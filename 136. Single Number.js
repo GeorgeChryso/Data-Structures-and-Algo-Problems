@@ -127,5 +127,5 @@ var bitsToConvert=(a,b)=>{
   return  countOnesOfBits(a^b) // tin ethesa pio panw
 }
 
-//px 
+//px z
 console.log(bitsToConvert(13,9))
