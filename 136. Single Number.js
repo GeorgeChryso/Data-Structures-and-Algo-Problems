@@ -10,7 +10,7 @@
 // Output: 1
 
 
-var singleNumber = function(nums) {
+var singleNumber0 = function(nums) {
 
 
     // for ( d of nums){
@@ -31,14 +31,27 @@ var singleNumber = function(nums) {
 // Runtime: 80 ms, faster than 31.27% of JavaScript online submissions for Single Number.
 // Memory Usage: 37 MB, less than 47.45% of JavaScript online submissions for Single Number.
 
+// lusi 2(a+b+c)-(a+a+b+b)=c  , c zitoumeno
+var singleNumber = function(nums) {
 
-// console.log(
-//     singleNumber(
+
+  
+    return 2*nums.sort()
+               .reduce((s,d,i)=>{
+                         if (i%2==0)
+                         {return s+d}
+                            return s;}) 
+    - nums.reduce((a,b)=> a+b)
+
+    
+};
+
+console.log(
+    singleNumber(
        
-
-//         [1,0,1,5,0]
-//     )
-// )
+        [1,0,1,3,0]
+    )
+)
 
 
 // Return the rightmost 1 in the binary representation of a number.
