@@ -22,12 +22,8 @@ var singleNumber = function(nums) {
 
     // }
 
-   nums.sort()
-    for (let i = 0; i < nums.length; i++) {
-         if(nums[i]!=nums[i+1])
-        {return nums[i]}
-        i++
-    }
+    return nums.reduce((a,b) => a^b);
+
 
     
 };
@@ -39,6 +35,9 @@ var singleNumber = function(nums) {
 console.log(
     singleNumber(
        
-        [1,0,1,3]
+
+        [1,0,1,5,0]
     )
 )
+
+console.log(2^3^2^3)
