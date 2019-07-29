@@ -31,7 +31,8 @@ var singleNumber0 = function(nums) {
 // Runtime: 80 ms, faster than 31.27% of JavaScript online submissions for Single Number.
 // Memory Usage: 37 MB, less than 47.45% of JavaScript online submissions for Single Number.
 
-// lusi 2(a+b+c)-(a+a+b+b)=c  , c zitoumeno
+// lusi 2(a+b+c)-(a+a+b+b+c)=c  , c zitoumeno
+
 var singleNumber = function(nums) {
 
 
@@ -48,7 +49,7 @@ var singleNumber = function(nums) {
 
 console.log(
     singleNumber(
-       
+        
         [1,0,1,3,0]
     )
 )
