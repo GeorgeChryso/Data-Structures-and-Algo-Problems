@@ -23,7 +23,7 @@
  
 
 
-var validMountainArray = function(A) {
+var validMountainArray0 = function(A) {
     if(A.length<3){
           return false
       }
@@ -49,9 +49,32 @@ var validMountainArray = function(A) {
   
   };
 
+ var validMountainArray=function(A){
+    var z=A.indexOf(Math.max(...A));
+    if( A.length<3 || z==0 || z==A.length-1){
+        return false
+    }
+   for ( let i=0 ;z-i-1<0 && z+i>A.length ;i++ ){
+           if (z-i-1>=0&&A[z-i]<=A[z-i-1]){
+               return false
+           }
+           if (z+i+1<A.length &&A[z+i]<=A[z+i+1]){
+               return false
+           }
+   
+   }
+   
+   return true;
+   
+   }
+
+
+// needs optimization
 console.log(
     validMountainArray(
         
-        [0,1,2,3,4,5,6,7,8,9]
+            [0,1,2,3,4,5,6,7,8,9]
     )
 )
+
+console.log( [1,2][2]>0)
