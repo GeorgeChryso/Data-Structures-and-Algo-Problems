@@ -12,21 +12,6 @@
 // Output: False
 // Explanation: You can't get a non-decreasing array by modify at most one element.
 
-function anomaly(i,x){
-    console.log('anomaly \n',i+'\n'+x)
-    var z=parseInt(i)+1;
-    if (isND( x.slice(0,i).concat(x.slice(z)))      ||
-        isND( x.slice(0,z).concat(x.slice(z+1)))    ||
-        isND( x.slice(0,i-1).concat(x.slice(i)))
-        )
-
-        {
-            
-
-        return true
-    }
-    return false
-}
 
 function isND(x){
 
@@ -48,37 +33,46 @@ var checkPossibility = function(nums) {
      return true
  }
 
- var IshouldChange=[]
+var c=0
+var q=0
 
   for ( i in nums){
-      console.log([nums[i]],nums[i-1])
+      if(i==0){continue}
+
     if(nums[i-1]>nums[i])
     {
-      
-      IshouldChange.push(i)
+      c++
+      q=i
+      if(c>1){
+          return false
+      }
     }
 
   }
-  console.log('SHOULD CHANGE', IshouldChange)
-  if (IshouldChange.length>1){
-      return false
-  }
-  else if ( IshouldChange.length==0){
+
+  if(c==0){return true}
+    q=parseInt(q)
+
+    if (isND( nums.slice(0,q).concat(nums.slice(q+1)))      ||
+      isND( nums.slice(0,q+1).concat(nums.slice(q+2)))    ||
+      isND( nums.slice(0,q-1).concat(nums.slice(q)))
+      )
+
+      {
+          
+
       return true
   }
-  else{
+  return false
 
-  return  anomaly(IshouldChange[0],nums)
-
-
-  }
+  
 
 
     
 };
 
 console.log( checkPossibility(
-    [1,2,3,4, 1,   1,2]       
+    [1,2,5,3]      
     
     ))
 
@@ -130,3 +124,5 @@ console.log( checkPossibility(
 // Runtime: 72 ms, faster than 45.78% of JavaScript online submissions for Non-decreasing Array.
 // Memory Usage: 39.1 MB, less than 6.00% of JavaScript online submissions for Non-decreasing Array.
 // Next challenges:
+
+//v2 optimized runtime 64ms
