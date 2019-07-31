@@ -13,66 +13,35 @@
 // Explanation: You can't get a non-decreasing array by modify at most one element.
 
 
-function isND(x){
-
-    for (i in x ){
-        if(i==0){
-            continue;
-        }
-        if (x[i-1]>x[i] ){
-            return false
-        }
-
-    }
-    return true;
-}
-
 
 var checkPossibility = function(nums) {
- if (nums.length==1){
-     return true
- }
-
-var c=0
-var q=0
-
-  for ( i in nums){
-      if(i==0){continue}
-
-    if(nums[i-1]>nums[i])
-    {
-      c++
-      q=i
-      if(c>1){
-          return false
-      }
-    }
-
-  }
-
-  if(c==0){return true}
-    q=parseInt(q)
-
-    if (isND( nums.slice(0,q).concat(nums.slice(q+1)))      ||
-      isND( nums.slice(0,q+1).concat(nums.slice(q+2)))    ||
-      isND( nums.slice(0,q-1).concat(nums.slice(q)))
-      )
-
-      {
-          
-
-      return true
-  }
-  return false
-
-  
-
-
     
-};
+   var c=-1     // edw tha apothikeusw to pithano simeio allagis
+   
+   
+ for (let i=0; i<nums.length-1; i++){
+         if (nums[i]>nums[i+1]){
+           if (c!=-1) // diladi an exw >1 shmeia allaghw, stop
+           {return false} 
+             c=i // apothikeuw to shmeio allaghs
+         }
+     }
+   
+       return (
+           c==-1                // to shmeio allaghs den allakse, h seira 
+                                // ara einai hdh diatetagmenh monotona+
+        || c==0                 //  to shmeio allaghs  einai to prwto thw                       seiras profanws allazei an to valw num[0]=num[1]
+        || c==nums.length-2     // to shmeio allaghs einai to proteleutaio ara mporw na to allaksw sto teleutaio i to prohgoumeno
+        || nums[c-1]<=nums[c+1]    // an to shmeio allaghs einai kapou sti mesi tha mporw na to allaksw sta nums[c-1] h nums[c+1] arkei vevaia na isxuei nums[c-1]<= nums[c+1] 
+        || nums[c]<=nums[c+2] ) // alliws sto epomeno kserw gw
+   
+       
+   };
+  //Runtime: 60 ms, faster than 92.73% of JavaScript online submissions for Non-decreasing Array.
+// Memory Usage: 36.6 MB, less than 90.00% of JavaScript online submissions for Non-decreasing Array.
 
 console.log( checkPossibility(
-    [1,2,5,3]      
+    [4,2,3]
     
     ))
 
