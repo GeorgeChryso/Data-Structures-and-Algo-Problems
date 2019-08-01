@@ -18,10 +18,34 @@
 
 var lenLongestFibSubseq = function(A) {
     let c=0
-    let Fibs=[
-    ]
-    A.forEach((d,i)=>{
-        
-    })
+    let Fibs=[ ]
+    let i,j,z;
+    var poss=[]
+        for ( i = 0; i < A.length; i++) {
+            for ( j =i+1; j < A.length; j++) {
+                poss.push(A[i],A[j])
+                for ( z =j+1; z < A.length; z++) {
+                    let q=
+                    if (parseInt(A[i]+A[j])===parseInt(A[z])){
+                        poss.push(A[z])
+                        i=j
+                        j=z
+                    }
+                
+                } 
+                Fibs.push(poss)
+                poss=[]
+                // edw prepei na allaksei to i,j outws wste na sunexizei apo ekei pou stamatise afou vrike thn akolouthia fibbonacci
+               console.log(' telos sta',i,j)
+
+            }  
+        }    
+        return Fibs
 
 };
+
+console.log(
+    lenLongestFibSubseq(
+        [1,2,3,4,5,6,7,8]
+    )
+)
