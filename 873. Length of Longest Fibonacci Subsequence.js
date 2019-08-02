@@ -40,9 +40,7 @@ var lenLongestFibSubseq = function(A) {
 
             }  
         }    
-        return Fibs
-
-};
+        return Fib
 
 console.log(
     lenLongestFibSubseq(
