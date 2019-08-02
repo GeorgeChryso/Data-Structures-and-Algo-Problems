@@ -19,31 +19,30 @@
 var lenLongestFibSubseq = function(A) {
     let c=0
     let i,j,z;
-    var poss=[]
         for ( i = 0; i < A.length; i++) {
             for ( j =i+1; j < A.length; j++) {
-                poss.push(A[i],A[j])
+                let count=2
                 let q=i
                 let p=j
                 for ( z =j+1; z < A.length; z++) {
                     
-                    if (parseInt(A[q]+A[p])===parseInt(A[z])){
-                        poss.push(A[z])
+                    if (A[q]+A[p]===A[z]){
+                       count++
                         q=p
                         p=z
                     }
                 
                 } 
+                count>2&&count>c?c=count:null;
                 
-                poss.length>2&&poss.length>c?c=poss.length:null;
-                
-                poss=[]
+
             
 
             }  
         }    
         return c
     }
+    
 console.log(
     lenLongestFibSubseq(
 
