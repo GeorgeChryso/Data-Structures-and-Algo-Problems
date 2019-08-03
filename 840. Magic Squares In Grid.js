@@ -73,8 +73,8 @@ if(s!=0||eq!=0||q!=0||ep!=0|| !Disti(i,j) ){
 
 
 let cc=0
-for (let u=0 ;u+2<A[0].length; u+=2){
-    for (let t = 0; t+2< A.length; t+=2) {
+for (let u=0 ;u+2<A[0].length-1; u+=1){
+    for (let t = 0; t+2< A.length-1; t+=1) {
         if(isMS(A,u,t)){
             cc+=1
         }        
@@ -88,6 +88,10 @@ return cc
 
 console.log(
     numMagicSquaresInside(
-        [[4,3,8,4],[9,5,1,9],[2,7,6,2]]
+        [[3,2,9,2,7],
+         [6,1,8,4,2],
+         [7,5,3,2,7],
+         [2,9,4,9,6],
+         [4,3,8,2,5]]
     )
-)
+) 
