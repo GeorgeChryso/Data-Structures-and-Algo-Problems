@@ -22,34 +22,56 @@
 // Example 4:
 
 
-var fairCandySwap = function(A, B) {
+var fairCandySwapz = function(A, B) {
 
 
 var maxA=A.reduce((d,z)=>d+z)
 var maxB=B.reduce((d,z)=>d+z)
+let SOLA={}
+A.forEach((d)=>SOLA[d]=1)
+let m=(maxA-maxB)/2
 
-let q=-1
-let l=0;
-while(q==-1){
-for (let i = 0; i < A.length; i++) {
   for (let j = 0; j < B.length; j++) {
-   if( maxA-A[i]+B[j]==maxB-B[j]+A[i]
+   if( SOLA[m+B[j]]==1
     ){
-       console.log(c,c+l)
-       return [A[i],B[j]]}       
+       return [m+B[j],B[j]]}       
   }
-}
-l++
-i=0
-j=0
-}
 
-return  q
+
+
 
 };
 
+
+var fairCandySwap = function(A, B) {
+
+    let SOLA={}
+    var maxA=0
+    A.forEach(function (b){
+        Object.defineProperty(SOLA, b , {
+           
+            value: 1
+          });
+        maxA+=b
+    });
+    console.log([SOLA])
+
+    var maxB=B.reduce((d,z)=>d+z)
+    let m=(maxA-maxB)/2
+    
+      for (let j = 0; j < B.length; j++) {
+       if( SOLA[m+B[j]]==1
+        ){
+           return [m+B[j],B[j]]}       
+      }
+    
+    
+    
+    
+    };
 console.log(
     fairCandySwap(
-        [2],[1,3]
+    [2],[1,3]
+
     )
 )
