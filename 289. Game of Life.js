@@ -84,7 +84,7 @@ A.forEach((d,i)=>A[i].forEach((z,j)=>
 return A
 };
 
-var gameOfLife = function(board) {
+var gameOfLife1 = function(board) {
     var A=[]
     
     
@@ -133,8 +133,58 @@ var gameOfLife = function(board) {
     }
     ) )
     return board
-    };// better than 98%    
+    };// better than 98%    timee 
     
+var gameOfLife = function(board) {
+        
+        
+        var shouldChange=(i,j)=>{
+            let c=0
+            if( j+1<= board[i].length-1 && board[i][j+1]>=1 ){c++}
+            if(j-1>=0 && board[i][j-1]>=1){c++}
+        
+            if(j-1>=0 &&i-1>=0 &&board[i-1][j-1]>=1 ){c++}
+            if(i-1>=0&& j+1<= board[i].length-1 &&board[i-1][j+1]>=1){c++}
+            if(i-1>=0&&board[i-1][j]==1){c++}
+        
+            if(j-1>=0 && i+1<=board.length-1&&board[i+1][j-1>=1]){c++}
+            if( i+1<=board.length-1 && board[i+1][j]>=1){c++}
+            if( j+1<= board[i].length && i+1<=board.length-1 &&board[i+1][j+1]>=1){c++}
+        
+            if(board[i][j]>=1){
+                if( c==2 || c==3){
+                }else{
+                    board[i][j]+=2
+                }
+        
+            }
+            else {
+                if (c==3){
+        
+                    board[i][j]+=2
+                }
+        
+        
+            }
+        return null
+        }
+        
+        
+        for (let i=0; i< board.length; i++){
+            for( let j=0; j <board[0].length;j++){
+              shouldChange(i,j)
+            }
+        }
+            board.forEach((d,i)=>board[i].forEach((z,j)=>
+        {
+            if(board[i][j]>1){
+                console.log(i,j)
+                board[i][j]-=2
+            }
+        }
+        ) )
+        return board
+        };// better than 98%    timee 
 
 console.log(
     gameOfLife( 
