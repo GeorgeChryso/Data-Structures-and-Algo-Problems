@@ -29,60 +29,118 @@
 // In this question, we represent the board using a 2D array. In principle, the board is 
 // infinite, which would cause problems when the active area encroaches the border of the array. How would you address these problems?
 
-var gameOfLife = function(board) {
-const A=board
-console.log(A)
-
+var gameOfLife0 = function(board) {
+var A=[]
+board.forEach((d)=>console.log(d))
 var shouldChange=(i,j)=>{
     let c=0
-    if( j+1<= A[1].length-1 && A[i][j+1]==1 ){c++}
-    if(j-1>=0 && A[i][j-1]==1){c++}
+    if( j+1<= board[1].length-1 && board[i][j+1]==1 ){c++}
+    if(j-1>=0 && board[i][j-1]==1){c++}
 
-    if(j-1>=0 &&i-1>=0 &&A[i-1][j-1]==1 ){c++}
-    if(i-1>=0&& j+1<= A[1].length-1 &&A[i-1][j+1]==1){c++}
-    if(i-1>=0&&A[i-1][j]==1){c++}
+    if(j-1>=0 &&i-1>=0 &&board[i-1][j-1]==1 ){c++}
+    if(i-1>=0&& j+1<= board[1].length-1 &&board[i-1][j+1]==1){c++}
+    if(i-1>=0&&board[i-1][j]==1){c++}
 
-    if(j-1>=0 && i+1<=A.length-1&&A[i+1][j-1]==1){c++}
-    if( i+1<=A.length-1 && A[i+1][j]==1){c++}
-    if( j+1<= A[1].length && i+1<=A.length-1 &&A[i+1][j+1]==1){c++}
+    if(j-1>=0 && i+1<=board.length-1&&board[i+1][j-1]==1){c++}
+    if( i+1<=board.length-1 && board[i+1][j]==1){c++}
+    if( j+1<= board[1].length && i+1<=board.length-1 &&board[i+1][j+1]==1){c++}
 
-    if(A[i][j]==1){
+    if(board[i][j]==1){
         if( c==2 || c==3){
-            console.log(i,j,c,true)
-            return true}
+            console.log(i,j,c,false)
+            return false}
             console.log(i,j,c,false)
 
-    return false
+    return true
     }
     else {
         if (c==3){
             console.log(i,j,c,true)
 
             return true}
-    }
-    console.log(i,j,c,false)
+            console.log(i,j,c,false)
 
-    return false
+            return false
+
+    }
+
 }
 
 
 for (let i=0; i< board.length; i++){
-
+        A.push([])
     for( let j=0; j<board[1].length;j++){
-      shouldChange(i,j)?board[i][j]^=1:null;
+      shouldChange(i,j)?A[i].push(board[i][j]^1):A[i].push(board[i][j]);
     }
 }
-console.log(A)
-return board
+
+A.forEach((d,i)=>A[i].forEach((z,j)=>
+{
+    if(!z[j]==board[i][j]){
+        board[i][j]=z[j]
+    }
+}
+) )
+return A
 };
+
+var gameOfLife = function(board) {
+    var A=[]
+    
+    
+    var shouldChange=(i,j)=>{
+        let c=0
+        if( j+1<= board[i].length-1 && board[i][j+1]==1 ){c++}
+        if(j-1>=0 && board[i][j-1]==1){c++}
+    
+        if(j-1>=0 &&i-1>=0 &&board[i-1][j-1]==1 ){c++}
+        if(i-1>=0&& j+1<= board[i].length-1 &&board[i-1][j+1]==1){c++}
+        if(i-1>=0&&board[i-1][j]==1){c++}
+    
+        if(j-1>=0 && i+1<=board.length-1&&board[i+1][j-1]==1){c++}
+        if( i+1<=board.length-1 && board[i+1][j]==1){c++}
+        if( j+1<= board[i].length && i+1<=board.length-1 &&board[i+1][j+1]==1){c++}
+    
+        if(board[i][j]==1){
+            if( c==2 || c==3){
+                return false}
+    
+        return true
+        }
+        else {
+            if (c==3){
+    
+                return true}
+    
+                return false
+    
+        }
+    
+    }
+    
+    
+    for (let i=0; i< board.length; i++){
+            A.push([])
+        for( let j=0; j <board[0].length;j++){
+          shouldChange(i,j)?A[i].push(board[i][j]^1):A[i].push(board[i][j]);
+        }
+    }
+        A.forEach((d,i)=>A[i].forEach((z,j)=>
+    {
+        if(!A[i][j]==board[i][j]){
+            board[i][j]=A[i][j]
+        }
+    }
+    ) )
+    return board
+    };// better than 98%    
+    
 
 console.log(
     gameOfLife( 
-       [
-        [0,1,0],
-        [0,0,1],
-        [1,1,1],
-        [0,0,0]
-      ]
+       
+        [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]
+
+      
       )
 )
