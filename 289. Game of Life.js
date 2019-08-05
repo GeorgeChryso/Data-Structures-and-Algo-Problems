@@ -140,28 +140,28 @@ var gameOfLife = function(board) {
         
         var shouldChange=(i,j)=>{
             let c=0
-            if( j+1<= board[i].length-1 && board[i][j+1]>=1 ){c++}
-            if(j-1>=0 && board[i][j-1]>=1){c++}
+            if( j+1<= board[i].length-1 && board[i][j+1]%2==1 ){c++}
+            if(j-1>=0 && board[i][j-1]%2==1){c++}
         
-            if(j-1>=0 &&i-1>=0 &&board[i-1][j-1]>=1 ){c++}
-            if(i-1>=0&& j+1<= board[i].length-1 &&board[i-1][j+1]>=1){c++}
-            if(i-1>=0&&board[i-1][j]==1){c++}
+            if(j-1>=0 &&i-1>=0 &&board[i-1][j-1]%2==1 ){c++}
+            if(i-1>=0&& j+1<= board[i].length-1 &&board[i-1][j+1]%2==1){c++}
+            if(i-1>=0&&board[i-1][j]%2==1){c++}
         
-            if(j-1>=0 && i+1<=board.length-1&&board[i+1][j-1>=1]){c++}
-            if( i+1<=board.length-1 && board[i+1][j]>=1){c++}
-            if( j+1<= board[i].length && i+1<=board.length-1 &&board[i+1][j+1]>=1){c++}
+            if(j-1>=0 && i+1<=board.length-1&&board[i+1][j-1]%2==1){c++}
+            if( i+1<=board.length-1 && board[i+1][j]%2==1){c++}
+            if( j+1<= board[i].length && i+1<=board.length-1 &&board[i+1][j+1]%2==1){c++}
         
-            if(board[i][j]>=1){
+            if(board[i][j]%2==1){
                 if( c==2 || c==3){
                 }else{
-                    board[i][j]+=2
+                    board[i][j]+=1
                 }
         
             }
             else {
                 if (c==3){
         
-                    board[i][j]+=2
+                    board[i][j]+=1
                 }
         
         
@@ -178,11 +178,10 @@ var gameOfLife = function(board) {
             board.forEach((d,i)=>board[i].forEach((z,j)=>
         {
             if(board[i][j]>1){
-                console.log(i,j)
-                board[i][j]-=2
-            }
-        }
+                board[i][j]=board[i][j]%2
+            }}
         ) )
+
         return board
         };// better than 98%    timee 
 
@@ -194,3 +193,6 @@ console.log(
       
       )
 )
+
+
+ console.log( 1%2==1,4%2==0)
