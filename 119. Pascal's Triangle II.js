@@ -23,7 +23,7 @@ var getRow0 = function(x) {
     return A
 };
 
-var getRow = function(x) {
+var getRow1= function(x) {
     if(x==0){return [1]}
     let A=[1]
     for (let k = 1; k < x+1; k++) {
@@ -42,6 +42,19 @@ var getRow = function(x) {
 };
 return A
 }
+
+
+var getRow = function(x) {
+    let A = new Array(x+1).fill(0);
+    A[0] = 1;
+        for(let i=1; i<x+1; i++){
+            for(let j=i; j>=1; j--){
+                A[j] += A[j-1];
+            }
+        }
+            
+        return A;
+};
 console.log(
     getRow(6)
 )
