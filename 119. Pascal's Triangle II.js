@@ -4,7 +4,7 @@
 
 
 
-var getRow = function(x) {
+var getRow0 = function(x) {
     if(x==0){return [1]}
     let A=[1],B=[]
     for (let k = 1; k < x+1; k++) {
@@ -23,9 +23,25 @@ var getRow = function(x) {
     return A
 };
 
+var getRow = function(x) {
+    if(x==0){return [1]}
+    let A=[1]
+    for (let k = 1; k < x+1; k++) {
+        console.log(A)
+        for (var i = 0; i <A.length+1-i; i++) {
+           
 
+                 (i==0||i==A.length-i)?A.unshift(1):
+                A.unshift( A[k-1]+A[k]);
+            console.log(A,'i='+i,'k='+k)
+    }
+    console.log(i,k)
+    A.splice(i,k)
+  
 
-
+};
+return A
+}
 console.log(
     getRow(6)
 )
