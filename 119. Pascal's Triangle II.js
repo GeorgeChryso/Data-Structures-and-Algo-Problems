@@ -44,17 +44,35 @@ return A
 }
 
 
-var getRow = function(x) {
+var getRow2 = function(x) {
     let A = new Array(x+1).fill(0);
     A[0] = 1;
+    console.log('A='+A)
         for(let i=1; i<x+1; i++){
+            console.log('i='+i)
             for(let j=i; j>=1; j--){
+                console.log('j='+j,'A['+j+']='+A[j]+'   +='+
+                'A['+(j-1)+']='+A[j-1])
                 A[j] += A[j-1];
             }
+            console.log('A='+A)
         }
             
         return A;
 };
+
+var getRow = function(n) {
+    const x = new Array(n + 1).fill(1);
+    for (let i = 0; i <= n; i++) {
+        
+        for (var j = i - 1; j > 0; j--) {
+            x[j] += x[j - 1];
+        }
+        console.log(x,i,j)
+    }
+    return x;
+  };
+
 console.log(
     getRow(6)
 )
