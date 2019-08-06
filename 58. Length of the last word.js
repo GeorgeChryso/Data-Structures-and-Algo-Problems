@@ -25,6 +25,10 @@ else{
 
 }
 
-console.log(lol(
-  'da da  '
-))
+
+var z=/( )+/g
+console.log('da da'.indexOf())
+
+// console.log(lol(
+//   'da da  '
+// ))
