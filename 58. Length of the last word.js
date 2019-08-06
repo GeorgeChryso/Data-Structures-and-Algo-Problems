@@ -1,15 +1,30 @@
 var lol=(A)=>{
-  A=  Array.from(A)
-  console.log(A)
-for (var i=0;  i< A.length-1;i++ ){
+
+
+for (var i=A.length-1 ;  A.charAt(i)==' ' && i!=-1 ;i-- ){
+
+
+
+
+}
+if(i==-1){
+    return 0
+}
 console.log(i)
-if (A[A.length-1-i]==' '){
-    break
+for (var j = i-1 ; A.charAt(j)!=' ' && j!=-1; j--) {
+    
 }
+console.log(j)
+if ( j==-1){
+    return i+1
 }
-    return i==A.length-1?0:i
+else{
+    return i-j
+}
+
+
 }
 
 console.log(lol(
-    'toend'
+  'da da  '
 ))
