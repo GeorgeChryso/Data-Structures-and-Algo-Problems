@@ -30,7 +30,8 @@ else{
 
 var lengthOfLastWord = function(s) {
     return s.trim().split(" ").pop().length;
-};/// poor speed
+};
+// poor speed
 //trim removes all whitespace in the end and the beginning of the string, split creates an array and pop returns the last element of the array
 
 
