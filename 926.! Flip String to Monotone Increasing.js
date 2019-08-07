@@ -95,7 +95,7 @@ if(S==null||S.length==0){return 0}
 var ones=0,flips=0
 
 for(let d of S){
-if ( d=='0') {          //To stoixeio mou einai 0
+if ( d=='0') {          //An To stoixeio mou einai 0
     if( ones!=0){       // enw exw sunanthsei Monades prin px (0010<-010)
         flips++         // flippare to stoixeiaki
     }
