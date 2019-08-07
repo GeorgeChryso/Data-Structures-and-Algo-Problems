@@ -63,17 +63,40 @@ var numFriendRequests = function(A) {
     
         var count=0;
         var len=A.length-1
-        A.sort((a,b)=>a-b).reduceRight((a,b,i)=>a+len-i)
-        count+=a
+        A.filter((d)=>d>=14).sort((a,b)=>a-b).forEach((a,i)=>{
+            console.log(count)
+            for(let j=0;j<i;j++){
+                if(A[j]>A[i]/2+7){count++}
+            }
+            console.log(count)
+            count+=len-i
+        })
+            
 
-    return A
+    return count
        }
 
 
 
 console.log(
     numFriendRequests(
-        [20,30,100,20,120]
+        [20,30,100,120]
             )
     )
 
+    var numFriendRequests = function(ages) {
+        let arr = Array(120).fill(0);
+        ages = ages.sort((a,b) => a-b);
+        ages.forEach(age => {
+          let min = Math.ceil(0.5 * age + 7.01);
+          let max = age;
+          for (let i=min; i<=max; i++) {
+            arr[i-1]++; 
+          }
+        });
+        let result = 0;
+        ages.forEach(age => {
+          result += arr[age-1]<=1 ? 0 : arr[age-1]-1;
+        });
+        return result;
+      };
