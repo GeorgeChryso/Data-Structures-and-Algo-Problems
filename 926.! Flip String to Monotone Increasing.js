@@ -80,12 +80,6 @@
 // 1 <= S.length <= 20000
 // S only consists of '0' and '1' characters.
 
-var minFlipsMonoIncr = function(S) {
-if(isMinc0(S)){return 0}
-
-
-
-};
 
 var minFlipsMonoIncr = function(S) {
     let z=0, d=0;
@@ -96,8 +90,39 @@ var minFlipsMonoIncr = function(S) {
    return Math.min(z, d);
 };
 
+var minFlipsMonoIncr = function(S) {
+if(S==null||S.length==0){return 0}
+var ones=0,flips=0
+
+for(let d of S){
+if ( d=='0') {          //To stoixeio mou einai 0
+    if( ones!=0){       // enw exw sunanthsei Monades prin px (0010<-010)
+        flips++         // flippare to stoixeiaki
+    }
+    else continue;
+}
+else                    // to stoixeio mou einai 1
+{                   
+    ones++              
+
+}
+
+    if(flips>ones){        // an ta flips mhdenikwn ksepernane
+                        // tis monades shmainei  oti 
+    flips=ones          // me sumferei na antistrepsw tis monades
+    }                   // px  0011000 ta flips sto telos einai 3 ksepernane tis 2           
+                //          monades ara kalutera na antistrepsw aftes
+}
+
+return flips
+
+
+}
+
+
+
 console.log(
     minFlipsMonoIncr(
-        '10101'
+        '10001'
     )
 )
