@@ -80,23 +80,41 @@ var numFriendRequests = function(A) {
 
 console.log(
     numFriendRequests(
-        [20,30,100,120]
+        [20,30,20,100,120]
             )
     )
 
     var numFriendRequests = function(ages) {
-        let arr = Array(120).fill(0);
-        ages = ages.sort((a,b) => a-b);
-        ages.forEach(age => {
-          let min = Math.ceil(0.5 * age + 7.01);
-          let max = age;
-          for (let i=min; i<=max; i++) {
-            arr[i-1]++; 
-          }
+        let arr = Array(120).fill(0); // gemise ena array me tis pithanes 120 ilikies
+        ages = ages.sort((a,b) => a-b); // sortare to array pou dinetai
+        ages.forEach(
+            age => {                           // gia kathe element tou array
+          let min = Math.ceil(0.5 * age + 7.01);      // to min einai to miso tou age+7
+          let max = age;                            // to max einai to age
+          for (let i=min; i<=max; i++) {arr[i-1]++}     // apothikeuei ilikies 
+             
         });
+
         let result = 0;
+
         ages.forEach(age => {
           result += arr[age-1]<=1 ? 0 : arr[age-1]-1;
         });
         return result;
       };
+
+      function numFriendRequests(ages) {
+        const nums = Array(121).fill(0)     // array me 121 stoixeia gia na mhn mperdeuomai
+        for (let age of ages) nums[age]++   // se kathe elemenet tou nums vaw poses fores sinantw tin ntistoixi ilikia
+        let sum = 0, min = 15, req = 0 
+        for (let i = 15;
+             i < 121;
+             req += nums[i++] * (sum - 1)       
+             )
+              {
+            sum += nums[i] //
+            while (min <= 0.5 * i + 7) {sum -= nums[min++]}
+        }
+        return req // []
+    }
+    
