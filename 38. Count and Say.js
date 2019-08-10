@@ -52,7 +52,8 @@ var countAndSay1=(x)=>{
 var countAndSay2 = function(n) {
     return n > 1 ? 
     countAndSay2(n - 1)
-        .match(/(\d)\1*/g) //  ()   creates a group with the parentheses, containing
+        .match(/(\d)\1*/g)  // .match() creates an array, with each element matching..
+                            //  ()   creates a group with the parentheses, containing
                             //  \d  a digit 
                             // \1   and matches the first group created( the only one)
                             // *    zero ore more times
