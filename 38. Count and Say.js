@@ -37,6 +37,23 @@ var countAndSay=(x)=>{
     }
     return cont.join('')
 }
+
+var countAndSay=(x)=>{
+    if(x==1){return '1'}
+    let z=countAndSay(x-1)
+    let cont=''
+    
+    for (let i = 0; i < z.length; i++) {
+        let c=0
+        for (var j = i; j<z.length&&z.charAt(i)==z.charAt(j); j++) {
+            c++
+        }
+        cont=cont+c+z.charAt(i);
+        i=j-1
+    }
+    return cont
+}
+
 console.log(
     countAndSay(
         5
