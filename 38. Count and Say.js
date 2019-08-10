@@ -16,15 +16,9 @@
  
 
 
-var countAndSay = function(n) {
-    
-};
-
-
-
-var countAndSay=(x)=>{
+var countAndSay0=(x)=>{
     if(x==1){return '1'}
-    let z=countAndSay(x-1).split('')
+    let z=countAndSay0(x-1).split('')
     let cont=[]
     
     for (let i = 0; i < z.length; i++) {
@@ -38,9 +32,9 @@ var countAndSay=(x)=>{
     return cont.join('')
 }
 
-var countAndSay=(x)=>{
+var countAndSay1=(x)=>{
     if(x==1){return '1'}
-    let z=countAndSay(x-1)
+    let z=countAndSay1(x-1)
     let cont=''
     
     for (let i = 0; i < z.length; i++) {
@@ -55,18 +49,20 @@ var countAndSay=(x)=>{
 }
 
 
-const countAndSay = function(n) {
+var countAndSay2 = function(n) {
     return n > 1 ? 
-    countAndSay(n - 1)
-        .match(/(\d)\1*/g)
+    countAndSay2(n - 1)
+        .match(/(\d)\1*/g) //  ()   creates a group with the parentheses, containing
+                            //  \d  a digit 
+                            // \1   and matches the first group created( the only one)
+                            // *    zero ore more times
             .map(D => D.length + D[0])
                 .join('') 
     : '1'
   }
 
-console.log(
-    countAndSay(
-        5
-    )
-)
 
+
+console.log(
+    '11221'.match(/(\d)\1*/g)
+)
