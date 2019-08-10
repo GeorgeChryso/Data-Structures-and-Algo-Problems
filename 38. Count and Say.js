@@ -54,8 +54,19 @@ var countAndSay=(x)=>{
     return cont
 }
 
+
+const countAndSay = function(n) {
+    return n > 1 ? 
+    countAndSay(n - 1)
+        .match(/(\d)\1*/g)
+            .map(D => D.length + D[0])
+                .join('') 
+    : '1'
+  }
+
 console.log(
     countAndSay(
         5
     )
 )
+
