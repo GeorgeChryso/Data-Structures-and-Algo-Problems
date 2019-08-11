@@ -27,8 +27,7 @@ var twoSum = function(nums, target) {
            }
           
       })
-            
-      
+             
   return answer
   };
 
@@ -37,6 +36,7 @@ var threeSum = function(z) {
     let l=z.length
     if(l==0){return []}
     let sols=[]
+    var memo=[]
     for (let i = 0; i < l; i++) {
         
             // for (let j = i+1 ;j <l; j++) {
@@ -52,9 +52,14 @@ var threeSum = function(z) {
         let answer=[]
             z.some((d, j) => {
          if(z.includes(-z[i]-d)&&j!=z.indexOf(-z[i]-d)&&j!=i&&i!=z.indexOf(-z[i]-d)){
-           answer=[d,-z[i]-d,z[i]].sort((a,b)=>a-b).join(',')
+           answer=[i,j,z.indexOf(-z[i]-d)].sort((a,b)=>a-b).join('')
            }
-         if (answer.length!=0&&!sols.includes(answer)) {sols.push(answer)}
+         if (answer.length!=0&&!memo.includes(answer)) {
+          memo.push(answer)
+
+          sols.push([z[i],d,-z[i]-d])
+
+        }
       })
             
             
@@ -63,7 +68,7 @@ var threeSum = function(z) {
     }
 
     //return sols.map(d=>d.split(',').map((d)=>Number(d)))
-    return sols.map(d=>d.split(',').map(d=>Number(d)))
+    return sols
 };
 
 
@@ -74,3 +79,4 @@ var threeSum = function(z) {
 console.log(threeSum(
     [-1, 0, 1, 2, -1, -4]
 ))
+
