@@ -16,6 +16,22 @@
 //   [-1, -1, 2]
 // ]
 
+var twoSum = function(nums, target) {
+
+
+    let answer=[]
+    nums.some((d, j) => {
+         if(nums.includes(target-d)&&j!=nums.indexOf(target-d)){
+           answer=[j,nums.indexOf(target-d)]
+          return true;
+           }
+          
+      })
+            
+      
+  return answer
+  };
+
 var threeSum = function(z) {
     
     let l=z.length
@@ -23,17 +39,31 @@ var threeSum = function(z) {
     let sols=[]
     for (let i = 0; i < l; i++) {
         
-            for (let j = i+1 ;j <l; j++) {
-                for (let k = j+1; k < l; k++) {
-                 if (z[k]+z[j]+z[i]==0){
-                   let u= [z[j],z[i],z[k]].sort((a,b)=>a-b).toString()
-                   if(!sols.includes(u))sols.push(u.toString())
-                  }
-                }                
-            }        
+            // for (let j = i+1 ;j <l; j++) {
+            //     for (let k = j+1; k < l; k++) {
+            //      if (z[k]+z[j]+z[i]==0){
+            //        let u= [z[j],z[i],z[k]].sort((a,b)=>a-b).toString()
+            //        if(!sols.includes(u))sols.push(u.toString())
+            //       }
+            //     }                
+            // }     // solA
+
+
+        let answer=[]
+            z.some((d, j) => {
+         if(z.includes(-z[i]-d)&&j!=z.indexOf(-z[i]-d)&&j!=i&&i!=z.indexOf(-z[i]-d)){
+           answer=[z[i],d,z[z.indexOf(-z[i]-d)]]
+           }
+         if (answer.length!=0) {sols.push(answer)}
+      })
+            
+            
+
+
     }
 
-    return sols.map(d=>d.split(',').map((d)=>Number(d)))
+    //return sols.map(d=>d.split(',').map((d)=>Number(d)))
+    return sols
 };
 
 
