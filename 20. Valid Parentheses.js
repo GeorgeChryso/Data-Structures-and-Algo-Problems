@@ -51,8 +51,35 @@ var isValid = function(s) {
 // faster
 
 
+var isValid=function(s){
+    console.log(s)
+    var pairs={
+        "\(" : "\)",
+        "\{" : "\}",
+        "\[" : "\]"
+    }
+
+    var open=[]         
+
+    for(var i = 0; i<s.length; i++){            //iteration
+        console.log( 's[i]=', s[i])
+        if(s[i] in pairs){      // sto open vazw ta anoigmena poy sunantw
+            open.push(s[i])
+            console.log('open',open)
+        }
+        else {                              //an sunatnisw klseisto
+            var current = open.pop()            // pairnw to prwto tou open
+            console.log('current',current)
+            if(pairs[current] !== s[i]){        // kai an den einai to antistoixo tou
+                return false                    // epistrefw false
+            }
+        }
+    }
+    return open.length === 0                // an den mou exoun meinei anoixta true
+}
+
 
 console.log(isValid(
-    "([][]()))[()]"
+    '()([)'
     ))
 
