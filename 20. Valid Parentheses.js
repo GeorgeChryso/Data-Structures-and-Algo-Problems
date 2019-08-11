@@ -16,6 +16,18 @@
 // Input: "()[]{}"
 // Output: true
 
+var isValid=(s)=>{
+    if (s === null || s.length <= 0) return true;
+while ( /\(+\)/.test(s) || /\{+\}/.test(s) || /\[+\]/.test(s) ){
+    s = s.replace("()", "").replace('{}', "").replace('[]', "")
+
+}
+
+return s==''
+}
+
+
+// slow af
 
 
 var isValid = function(s) {
@@ -36,18 +48,10 @@ var isValid = function(s) {
 };
 
 
+// faster
 
 
 
-var isValid=(s)=>{
-    if (s === null || s.length <= 0) return true;
-while ( /\(+\)/.test(s) || /\{+\}/.test(s) || /\[+\]/.test(s) ){
-    s = s.replace("()", "").replace('{}', "").replace('[]', "")
-
-}
-
-return s==''
-}
 console.log(isValid(
     "([][]()))[()]"
     ))
