@@ -52,9 +52,9 @@ var threeSum = function(z) {
         let answer=[]
             z.some((d, j) => {
          if(z.includes(-z[i]-d)&&j!=z.indexOf(-z[i]-d)&&j!=i&&i!=z.indexOf(-z[i]-d)){
-           answer=[z[i],d,z[z.indexOf(-z[i]-d)]]
+           answer=[d,-z[i]-d,z[i]].sort((a,b)=>a-b).join(',')
            }
-         if (answer.length!=0) {sols.push(answer)}
+         if (answer.length!=0&&!sols.includes(answer)) {sols.push(answer)}
       })
             
             
@@ -63,7 +63,7 @@ var threeSum = function(z) {
     }
 
     //return sols.map(d=>d.split(',').map((d)=>Number(d)))
-    return sols
+    return sols.map(d=>d.split(',').map(d=>Number(d)))
 };
 
 
