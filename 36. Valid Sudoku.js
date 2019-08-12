@@ -41,9 +41,7 @@ var isValidSudoku = function(board) {
     var checkEnt=(x)=>{
         for (let i = 1; i < 10; i++) {
         
-        if (
-          ((x[i-1]<=9&&x[i-1]>=1)||x[i-1]==".")
-        &&x.indexOf(String(i))!=x.lastIndexOf(String(i))
+        if (x.indexOf(String(i))!=x.lastIndexOf(String(i))
         ) {return false  }
       
 
@@ -52,13 +50,77 @@ var isValidSudoku = function(board) {
     return true
     }
 
-    for (let i = 0; i < 9; i++) {
-        result=result&&checkEnt(createCol(i))&&checkEnt(board[i])
-        &&checkEnt(createBox(i))
+    for (let i = 0; i < 9 && result==true; i++) {
 
+      result=result&&checkEnt(createCol(i))&&checkEnt(board[i])
+        &&checkEnt(createBox(i))
+            
         
     }
+
+    return result
     
+
+}
+var isValidSudoku = function(board) {
+    let result=true
+    var objy={   
+        0:'00',
+        1:'03',
+        2:'06',
+        3:'30',
+        4:'33',
+        5:'36',
+        6:'60',
+        7:'63',
+        8:'66'}
+
+    var createBox=(x)=>{
+        let arr=[]
+        for (let q=0;q<3;q++) {
+            for (let p=0;p<3;p++) {
+                if(arr.indexOf(board[Number(objy[x][0])+q][Number(objy[x][1])+p])!=-1){
+                    return false
+                }
+                arr.push(
+                    board[Number(objy[x][0])+q][Number(objy[x][1])+p]
+                    )
+            }
+
+         }
+         return true
+    }
+    var createCol=(i)=>{
+        let z=[]
+        for (let j = 0; j < 9; j++) {
+            if (z.indexOf(board[j][i])!=-1){
+                return false
+            }
+           z.push(board[j][i])
+            
+        }
+        return true
+    }
+    var checkEnt=(x)=>{
+        for (let i = 1; i < 10; i++) {
+        
+        if (x.indexOf(String(i))!=x.lastIndexOf(String(i))
+        ) {return false  }
+      
+
+        }
+       
+    return true
+    }
+
+    for (let i = 0; i < 9 && result==true; i++) {
+
+      result=result&&checkEnt(createCol(i))&&checkEnt(board[i])
+        &&checkEnt(createBox(i))
+            
+        
+    }
+
     return result
     
 
