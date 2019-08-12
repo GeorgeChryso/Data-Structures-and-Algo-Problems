@@ -80,6 +80,10 @@ var threeSum = function(arr) {
 let results=[]
 arr=arr.sort((a,b)=>a-b)
 for (let i = 0; i <=arr.length-3; i++) {
+  if (arr[i] > 0) {
+    return results;     // Since im  actually searching for 2 elements a,b so that arr[i]+a+b=0, a+b=-arr[i]
+                        // but, if arr[i]>0, that means that a,b>0 since arr is sorted . Impossible
+  }
 
     if(i==0|| arr[i]>arr[i-1]){
         let start=i+1; // I search from here
@@ -120,6 +124,53 @@ return results
 
 // nice but slow
 
+
+var threeSum = function(nums) {
+	var rtn = [];
+	if (nums.length < 3) {
+		return rtn;
+	}
+	nums = nums.sort(function(a, b) {
+		return a - b;
+  });
+  
+
+	for (var i = 0; i < nums.length - 2; i++) {
+
+		if (nums[i] > 0) {
+			return rtn;
+		}
+		if (i > 0 && nums[i] == nums[i - 1]) {
+			continue;
+		}
+		for (var j = i + 1, k = nums.length - 1; j < k;) {
+
+			if (nums[i] + nums[j] + nums[k] === 0) {
+
+				rtn.push([nums[i], nums[j], nums[k]]);
+				j++;
+        k--;
+        
+
+				while (j < k && nums[j] == nums[j - 1]) {
+					j++;
+				}
+				while (j < k && nums[k] == nums[k + 1]) {
+					k--;
+        }
+        
+
+      } 
+      else if (nums[i] + nums[j] + nums[k] > 0) {
+				k--;
+      }
+       else {
+				j++;
+			}
+		}
+	}
+	return rtn;
+};
 
 
 console.log(threeSum(
