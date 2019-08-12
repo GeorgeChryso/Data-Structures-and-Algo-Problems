@@ -76,7 +76,54 @@ var threeSum = function(z) {
 
 
 
+var threeSum = function(arr) {
+let results=[]
+arr=arr.sort((a,b)=>a-b)
+for (let i = 0; i <=arr.length-3; i++) {
+
+    if(i==0|| arr[i]>arr[i-1]){
+        let start=i+1; // I search from here
+        let end=arr.length-1 // to here
+
+        while(start<end){
+
+            if( arr[i]+arr[start]+arr[end]==0){
+              results.push([arr[i],arr[start],arr[end]])
+            }
+            
+            if( arr[i]+arr[start]+arr[end]<0){
+              let curStart=start
+
+              while(arr[start]==arr[curStart] && start < end){
+              start++}  
+
+            }
+            else{
+              let curEnd=end
+              while (arr[curEnd]==arr[end]) {
+                end--
+
+              }
+
+            }
+
+        }
+
+    }
+
+
+  
+}
+  
+return results
+}
+
+// nice but slow
+
+
+
 console.log(threeSum(
-    [-1, 0, 1, 2, -1, -4]
-))
+
+  [0,0,0]
+  ))
 
