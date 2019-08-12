@@ -100,7 +100,7 @@ for (let i = 0; i <=arr.length-3; i++) {
             }
             else{
               let curEnd=end
-              while (arr[curEnd]==arr[end]) {
+              while (arr[curEnd]==arr[end]&& start < end) {
                 end--
 
               }
