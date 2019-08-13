@@ -74,13 +74,16 @@ var isValidSudoku = function(board) {
         6:'60',
         7:'63',
         8:'66'}
+    var arr=[]
+
 
     var createBox=(x)=>{
-        let arr=[]
         for (let q=0;q<3;q++) {
             for (let p=0;p<3;p++) {
                 if(arr.indexOf(board[Number(objy[x][0])+q][Number(objy[x][1])+p])!=-1){
+                    arr=[]
                     return false
+
                 }
                 arr.push(
                     board[Number(objy[x][0])+q][Number(objy[x][1])+p]
@@ -88,23 +91,26 @@ var isValidSudoku = function(board) {
             }
 
          }
+         arr=[]
          return true
     }
     var createCol=(i)=>{
-        let z=[]
+
         for (let j = 0; j < 9; j++) {
-            if (z.indexOf(board[j][i])!=-1){
+            if (arr.indexOf(board[j][i])!=-1){
+                arr=[]
                 return false
             }
-           z.push(board[j][i])
+           arr.push(board[j][i])
             
         }
+        arr=[]
         return true
     }
-    var checkEnt=(x)=>{
-        for (let i = 1; i < 10; i++) {
+    function checkRow(){
+        for (let i = 0; i < 10; i++) {
         
-        if (x.indexOf(String(i))!=x.lastIndexOf(String(i))
+        if (board.indexOf(String(i))!=board.lastIndexOf(String(i))
         ) {return false  }
       
 
@@ -114,30 +120,102 @@ var isValidSudoku = function(board) {
     }
 
     for (let i = 0; i < 9 && result==true; i++) {
-
-      result=result&&checkEnt(createCol(i))&&checkEnt(board[i])
-        &&checkEnt(createBox(i))
+        if(!result){break}
+      result=result&&createCol(i)&&createBox(i)
             
         
     }
 
-    return result
+    return result&&checkRow()
     
 
 }
 
 
 
+
+
+var isValidSudoku = function (board) {
+    let result = true
+    var objy = {
+        0: '00',
+        1: '03',
+        2: '06',
+        3: '30',
+        4: '33',
+        5: '36',
+        6: '60',
+        7: '63',
+        8: '66'
+    }
+    var createBox = (x) => {
+        let arr = []
+        for (let q = 0; q < 3; q++) {
+            for (let p = 0; p < 3; p++) {
+                if (board[Number(objy[x][0]) + q][Number(objy[x][1]) + p] != '.' &&arr.indexOf(board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]) != -1) {
+                    return ['1','1']
+
+                }
+                arr.push(
+                    board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]
+                )
+            }
+
+        }
+        return arr
+    }
+    var createCol = (i) => {
+        let z = []
+        for (let j = 0; j < 9; j++) {
+
+            if (z.indexOf(board[j][i]) != -1 && board[j][i]!='.') {
+               
+                return ['1','1']
+            }
+            z.push(board[j][i])
+
+        }
+        return z
+    }
+    var checkEnt = (x) => {
+        for (let i = 1; i < 10; i++) {
+
+            if (
+                x.indexOf(String(i)) != x.lastIndexOf(String(i))
+            ) { return false }
+
+
+        }
+
+        return true
+    }
+
+
+    for (let i = 0; i < 9 && result; i++) {
+        if(result==false){break}
+        result = result && checkEnt(createCol(i)) && checkEnt(board[i])
+            && checkEnt(createBox(i))
+
+
+    }
+    return result
+
+
+}
+
+
 console.log(isValidSudoku(
-    [
-        [".",".",".",".",".",".",".",".","."],
-        [".",".",".",".",".",".",".",".","."],
-        [".","9",".",".",".",".",".",".","1"],
-        ["8",".",".",".",".",".",".",".","."],
-        [".","9","9","3","5","7",".",".","."],
-        [".",".",".",".",".",".",".","4","."],
-        [".",".",".","8",".",".",".",".","."],
-        [".","1",".",".",".",".","4",".","9"],
-        [".",".",".","5",".","4",".",".","."]
+    
+    [   ["5", "3", ".", ".", "7", ".", ".", ".", "."],
+        ["6", ".", ".", "1", "9", "5", ".", ".", "."],
+        [".", "9", "8", ".", ".", ".", ".", "6", "."],
+        ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
+        ["4", ".", ".", "8", ".", "3", ".", ".", "1"],
+        ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
+        [".", "6", ".", ".", ".", ".", "2", "8", "."],
+        [".", ".", ".", "4", "1", "9", ".", ".", "5"],
+        [".", ".", ".", ".", "8", ".", ".", "7", "9"]
     ]
+        
+    
 ))
