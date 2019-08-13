@@ -138,7 +138,18 @@ var isValidSudoku = function(board) {
 var isValidSudoku = function (board) {
     let result = true
     var objy = {
-        0: '00',
+00
+01
+02
+03  10
+04  11
+05  12             
+06 = 20
+07 = 21
+08 = 22
+ j=>j%3
+                    
+                
         1: '03',
         2: '06',
         3: '30',
@@ -148,56 +159,53 @@ var isValidSudoku = function (board) {
         7: '63',
         8: '66'
     }
+    let arr = []
+
     var createBox = (x) => {
-        let arr = []
         for (let q = 0; q < 3; q++) {
             for (let p = 0; p < 3; p++) {
-                if (board[Number(objy[x][0]) + q][Number(objy[x][1]) + p] != '.' &&arr.indexOf(board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]) != -1) {
+                let u = board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]
+                if ( u!= '.' &&arr.indexOf(u) != -1) {
+                    arr = []
                     return false
+                   
                 }
                 arr.push(
-                    board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]
+                   u
                 )
             }
 
         }
+        arr = []
         return true
     }
-    var createCol = (i) => {
-        let z = []
-        for (let j = 0; j < 9; j++) {
 
-            if (z.indexOf(board[j][i]) != -1 && board[j][i]!='.') {
-               
-                return false
-            }
-            z.push(board[j][i])
 
-        }
-        return true
-    }
-    var checkEnt = (x) => {
-        for (let i = 1; i < 10; i++) {
 
+
+    return result
+
+
+    for (let i = 0; i < 9; i++) {
+        let arr=[]
+        for (let j = 0; i < 9; i++) {
             if (
-                x.indexOf(String(i)) != x.lastIndexOf(String(i))
+                board[i].indexOf(String(j + 1)) != board[i].lastIndexOf(String(j + 1))
+                || (arr.indexOf(board[j][i]) != -1 && board[j][i] != '.')
+
             ) { return false }
 
 
+            arr.push(board[j][i])
+      
         }
 
-        return true
-    }
+       
 
 
-    for (let i = 0; i < 9 && result; i++) {
-        if(result==false){break}
-        result = result && createCol(i) && checkEnt(board[i])
-            && createBox(i)
-
-
-    }
-    return result
+}
+    
+return true
 
 
 }
