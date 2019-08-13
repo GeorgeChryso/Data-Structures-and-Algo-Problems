@@ -153,8 +153,7 @@ var isValidSudoku = function (board) {
         for (let q = 0; q < 3; q++) {
             for (let p = 0; p < 3; p++) {
                 if (board[Number(objy[x][0]) + q][Number(objy[x][1]) + p] != '.' &&arr.indexOf(board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]) != -1) {
-                    return ['1','1']
-
+                    return false
                 }
                 arr.push(
                     board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]
@@ -162,7 +161,7 @@ var isValidSudoku = function (board) {
             }
 
         }
-        return arr
+        return true
     }
     var createCol = (i) => {
         let z = []
@@ -170,12 +169,12 @@ var isValidSudoku = function (board) {
 
             if (z.indexOf(board[j][i]) != -1 && board[j][i]!='.') {
                
-                return ['1','1']
+                return false
             }
             z.push(board[j][i])
 
         }
-        return z
+        return true
     }
     var checkEnt = (x) => {
         for (let i = 1; i < 10; i++) {
@@ -193,8 +192,8 @@ var isValidSudoku = function (board) {
 
     for (let i = 0; i < 9 && result; i++) {
         if(result==false){break}
-        result = result && checkEnt(createCol(i)) && checkEnt(board[i])
-            && checkEnt(createBox(i))
+        result = result && createCol(i) && checkEnt(board[i])
+            && createBox(i)
 
 
     }
