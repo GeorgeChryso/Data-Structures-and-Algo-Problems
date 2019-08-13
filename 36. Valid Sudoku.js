@@ -138,18 +138,7 @@ var isValidSudoku = function(board) {
 var isValidSudoku = function (board) {
     let result = true
     var objy = {
-00
-01
-02
-03  10
-04  11
-05  12             
-06 = 20
-07 = 21
-08 = 22
- j=>j%3
-                    
-                
+        0: '00',
         1: '03',
         2: '06',
         3: '30',
@@ -159,20 +148,14 @@ var isValidSudoku = function (board) {
         7: '63',
         8: '66'
     }
-    let arr = []
+    var arr = []
+    
 
     var createBox = (x) => {
         for (let q = 0; q < 3; q++) {
             for (let p = 0; p < 3; p++) {
-                let u = board[Number(objy[x][0]) + q][Number(objy[x][1]) + p]
-                if ( u!= '.' &&arr.indexOf(u) != -1) {
-                    arr = []
-                    return false
-                   
-                }
-                arr.push(
-                   u
-                )
+               
+              
             }
 
         }
@@ -182,8 +165,6 @@ var isValidSudoku = function (board) {
 
 
 
-
-    return result
 
 
     for (let i = 0; i < 9; i++) {
@@ -197,10 +178,10 @@ var isValidSudoku = function (board) {
 
 
             arr.push(board[j][i])
-      
+                
         }
-
-       
+        result = result && createBox(i)
+        if (result == false) { return false }
 
 
 }
