@@ -136,53 +136,59 @@ var isValidSudoku = function(board) {
 
 
 var isValidSudoku = function (board) {
-    let result = true
-    var objy = {
-        0: '00',
-        1: '03',
-        2: '06',
-        3: '30',
-        4: '33',
-        5: '36',
-        6: '60',
-        7: '63',
-        8: '66'
-    }
-    var arr = []
+  
     
+    
+    var gimme = (i, j) => {
+        let u = i
 
-    var createBox = (x) => {
-        for (let q = 0; q < 3; q++) {
-            for (let p = 0; p < 3; p++) {
-               
-              
-            }
+        if (i < 3) {
+
+            if (j < 3) {
+                i = 0
+                
+               }
+            else if (j < 6) {i=1 }
+            else { i = 2 }
+           
 
         }
-        arr = []
-        return true
+        else if (i < 6) {
+            if (j < 3) { i = 3 }
+            else if (j < 6) { i = 4 }
+            else { i = 5 }
+
+
+        } else {
+            if (j < 3) { i = 6 }
+            else if (j < 6) { i = 7 }
+            else { i = 8 }
+
+        }
+        j = (u % 3) * 3 + j % 3
+
+        return board[i][j]
     }
-
-
 
 
 
     for (let i = 0; i < 9; i++) {
-        let arr=[]
-        for (let j = 0; i < 9; i++) {
+        let arr = []
+        var box = []
+
+        for (let j = 0; j < 9; j++) {
+            let uhu =gimme(i,j)
             if (
                 board[i].indexOf(String(j + 1)) != board[i].lastIndexOf(String(j + 1))
                 || (arr.indexOf(board[j][i]) != -1 && board[j][i] != '.')
-
+                 || (box.indexOf(uhu) != -1 && uhu != '.')
             ) { return false }
-
-
+            
+          
+            box.push(uhu)
             arr.push(board[j][i])
                 
         }
-        result = result && createBox(i)
-        if (result == false) { return false }
-
 
 }
     
@@ -194,7 +200,8 @@ return true
 
 console.log(isValidSudoku(
     
-    [   ["5", "3", ".", ".", "7", ".", ".", ".", "."],
+    [
+        ["8", "3", ".", ".", "7", ".", ".", ".", "."],
         ["6", ".", ".", "1", "9", "5", ".", ".", "."],
         [".", "9", "8", ".", ".", ".", ".", "6", "."],
         ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
@@ -203,7 +210,6 @@ console.log(isValidSudoku(
         [".", "6", ".", ".", ".", ".", "2", "8", "."],
         [".", ".", ".", "4", "1", "9", ".", ".", "5"],
         [".", ".", ".", ".", "8", ".", ".", "7", "9"]
-    ]
-        
+    ]  
     
 ))
