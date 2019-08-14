@@ -131,7 +131,88 @@ var isValidSudoku = function(board) {
 
 }
 
+var isValidSudoku = function (board) {
 
+
+
+    var gimme = (i, j) => {
+        let u = i
+
+        if (i < 3) {
+
+            if (j < 3) {
+                i = 0
+
+            }
+            else if (j < 6) { i = 1 }
+            else { i = 2 }
+
+
+        }
+        else if (i < 6) {
+            if (j < 3) { i = 3 }
+            else if (j < 6) { i = 4 }
+            else { i = 5 }
+
+
+        } else {
+            if (j < 3) { i = 6 }
+            else if (j < 6) { i = 7 }
+            else { i = 8 }
+
+        }
+        j = (u % 3) * 3 + j % 3
+
+        return board[i][j]
+    }
+
+
+
+    for (let i = 0; i < 9; i++) {
+        let arr = {
+            '1': -1,
+            '2': -1,
+            '3': -1,
+            '4': -1,
+            '5': -1,
+            '6': -1,
+            '7': -1,
+            '8': -1,
+            '9': -1
+        }
+
+        var box = {
+            '1': -1,
+            '2': -1,
+            '3': -1,
+            '4': -1,
+            '5': -1,
+            '6': -1,
+            '7': -1,
+            '8': -1,
+            '9': -1
+        }
+
+        for (let j = 0; j < 9; j++) {
+            let uhu = gimme(i, j)
+            if (
+                board[i].indexOf(String(j + 1)) != board[i].lastIndexOf(String(j + 1))
+                || (arr[board[j][i]] != -1 && board[j][i] != '.')
+                || (box[uhu] != -1 && uhu != '.')
+            ) { return false }
+
+
+            arr[board[j][i]] = 2
+            box[uhu] = 2
+
+        }
+
+    }
+
+    return true
+
+
+}
 
 
 
@@ -196,6 +277,8 @@ return true
 
 
 }
+
+
 
 
 console.log(isValidSudoku(
