@@ -15,7 +15,7 @@
 // The given board size is always 9x9.
 var x =
     [
-        ["5", "1", "9", "7", "4", "8", "6", "3", "2"],
+["5", "1", "9", "7", "4", "8", "6", "3", "2"],
 ["7", "8", "3", "6", "5", "2", "4", "1", "9"],
 ["4", "2", "6", "1", "3", "9", "8", "7", "5"],
 ["3", "5", "7", "9", "8", "6", "2", "4", "1"],
@@ -72,7 +72,7 @@ function deSet(x) {
      for (let j in x[i]) {
          if (!isString(x[i][j])) {
             
-             x[i][j] = '.'
+             x[i][j] = ' '
              //x[i][j] = [x[i][j].size]
          }
      }
@@ -227,96 +227,95 @@ var solveSudoku = function (board) {
         }
 
 // box differences
-    
-    // for (let i = 0; i < 9; i++) {
-    //     for (let j = 0; j < 9; j++) {
-    //         let diff = new Set()// kane adeio set
-    //         let rowunion = new Set()
-    //         let colUnion=new Set()
-    //         for (var k = 0; k < 9 && !isString(board[i][j]); k++) // gia ta 9 tou koutiou otan to A einai Set
-    //         {
-    //             let u = checkMyBox(i, j, k)
+    function boxDif(){
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            let diff = new Set()// kane adeio set
+            let rowunion = new Set()
+            let colUnion=new Set()
+            for (var k = 0; k < 9 && !isString(board[i][j]); k++)
+            // gia ta 9 tou koutiou otan to A einai Set
+            {
+                let u = checkMyBox(i, j, k)
                
                
-    //             //ROWS
+                //ROWS
 
 
-    //             if (!isString(board[i][k])) {
-    //                 if (
-    //                     difference(board[i][k], board[i][j]) != 0
-    //               ) { rowunion = union(rowunion, board[i][k])}
-    //             }
-    //             else if (isString(board[i][k]) ) {
-    //                 rowunion.add(Number (board[i][k]))
-    //             }
-
-
-
-    //             // COLUMNS 
-
-
-    //             if (!isString(board[k][j]) ) {
-    //                 if (difference(board[k][j], board[i][j]) != 0)
-    //                 { colUnion = union(colUnion, board[i][k]) }
-    //             }
-    //             else if (isString(board[k][j])){
-    //                 colUnion.add(Number(board[k][j]))
-    //             }
+                if (!isString(board[i][k])) {
+                    if (
+                        k!= i
+                    ) { 
+                        rowunion = union(rowunion, board[i][k])
+                    }
+                }
+                else if (isString(board[i][k]) ) {
+                    rowunion.add(Number (board[i][k]))
+                }
 
 
 
-    //            // BOXES
-    //             if (!isString(board[u[0]][u[1]])
-    //                 && difference(board[u[0]][u[1]], board[i][j]).size != 0) {              //  An to stoixeio einai Set
-    //             //     if (diff.size == 0)                         // vale sto diff tin diafora poy exei to A me to stoixeio koutiou
-    //             //     {
-    //             //         diff = difference(board[i][j], board[u[0]][u[1]])
-    //             //         continue;
-    //             //     }
-    //             //                                             // as einai diff2 h diafora tou A me to stoixeio koutiou
-    //             //     let diff2 = difference(board[i][j], board[u[0]][u[1]])
-    //             //             // to size tis diaforas diff kai diff2 einai diaforo tou 0, to kouti axristeutike
-    //             //    diff=intersection(diff,diff2)
+                // COLUMNS 
+
+
+                if (!isString(board[k][j]) ) {
+                    if (k!=j)
+                    { colUnion = union(colUnion, board[i][k]) }
+                }
+                else if (isString(board[k][j])){
+                    colUnion.add(Number(board[k][j]))
+                }
+
+
+
+               // BOXES
+                if (!isString(board[u[0]][u[1]])
+                    && !(u[0] == i && u[1] == j)
+                ) {
                     
-    //                 diff = union(diff, board[u[0]][u[1]])
+                    diff = union(diff, board[u[0]][u[1]])
 
 
 
-    //             } else if (isString(board[u[0]][u[1]]))  
-    //             {
-    //                 diff =diff.add(Number(board[u[0]][u[1]]))
-    //                 }
-    //         }
-           
-    //         diff = difference(q, diff)
-    //         rowunion = difference(rowunion, q)
-    //         colUnion = difference(colUnion,q)
-    //         if (rowunion.size == 1 && [...board[i][j]].includes(String([...rowunion][0]))) {
-    //             console.log('hio', i, j)
+                } else if (isString(board[u[0]][u[1]]))  
+                {
+                    diff =diff.add(Number(board[u[0]][u[1]]))
+                    }
+            }
+            if (i == 1 && j == 6) {
+               // console.log(rowunion)
+             }
+            diff = difference(q, diff)
+            rowunion = difference(rowunion, q)
+            colUnion = difference(colUnion,q)
+            if (rowunion.size == 1 && [...board[i][j]].includes(String([...rowunion][0]))) {
+                console.log('hio', i, j)
 
-    //             board[i][j] = String([...rowunion][0])
-    //             checkMe(i, j)
+                board[i][j] = String([...rowunion][0])
+                checkMe(i, j)
 
-    //         }
-    //         if (colUnion.size == 1 && [...board[i][j]].includes(String([...colUnion][0]))) {
-    //             console.log('hiu', i, j)
+            }
+            if (colUnion.size == 1 && [...board[i][j]].includes(String([...colUnion][0]))) {
+                console.log('hiu', i, j)
 
-    //             board[i][j] = String([...colUnion][0])
-    //             checkMe(i, j)
+                board[i][j] = String([...colUnion][0])
+                checkMe(i, j)
 
-    //         }
-    //         if (diff.size == 1
-    //             ) {
-    //             console.log('hi',i,j)
-    //             board[i][j] = String([...diff][0])
-    //             checkMe(i,j)
-    //         }
+            }
+            if (diff.size == 1
+                ) {
+                console.log('hi',i,j)
+                board[i][j] = String([...diff][0])
+                checkMe(i,j)
+            }
 
-    //    }
-    // }
+       }
+    }
+    }
+    boxDif()
 
-
-   // return deSet(board)
+   //return board[
+   return deSet(board)
     return mapCorrect(deSet(board))
 
 
