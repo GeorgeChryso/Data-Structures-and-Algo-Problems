@@ -13,10 +13,50 @@
 // The given board contain only digits 1 - 9 and the character '.'.
 // You may assume that the given Sudoku puzzle will have a single unique solution.
 // The given board size is always 9x9.
+var x =
+    [
+        ["5", "1", "9", "7", "4", "8", "6", "3", "2"],
+["7", "8", "3", "6", "5", "2", "4", "1", "9"],
+["4", "2", "6", "1", "3", "9", "8", "7", "5"],
+["3", "5", "7", "9", "8", "6", "2", "4", "1"],
+["2", "6", "4", "3", "1", "7", "5", "9", "8"],
+["1", "9", "8", "5", "2", "4", "3", "6", "7"],
+["9", "7", "5", "8", "6", "3", "1", "2", "4"],
+["8", "3", "2", "4", "9", "1", "7", "5", "6"],
+["6", "4", "1", "2", "7", "5", "9", "8", "3"]
+]
+
+
+function mapCorrect(A) {
+      A.forEach((d,i)=>
+        A[i].forEach((d, j) => {
+            if (d == x[i][j]) {
+              A[i][j]='@'
+            }
+            else if (d =='.') {
+                A[i][j] = '.'
+            }
+            else {
+                A[i][j] = '!'
+            }
+        }))
+    
+ 
+    return A
+}
+
 
 
 function isString(value) {
     return typeof value === 'string' || value instanceof String;
+}
+
+function union(setA, setB) {
+    var _union = new Set(setA);
+    for (var elem of setB) {
+        _union.add(elem);
+    }
+    return _union;
 }
 function intersection(setA, setB) {
     var _intersection = new Set();
@@ -32,8 +72,8 @@ function deSet(x) {
      for (let j in x[i]) {
          if (!isString(x[i][j])) {
             
-             //x[i][j] = '.'
-             x[i][j] = [x[i][j].size]
+             x[i][j] = '.'
+             //x[i][j] = [x[i][j].size]
          }
      }
     }
@@ -57,6 +97,10 @@ for (let i = 1; i < 10; i++) {
 
 
 var solveSudoku = function (board) {
+    function isString(value) {
+        return typeof value === 'string' || value instanceof String;
+    }
+
     var checkMyBox = (i, j, k) => {
         if (i < 3) {
             if (j < 3) {
@@ -148,7 +192,6 @@ var solveSudoku = function (board) {
                     board[u[0]][u[1]].delete(Number(board[i][j]))
                     if (board[u[0]][u[1]].size == 1) { checkMe(u[0], u[1]) }
                 }
-                // MISSING THE 3X3 BOX 
             }
         }
         else {
@@ -185,33 +228,97 @@ var solveSudoku = function (board) {
 
 // box differences
     
-    for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-            let diff = new Set()// kane adeio set
-            for (var k = 0; k < 9 && !isString(board[i][j]); k++) // gia ta 9 tou koutiou otan to A einai Set
-            {
-                let u = checkMyBox(i, j, k)
-                if (!isString(board[u[0]][u[1]])){              //  An to stoixeio einai Set
-                    if (diff.size == 0)                         // vale sto diff tin diafora poy exei to A me to stoixeio koutiou
-                    {
-                        diff = difference(board[i][j], board[u[0]][u[1]])
-                        continue;
-                    }
-                                                            // as einai diff2 h diafora tou A me to stoixeio koutiou
-                    let diff2 = difference(board[i][j], board[u[0]][u[1]])
-                            // to size tis diaforas diff kai diff2 einai diaforo tou 0, to kouti axristeutike
-                   diff=intersection(diff,diff2)
-                }    
-            }
-            if (diff.size == 1&&k==9) {
-                board[i][j] = String([...diff][0])
-                checkMe(i,j)
-            }
-       }
-    }
-            
-     //return deSet(board)
-    return board
+    // for (let i = 0; i < 9; i++) {
+    //     for (let j = 0; j < 9; j++) {
+    //         let diff = new Set()// kane adeio set
+    //         let rowunion = new Set()
+    //         let colUnion=new Set()
+    //         for (var k = 0; k < 9 && !isString(board[i][j]); k++) // gia ta 9 tou koutiou otan to A einai Set
+    //         {
+    //             let u = checkMyBox(i, j, k)
+               
+               
+    //             //ROWS
+
+
+    //             if (!isString(board[i][k])) {
+    //                 if (
+    //                     difference(board[i][k], board[i][j]) != 0
+    //               ) { rowunion = union(rowunion, board[i][k])}
+    //             }
+    //             else if (isString(board[i][k]) ) {
+    //                 rowunion.add(Number (board[i][k]))
+    //             }
+
+
+
+    //             // COLUMNS 
+
+
+    //             if (!isString(board[k][j]) ) {
+    //                 if (difference(board[k][j], board[i][j]) != 0)
+    //                 { colUnion = union(colUnion, board[i][k]) }
+    //             }
+    //             else if (isString(board[k][j])){
+    //                 colUnion.add(Number(board[k][j]))
+    //             }
+
+
+
+    //            // BOXES
+    //             if (!isString(board[u[0]][u[1]])
+    //                 && difference(board[u[0]][u[1]], board[i][j]).size != 0) {              //  An to stoixeio einai Set
+    //             //     if (diff.size == 0)                         // vale sto diff tin diafora poy exei to A me to stoixeio koutiou
+    //             //     {
+    //             //         diff = difference(board[i][j], board[u[0]][u[1]])
+    //             //         continue;
+    //             //     }
+    //             //                                             // as einai diff2 h diafora tou A me to stoixeio koutiou
+    //             //     let diff2 = difference(board[i][j], board[u[0]][u[1]])
+    //             //             // to size tis diaforas diff kai diff2 einai diaforo tou 0, to kouti axristeutike
+    //             //    diff=intersection(diff,diff2)
+                    
+    //                 diff = union(diff, board[u[0]][u[1]])
+
+
+
+    //             } else if (isString(board[u[0]][u[1]]))  
+    //             {
+    //                 diff =diff.add(Number(board[u[0]][u[1]]))
+    //                 }
+    //         }
+           
+    //         diff = difference(q, diff)
+    //         rowunion = difference(rowunion, q)
+    //         colUnion = difference(colUnion,q)
+    //         if (rowunion.size == 1 && [...board[i][j]].includes(String([...rowunion][0]))) {
+    //             console.log('hio', i, j)
+
+    //             board[i][j] = String([...rowunion][0])
+    //             checkMe(i, j)
+
+    //         }
+    //         if (colUnion.size == 1 && [...board[i][j]].includes(String([...colUnion][0]))) {
+    //             console.log('hiu', i, j)
+
+    //             board[i][j] = String([...colUnion][0])
+    //             checkMe(i, j)
+
+    //         }
+    //         if (diff.size == 1
+    //             ) {
+    //             console.log('hi',i,j)
+    //             board[i][j] = String([...diff][0])
+    //             checkMe(i,j)
+    //         }
+
+    //    }
+    // }
+
+
+   // return deSet(board)
+    return mapCorrect(deSet(board))
+
 
 }
 
@@ -229,6 +336,7 @@ console.log(
         ]
     )
 )
+
   
 // console.log(solveSudoku(
     
