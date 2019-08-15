@@ -313,8 +313,8 @@ var solveSudoku = function (board) {
     }
     }
     boxDif()
-
-   //return board[
+   
+   return board
    return deSet(board)
     return mapCorrect(deSet(board))
 
