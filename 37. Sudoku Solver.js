@@ -14,8 +14,37 @@
 // You may assume that the given Sudoku puzzle will have a single unique solution.
 // The given board size is always 9x9.
 
+
 function isString(value) {
     return typeof value === 'string' || value instanceof String;
+}
+function intersection(setA, setB) {
+    var _intersection = new Set();
+    for (var elem of setB) {
+        if (setA.has(elem)) {
+            _intersection.add(elem);
+        }
+    }
+    return _intersection;
+}
+function deSet(x) {
+    for (let i in x) {
+     for (let j in x[i]) {
+         if (!isString(x[i][j])) {
+            
+             //x[i][j] = '.'
+             x[i][j] = [x[i][j].size]
+         }
+     }
+    }
+    return x
+}
+function difference(setA, setB) {
+    var _difference = new Set(setA);
+    for (var elem of setB) {
+        _difference.delete(elem);
+    }
+    return _difference;
 }
 
 
@@ -32,69 +61,69 @@ var solveSudoku = function (board) {
         if (i < 3) {
             if (j < 3) {
                 return [
-                    board[0][0], board[0][1], board[0][2],
-                    board[1][0], board[1][1], board[1][2],
-                    board[2][0], board[2][1], board[2][2]
+                    [0,0], [0,1], [0,2],
+                    [1,0], [1,1], [1,2],
+                    [2,0], [2,1], [2,2]
                 ][k]
             }
             else if (j < 6) {
                 return [
-                    board[0][3], board[0][4], board[0][5],
-                    board[1][3], board[1][4], board[1][5],
-                    board[2][3], board[2][4], board[2][5]
+                    [0,3], [0,4], [0,5],
+                    [1,3], [1,4], [1,5],
+                    [2,3], [2,4], [2,5]
                 ][k]
             }
             else {
                 return [
-                    board[0][6], board[0][7], board[0][8],
-                    board[1][6], board[1][7], board[1][8],
-                    board[2][6], board[2][7], board[2][8]
+                    [0,6], [0,7], [0,8],
+                    [1,6], [1,7], [1,8],
+                    [2,6], [2,7], [2,8]
                 ][k]
             }
         }
         else if (i < 6) {
             if (j < 3) {
                 return [
-                    board[3][0], board[3][1], board[3][2],
-                    board[4][0], board[4][1], board[4][2],
-                    board[5][0], board[5][1], board[5][2]
+                    [3,0], [3,1], [3,2],
+                    [4,0], [4,1], [4,2],
+                    [5,0], [5,1], [5,2]
                 ][k]
             }
             else if (j < 6) {
                 return [
-                    board[3][3], board[3][4], board[3][5],
-                    board[4][3], board[4][4], board[4][5],
-                    board[5][3], board[5][4], board[5][5]
+                    [3,3], [3,4], [3,5],
+                    [4,3], [4,4], [4,5],
+                    [5,3], [5,4], [5,5]
                 ][k]
             }
             else {
                 return [
-                    board[3][6], board[3][7], board[3][8],
-                    board[4][6], board[4][7], board[4][8],
-                    board[5][6], board[5][7], board[5][8]
+                    [3,6], [3,7], [3,8],
+                    [4,6], [4,7], [4,8],
+                    [5,6], [5,7], [5,8]
                 ][k]
             }
         }
         else {
             if (j < 3) {
                 return [
-                    board[6][0], board[6][1], board[6][2],
-                    board[7][0], board[7][1], board[7][2],
-                    board[8][0], board[8][1], board[8][2]
+                    [6,0], [6,1], [6,2],
+                    [7,0], [7,1], [7,2],
+                    [8,0], [8,1], [8,2]
                 ][k]
             }
             else if (j < 6) {
                 return [
-                    board[6][3], board[6][4], board[6][5],
-                    board[7][3], board[7][4], board[7][5],
-                    board[8][3], board[8][4], board[8][5]
+                    [6,3], [6,4], [6,5],
+                    [7,3], [7,4], [7,5],
+                    [8,3], [8,4], [8,5]
                 ][k]
             }
             else {
                 return [
-                    board[6][6], board[6][7], board[6][8],
-                    board[7][6], board[7][7], board[7][8],
-                    board[8][6], board[8][7], board[8][8]
+                    [6,6], [6,7], [6,8],
+                    [7,6], [7,7], [7,8],
+                    [8,6], [8,7], [8,8]
                 ][k]
             }
 
@@ -102,7 +131,7 @@ var solveSudoku = function (board) {
     }
     var checkMe = (i, j) => {
         if (isString(board[i][j])) {
-            for (var k = 0; k < 9; k++) {
+            for (let k = 0; k < 9; k++) {
 
                 if (!isString(board[k][j])) {
                     board[k][j].delete(Number(board[i][j]));
@@ -114,12 +143,15 @@ var solveSudoku = function (board) {
                     if (board[i][k].size == 1) { checkMe(i, k) }
 
                 }
-                if (!isString(checkMyBox(i, j, k))) {
-                    
+                let u = checkMyBox(i,j,k)
+                if (!isString(board[u[0]][u[1]])) {
+                    board[u[0]][u[1]].delete(Number(board[i][j]))
+                    if (board[u[0]][u[1]].size == 1) { checkMe(u[0], u[1]) }
                 }
                 // MISSING THE 3X3 BOX 
             }
-        } else {
+        }
+        else {
             if (board[i][j].size == 1) {
 
                 board[i][j] = String([...board[i][j]][0])
@@ -142,48 +174,76 @@ var solveSudoku = function (board) {
         }
         )
     };
-        for (let i = 0; i < 9; i++) {
-            for (let j = 0; j <9; j++) {
+    
+    
+    
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j <9; j++) {
                     checkMe(i,j)
-                
-
-
-
-                    //
             }
         }
 
-
-            
+// box differences
     
-       
-
-        
-    
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            let diff = new Set()// kane adeio set
+            for (var k = 0; k < 9 && !isString(board[i][j]); k++) // gia ta 9 tou koutiou otan to A einai Set
+            {
+                let u = checkMyBox(i, j, k)
+                if (!isString(board[u[0]][u[1]])){              //  An to stoixeio einai Set
+                    if (diff.size == 0)                         // vale sto diff tin diafora poy exei to A me to stoixeio koutiou
+                    {
+                        diff = difference(board[i][j], board[u[0]][u[1]])
+                        continue;
+                    }
+                                                            // as einai diff2 h diafora tou A me to stoixeio koutiou
+                    let diff2 = difference(board[i][j], board[u[0]][u[1]])
+                            // to size tis diaforas diff kai diff2 einai diaforo tou 0, to kouti axristeutike
+                   diff=intersection(diff,diff2)
+                }    
+            }
+            if (diff.size == 1&&k==9) {
+                board[i][j] = String([...diff][0])
+                checkMe(i,j)
+            }
+       }
+    }
             
+     //return deSet(board)
     return board
 
 }
 
+console.log(
+    solveSudoku(
+        [   [".", ".", "9", "7", "4", "8", ".", ".", "."],
+            ["7", ".", ".", ".", ".", ".", ".", ".", "."],
+            [".", "2", ".", "1", ".", "9", ".", ".", "."],
+            [".", ".", "7", ".", ".", ".", "2", "4", "."],
+            [".", "6", "4", ".", "1", ".", "5", "9", "."],
+            [".", "9", "8", ".", ".", ".", "3", ".", "."],
+            [".", ".", ".", "8", ".", "3", ".", "2", "."],
+            [".", ".", ".", ".", ".", ".", ".", ".", "6"],
+            [".", ".", ".", "2", "7", "5", "9", ".", "."]
+        ]
+    )
+)
+  
+// console.log(solveSudoku(
+    
+//     [
+//         [".", ".", "9", "7", "4", "8", ".", ".", "."],
+//         ["7", ".", ".", ".", ".", ".", ".", ".", "."],
+//         [".", "2", ".", "1", ".", "9", ".", ".", "."],
+//         [".", ".", "7", ".", ".", ".", "2", "4", "."],
+//         [".", "6", "4", ".", "1", ".", "5", "9", "."],
+//         [".", "9", "8", ".", ".", ".", "3", ".", "."],
+//         [".", ".", ".", "8", ".", "3", ".", "2", "."],
+//         [".", ".", ".", ".", ".", ".", ".", ".", "6"],
+//         [".", ".", ".", "2", "7", "5", "9", ".", "."]
+//     ]
+    
+    
+// ))
 
-
-
-console.log(solveSudoku(
-    [
-        ["5", "3", ".", ".", "7", ".", ".", ".", "."],
-        ["6", ".", ".", "1", "9", "5", ".", ".", "."],
-        [".", "9", "8", ".", ".", ".", ".", "6", "."],
-        ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
-        ["4", ".", ".", "8", ".", "3", ".", ".", "1"],
-        ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
-        [".", "6", ".", ".", ".", ".", "2", "8", "."],
-        [".", ".", ".", "4", "1", "9", ".", ".", "5"],
-        [".", ".", ".", ".", "8", ".", ".", "7", "9"]
-    ]
-))
-
-let arr=[1,2]
-
-arr[0] = q
-    q.delete(-1)
-console.log('q'.size)
