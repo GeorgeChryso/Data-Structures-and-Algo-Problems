@@ -1,20 +1,21 @@
 
 
+
 var numJewelsInStones = function (J, S) {
-    let c = 0
- for ( let i in J) {
-    for (let j in S) {
-        if (J.charAt(i)===S.charAt(j)) {
-            c++            
+
+    J = new Set(J)
+    let count = 0
+    for (let i = 0; i < S.length; i++) {
+        if (J.has(S[i])) {
+            count++
         }
     }
-    }
-    
-    return c
-
+    return count
 };
+
 
 console.log(numJewelsInStones(
 
-    "aA", "aAAbbbb"
+    "z",
+"ZZ"
 ))
