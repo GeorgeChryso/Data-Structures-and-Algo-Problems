@@ -33,7 +33,7 @@ function mapCorrect(A) {
             if (d == x[i][j]) {
               A[i][j]='@'
             }
-            else if (d =='.') {
+            else if (d =='.'||d==' ') {
                 A[i][j] = '.'
             }
             else {
@@ -313,13 +313,147 @@ var solveSudoku = function (board) {
     }
     }
     boxDif()
-   
-   return board
-   return deSet(board)
+    function findXrows() {
+        let c = 0
+        let u = [[],[],[],[],[],[],[],[],[],[]]
+        for (let i = 0; i < 9; i++) {
+           
+            for (let k = 1; k < 10; k++) {
+
+                for (let j = 0; j < 9; j++) {
+                   // if (k == 3 && i == 3) { console.log(!isString(board[i][j]) && board[i][j].has(k))}
+                    if (!isString(board[i][j]) && board[i][j].has(k)&&c<2) {
+                        c++
+                        u[k].push([i, j])
+                       // console.log(k,u[k])
+                    }
+                }
+                if (c != 2) { c = 0; continue; }
+                c=0
+                console.log(k, 'found in', u[k]) 
+                
+            }    
+        }
+   }
+findXrows()
+  return board
+ // return deSet(board)
     return mapCorrect(deSet(board))
 
 
 }
+var solveSudoku = function (board)
+{
+    // check if board is valid after updating number at row-col
+    function isValid(board, row, col) {
+        let num = board[row][col];
+        // check if row / column / block already has current number
+        return !(
+            boardHasNumberInSection(board, num, {
+                rowStart: 0, rowEnd: 9, rowInc: 1,
+                colStart: col, colEnd: col + 1, colInc: 1,
+            }, { row, col })
+            || boardHasNumberInSection(board, num, {
+                rowStart: row, rowEnd: row + 1, rowInc: 1,
+                colStart: 0, colEnd: 9, colInc: 1
+            }, { row, col })
+            || boardHasNumberInSection(board, num, {
+                rowStart: Math.floor(row / 3) * 3, rowEnd: Math.floor(row / 3) * 3 + 3, rowInc: 1,
+                colStart: Math.floor(col / 3) * 3, colEnd: Math.floor(col / 3) * 3 + 3, colInc: 1
+            }, { row, col })
+        );
+    }
+
+    function boardHasNumberInSection(board, num, section, skip) {
+        for (let row = section.rowStart; row < section.rowEnd; row += section.rowInc) {
+            for (let col = section.colStart; col < section.colEnd; col += section.colInc) {
+                if (row === skip.row && col === skip.col) continue;
+                if (board[row][col] === num) return true;
+            }
+        }
+        return false;
+    }
+
+    let isSolved = [[], [], [], [], [], [], [], [], []]; // boolean board that contains "solved" flags
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            let num = Number.parseInt(board[row][col]);
+            isSolved[row][col] = !!Number.parseInt(board[row][col]);
+            board[row][col] = num || 0;
+        }
+    }
+    let row, col, index = 0, direction = 1;
+
+    while (index >= 0 && index < 81) {
+        row = Math.floor(index / 9);
+        col = index % 9;
+
+        if (!isSolved[row][col]) {
+            // increase the next item because last try didn't succeed
+            ++board[row][col];
+
+            // increase the number till it fits into the picture, or becomes 10
+            while (board[row][col] <= 9 && !isValid(board, row, col)) {
+                ++board[row][col];
+            }
+
+            // intentional fail point: number can be 10. in this case reset number to 0 and backtrack
+            if (board[row][col] > 9) {
+                board[row][col] = 0;
+                direction = -1;
+            } else {
+                direction = 1;
+            }
+        }
+        index += direction;
+    }
+    if (index < 0) {
+        throw new Error(`Catastrophic failure! Couldn't solve the puzzle`);
+    }
+
+    // convert back into strings
+    for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+            board[row][col] = '' + board[row][col];
+        }
+    }
+    return board
+};
+// DFS
+
+var solveSudoku = function (board) {
+    dfs(0, 0);
+    function dfs(row, col) {
+        if (row === 9) return true;
+        if (col === 9) return dfs(row + 1, 0);
+        if (board[row][col] === '.') {
+            for (let num = 1; num <= 9; num++) {
+                if (isValid(row, col, `${num}`)) {
+                    board[row][col] = `${num}`;
+                    if (dfs(row, col + 1)) { return true; }
+                    board[row][col] = '.';
+                }
+            }
+        } else {
+            return dfs(row, col + 1);
+        }
+        return false;
+    }
+    function isValid(row, col, num) {
+        for (let rowIdx = 0; rowIdx < 9; rowIdx++) if (board[rowIdx][col] === num) return false;
+        for (let colIdx = 0; colIdx < 9; colIdx++) if (board[row][colIdx] === num) return false;
+
+        let squareRowStart = row - (row % 3);
+        let squareColStart = col - (col % 3);
+        for (let rowIdx = 0; rowIdx < 3; rowIdx++) {
+            for (let colIdx = 0; colIdx < 3; colIdx++) {
+                if (board[squareRowStart + rowIdx][squareColStart + colIdx] === num) return false;
+            }
+        }
+        return true;
+    }
+return board
+};
 
 console.log(
     solveSudoku(
@@ -353,4 +487,3 @@ console.log(
     
     
 // ))
-
