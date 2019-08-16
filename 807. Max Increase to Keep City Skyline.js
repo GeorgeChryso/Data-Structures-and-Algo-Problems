@@ -26,32 +26,26 @@
 
 // Notes:
 
-
 var maxIncreaseKeepingSkyline = function (grid) {
 
     let maxi = []
-    let maxj=[]
-   for (let i = 0; i < grid[0].length; i++) {
-       maxi.push(Math.max(...grid[i]))
-
-   }
-    
-    for (let j = 0;j < grid[0].length; j++) {
-      
-   col = []
-        for (let i in grid[0]) {
-            col.push(grid[i][j])
-
+    let maxj = []
+    for (let i = 0; i < grid[0].length; i++) {
+        maxi.push(Math.max(...grid[i]))
+        col = []
+        for (var j = 0; j < grid[0].length; j++) {
+            col.push(grid[j][i])
         }
-
         maxj.push(Math.max(...col))
+        
     }
-    
-let c=0
+
+
+    let c = 0
     for (let i = 0; i < grid.length; i++) {
         for (let j = 0; j < grid[0].length; j++) {
             c += Math.min(maxi[i], maxj[j]) - grid[i][j]
-        }        
+        }
     }
 
     return c
