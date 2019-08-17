@@ -8,9 +8,9 @@
 
 var removeOuterParentheses = function (S) {
     let c = 0
-    let arr = []
+    let arr = ''
     var k=1
-    for (let i in S) {
+    for (let i = 0; i < S.length;i++) {
         if (S.charAt(i)=='(') {
             c++
             
@@ -18,20 +18,22 @@ var removeOuterParentheses = function (S) {
         else {
             c--
         }
-        console.log(i,S.charAt(i), c)
+     
 
-        if (c == 0) { 
-            arr.push(S.slice(k, (Number(i) < S.length  )? Number(i) : Number(i)-1)) 
-            k = Number(i) + 2
+        if (c == 0) {
+
+            arr+=S.slice(k, i)        
+            k = i + 2
         }
-        else {
-            S
-        }
+            
+        
+        
     }
-    return arr.join('')
+    
+    return arr
 
 };
 
 console.log(removeOuterParentheses(
-  '(()())(())'
+    "()()"
 ))
