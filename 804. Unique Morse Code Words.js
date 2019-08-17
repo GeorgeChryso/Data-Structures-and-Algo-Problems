@@ -22,12 +22,10 @@
 var table= [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."]
 var z='abcdefghijklmnopqrstuvwxyz'
 var uniqueMorseRepresentations = function (words) {
-    function transform(x) {
-     return x.split('').map((d)=>table[z.indexOf(d)]).join('')
-        
-    }
-    let  S= new Set()
-    words.forEach((d)=>S.add(transform(d)))
+    let S = new Set()
+   
+   
+    words.forEach((d) => S.add(d.replace(/[a-z]/g, a => table[z.indexOf(a)])))
 return S.size
 };
 console.log(uniqueMorseRepresentations(
