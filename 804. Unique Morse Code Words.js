@@ -27,7 +27,7 @@ var uniqueMorseRepresentations = function (words) {
    
     words.forEach((d) => S.add(d.replace(/[a-z]/g, a => table[z.indexOf(a)])))
 return S.size
-};
+};                                                       
 console.log(uniqueMorseRepresentations(
     ["gin", "zen", "gig", "msg"]
 ))
