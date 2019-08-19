@@ -4,20 +4,19 @@
 
 // Return the final string after all such duplicate removals have been made.  It is guaranteed the answer is unique.
 
-var removeDuplicates = function(S) {
   
+var removeDuplicates =(function(S) {    
+    while (S.length > 1) {
+        let a = S.length;        
+        S = S.replace(/([a-z])\1/g, "");
+        if (S.length == a) {
+            break;
+        }       
+    }       
+    
+    return S;
+})( "abbaca")
 
-   // while([...S.match((/(.)\1+/))].length!=0){}
- while(/(.)\1/.test(S)){
-S= S.replace(/(.)\1/,'')  }
-return  S
-
-};
-
-console.log(
-    removeDuplicates(
-        "abbaca"
-    )
-)
+console.log(removeDuplicates)
 
 // /(.)\1+/.test(  "abbaca")d
