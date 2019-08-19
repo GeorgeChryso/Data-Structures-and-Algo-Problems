@@ -7,17 +7,26 @@ var intervalIntersection = (function(A, B) {
     
     let answ=[]
     for (let i = 0; i < A.length; i++) {
-    answ.push(intersect(A[i],B[i])
+        for (let j = 0; j < B.length; j++) {
+            answ.push(intersect(A[i],B[j]!=0?intersect(A[i],B[j]):null)          )            
+        }
+   
 
-    )        
+  
     }
 
     function intersect(A,B){
         if(A[0]<B[0]){
-            if(A[1]<B[0]){return [0]}
+            if(A[1]<B[0]){return 0}
             else if ( A[1]<B[1]){return [B[0],A[1]]}
             else if (A[1]>B[0]){return [B[0],A[1]]}
             else if (A[1]>B[1]){return [B[0],B[1]]}
+            else if (A[1]==B[0]){
+                return [B[0],B[0]]
+            }
+            else if (A[1]==B[1]){
+                return [B[0],A[1]]
+            }
         }
         else if ( A[0]==B[0]){ 
             if( A[1]>B[1]){ return [A[0],B[1]]}
@@ -26,7 +35,7 @@ var intervalIntersection = (function(A, B) {
             }
         }
         else {
-            if( A[0]>B[1]){ return [0]}
+            if( A[0]>B[1]){ return 0}
             else if ( A[0]<B[1]){
                 if( A[1]<B[1]){ return [A[0],A[1]]}
                 else if (A[1]==B[1]){ return [A[0],A[1]]}
@@ -36,7 +45,7 @@ var intervalIntersection = (function(A, B) {
 
             }
             else{
-                return [A[0]]
+                return [A[0],A[0]]
             }
 
         }
