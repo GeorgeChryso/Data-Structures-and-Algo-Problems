@@ -18,4 +18,41 @@ var shortestToChar = (function(S, C) {
     "loveleetcode",'e'
     )
 
+
+
+    var shortestToChar = (function(S, C) {
+        
+            let res = new Array(S.length);
+            let pre = Infinity;
+            for(let i=0;i<S.length;i++){
+                if(S[i] == C){
+                    pre = i
+                } 
+                res[i] = Math.abs(i - pre)
+             
+            }
+            pre = Infinity;
+            for(let i = S.length-1;i>=0;i--){
+                if(S[i] == C){
+                    pre = i
+                }
+                res[i] = Math.min(res[i],Math.abs(pre-i))
+                
+            }
+            return res;
+        
+     
+    
+    })(
+        "loveleetcode",'e'
+        )
+    
+
+
+
+    
 console.log(shortestToChar)
+
+
+
+
