@@ -71,7 +71,8 @@ var intervalIntersection = (function(A, B) {
         
         if (a1 > b1) {
             j++
-        } else {
+        } else
+         {
             i++
         }
     }
