@@ -55,4 +55,32 @@ var intervalIntersection = (function(A, B) {
 
 )
 
+var intervalIntersection = (function(A, B) {
+    let ans = []
+    let i = 0
+    let j = 0
+    
+    while (i < A.length && j < B.length) {
+        let [a0, a1] = A[i]
+        let [b0, b1] = B[j]
+        
+        let min = Math.min(a1, b1)
+        let max = Math.max(a0, b0)
+        
+        if (min >= max) ans.push([max, min])
+        
+        if (a1 > b1) {
+            j++
+        } else {
+            i++
+        }
+    }
+    
+    return ans
+})(
+    [[1,7]],
+    [[3,10]]
+
+)
+
 console.log(intervalIntersection)
