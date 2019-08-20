@@ -11,6 +11,9 @@ var intervalIntersection = (function(A, B) {
             if(A[i][1]>=B[j][0])
             {console.log('aa')
                 intersect(A[i],B[j])  }
+                else{
+                    break
+                }
         }
    
 
@@ -19,8 +22,7 @@ var intervalIntersection = (function(A, B) {
 
     function intersect(A,B){
         if(A[0]<B[0]){
-            if(A[1]<B[0]){return 0}
-            else if ( A[1]<=B[1]){answ.push([B[0],A[1]])}
+             if ( A[1]<=B[1]){answ.push([B[0],A[1]])}
             else if (A[1]>B[1]){ answ.push([B[0],B[1]])}
             
         }
