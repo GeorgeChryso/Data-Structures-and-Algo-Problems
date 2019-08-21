@@ -5,21 +5,20 @@
 // (Here, the given index = queries[i][1] is a 0-based index, and each query permanently modifies the array A.)
 
 // Return the answer to all queries.  Your answer array should have answer[i] as the answer to the i-th query.
-function sumOfEven(x){
-    return x.reduce((a,b)=>{
-        
-        if(b%2==0)
-       { 
-        return a+b}
-        else{
-            return a
-        }
-})-(x[0]%2==0?0:x[0])
-}
+
 
 var sumEvenAfterQueries = function(A, queries) {
   let answer=[]
-  let sum=sumOfEven(A)
+  let sum=A.reduce((a,b)=>{
+        
+    if(b%2==0)
+   { 
+    return a+b}
+    else{
+        return a
+    }
+})-(A[0]%2==0?0:A[0])
+
    queries.forEach(
     (d)=>{
         sum-=A[d[1]]%2==0?A[d[1]]:0
