@@ -19,10 +19,13 @@ function sumOfEven(x){
 
 var sumEvenAfterQueries = function(A, queries) {
   let answer=[]
+  let sum=sumOfEven(A)
    queries.forEach(
     (d)=>{
+        sum-=A[d[1]]%2==0?A[d[1]]:0
         A[d[1]]+=d[0]
-        answer.push(sumOfEven(A))
+        sum+=A[d[1]]%2==0?A[d[1]]:0
+        answer.push(sum)
     }
 
   )
