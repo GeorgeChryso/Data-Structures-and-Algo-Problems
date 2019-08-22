@@ -32,7 +32,7 @@ var isToeplitzMatrix = function(A) {
         return true
     }
 
-    for (let i = 0; i < A[0].length; i++) {
+    for (let i = 0; i < A[0].length-1; i++) {
         if(chechdiag(0,i)==false){
             return false
         }
@@ -40,7 +40,7 @@ var isToeplitzMatrix = function(A) {
         
     }
 
-    for (let i = 1; i < A.length; i++) {
+    for (let i = 1; i < A.length-1; i++) {
         if(chechdiag(i,0)==false){
             return false
         }
