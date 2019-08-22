@@ -1,3 +1,5 @@
+'use strict'
+
 // A sequence X_1, X_2, ..., X_n is fibonacci-like if:
 
 //  n >= 3

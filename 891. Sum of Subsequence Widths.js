@@ -1,3 +1,5 @@
+'use strict'
+
 // Given an array of integers A, consider all non-empty subsequences of A.
 
 // For any sequence S, let the width of S be the difference between the maximum and minimum element of S.

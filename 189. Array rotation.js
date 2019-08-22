@@ -1,3 +1,5 @@
+'use strict'
+
 
 
 var rotate0 = function(A, k) {

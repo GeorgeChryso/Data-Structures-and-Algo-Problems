@@ -1,3 +1,5 @@
+'use strict'
+
 // Some people will make friend requests. The list of their ages is given and ages[i] is the age of the ith person. 
 
 // Person A will NOT friend request person B (B != A) if any of the following conditions are true:

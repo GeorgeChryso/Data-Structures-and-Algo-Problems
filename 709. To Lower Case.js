@@ -1,3 +1,5 @@
+'use strict'
+
 var toLowerCase = function (str) {
     return str.toLowerCase()
 };

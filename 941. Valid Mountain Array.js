@@ -1,3 +1,5 @@
+'use strict'
+
 // Given an array A of integers, return true if and only if it is a valid mountain array.
 
 // Recall that A is a mountain array if and only if:

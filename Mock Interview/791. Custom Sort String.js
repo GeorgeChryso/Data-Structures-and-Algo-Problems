@@ -1,3 +1,5 @@
+'use strict'
+
 // S and T are strings composed of lowercase letters.
 // In S, no letter occurs more than once.
 

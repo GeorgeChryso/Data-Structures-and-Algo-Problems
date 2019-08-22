@@ -1,3 +1,5 @@
+'use strict'
+
 // Given a non-negative integer numRows, generate the first numRows of Pascal's triangle.
 
 //Given a non-negative index k where k ≤ 33, return the kth index row of the Pascal's triangle.

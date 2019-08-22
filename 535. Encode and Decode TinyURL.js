@@ -1,3 +1,5 @@
+'use strict'
+
 // Note: This is a companion problem to the System Design
 //roblem: Design TinyURL.
 // TinyURL is a URL shortening service where you enter a

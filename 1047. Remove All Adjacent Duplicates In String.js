@@ -1,3 +1,5 @@
+'use strict'
+
 // Given a string S of lowercase letters, a duplicate removal consists of choosing two adjacent and equal letters, and removing them.
 
 // We repeatedly make duplicate removals on S until we no longer can.

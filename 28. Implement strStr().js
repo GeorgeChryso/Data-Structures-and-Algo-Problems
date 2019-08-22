@@ -1,3 +1,5 @@
+'use strict'
+
 // 28. Implement strStr()
 // Easy
 
