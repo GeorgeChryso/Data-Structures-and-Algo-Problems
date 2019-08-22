@@ -49,7 +49,26 @@ var isToeplitzMatrix = function(A) {
     }
     return chechdiag(0,0)
 };
-
+var isToeplitzMatrix = function(matrix) {
+    var a;
+    
+    for (var i = 0; i < matrix.length; i++) {
+        for (var j = 0; j < matrix[0].length; j++) {
+                
+        a = matrix[i][j];
+                    if (
+                        ((i + 1) < matrix.length)   &&
+                        ((j + 1) < matrix[0].length) 
+                    ) {
+                        if (a != matrix[i + 1][j + 1]) {
+                            return false;
+                        }
+                    }
+        }
+    }
+    
+    return true;
+};
 
 console.log(isToeplitzMatrix(
     [[1,2,3,4],
