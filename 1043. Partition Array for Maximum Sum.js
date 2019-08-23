@@ -18,15 +18,12 @@
 
 
     for (let i = 1 ; i < l + 1; i++) {
-        console.log(dp)
         let m = Number.MIN_VALUE;
         for (let j = 1; j < Math.min(i, K) + 1; j++){
             
             m = Math.max(m, A[i - j]);
             
             dp[i] = Math.max(dp[i], dp[i - j] + m * j);
-            console.log(m)
-            console.log(dp)
         }
     }
     return dp[l];
@@ -41,15 +38,24 @@ function maxSumAfterPartitioning( A,  K) {
 
     for (let i = 0; i < N; i++) {
         var curMax = 0;
+        // tha dokimasw na antikatastisw ola ta pithana k me ton arithmo poy thelw
+        console.log('i='+i,'dp= ['+dp+']    A= ['+A+']')
         for (let k = 1; k <= K && i - k + 1 >= 0; k++) {
+                      console.log('   k='+k+'\n'+'    dp= ['+dp+']' +'\n' )
+                      console.log('    curMax= Max('+curMax+', A['+(i+k-1)+']='+A[i-k+1]+') = '+Math.max(curMax, A[i - k + 1])+'\n')
 
             curMax = Math.max(curMax, A[i - k + 1]);
-            dp[i] = Math.max(dp[i], (i >= k ? dp[i - k] : 0) + curMax * k);
+        
+                    console.log('dp['+i+']= Max('+dp[i]+','+(i-k >=0 ? dp[i - k] : 0)+'+curMax*k ('+curMax*k+')) = '+ Math.max(dp[i],
+                        (i-k >=0 ? dp[i - k] : 0) + curMax * k)+'\n' )
+            dp[i] = Math.max(dp[i],
+                 (i-k >=0 ? dp[i - k] : 0) + curMax * k);
+                      console.log('    dp= ['+dp+']'   +'\n   -----------------')
         }
     }
     return dp[N - 1];
 }
 
 console.log(maxSumAfterPartitioning(
-    [1,15,7,9,2,5,10],3
+    [1,15,7,9,2,5,10],2
 ))
