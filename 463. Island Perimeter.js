@@ -6,7 +6,6 @@
 
 var islandPerimeter = function(A) {
     function worth(i,j){
-        if(A[i][j]==0){return 0}
         let c=0
         if (i>=1&& A[i-1][j]==0){c++}
         if (j>=1 &&A[i][j-1]==0){c++}
@@ -21,6 +20,7 @@ var islandPerimeter = function(A) {
     let answ=0
     for (let i = 0; i < A.length; i++) {
         for (let j = 0; j < A[0].length; j++) {
+          if ( A[i][j]==0)continue;
             answ+=worth(i,j)
         }
         
