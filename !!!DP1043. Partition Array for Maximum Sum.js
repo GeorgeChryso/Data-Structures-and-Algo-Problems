@@ -46,7 +46,7 @@ function maxSumAfterPartitioning( A,  K) {
 
             curMax = Math.max(curMax, A[i - k + 1]);
         
-                    console.log('dp['+i+']= Max('+dp[i]+','+(i-k >=0 ? dp[i - k] : 0)+'+curMax*k ('+curMax*k+')) = '+ Math.max(dp[i],
+                    console.log('   dp['+i+']= Max('+dp[i]+','+(i-k >=0 ? dp[i - k] : 0)+'+curMax*k ('+curMax*k+')) = '+ Math.max(dp[i],
                         (i-k >=0 ? dp[i - k] : 0) + curMax * k)+'\n' )
             dp[i] = Math.max(dp[i],
                  (i-k >=0 ? dp[i - k] : 0) + curMax * k);
@@ -57,5 +57,5 @@ function maxSumAfterPartitioning( A,  K) {
 }
 
 console.log(maxSumAfterPartitioning(
-    [1,15,7,9,2,5,10],2
+    [1,15,7,9,2,5,10],4
 ))
