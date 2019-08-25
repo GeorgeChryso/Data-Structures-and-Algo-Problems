@@ -20,16 +20,15 @@ var findDisappearedNumbers = function(A) {
             if (A[Math.abs(A[i-1])-1]>=0){
                 A[Math.abs(A[i-1])-1]*=-1
             }
-            else{
-                answ.push(i)
-            }
-                console.log(A+'')
+         
     }
+
+    A.forEach((d,i)=>d>0?answ.push(i+1):null)
     return answ
 };
 
 console.log(findDisappearedNumbers(
-   [4,3,2,7,8,2,3,1]
+  // [4,3,2,7,8,2,3,1]
     //[1,1]
   // [1,2,3,4,4]
  // [2,3,1,5,1]
