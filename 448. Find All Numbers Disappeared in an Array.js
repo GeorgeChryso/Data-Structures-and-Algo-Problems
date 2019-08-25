@@ -33,6 +33,20 @@ var findDisappearedNumbers = function(A) {
 };
 
 
+var findDisappearedNumbers = function(A) {
+    let S=new Set(A.keys()).add(A.length)
+    S.delete(0)
+    console.log(S)
+    
+    for (let i = 0; i < A.length; i++) {
+                
+            S.delete(A[i])
+         
+    }
+   
+    return [...S]
+};
+
 // var findDisappearedNumbers = function(A) {
 //     let l=A.length
 //     A=new Object(A)
@@ -49,8 +63,8 @@ var findDisappearedNumbers = function(A) {
 // };
 
 console.log(findDisappearedNumbers(
-   [4,3,2,7,8,2,3,1]
-    //[1,1]
+   //[4,3,2,7,8,2,3,1]
+    [1,1]
   // [1,2,3,4,4]
  // [2,3,1,5,1]
 ))
