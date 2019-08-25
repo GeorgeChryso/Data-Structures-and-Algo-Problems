@@ -6,9 +6,9 @@
 
 
 
-console.log()
+console.log( Number(5^1^2^1)==Number(5^1^2^1))
 
-
+console.log(5^5)
 
 var findDuplicates = function(nums) {
  for (let i = 0; i<nums.length; i++) {
@@ -18,8 +18,14 @@ var findDuplicates = function(nums) {
         i--
     }
  }
-   return nums
+ let c
+
+
+ 
+
 };
+
+
 console.log(findDuplicates(
     [4,3,2,7,8,2,3,1]
 ))
