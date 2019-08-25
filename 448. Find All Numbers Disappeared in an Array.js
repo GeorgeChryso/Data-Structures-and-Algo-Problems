@@ -13,7 +13,6 @@
 // [5,6]
 
 var findDisappearedNumbers = function(A) {
-    var answ =[]    
 
     for (let i = 1; i < A.length+1; i++) {
                 
@@ -22,13 +21,35 @@ var findDisappearedNumbers = function(A) {
             }
          
     }
-
-    A.forEach((d,i)=>d>0?answ.push(i+1):null)
-    return answ
+    for (let i = 0,j=1; i < A.length; j++,i++) {
+           if(A[i]<0){
+               A.splice(i,1);
+               i-- }
+           else A[i]=j
+        
+     
+    }
+    return A
 };
 
+
+// var findDisappearedNumbers = function(A) {
+//     let l=A.length
+//     A=new Object(A)
+//     let ans=[]
+//     for (let i = 1; i < l+1; i++) {
+                
+//             if (!A.has(i)){
+//                 answ.push(i)
+//             }
+         
+//     }
+
+//     return answ
+// };
+
 console.log(findDisappearedNumbers(
-  // [4,3,2,7,8,2,3,1]
+   [4,3,2,7,8,2,3,1]
     //[1,1]
   // [1,2,3,4,4]
  // [2,3,1,5,1]
