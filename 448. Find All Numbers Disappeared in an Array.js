@@ -45,35 +45,35 @@ var findDisappearedNumbers = function(A) {
     return [...S]
 };
 
- var findDisappearedNumbers = function(nums) {
-  let index = 0;
+ var findDisappearedNumbers = function(A) {
+  let j = 0;
  let tmp = null
-while (index < nums.length) {
- let n1 = nums[index]
-      if (index + 1 !== n1) {
-        let n2 = nums[n1 - 1]
-                if (n1 !== n2) {
-                    tmp = nums[index]
-                    nums[index] = nums[n1 - 1]
-                    nums[n1 - 1] = tmp
+while (j < A.length) {
+ let curr = A[j]
+      if (j + 1 !== curr) {
+        let n2 = A[curr - 1]
+                if (curr !== n2) {
+                    tmp = A[j]          // If curr != A[curr-1]
+                    A[j] = A[curr - 1]   //A[j] switch A[A[j]-1]
+                    A[curr - 1] = tmp   // curr switch A[curr-1]
                 }
                 else {
-                    index++
+                    j++
                 }
             }
         else {
-        index++
+        j++
     }
 }
 
-index = 0;
-for (let i = 0; i < nums.length; i++) {
-  if (i + 1 != nums[i]) {
-    nums[index++] = i + 1
+j = 0;
+for (let i = 0; i < A.length; i++) {
+  if (i + 1 != A[i]) {
+    A[j++] = i + 1
   }
 }
-nums.length = index
-return nums
+A.length = j
+return A
 };
 // };
 
