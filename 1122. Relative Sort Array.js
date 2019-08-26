@@ -20,42 +20,46 @@
 var relativeSortArray = function(arr1, arr2) {
     let rem=[]
     let l=arr2.length+1-1
+    
+
+        arr2=arr2.map((d,i)=>[d,i])
         for (let i = 0; i < l; i++) {
-            console.log(i,l)
-            if(arr2[arr2[i]]!=null){
-                let temp=arr2[arr2[i]]
-                arr2[arr2[i]]=arr2[i]
-                arr2[i]=temp
-                i--
+            if ( arr2[i][0]==undefined){
                 continue;
             }
-            else{
-                arr2[arr2[i]]=arr2[i]
-                arr2[i]=null
+            if(arr2[arr2[i][0]]!=undefined){
+                if(arr2[arr2[i][0]][0]==arr2[i][0]){ continue}
+                let temp=arr2[arr2[i][0]]
+                arr2[arr2[i][0]]=arr2[i]
+                arr2[i]=temp
+                i--
+                
             }
-            console.log(arr2)
+            else{
+                arr2[arr2[i][0]]=arr2[i]
+                arr2[i]=undefined
+            }
+      
+            console.log (arr2)
 
         }
-     
-    // arr1=arr1.filter((a)=>{
-    //     if(arr2.indexOf(a)!=-1){
-    //         console.log(a,true)
-    //         return true}
-    //     else {
-    //                       rem.push(a)
-    //                       console.log(a,false)
 
-    //                       return false;
-    //                   }})
-    //                   console.log(arr1)
+    arr1=arr1.filter((a)=>{
+        if(arr2[a]){
+            return true}
+        else {
+                          rem.push(a)
+                          return false;
+                      }})
 
         
-    // arr1.sort((a,b)=>{
-    //     if (arr2.indexOf(a)<arr2.indexOf(b)){ return -1}
-    //     if (arr2.indexOf(a)>arr2.indexOf(b)){ return 1}
-    //     return 0
-    // })
-    // return arr1.concat(rem.sort((a,b)=>a-b))
+    arr1.sort((a,b)=>{
+        if (arr2[a][1]<arr2[b][1]){ return -1}
+        if (arr2[a][1]>arr2[b][1]){ return 1}
+        return 0
+    })
+    return arr1.concat(rem.sort((a,b)=>a-b))
+
 };
 console.log( relativeSortArray(
     [2,3,1,3,2,4,6,7,9,2,19], [2,1,4,3,9,6]
