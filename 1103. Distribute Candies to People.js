@@ -10,16 +10,21 @@
 
 var distributeCandies = function(C, N) {
     let answ =Array(N).fill(0)
-    console.log(answ.length)
-    for (let EXP=1,i=0;  C>0 ; C-=EXP,i++,EXP++) {
-        if(i>=N){i=-1;C++;EXP--;continue;}
-        console.log(C,EXP,answ)
+    for (var EXP=1, i=0;  C>0 ;i++) {
+ console.log(C , EXP , answ)
 
-        if(EXP>=C){
-            console.log('exp>=c',i);
-            answ[( i+1)<N?i+1:0]+=C;break;}
+        if(i>=N){i=-1;continue;}
+
         answ[i]+=EXP
+        C-=answ[i]
+        EXP++
+       
+    console.log(C , EXP , answ)
     } 
+    
+    if(EXP>=C&&C>0){
+        answ[( i)<N?i:0]+=C;
+    }
 
 
     return answ
@@ -27,6 +32,22 @@ var distributeCandies = function(C, N) {
 
 console.log(
     distributeCandies(
-        10,3
+  60,4
     )
 )
+
+var distributeCandies = function(candies, num_people) {
+    var result=new Array(num_people).fill(0);
+    if(candies == 0) return result;
+    var dfs=function(candies, result, i, n){
+        var cur = Math.min(candies, i);
+        result[(i-1)%n]+=cur;
+        candies-=cur;
+        if(candies<=0){
+            return;
+        }
+        dfs(candies, result, i+1, n);
+    }
+    dfs(candies, result, 1, num_people)
+    return result;
+};
