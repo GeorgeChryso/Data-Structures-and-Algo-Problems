@@ -23,6 +23,40 @@
 // 0 <= grumpy[i] <= 1
 
 
-var maxSatisfied = function(customers, grumpy, X) {
+var maxSatisfied = function(C, G, X) {
+    let fin=0
+    function satisfaction(i){
+ 
+
+
+      fin=Math.max(fin, 
+        C.reduce((acc,c,j)=> {   
+            
+            if(
+                (G[j]==0)  || (j>=i && j<= i+X-1 )  
+            ){
+            return acc+c}
+        return acc},0) )
+            
+       
+    }
     
+    for (let i = 0; i <= G.length-X; i++) {
+        if(G[i]==0){continue}
+        satisfaction(i)
+
+    }
+return fin
 };
+
+console.log(
+    maxSatisfied(
+ 
+//         [1,0,1,2,1,1,7,5],
+// [0,1,0,1,0,1,0,1],
+// 3
+        [2,6,6,9],
+        [0,0,1,1],
+        1
+    )
+)
