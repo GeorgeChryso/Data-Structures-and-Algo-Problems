@@ -78,7 +78,8 @@ var distributeCandies = function(C, N) {
 
        var j=0
        while(SumAt(1,i+j*N,1)<=C){
-        console.log(SumAt(1,i+j*N,1))   
+        console.log(SumAt(1,i+j*N,1))  
+        
         j++}
         j-=(j==0?0:1); 
 
