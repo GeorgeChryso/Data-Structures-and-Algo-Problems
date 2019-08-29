@@ -42,11 +42,36 @@ var maxSatisfied = function(C, G, X) {
     }
     
     for (let i = 0; i <= G.length-X; i++) {
-        if(G[i]==0){continue}
+        if(G[i]==0&&G[i+1]==0&&[G[i+2]==0]){i=i+2}
         satisfaction(i)
 
     }
 return fin
+};
+var maxSatisfied = function(customers, grumpy, X) {
+    let guar_sat = 0;
+    let queue = [];
+    for(let i = 0; i < customers.length; i++) {
+        guar_sat += grumpy[i] == 0 ? customers[i] : 0;
+        if(grumpy[i] == 1) {
+            queue.push(i);
+        }
+    }
+    let max_sat = guar_sat;
+    let left = 0;
+    let right = 0;
+    while(right < queue.length) {
+        while(queue[right] - queue[left] >= X) {
+                let yesGrumpy = queue[left];
+                guar_sat -= customers[yesGrumpy];
+                left += 1;
+            }
+        let noGrumpy = queue[right];
+        guar_sat += customers[noGrumpy];
+        max_sat = Math.max(max_sat, guar_sat);
+        right += 1;
+    }
+    return max_sat;
 };
 
 console.log(
