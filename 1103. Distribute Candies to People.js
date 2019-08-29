@@ -73,28 +73,35 @@ var distributeCandies = function(C, N) {
         return n*(a1+charAtPos(a1,n,v))/2
 
     }
-    let D=C+1-1
+    let D=C
     for (var  i=0;  0<D ;i++) {
 
        var j=0
-       while(SumAt(1,i+j*N,1)<=C){j++}
-        j--;
-        answ[i%N]=SumAt(1,1+i+j*N,1)<C? 
-        SumAt(i%N,i+j*N+1,N)
+       while(SumAt(1,i+j*N,1)<=C){
+        console.log(SumAt(1,i+j*N,1))   
+        j++}
+        j-=(j==0?0:1); 
+
+        answ[i%N]=
+      (  SumAt(1,1+i+j*N,1)<C)? 
+        SumAt(i%N+1,j+1,N)
         :
-         (  SumAt(i%N,i+j*N ,N)+C-charAtPos(1,i+j*N+1,1) );
+         (  SumAt(i%N +1,j ,N)+
+         C-SumAt(1,i+j*N,1) );
+
         D-=answ[i]
+        
     } 
-    answ[0]++
-    console.log('broke at D='+D)
 
     return answ
 };
 
 console.log(
     distributeCandies(
- 10,3
+ 12,3
     )
 )
 
-// 2 2 3
+// 1 2 3 
+// 4 5 6
+// 7 8 9
