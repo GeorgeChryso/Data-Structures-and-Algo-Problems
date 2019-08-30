@@ -16,4 +16,4 @@ console.log(tribonacci(36))
 
 
 
-//
+//optimized
