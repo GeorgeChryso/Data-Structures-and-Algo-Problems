@@ -6,14 +6,17 @@ var dailyTemperatures = function(T) {
             answ[i]=0
             continue
         }
-        for (var j = i+1; T[i]>=T[j]&&j<(T.length-1); j++){
+        for (var j = i+1; T[i]>=T[j] && ( j<=(T.length -1)); j++){
             
            
         }
-        if( j==T.length-1){
+        if( j>T.length-1){
+            console.log(i,j)
+
             answ[i]=0
         }else 
-        {answ[i]=j-i}
+        {answ[i]=j-i
+        }
 
         console.log(answ+'')
     }
