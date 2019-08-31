@@ -6,14 +6,30 @@
 
 
 var tribonacci = function(n) {
-    let arr=[0,1,1]    
+    let arr=[0,1,1,2]    
         for (let i =3; i <= n; i++) {
-             arr[i]=arr[i-3]+arr[i-2]+arr[i-1]        
+          //   arr[i]=arr[i-3]+arr[i-2]+arr[i-1]       
+             arr[0]=arr[1]
+             arr[1]=arr[2]
+             arr[2]=arr[3]
+             arr[3]=arr[0]+arr[1]+arr[2] 
         }
-    return arr[n]
+    return arr[3]
 };
-console.log(tribonacci(36))
-
+console.log(tribonacci(4))
+console.log( 'ha')
 
 
 //optimized
+var tribonacci = function(n) {
+    let arr=[0,1,1,2]    
+    if( n<3)return arr[n]
+    for (let i =3; i <= n-1; i++) {
+           
+             arr[0]=arr[1]
+             arr[1]=arr[2]
+             arr[2]=arr[3]
+             arr[3]=arr[0]+arr[1]+arr[2] 
+        }
+    return arr[3]
+};
