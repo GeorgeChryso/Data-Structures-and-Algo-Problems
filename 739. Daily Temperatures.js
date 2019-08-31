@@ -11,14 +11,11 @@ var dailyTemperatures = function(T) {
            
         }
         if( j>T.length-1){
-            console.log(i,j)
-
             answ[i]=0
         }else 
         {answ[i]=j-i
         }
 
-        console.log(answ+'')
     }
 
 return answ
