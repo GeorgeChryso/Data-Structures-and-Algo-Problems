@@ -51,6 +51,8 @@ var dailyTemperatures = function(T) {
     }
     return res;
 }; 
+
+// OPTIMIZED STACK SOLUTION
 console.log(dailyTemperatures(
     [55,38,53,81,61,93,97,32,43,78]
     ))
