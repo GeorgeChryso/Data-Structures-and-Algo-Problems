@@ -25,24 +25,29 @@
 //     "FizzBuzz"
 // ]
 
-var fizzBuzz = function(n) {
+// var fizzBuzz = function(n) {
     
-    return  Array(n).fill(0).map((d,j)=>{
-        return ((j+1)%3==0 && (j+1)%5==0)? 'FizzBuzz':
-        ((j+1)%3==0 )?'Fizz':
-       ((j+1)%5==0)? 'Buzz':
-         String(j+1)
-    })
+//     return  Array(n).fill(0).map((d,j)=>{
+//         return ((j+1)%3==0 && (j+1)%5==0)? 'FizzBuzz':
+//         ((j+1)%3==0 )?'Fizz':
+//        ((j+1)%5==0)? 'Buzz':
+//          String(j+1)
+//     })
 
-    let answ=[]
+//     let answ=[]
 
-    for (let j = 0; j <n; i++) {
-        answ.push(((j+1)%3==0 && (j+1)%5==0)? 'FizzBuzz':
-        ((j+1)%3==0 )?'Fizz':
-       ((j+1)%5==0)? 'Buzz':
-         String(j+1))        
-    }
-    return answ
-};
+//     for (let j = 0; j <n; i++) {
+//         answ.push(((j+1)%3==0 && (j+1)%5==0)? 'FizzBuzz':
+//         ((j+1)%3==0 )?'Fizz':
+//        ((j+1)%5==0)? 'Buzz':
+//          String(j+1))        
+//     }
+//     return answ
+// };
+var fizzBuzz=(n)=>{for(let i=1;i<=n;i++)
+console.log(
+    `${i%3==0?'fizz':(i%5==0?'':i)}${i%5==0?'buzz':''}`) ;}
 
-console.log(fizzBuzz(15))
+console.log(fizzBuzz(16))
+
+
