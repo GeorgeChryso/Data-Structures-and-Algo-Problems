@@ -40,6 +40,30 @@ return N
     };  
 
 
+    var singleNumber = function(nums) {
+        var s = nums.reduce((n1, n2) => n1 ^ n2);
+        var offset = 0;
+        while (true) {
+            if (s & 1 == 1) {
+                break;
+            }
+    
+            offset++;
+            s >>= 1;
+        }
+    
+        var a = 0, b = 0;
+        nums.forEach(num => {
+            if ((num >> offset) & 1 == 1) {
+                a ^= num;
+            } else {
+                b ^= num;
+            }
+        });
+    
+        return [a, b];
+    };
+
 
 console.log(singleNumber(
     [1,2,1,3,2,5]
