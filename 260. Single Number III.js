@@ -10,11 +10,19 @@
 // Your algorithm should run in linear runtime complexity. Could you implement it using only constant space complexity?
 
 var singleNumber = function(nums) {
-    let a= nums.reduce((a,b)=>a^b)
-    nums.forEach(d=>console.log(d,a,a|d))
-};
+        let objy={}
+        nums.forEach((d)=>{
+            console.log(objy)
+        if(!objy[d]){
+            objy[d]=' '
+        }else{
+            delete objy[d]
+        }}
+        )
+        return Object.keys(objy)
+    };  
 console.log(singleNumber(
     [1,2,1,3,2,5]
 ))
 
-console.log(3^5)
+console.log(3^3,3^1,1^3,4^1)
