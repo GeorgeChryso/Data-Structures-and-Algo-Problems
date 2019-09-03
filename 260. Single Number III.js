@@ -21,6 +21,26 @@ var singleNumber = function(nums) {
         )
         return Object.keys(objy)
     };  
+
+
+var singleNumber = function(N) {
+        for (let i = 0; i < N.length; i++) {
+           for (let j = i+1 ; j < N.length; j++) {
+               if( N[i]==N[j]){
+                   N.splice(i,1)
+                   N.splice(j-1,1)
+                   j--
+                   i--
+               }
+           }
+            
+        } 
+
+return N
+    };  
+
+
+
 console.log(singleNumber(
     [1,2,1,3,2,5]
 ))
