@@ -33,19 +33,49 @@ var numSubmatrixSumTarget = function(M, T) {
         return sum
     }
     var count=0
-    
+    var N=Array(M.length).fill(Array(M[0].length).fill(0))
+
+
+    function nSum(i,j){
+
+       if (j-1<0&&i-1>=0){N[i][j]=M[i][j]+N[i-1][j];
+        N[i][j]==T?count++:null    
+        return ;}
+    if  (i-1<0&&(j-1)>=0){N[i][j]=M[i][j]+N[i][j-1];
+        N[i][j]==T?count++:null    
+        return;}
+        if(i==0&&j==0) {N[i][j]=0;
+            N[i][j]==T?count++:null    
+            return ;}
+        N[i][j]=M[i][j]+N[i][j-1]+N[i-1][j]-N[i-1][j-1]
+        N[i][j]==T?count++:null    
+        return;
+    }
+
+    // for (let i = 0; i < M.length; i++) {
+    //     for (let j = 0; j < M[0].length; j++) {
+    //         for (let ii = i; ii < M.length; ii++) {
+    //             for (let jj = j; jj < M[0].length; jj++) {
+
+
+                            
+    //                 mSum(i,j,ii,jj)==T?count++:null
+
+    //             }                
+    //         }
+            
+    //     }        
+    // }
+
     for (let i = 0; i < M.length; i++) {
         for (let j = 0; j < M[0].length; j++) {
-            for (let ii = i; ii < M.length; ii++) {
-                for (let jj = j; jj < M[0].length; jj++) {
-                    mSum(i,j,ii,jj)==T?count++:null
+            console.log(N,i,j)
 
-                }                
+                 nSum(i,j)    
+            console.log('finished')
             }
             
         }        
-    }
-
     
     return count
 };
