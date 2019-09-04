@@ -20,3 +20,37 @@
 //                  [-1,1]], target = 0
 // Output: 5
 // Explanation: The two 1x2 submatrices, plus the two 2x1 submatrices, plus the 2x2 submatrix.
+
+
+var numSubmatrixSumTarget = function(M, T) {
+    function mSum(i1,j1,i2,j2){
+        let sum=0
+        for (let i = i1; i <=i2; i++) {
+            for (let j = j1; j <=j2; j++) {
+                    sum+=M[i][j]                
+            }            
+        }
+        return sum
+    }
+    var count=0
+    
+    for (let i = 0; i < M.length; i++) {
+        for (let j = 0; j < M[0].length; j++) {
+            for (let ii = i; ii < M.length; ii++) {
+                for (let jj = j; jj < M[0].length; jj++) {
+                    mSum(i,j,ii,jj)==T?count++:null
+
+                }                
+            }
+            
+        }        
+    }
+
+    
+    return count
+};
+
+
+console.log(numSubmatrixSumTarget(
+    [[1,-1],[-1,1]],0
+    ))
