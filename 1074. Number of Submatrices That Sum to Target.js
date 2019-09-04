@@ -44,7 +44,7 @@ var numSubmatrixSumTarget = function(M, T) {
     if  (i-1<0&&(j-1)>=0){N[i][j]=M[i][j]+N[i][j-1];
         N[i][j]==T?count++:null    
         return;}
-        if(i==0&&j==0) {N[i][j]=0;
+        if(i==0&&j==0) {N[i][j]=M[i][j];
             N[i][j]==T?count++:null    
             return ;}
         N[i][j]=M[i][j]+N[i][j-1]+N[i-1][j]-N[i-1][j-1]
@@ -52,33 +52,36 @@ var numSubmatrixSumTarget = function(M, T) {
         return;
     }
 
+    for (let i = 0; i < M.length; i++) {
+        for (let j = 0; j < M[0].length; j++) {
+
+            for (let ii = i; ii < M.length; ii++) {
+                for (let jj = j; jj < M[0].length; jj++) {
+
+
+
+                                     nSum(ii,jj)    
+
+                }                
+            }
+            var N=Array(M.length-i).fill(Array(M[0].length-j).fill(0))
+            console.log(N)
+        }        
+    }
+
     // for (let i = 0; i < M.length; i++) {
     //     for (let j = 0; j < M[0].length; j++) {
-    //         for (let ii = i; ii < M.length; ii++) {
-    //             for (let jj = j; jj < M[0].length; jj++) {
+    //         console.log(N,i,j)
 
-
-                            
-    //                 mSum(i,j,ii,jj)==T?count++:null
-
-    //             }                
+    //              nSum(i,j)    
+    //         console.log('finished')
     //         }
             
     //     }        
-    // }
-
-    for (let i = 0; i < M.length; i++) {
-        for (let j = 0; j < M[0].length; j++) {
-            console.log(N,i,j)
-
-                 nSum(i,j)    
-            console.log('finished')
-            }
-            
-        }        
     
     return count
 };
+
 
 
 console.log(numSubmatrixSumTarget(
