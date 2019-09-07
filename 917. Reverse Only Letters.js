@@ -40,7 +40,7 @@ var reverseOnlyLetters = function(S) {
    
    for (let i =S.length-1,j=0; i >-1; i--) {
        if(A[S[i]]){
-      while( Z[j]!=false ){
+      while( Z[j]!==false ){
           j++
       }
        if( j>Z.length-1){
@@ -54,4 +54,4 @@ var reverseOnlyLetters = function(S) {
 };
 
 console.log(reverseOnlyLetters(
-    "Test1ng-Leet=code-Q!"))
+    '?6C40E'))
