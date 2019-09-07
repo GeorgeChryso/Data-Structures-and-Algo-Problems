@@ -9,16 +9,14 @@ var canThreePartsEqualSum = function(A) {
     for (let i = 0; i < A.length-1; i++) {
         sums[0]+=A[i]
         if(sums[0]!=Math.floor(sum/3)){continue;}
-        console.log(i)
         for (let j = i+1; j < A.length-1; j++) {
             sums[1]+=A[j]
             if(sums[1]!=Math.floor(sum/3)){continue;}
-
-            if(sums[0]==sums[1]&& (sum-sums[0]-sums[1])==sums[1]){ return true}
+            return true
+           
 
            
         }
-        sums[1]=0        
     }
     return false
 
@@ -26,5 +24,22 @@ var canThreePartsEqualSum = function(A) {
 
 };
 
+var canThreePartsEqualSum=function(A){
+    var sum=A.reduce((a,b)=>a+b)
+    if( sum%3 )return false
+    var sum=Math.floor(sum/3)
+    var count=0
+    var checkSum=0
+    for (let i = 0; i < A.length; i++) {
+       
+        checkSum+=A[i]
+        if(checkSum==sum){
+            count++
+            checkSum=0
+        }
+    }
+    return count==3
+
+}
 console.log(canThreePartsEqualSum(
     [18,12,-18,18,-19,-1,10,10] ))
