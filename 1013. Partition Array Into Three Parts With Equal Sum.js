@@ -35,10 +35,11 @@ var canThreePartsEqualSum=function(A){
         checkSum+=A[i]
         if(checkSum==sum){
             count++
+            if(count==2){return true}
             checkSum=0
         }
     }
-    return count==3
+    return false
 
 }
 console.log(canThreePartsEqualSum(
