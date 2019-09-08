@@ -4,10 +4,10 @@
 
 var camelMatch = function(queries, pattern) {
 
-    pattern=new RegExp('^([a-z])*'+pattern.split('').join('([a-z])*')+'([a-z])*$')
-    
+    pattern=new RegExp('^'+pattern.replace(/()/g,'([a-z])*')+'$')
+
     return queries.map(
-        (d)=>(pattern.test(d)?true:false)
+        (d)=>pattern.test(d)
     )
 };
 console.log(camelMatch(
@@ -20,3 +20,7 @@ console.log(camelMatch(
 "ksvjLiknTzqn"
 
 ))
+
+console.log(
+    'abcd'.replace(/()/g,'|')
+)
