@@ -3,13 +3,11 @@
 // Given a list of queries, and a pattern, return an answer list of booleans, where answer[i] is true if and only if queries[i] matches the pattern.
 
 var camelMatch = function(queries, pattern) {
-    let arr=[]
-    arr=pattern.split('')
-  
-    var regy=new RegExp('^([a-z])*'+arr.join('([a-z])*')+'([a-z])*$')
-    console.log(arr,regy)
+
+    pattern=new RegExp('^([a-z])*'+pattern.split('').join('([a-z])*')+'([a-z])*$')
+    
     return queries.map(
-        (d)=>(regy.test(d)?true:false)
+        (d)=>(pattern.test(d)?true:false)
     )
 };
 console.log(camelMatch(
