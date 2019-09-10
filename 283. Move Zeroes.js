@@ -11,23 +11,26 @@
 
 
 var moveZeroes = function(A) {
-    let z=[]
-    for (let i = A.length-1 ; i >=0; i--) {
-       
-        if(!A[i]){
-            z.push(A[i])
+  
+    for (let i = 0,last=0; i < A.length; i++) {
+        if(A[i]){
+            let c=A[i]
+            A[i]=A[last]
+            A[last]=c
+            last++
         }
-        else{
-            z.unshift(A[i])
-        }
-
+        
     }
-    A.forEach((d,i)=>A[i]=z[i])
-
     return A
 };
-
+var moveZeroes = function(nums) {       
+    for(var i = nums.length;i--;){
+        if(nums[i]===0){
+            nums.splice(i,1)
+            nums.push(0);
+        }
+    }
+};
 console.log(moveZeroes(
 
-    [0,0,1]
-    ))
+    [0,1,0,3,12]    ))
