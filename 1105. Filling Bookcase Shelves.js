@@ -29,9 +29,8 @@
 
 var minHeightShelves = function(books, shelf_width) {
     var shelfHeight=[]
-    var i=0
     var curWidth=0
-
+    var minH=0
     function isPlaceable(i){
         return (curWidth+books[i][0])<=shelf_width
     }
@@ -39,19 +38,21 @@ var minHeightShelves = function(books, shelf_width) {
     function placeMe(i){
         curWidth+= books[i][0]
         shelfHeight[shelfHeight.length-1]=Math.max(books[i][1],shelfHeight[shelfHeight.length-1])
-
-        if(!isPlaceable(i+1) &&((i+1)<(books.length-1))){
-            shelfHeight.push(0)
-            curWidth=0
-        }
-        
+        console.log('placed books['+i+'] on shelf#'+shelfHeight.length)
     }
 
-    
+    function newShelf(){
+        shelfHeight.push(0)
+        curWidth=0
+    }
 
+    function opComplete(){
+        minH=Math.min(minH,shelfHeight.reduce((a,b)=>a+b))
+      shelfHeight=[]
+      curWidth=0
+    }
 
-
-    return Math.max(...shelfHeight)
+    return minH
 };
 
 
