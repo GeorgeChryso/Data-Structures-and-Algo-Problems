@@ -28,29 +28,28 @@
 
 
 var minHeightShelves = function(books, shelf_width) {
-    var counter=0
     var shelfHeight=[]
     var i=0
-    while(counter<books.length){
+    var curWidth=0
 
-        shelfHeight.push(0)
-        var curWidth=0
-        for (i; i<books.length; i++) {
-            if((curWidth+books[i][0])>shelf_width ){
-           console.log('break at '+i, curWidth)
+    function isPlaceable(i){
+        return (curWidth+books[i][0])<=shelf_width
+    }
 
-            break;}
-           console.log(i,shelfHeight.length)
-           counter++
-           curWidth+= books[i][0]
-           shelfHeight[shelfHeight.length-1]=Math.max(books[i][1],shelfHeight[shelfHeight.length-1])
+    function placeMe(i){
+        curWidth+= books[i][0]
+        shelfHeight[shelfHeight.length-1]=Math.max(books[i][1],shelfHeight[shelfHeight.length-1])
+
+        if(!isPlaceable(i+1) &&((i+1)<(books.length-1))){
+            shelfHeight.push(0)
+            curWidth=0
         }
         
-
-
-
-
     }
+
+    
+
+
 
     return Math.max(...shelfHeight)
 };
