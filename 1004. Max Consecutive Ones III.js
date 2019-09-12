@@ -16,28 +16,18 @@
 
 
 var longestOnes = function(A, K) {
-    let neo=[]
-    var count0=0
-    var count1=0
-    A.push(!A[A.length-1])
-    for (let i = 0; i < A.length; i++) {
-        if(A[i]){
-            count1++
-          if(count0){
-              neo.push([count0])
-              count0=0
-          }
-        }
-        else{
-            count0++
-            if(count1){
-                neo.push(count1)
-                count1=0
-            }
-        }
+   var zeroes=0,start=0,res=0,end=0
+   while (end<A.length){
+       if (!A[end])zeroes+=1
+       while (zeroes>K){
+           if (!A[start])zeroes--
+           start++
+       }
+       res=Math.max(res,end-start+1)
+       end++
     }
-    return neo
-};
+    return res
+ };
 
 console.log(longestOnes(
     [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1]))
