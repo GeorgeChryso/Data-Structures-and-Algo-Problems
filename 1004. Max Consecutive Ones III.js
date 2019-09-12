@@ -34,14 +34,22 @@ var longestOnes = function(A, K) {
  var longestOnes=function(A,K){
     var i = 0
     for (var j = 0; j < A.length ; j++) {
+        console.log(A+'' ,'K='+K)
+        let z=new Array(A.length).fill(' ')
+        let q=new Array(A.length).fill(' ')
+
+        z[i]='i'
+        q[j]='j'
+        
         if (A[j] == 0) K--;
         if (K < 0 && A[i++] == 0) K++;
+        console.log(z+'' ,'|||')
+        console.log(q+'' ,'K='+K,'\n         ')
     }
     return j - i;
 
  }
 
 console.log(longestOnes(
-    [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1]
-    ))
+    [1,0,0,0,0,0,1,1,1,1,0],  2    ))
 
