@@ -23,12 +23,25 @@ var longestOnes = function(A, K) {
            if (!A[start])zeroes--
            start++
        }
+       
        res=Math.max(res,end-start+1)
        end++
     }
     return res
  };
 
+
+ var longestOnes=function(A,K){
+    var i = 0
+    for (var j = 0; j < A.length ; j++) {
+        if (A[j] == 0) K--;
+        if (K < 0 && A[i++] == 0) K++;
+    }
+    return j - i;
+
+ }
+
 console.log(longestOnes(
-    [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1]))
+    [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1]
+    ))
 
