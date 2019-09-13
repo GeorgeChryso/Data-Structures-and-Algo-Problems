@@ -11,12 +11,27 @@ var goods={
 }
 
 var count=0
-
-for (let i = 0; i < N.length; i++) {
-    const element = array[i];
+function amIvalid(d){
+    d=String(d).split('')
+    for (let i = 0; i < d.length; i++) {
+        if(goods[d[i]]==undefined){
+        return false     }
+        else{
+            d[i]=goods[d[i]]
+        }
+    }
+    return Number(d)
+}
+for (let i = 1; i < N; i++) {
+   if (amIvalid(i) && amIvalid(i)!=i){
+       console.log(i,amIvalid(i))
+       count++
+   }
     
 }
 
 return count
     
 };
+
+console.log(rotatedDigits(10))
