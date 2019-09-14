@@ -26,6 +26,27 @@ var countBinarySubstrings = function(s) {
     }
     return count
 };
+// time limit exceeded'
+var countBinarySubstrings = function(s) {
+
+    var count =0
+    var temp=[0,0]
+    var tempy=s[0]
+    temp[s[0]]++
+    for (let i =1; i < s.length; i++) {
+        while(tempy==s[i]){
+            temp[s[i]]++
+            i++
+        }        
+        count+=Math.min(temp[0],temp[1])
+        temp[s[i]]=0
+        tempy=s[i]
+        i--
+
+    }
+    return count
+};
+
 
 console.log(countBinarySubstrings(
-    "10101"))
+    "11000101"))
