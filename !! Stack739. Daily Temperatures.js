@@ -1,3 +1,6 @@
+
+
+
 var dailyTemperatures = function(T) {
 //     for (let i = 0; i < T.length; i++) {
         

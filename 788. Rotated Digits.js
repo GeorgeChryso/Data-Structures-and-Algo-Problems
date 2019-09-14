@@ -14,20 +14,19 @@ var count=0
 
 for (let i = 1; i <=N; i++) {
  
-    
+    z=true
    d=String(i).split('')
    for (let j = 0; j < d.length; j++) {
-    if(goods[d[j]]==undefined){
-        d=i
-        break;
+        if(goods[d[j]]==undefined ){
+            z=false
+            break;
+        }else{
+
+        }
+        
     }
-    else{
-        d[j]=goods[d[j]]
-    }
-    }
-    if( d[0]!=undefined){ d=Number(d.join(''))}
-    
-if (d!=i){
+
+if (z){
     count++
 }
 
