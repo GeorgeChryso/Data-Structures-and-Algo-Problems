@@ -27,6 +27,7 @@ var countBinarySubstrings = function(s) {
     return count
 };
 // time limit exceeded'
+
 var countBinarySubstrings = function(s) {
 
     var count =0
@@ -46,6 +47,39 @@ var countBinarySubstrings = function(s) {
     }
     return count
 };
+
+
+var countBinarySubstrings = function(s) {
+
+    var count =0
+    var prev=0
+    var cur=0
+    for (let i =0; i < s.length; i++) {
+        if(s[i-1]!==s[i]){
+            count+=Math.min(prev,cur)
+            prev=cur
+            cur=1}
+            else cur++
+    }
+    return count+Math.min(prev,cur)
+};
+
+var countBinarySubstrings = function(s) {
+    let count = 0,
+        pre_length = 0,
+        cur_length = 1
+  
+    for (let i = 1; i < s.length; i++) {
+      if (s[i] === s[i - 1]) {
+        cur_length += 1
+      } else {
+        count+=Math.min(pre_length,cur_length)
+        pre_length = cur_length
+        cur_length = 1
+      }
+    }
+    return count+Math.min(pre_length,cur_length)
+  }
 
 
 console.log(countBinarySubstrings(
