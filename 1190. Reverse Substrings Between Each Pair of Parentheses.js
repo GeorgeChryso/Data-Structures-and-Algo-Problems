@@ -73,9 +73,58 @@ var reverseParentheses = function(S) {
         }
 
     }
+
+
 return answ.join('')+(temp?temp:'')
 };
 
-console.log(reverseParentheses(
-    "sxmdll(q)eki(x)"))
 
+var reverseParentheses = function(s, start = 0, end = s.length, position = findParentheses(s)) {
+    let output = '';
+    for (let i = start; i < end; i++) {
+      if (s[i] === '(') {
+        const str = reverseParentheses(s, i + 1, position[i], position);
+        output += reverse(str);
+        i = position[i];
+      } else {
+        output += s[i];
+      }
+    }
+    return output;
+  };
+  
+  function findParentheses(s) {
+    const position = {};
+    const stack = [];
+    for (let i = 0; i < s.length; i++) {
+      if (s[i] === '(') {
+        stack.push(i);
+      } else if (s[i] === ')') {
+        position[stack.pop()] = i;
+      }
+    }
+    return position;
+  }
+  
+  function reverse(s) {
+    let output = '';
+    for (const c of s) {
+      output = c + output;
+    }
+    return output;
+  }
+
+console.log(reverseParentheses(
+    "sxmdll(q(0)(a))e(d(1)(b))ki(x(2)(c))"))
+
+    "sxmdll a0q e b1d ki c2x"
+
+
+
+    "n(ev(t)me((()lfevf))da()yd)cb()"
+
+    "n dy fvefl t ve cb"
+    n dy fvefl em t ve cb"
+
+    "n dy adfveflemtvecb"
+    "ndy   fvefl   emtvecb"
