@@ -7,17 +7,32 @@
 
 
 var reverseParentheses = function(S) {
-    
+    function lean(answ,ret,temp){
+        for (let i = 0; i < answ.length; i++) {
+             if(answ[i]==''){
+                 answ[i]=ret[ret.length-1]
+                 ret.pop()
+     
+             }       
+        }
+        if( answ.length!=0)
+        {
+        answ=[]
+        temp=''
+        ret=[]}
+
+
+     }
     var answ=[]
     var temp=''
     var ret=[]
     var counter=0
 
     for (let i = 0; i < S.length; i++) {
+      
         if(S[i]=='('){
             if (!(counter%2)) {
                 if(temp.length!=0)answ.push(temp)
-                console.log('hi')
 
             }
             else{
@@ -26,19 +41,24 @@ var reverseParentheses = function(S) {
                 ret.push(temp)
                         }
             counter++
+            if(!counter ){
+                lean(answ,ret,temp)
+            }
             temp=''
             continue
         }
         if(S[i]==')'){
             if (!(counter%2)) {
                 if(temp.length!=0)answ.push(temp)
-                console.log('hi')
             }
             else{
               answ.push('')
                 ret.push(temp)
                         }
             counter--
+            if(!counter ){
+                lean(answ,ret,temp)
+            }
             temp=''
             continue
         }
@@ -51,23 +71,11 @@ var reverseParentheses = function(S) {
             temp+=S[i]
 
         }
-        console.log(temp)
 
     }
-
-    console.log(answ,'\n',ret,'\n','\n' )
-   for (let i = 0; i < answ.length; i++) {
-        if(answ[i]==''){
-            console.log(answ,ret, )
-            answ[i]=ret[ret.length-1]
-            ret.pop()
-            console.log(answ,ret ,'\n','\n')
-
-        }       
-   }
-    return answ.join('')+(temp.length?temp:'')
+return answ.join('')+(temp?temp:'')
 };
 
 console.log(reverseParentheses(
-    "(abcd)"  ))
+    "sxmdll(q)eki(x)"))
 
