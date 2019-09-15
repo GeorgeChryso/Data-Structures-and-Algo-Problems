@@ -80,6 +80,7 @@ return answ.join('')+(temp?temp:'')
 
 
 var reverseParentheses = function(s, start = 0, end = s.length, position = findParentheses(s)) {
+
     let output = '';
     for (let i = start; i < end; i++) {
       if (s[i] === '(') {
@@ -114,17 +115,43 @@ var reverseParentheses = function(s, start = 0, end = s.length, position = findP
     return output;
   }
 
+
+//
+
+
+var reverseParentheses = function(S) {
+    function reverse(s) {
+        let output = '';
+        for (const c of s) {
+          output = c + output;
+        }
+        return output;
+      }
+      let t=0
+        let stack = ['']
+        for (c of S){
+            console.log(stack)
+
+            if (c == '(') null
+            else if( c == ')')
+                {var add = stack[stack.length-1]
+                    stack.pop()
+                stack.unshift(
+                    (t%2?reverse(add):add)) 
+                t++}
+            else
+                {stack.unshift(c)}
+            }
+
+            stack.pop()
+        return stack
+};
+
 console.log(reverseParentheses(
-    "sxmdll(q(0)(a))e(d(1)(b))ki(x(2)(c))"))
+  //  "(u(love)i)"
+    // "a(ed((oc))da(et)el)b"
+    "(ed(et(oc))el)"
+     ))
 
-    "sxmdll a0q e b1d ki c2x"
 
-
-
-    "n(ev(t)me((()lfevf))da()yd)cb()"
-
-    "n dy fvefl t ve cb"
-    n dy fvefl em t ve cb"
-
-    "n dy adfveflemtvecb"
-    "ndy   fvefl   emtvecb"
+console.log(Math.floor(2))
