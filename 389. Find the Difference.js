@@ -22,18 +22,18 @@ var findTheDifference = function(s, t) {
     }
 
     for (let i = 0; i < s.length; i++) {
-            if(objy.s[i]!=undefined){
-                objy.s[i]=1
+            if(Object.is(objy[s[i]],undefined)){
+                objy[s[i]]=1
             }else{
-                objy.s[i]++
+                objy[s[i]]++
             }       
     }
 
     for (let i = 0; i < t.length; i++) {
-        if(objy.t[i]==undefined || objy.t[i]==0){
+        if(Object.is(objy[t[i]],undefined) || objy[t[i]]==0){
             return t[i]
         }else{
-            objy.t[i]--
+            objy[t[i]]--
         }        
     }
 
