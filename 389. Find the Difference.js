@@ -40,6 +40,48 @@ var findTheDifference = function(s, t) {
 };
 
 
+// Essentially we will be taking advantage of the Bitwise XOR ^ operator.
+// For every **NUMBER**   X, we have  
+// * **X^X=0**  
+// and  
+// * **X^0=X**
+
+// So the **plan** is: 
+// 	**1.** Iterate over the shortest array **s**
+//    **2.** Keep accumulating (XOR ^ing) the elements of both s and t, after we have converted them to **Numbers** with CharCodeAt() so the XOR can work
+//    **3.** Return the **converted back to character** final sum
+   
+ 
+
+
+var findTheDifference = function(s, t) {
+    var sum=0 // initialize the accumulator
+	
+	// t.length < s.length because there will always be 1 extra letter on t (the one we want to return)
+    for (var i = 0; i < s.length; i++) {
+		sum^=                       // accumulate with XOR 
+		t[i].charCodeAt()^          // the converted to Number t[i]
+        s[i].charCodeAt()           // along with a converted to Number s[i],
+                                    
+    }
+    sum^=t[i].charCodeAt()          // add the remaining letter of t
+   return String.fromCharCode(sum)  // return the converted to Character total
+
+};
+
+var findTheDifference = function(s, t) {
+    
+   return String.fromCharCode(t.charCodeAt()-s.charCodeAt())  // return the converted to Character total
+
+};
+
+
+
+
+
 console.log(findTheDifference(
-   "abcd" ,"abcde"
+   "abcd" ,"abecd"
 ))
+
+charCodeAt()
+console.log(25^0)
