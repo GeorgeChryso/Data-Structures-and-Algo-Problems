@@ -69,15 +69,6 @@ var findTheDifference = function(s, t) {
 
 };
 
-var findTheDifference = function(s, t) {
-    
-   return String.fromCharCode(t.charCodeAt()-s.charCodeAt())  // return the converted to Character total
-
-};
-
-
-
-
 
 console.log(findTheDifference(
    "abcd" ,"abecd"
