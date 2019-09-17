@@ -19,6 +19,8 @@
 
 
 var intToRoman = function(A) {
+    A=String(A)
+    var answ=[]
     var objy={
         0:'',
         1:'I',
@@ -36,19 +38,149 @@ var intToRoman = function(A) {
         90:'XC',
         100:'C',200:'CC',300:'CCC',
         400: 'CD',
-        500:'D',600:'DC',700:'DCC',800:'DCC',
+        500:'D',600:'DC',700:'DCC',800:'DCCC',
         900:'CM',
         1000:'M',
         2000:'MM',
         3000:'MMM'
     }
- return Array.from(String(A))
- .map((d,i)=>{
-       return objy[Number(d)*Math.pow(10,(String(A).length-i-1))]
-    
+  for (let i = 0; i < A.length; i++) {
+   answ+= objy[A[i]*Math.pow(10,(A.length-i-1))]
+  }
+    return answ
 
+   
+};
+var intToRoman = function(num) {
+    let result = '';
+    switch (Math.floor(num/1000)) {
+        case 0:
+            break;
+        case 1:
+            result += "M";
+            //num -= 1000;
+            break;
+        case 2:
+            result += "MM";
+            //num -= 2000;
+            break;
+        case 3:
+            result += "MMM";
+            //num -= 3000;
+            break;
     }
- ).join('')    
+    switch (Math.floor((num%1000)/100)) {
+        case 0:
+            break;
+        case 1:
+            result += "C";
+            //num -= 100;
+            break;
+        case 2:
+            result += "CC";
+            //num -= 200;
+            break;
+        case 3:
+            result += "CCC";
+            //num -= 300;
+            break;
+        case 4:
+            result += "CD";
+            //num -= 400;
+            break;
+        case 5:
+            result += "D";
+            //num -= 500;
+            break;
+        case 6:
+            result += "DC";
+            //num -= 600;
+            break;
+        case 7:
+            result += "DCC";
+            //num -= 700;
+            break;
+        case 8:
+            result += "DCCC";
+            //num -= 800;
+            break;
+        case 9:
+            result += "CM";
+            //num -= 900;
+            break;
+    }
+    switch (Math.floor((num%100/10))) {
+        case 0:
+            break;
+        case 1:
+            result += "X";
+            //num -= 10;
+            break;
+        case 2:
+            result += "XX";
+            //num -= 20;
+            break;
+        case 3:
+            result += "XXX";
+            //num -= 30;
+            break;
+        case 4:
+            result += "XL";
+            //num -= 40;
+            break;
+        case 5:
+            result += "L";
+            //num -= 50;
+            break;
+        case 6:
+            result += "LX";
+            //num -= 60;
+            break;
+        case 7:
+            result += "LXX";
+            //num -= 70;
+            break;
+        case 8:
+            result += "LXXX";
+            //num -= 80;
+            break;
+        case 9:
+            result += "XC";
+            //num -= 90;
+            break;
+    }
+    switch (num%10) {
+        case 0:
+            break;
+        case 1:
+            result += "I";
+            break;
+        case 2:
+            result += "II";
+            break;
+        case 3:
+            result += "III";
+            break;
+        case 4:
+            result += "IV";
+            break;
+        case 5:
+            result += "V";
+            break;
+        case 6:
+            result += "VI";
+            break;
+        case 7:
+            result += "VII";
+            break;
+        case 8:
+            result += "VIII";
+            break;
+        case 9:
+            result += "IX";
+            break;
+    }
+    return result;
 };
 
 console.log(intToRoman(
