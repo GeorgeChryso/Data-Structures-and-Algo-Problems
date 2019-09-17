@@ -19,62 +19,6 @@
 
 
 var intToRoman = function(A) {
-    let answ=''
-    while(A>=1000){
-    answ+='M'
-    A-=1000
-    }
-    while (A>=100){
-        if(A>=900){
-            answ+='CM'
-            A-=900
-            break
-        }
-        if( A>=500){
-            answ+='D'
-            while(A>599){
-                answ+='C'
-                A-=100
-            }
-            A-=500
-            break
-        }
-         if (A>=400){
-            answ+='CD'
-            A-=400
-            break;
-        }
-      
-       answ+='C' 
-        A-=100
-
-    }
-    while(A>=10){
-        if(A>=90){
-            answ+='XC'
-            A-=90
-            break
-        }
-        else if ( A>=50){
-            answ+='L'
-            while (A>59){
-                answ+='X'
-                A-=10
-            }
-            A-=50
-            break;
-        }
-        else if ( A>=40){
-            answ+='XL'
-            A-=40
-            break;
-        }
-        
-            answ+='X'
-        
-        A-=10
-    }
-    console.log(A)
     var objy={
         0:'',
         1:'I',
@@ -85,9 +29,26 @@ var intToRoman = function(A) {
         6:'VI',
         7:'VII',
         8:'VIII',
-        9:'IX'
+        9:'IX',
+        10:'X',20:'XX',30:'XXX',
+        40:'XL',
+        50:'L',60:'LX',70:'LXX',80:'LXXX',
+        90:'XC',
+        100:'C',200:'CC',300:'CCC',
+        400: 'CD',
+        500:'D',600:'DC',700:'DCC',800:'DCC',
+        900:'CM',
+        1000:'M',
+        2000:'MM',
+        3000:'MMM'
     }
-    return answ+objy[A]
+ return Array.from(String(A))
+ .map((d,i)=>{
+       return objy[Number(d)*Math.pow(10,(String(A).length-i-1))]
+    
+
+    }
+ ).join('')    
 };
 
 console.log(intToRoman(
