@@ -43,3 +43,15 @@ var nextGreaterElements = function(A) {
 console.log(nextGreaterElements(
     [1,2,1]
 ))
+
+var nextGreaterElements = function(nums) {
+    const len = nums.length, res = Array(len).fill(-1), stack = [];
+    for(let i=0;i<len*2;++i){
+        while(stack.length&&nums[stack[stack.length-1]]<nums[i%len]){
+            res[stack[stack.length-1]]=nums[i%len];
+            stack.pop();
+        }
+        if(i<len)   stack.push(i);
+    }
+    return res;
+};
