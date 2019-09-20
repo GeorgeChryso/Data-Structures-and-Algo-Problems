@@ -20,13 +20,13 @@ var minAreaRect = function(P) {
     })
 }
 
-  P.forEach(d=>
+  P.forEach(([x,y])=>
        {
-          if(  obx[d[0]]==undefined ){
-          obx[d[0]]=[d[1]]
+          if(  obx[x]==undefined ){
+          obx[x]=[y]
           }
           else{
-          obx[d[0]].push(d[1])
+          obx[x].push(y)
           }
         } 
       )
@@ -42,6 +42,30 @@ var minAreaRect = function(P) {
 return min==Infinity?0:min
 };
 
+var minAreaRect = function(points) {
+  let min = Infinity;
+  let isPoint = {};
+  points.forEach(([x, y]) => (isPoint[x * 40000 + y] = true));
+  console.log(isPoint)
+  for (let idx1 = 0; idx1 < points.length - 1; idx1++) {
+    let [x1, y1] = points[idx1];
+    for (let idx2 = idx1 + 1; idx2 < points.length; idx2++) {
+      let [x2, y2] = points[idx2];
+      let area = Math.abs((x1 - x2) * (y1 - y2));
+
+      console.log([x1,y1])
+      console.log([x2,y2] ,area)
+      console.log(area === 0 || area >= min)   
+
+
+      if (area === 0 || area >= min) continue;
+      console.log(isPoint[x1 * 40000 + y2] && isPoint[x2 * 40000 + y1],'\n','\n')
+      if (isPoint[x1 * 40000 + y2] && isPoint[x2 * 40000 + y1]) min= area;
+    }
+  }
+  return min!== Infinity ? min: 0;
+};
+// Genius lol 
 console.log(minAreaRect(
   [[1,1],[1,3],[3,1],[3,3],[4,1],[4,3]]
 ))
