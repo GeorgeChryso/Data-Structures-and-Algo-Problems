@@ -79,7 +79,7 @@ var countBinarySubstrings = function(s) {
       }
     }
     return count+Math.min(pre_length,cur_length)
-  }
+}
 
 
 console.log(countBinarySubstrings(
