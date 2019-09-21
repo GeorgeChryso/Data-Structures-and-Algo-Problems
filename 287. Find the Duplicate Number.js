@@ -24,6 +24,28 @@ var findDuplicate = function(nums) {
 // fast but beats the cause
 
 
+//Floyd's Tortoise and Hare algorithm
+
+var findDuplicate = function(nums) {
+    var tortoise=nums[0]
+    var hare =nums[0]
+    
+    do{
+        tortoise=nums[tortoise]
+        hare=nums[nums[hare]]
+    }while(tortoise!=hare)
+
+    var p1=nums[0]
+    var p2=tortoise
+    while(p1!=p2)
+    {
+        p1=nums[p1]
+        p2=nums[p2]
+    }
+    
+    return p1
+};
+
 
 console.log(findDuplicate(
     [1,3,4,2,2]
