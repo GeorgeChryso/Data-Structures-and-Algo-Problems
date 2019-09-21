@@ -30,6 +30,8 @@ var lemonadeChange = function(bills) {
         }
     }
     
+
+    
     return true;
 };
 console.log(lemonadeChange(
