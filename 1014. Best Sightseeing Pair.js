@@ -28,15 +28,17 @@ var maxScoreSightseeingPair = function(A) {
 
 
 var maxScoreSightseeingPair = function(A) {
-    var prevMax = 0;
-    var maxScore = 0;
-    
-    for (var i=0; i<A.length; i++) {
-      maxScore = Math.max(maxScore, A[i] + prevMax - i);
-      prevMax = Math.max(prevMax, A[i] + i)
+    var cur=0
+    var result=0
+    for (var a of A) {
+        
+        result=Math.max(result, cur+a)
+
+        cur=Math.max(cur, a) - 1;
+
     }
-    
-    return maxScore;
+
+    return result
   };
 
 console.log(maxScoreSightseeingPair(
