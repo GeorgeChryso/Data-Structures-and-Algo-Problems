@@ -17,12 +17,27 @@ var maxScoreSightseeingPair = function(A) {
     for (let i = 0; i < A.length; i++) {
         for (let j = i+1; j < A.length; j++) {
             
-            max=Math.max(max,A[i]+A[j]+i-j)
+            max=Math.max(max,A[i]+A[j]+     i-j)
         }
         
     }
     return max
 };
+
+// O(N^2)
+
+
+var maxScoreSightseeingPair = function(A) {
+    var prevMax = 0;
+    var maxScore = 0;
+    
+    for (var i=0; i<A.length; i++) {
+      maxScore = Math.max(maxScore, A[i] + prevMax - i);
+      prevMax = Math.max(prevMax, A[i] + i)
+    }
+    
+    return maxScore;
+  };
 
 console.log(maxScoreSightseeingPair(
     [8,1,5,2,6]
