@@ -15,11 +15,15 @@
 var maxScoreSightseeingPair = function(A) {
     let max=0
     for (let i = 0; i < A.length; i++) {
-        for (let j = 0; j < A.length; j++) {
-            max=Math.max(max,A[i]+A[j]+i-j)            
+        for (let j = i+1; j < A.length; j++) {
+            
+            max=Math.max(max,A[i]+A[j]+i-j)
         }
         
     }
     return max
 };
 
+console.log(maxScoreSightseeingPair(
+    [8,1,5,2,6]
+))
