@@ -1,0 +1,4 @@
+var totalHammingDistance = function(nums) {
+    
+    
+};
