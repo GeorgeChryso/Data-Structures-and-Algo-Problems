@@ -28,3 +28,10 @@ var totalHammingDistance = function(nums) {
     }
     return total
 };
+
+var totalHammingDistance = function(nums) {
+    return Array.from(Array(32), (_,i)=>1<<i)
+      .map(mask=>nums.filter(n=>(n&mask)!=0).length)
+      .reduce((v,cnt)=>v+(nums.length-cnt)*cnt,0);
+};
+
