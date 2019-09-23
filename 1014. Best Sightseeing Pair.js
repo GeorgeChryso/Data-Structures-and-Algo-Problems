@@ -29,12 +29,21 @@ var maxScoreSightseeingPair = function(A) {
 
 var maxScoreSightseeingPair = function(A) {
     var startG=0
+    var pointer=0
     var OG=0
-   for (let i = 0; i < A.length; i++) {
 
-        OG=Math.max(OG, startG + A[i]-i)
+    for (var i = 0; i+1 < A.length; i++) {        
+        if( startG<(A[i])){
+            pointer=i
+            startG=A[i]
+        }
+    }
 
-        startG=Math.max(startG,A[i]+i)
+    console.log(pointer)
+   for ( i=pointer+1  ; i < A.length; i++) {
+
+        OG=Math.max(OG, startG + A[i]-i+pointer)
+
 
     }
   
@@ -44,5 +53,4 @@ var maxScoreSightseeingPair = function(A) {
   };
 
 console.log(maxScoreSightseeingPair(
-    [8,1,5,2,6]
-))
+    [2,2,1]))
