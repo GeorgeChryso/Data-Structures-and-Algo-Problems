@@ -27,7 +27,7 @@ var totalHammingDistance = function(nums) {
         }
     }
     return total
-};//fonyf
+};//fonyfycuhg
 
 var totalHammingDistance = function(nums) {
     return Array.from(Array(32), (_,i)=>1<<i)
