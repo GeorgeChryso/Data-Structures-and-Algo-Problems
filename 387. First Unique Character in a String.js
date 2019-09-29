@@ -2,21 +2,24 @@
 
 var firstUniqChar = function(s) {
     var arry=Array(26).fill(s.length+1)
-  
+    var order=[]
     for (let i = 0; i < s.length; i++) {
         var z=s.charCodeAt(i) -97
 
         if(arry[z]==s.length+1){
             arry[z]=i
+            order.push(z)
         }
         else{
             arry[z]=s.length
         }
 
     }
-    
-    var z=Math.min(...arry)
-    return z<s.length?z:-1
+
+    for (let i = 0; i < order.length; i++) {
+        if(arry[order[i]]<s.length)return arry[order[i]]      
+    }
+    return -1
 
 
 
