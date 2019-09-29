@@ -2,42 +2,28 @@
 
 var firstUniqChar = function(s) {
     var lexic={}
+    var arry=Array(s.length).fill(-1)
+    var min=0
     for (let i = 0; i < s.length; i++) {
         if(lexic[s[i]]==undefined){
             lexic[s[i]]=i
+            arry[i]=i
+
         }
         else{
-            lexic[s[i]]=Infinity
+            arry[lexic[s[i]]]=-1
+            lexic[s[i]]=i
+            arry[i]=-1
         }
     }
+    for (let i = 0; i < arry.length; i++) {
+        if(arry[i]!=-1)return i        
+    }
+    return -1
+
     var res=Math.min(...Object.values(lexic))
     return res==Infinity?-1:res
 
-};
-
-
-let firstUniqChar = s => {
-    let states = Array(26).fill(-1)
-    let order = []
-    
-    for (let i = 0; i < s.length; i++) {
-        let char = s.charCodeAt(i) - 97
-        
-        if (states[char] === -1) {
-            order.push(char)
-            states[char] = i
-        } else {
-            states[char] = -2
-        }
-    }
-    
-    for (let i = 0; i < order.length; i++) {
-        let char = order[i]
-        let index = states[char]
-        if (index > -1) return index
-    }
-    
-    return -1
 };
 
 
@@ -50,4 +36,3 @@ console.log(
     )
 )
 
-console.log(Object.values({a:1,b:2}))
