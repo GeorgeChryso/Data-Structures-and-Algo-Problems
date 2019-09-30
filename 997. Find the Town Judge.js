@@ -9,20 +9,20 @@
 
 // If the town judge exists and can be identified, return the label of the town judge.  Otherwise, return -1.
 
-var findJudge = function(N, trust) {
-  var cand={...Array(N+1).fill(0)}
-  delete cand[0]
-  trust.forEach(([t,d])=>{
-      delete cand[t]
-      if(cand[d]!=undefined)cand[d]++
-  }) 
+// var findJudge = function(N, trust) {
+//   var cand={...Array(N+1).fill(0)}
+//   delete cand[0]
+//   trust.forEach(([t,d])=>{
+//       delete cand[t]
+//       if(cand[d]!=undefined)cand[d]++
+//   }) 
 
-  if(Object.values(cand)[0]==N-1){
-      return Object.keys(cand)[0]
-  }
+//   if(Object.values(cand)[0]==N-1){
+//       return Object.keys(cand)[0]
+//   }
 
-  return -1
-};
+//   return -1
+// };
 
 var findJudge = function(N, trust) {
    
