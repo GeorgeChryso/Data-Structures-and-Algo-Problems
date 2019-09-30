@@ -1,6 +1,8 @@
 // Given a string, find the first non-repeating character in it and return it's index. If it doesn't exist, return -1.
 
 var firstUniqChar = function(s) {
+
+    
     var arry=Array(26).fill(s.length+1)
     var order=[]
     for (let i = 0; i < s.length; i++) {
