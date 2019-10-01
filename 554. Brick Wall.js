@@ -33,6 +33,53 @@ var leastBricks = function(A) {
     }
     return count1min
 };
+// solved but slow
+var leastBricks = function(wall) {
+    const counts = {};
+    let max = 0;
+    for (let row of wall) {
+        let sum = 0;
+        console.log(counts)
+        for (let i = 0; i < row.length - 1; i++) {
+            sum += row[i];
+            counts[sum] = (counts[sum] || 0) + 1;
+            max = Math.max(max, counts[sum]);
+        }
+    }
+    return wall.length - max;
+};
+
+var leastBricks = function(wall) {
+    let obj = {};
+    for(let i = 0; i < wall.length; i++){
+        let sum = 0;
+        for(let j = 0; j < wall[i].length - 1; j++){
+            sum += wall[i][j];
+            if(!obj[sum]) obj[sum] = 1;
+            else obj[sum]++;
+        }
+    } 
+    let values = Object.values(obj);
+    if(values.length === 0) return wall.length;
+    let max = Math.max(...values);
+    return wall.length - max;
+};
+
+var leastBricks = function(wall) {
+    let map=new Map(), size=wall.length, max=0;
+    for(let i=0; i<size; i++){
+        let sum=0;
+        for(let j=0; j<wall[i].length-1; j++){
+            sum+= wall[i][j];
+            map.set(sum, (map.get(sum) || 0)+1);
+            max=Math.max(max, map.get(sum));
+        }
+    }
+    return size-max;
+};
+
+// The idea is straightforward, since each brick length is positive, we can record all the edge index in the wall and figure out which edge index is the most common. We cut through that edge index, it will cross number of rows - most common edge count rows
+
 
 console.log(leastBricks(
     [[1,2,2,1],
