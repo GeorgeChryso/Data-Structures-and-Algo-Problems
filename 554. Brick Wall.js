@@ -20,10 +20,18 @@ var leastBricks = function(A) {
               }
             if(z!=d.length-1)Mrow.push(0)
         })
-        M.push(Mrow+'')
+        M.push(Mrow)
     })
+    var count1min=Infinity
 
-    return M
+    for (let i = 0; i < M[0].length; i++) {
+        var temp1=0
+        for (let j = 0; j < M.length; j++) {
+            if(M[j][i]==1)temp1++
+        }
+        count1min=Math.min(count1min,temp1)        
+    }
+    return count1min
 };
 
 console.log(leastBricks(
