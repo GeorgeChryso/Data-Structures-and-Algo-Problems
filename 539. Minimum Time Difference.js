@@ -78,26 +78,48 @@ var findMinDifference=(A)=>{
     var result=Infinity
     for (let i = 0; i < A.length; i++) {
         var []=A[i]// "23:49"
-        dict[
+       if( dict[
             (A[i][0]+A[i][1])*60
             +(A[i][3]+A[i][4])*1
-            ]=true       
+            ]    
+            ){
+                return 0
+            } 
+
+        else{
+            dict[
+                (A[i][0]+A[i][1])*60
+                +(A[i][3]+A[i][4])*1
+                ] =true 
+        } 
     }
-    var temp=Infinity
-    for(let c of dict){
-        if(c==true){
-            result=Math.min(result,temp)
-            temp=0
+
+    var firstTrueInd=0
+    var temp=1
+    let i=0
+    while(!dict[i]){
+        i++
+    }
+    firstTrueInd=i
+    i++
+    for (i; i < dict.length; i++) {
+        if(dict[i]){
+            result=Math.min(temp,result)
+            temp=1
+            continue;
         }
         temp++
     }
+    
+    console.log(result,firstTrueInd)
 
-    return result
+    return Math.min(result, temp+firstTrueInd)
 }
 
 console.log(findMinDifference(
-    ["12:01","00:10","00:01"]
+  // ["23:59","00:00"]
+  //["00:00","23:59","00:00"]
 
-
+  ["12:12","00:13"]
 ))
 
