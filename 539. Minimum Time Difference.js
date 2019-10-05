@@ -95,7 +95,7 @@ var findMinDifference=(A)=>{
     }
 
     var firstTrueInd=0
-    var temp=1
+    var temp=1// distance between the array elements (1 because minutes)
     let i=0
     while(!dict[i]){
         i++
