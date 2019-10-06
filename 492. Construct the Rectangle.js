@@ -19,8 +19,9 @@ var constructRectangle = function(A) {
 
             while(Y>=1)
             {   
+                if(X-Y>dist)break
                 console.log(X,Y,dist)
-                if(X*Y==A && X-Y<=dist && X-Y>=0){
+                if(X*Y==A ){
                     L=X
                     W=Y
                     dist=X-Y
@@ -35,7 +36,16 @@ var constructRectangle = function(A) {
     return [L,W]
 };
 
-console.log(constructRectangle(
-   
+
+// Observation: W<=Math.sqrt(A)
+var constructRectangle = function(area) {
+    let w = Math.floor(Math.sqrt(area));
+    
+    while(area % w)
+        w--;
+    
+    return [area/w, w];
+};
+console.log(constructRectangle(   
     2
 ))
