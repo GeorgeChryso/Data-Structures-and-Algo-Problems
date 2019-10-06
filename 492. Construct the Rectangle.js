@@ -9,32 +9,33 @@
 
 
 var constructRectangle = function(A) {
-    var X=1,Y=1
+    var X=A,Y=X
     var L=0,W=0
     var dist=Infinity
-    while (X<=A )
-    {   
+    while (X>=1 )
+    {  
         if(A%X==0){
-            Y=1
-            console.log(X)
-            while(Y<=X){
-                console.log("aads",X,Y,dist)
+            Y=X
 
-                if( X-Y<=dist && X*Y==A){
-                    console.log('yo'+dist)
-                    dist=X-Y
+            while(Y>=1)
+            {   
+                console.log(X,Y,dist)
+                if(X*Y==A && X-Y<=dist && X-Y>=0){
                     L=X
                     W=Y
+                    dist=X-Y
+                    break
                 }
-            Y++
+                Y--
             }
         }
-        X++
+        X--
     }
 
     return [L,W]
 };
 
 console.log(constructRectangle(
-   6
+   
+    2
 ))
