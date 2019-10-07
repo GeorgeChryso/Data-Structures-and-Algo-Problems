@@ -42,11 +42,14 @@ var lexicalOrder = function(n) {
 
     function getNumberByOrder( start, end) {
         
-        while(start <= end && start<= n){
-            start++}
-        
-        result.push(start);   
-        getNumberByOrder(start*10, start*10+9);
+        while(start <= end ){
+         console.log(result)
+         if(start>n)break
+         result.push(start);   
+         getNumberByOrder(start*10, start*10+9);
+         start++   
+         
+        }
    }
 
    
