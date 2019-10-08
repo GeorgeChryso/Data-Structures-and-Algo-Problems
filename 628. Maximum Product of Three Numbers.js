@@ -44,9 +44,9 @@ if (i==1) return A[A.length-1]*A[A.length-2]*A[A.length-3]
 
 
 };
-
+//brute 
 var maximumProduct=(A)=>{
-    if(A.length==3)return A[0]*A[1]*A[2]
+if(A.length==3)return A[0]*A[1]*A[2]
 
 
 var objy={
@@ -58,6 +58,7 @@ var objy={
     cl:-0.7,
 
     0:undefined,
+
     maxP:-2,
     maxPP:-1,
     maxT:undefined
@@ -163,6 +164,40 @@ function exCl(a){
         objy['maxT'] * objy['maxPP'] *objy['maxP'] : -Infinity)
  
 }
+//naive
+
+var maximumProduct=(A)=>{
+
+var 
+    min1=Infinity,
+    min2=Infinity,
+    max1=-Infinity,
+    max2=-Infinity,
+    max3=-Infinity
+
+
+for (var n of A) {
+    if (n <= min1) {
+        min2 = min1;
+        min1 = n;
+    } else if (n <= min2) {     // n lies between min1 and min2
+        min2 = n;
+    }
+    if (n >= max1) {            // n is greater than max1, max2 and max3
+        max3 = max2;
+        max2 = max1;
+        max1 = n;
+    } else if (n >= max2) {     // n lies betweeen max1 and max2
+        max3 = max2;
+        max2 = n;
+    } else if (n >= max3) {     // n lies betwen max2 and max3
+        max3 = n;
+    }
+
+}
+return Math.max(min1 * min2 * max1, max1 * max2 * max3);
+}
+// optimal
 
 console.log(maximumProduct(
   //[-4,-3,-2,-1,60]
