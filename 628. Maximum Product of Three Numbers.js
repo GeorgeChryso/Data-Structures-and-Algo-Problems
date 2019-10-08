@@ -19,15 +19,35 @@
 
 
 var maximumProduct = function(A) {
-   var max=-Infinity
+ 
 
-   for (let i = 0; i < A.length; i++) {
-        for (let j = i+1; j < A.length; j++) {
-            for (let k = j+1; k < A.length; k++) {
-                A[i]*A[j]*A[k]>max?max=A[i]*A[j]*A[k]:null;
-                
-            }            
-        }       
-   }
-   return max
+//
+if(A.length==3)return A[0]*A[1]*A[2]
+
+A=A.sort((a,b)=>a-b)
+
+if(A[A.length-1]==0){
+    return 0
+}
+if(A[A.length-1]<0 || A[0]>=0){
+    return A[A.length-1]*A[A.length-2]*A[A.length-3]
+}
+
+for (var i = 0; i < A.length; i++) {
+    if(A[i]>=0) break
+}
+
+if (i==1) return A[A.length-1]*A[A.length-2]*A[A.length-3]
+
+if(i>=2){
+    var max1=A[0]*A[1]*A[A.length-1]
+    return Math.max(max1,A[A.length-1]*A[A.length-2]*A[A.length-3])
+}
+
+
+
 };
+
+console.log(maximumProduct(
+    [-4,-3,-2,-1,60]
+))
