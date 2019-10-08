@@ -29,6 +29,7 @@ A=A.sort((a,b)=>a-b)
 if(A[A.length-1]==0){
     return 0
 }
+
 if(A[A.length-1]<0 || A[0]>=0){
     return A[A.length-1]*A[A.length-2]*A[A.length-3]
 }
@@ -39,15 +40,133 @@ for (var i = 0; i < A.length; i++) {
 
 if (i==1) return A[A.length-1]*A[A.length-2]*A[A.length-3]
 
-if(i>=2){
-    var max1=A[0]*A[1]*A[A.length-1]
-    return Math.max(max1,A[A.length-1]*A[A.length-2]*A[A.length-3])
-}
 
 
 
 };
 
+var maximumProduct=(A)=>{
+    if(A.length==3)return A[0]*A[1]*A[2]
+
+
+var objy={
+    minT:undefined,
+    minP:1,
+
+    clll:-0.5,
+    cll:-0.6,
+    cl:-0.7,
+
+    0:undefined,
+    maxP:-2,
+    maxPP:-1,
+    maxT:undefined
+}
+function exCl(a){
+ if(a>objy['clll']){
+     objy['cl']=objy['cll']
+     objy['cll']=objy['clll']
+     objy['clll']=a
+     return
+ }
+
+ if(a>objy['cll']){
+    objy['cl']=objy['cll']
+    objy['cll']=a
+    return
+ }
+
+ if(a>objy['cl']){
+    objy['cl']=objy['cll']
+    objy['cll']=a
+    return
+ }
+ return
+}
+
+    for (let i = 0; i < A.length; i++) {
+
+
+        if(A[i]<0&&objy['minT']===undefined){
+            objy['minP']=objy['minT']
+            objy['minT']=A[i]
+            continue
+        }
+        if(A[i]>0 && objy['maxT']===undefined){
+            objy['maxP']=objy['maxPP']
+            objy['maxPP']=objy['maxT']
+            objy['maxT']=A[i]
+            continue
+        }
+
+        if(A[i]<=objy['minT']){
+            exCl(A[i])
+            objy['minP']=objy['minT']
+            objy['minT']=A[i]
+            continue
+        }
+        if(A[i]<objy['minP'] || objy['minP']==undefined){
+            exCl(A[i])
+            objy['minP']=A[i]
+            continue
+        }
+        if(!A[i]){
+            objy[0]=true
+            continue
+        }
+
+        if(A[i]>=objy['maxT']|| objy['maxT']===undefined){
+            objy['maxP']=objy['maxPP']
+            objy['maxPP']=objy['maxT']
+            objy['maxT']=A[i]
+            continue
+        }
+
+        if(A[i]>=objy['maxPP']|| objy['maxPP']===undefined){
+            objy['maxP']=objy['maxPP']
+            objy['maxPP']=A[i]
+            continue
+        }
+
+        if(A[i]>=objy['maxP'] || objy['maxP']===undefined){
+            objy['maxP']=A[i]
+            continue
+        }
+
+    }
+    console.log(objy)
+
+   
+
+     if(objy['maxT']===undefined){
+        if(objy[0]){
+            return 0
+        }
+        else{
+            return objy['cl']*objy['cll']*objy['cll']
+        }
+    }
+    
+    if(objy['minT']===undefined){
+        if( ! objy['maxP'] || !objy['maxPP']) return 0
+
+        return objy['maxT']*objy['maxPP']*objy['maxP']
+    }
+
+    if( objy['minP']===undefined){
+        if( ! objy['maxP'] || !objy['maxPP']) return 0
+        return objy['maxT']*objy['maxPP']*objy['maxP']
+    }
+
+
+        return Math.max(objy['maxT']*objy['minP']*objy['minT'], objy['maxT'] && objy['maxPP'] && objy['maxP']? 
+        objy['maxT'] * objy['maxPP'] *objy['maxP'] : -Infinity)
+ 
+}
+
 console.log(maximumProduct(
-    [-4,-3,-2,-1,60]
+  //[-4,-3,-2,-1,60]
+    //[1,2,3,3,3]
+    [7,3,1,0,0,6]
+//[0,0,0,4]
 ))
