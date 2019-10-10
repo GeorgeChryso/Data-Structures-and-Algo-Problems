@@ -68,6 +68,20 @@ var calculateMinimumHP = function(A) {
 
 
 // Elegant O(M*N), O(1)
+
+// T L D R
+// so starting from the princess herself i am replacing all the 
+// A[i][j] elements with: The minimum Hp needed to get to the Princess // 
+
+// I am doing this in an order befitting to the freedom of movement so 
+// as for all the cases to be considered(Rightward and Downward movements)
+
+// In the end I return the first element which has to be the least amount 
+// of HP needed to get to the princess overall. 
+
+// I could have used an external Memoization MxN matrix but that would just be
+// extra uncesessary space, so I m using the given Matrix instead
+
 var calculateMinimumHP = function(A) {
     if (A.length === 0) {
         return 1;
