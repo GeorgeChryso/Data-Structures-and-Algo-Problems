@@ -1,1 +1,1 @@
-        Recu(0, 0, 0, 1)
+    const h = Array(m).fill(Array(n).fill(0))
