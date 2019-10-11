@@ -41,6 +41,41 @@ var backspaceCompare = function(S, T) {
 };
 
 
+
+var backspaceCompare = function(S, T) {
+    
+    
+    // Define a regex expression to locate a backspace and number
+    let reg = /[a-z]\#/gi;
+    
+    let reg2 = /\#/gi;
+    
+    while(reg.test(S)) {
+            S = S.replace(reg,"")   
+    }
+
+    
+    while(reg.test(T)) {
+        T = T.replace(reg,"")   
+    }
+    
+
+    while(reg2.test(S)) {
+          S = S.replace(reg2,"")   
+    }
+
+    
+    while(reg2.test(T)) {
+        T = T.replace(reg2,"")   
+    }
+    
+    
+    return (S === T) ? true : false;
+
+};
+
+
+
 console.log(backspaceCompare(
     "gtc#uz#",
     "gtc#uz##"
