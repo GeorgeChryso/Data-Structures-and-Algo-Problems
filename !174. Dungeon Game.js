@@ -88,10 +88,13 @@ var calculateMinimumHP = function(A) {
     }
     
     const [m, n] = [A.length, A[0].length];
-    
+
+
+    // FROM THE BOTTOM ROW TO THE FIRST, COS I CAN ONLY GO DOWNWARDS
     for (let i=m-1; i>=0; i--) {
 
-
+        
+        // FROM THE RIGHTMOST COLUMN TO THE FIRST, COS I CAN ONLY GO RIGHTWARDS
         for (let j=n-1; j>=0; j--) {
 
 
@@ -123,6 +126,10 @@ var calculateMinimumHP = function(A) {
     
     return A[0][0];
 };
+
+
+
+
 console.log(calculateMinimumHP(
   
    
