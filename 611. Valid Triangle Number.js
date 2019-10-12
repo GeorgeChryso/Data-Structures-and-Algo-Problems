@@ -14,13 +14,14 @@ var triangleNumber = function(A) {
     for (let i = 0; i < A.length; i++) {
         for (let j = i+1; j < A.length; j++) {
             for (let k = j+1; k < A.length; k++) {
-                if(makeAtriangle(A[i],A[j],A[k]))count++
+                if(makeAtriangle(A[i],A[j],A[k])) count++
             }            
         }
     }
     return count
 };
 
+// O(N^3), O(1)
 console.log(triangleNumber(
     [2,2,3,4]
 ))
