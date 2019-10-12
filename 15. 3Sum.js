@@ -40,16 +40,6 @@ var threeSum = function(z) {
     let sols=[]
     var memo=[]
     for (let i = 0; i < l; i++) {
-        
-            // for (let j = i+1 ;j <l; j++) {
-            //     for (let k = j+1; k < l; k++) {
-            //      if (z[k]+z[j]+z[i]==0){
-            //        let u= [z[j],z[i],z[k]].sort((a,b)=>a-b).toString()
-            //        if(!sols.includes(u))sols.push(u.toString())
-            //       }
-            //     }                
-            // }     // solA
-
 
         let answer=[]
             z.some((d, j) => {
@@ -126,12 +116,16 @@ return results
 
 // nice but slow
 
-
+// optimal O(N)
 var threeSum = function(nums) {
-	var rtn = [];
+  var rtn = [];
+  
+  //I need the 3 sum, not 2sum or 1sumlol
 	if (nums.length < 3) {
 		return rtn;
-	}
+  }
+
+  // Sorting 
 	nums = nums.sort(function(a, b) {
 		return a - b;
   });
@@ -143,36 +137,56 @@ var threeSum = function(nums) {
 			return rtn;
 		}
 		if (i > 0 && nums[i] == nums[i - 1]) {
+      // I need unique triplets, therefore If A[i] repeats itself i dont want it
 			continue;
-		}
+    }
+    
+
+
 		for (var j = i + 1, k = nums.length - 1; j < k;) {
 
 			if (nums[i] + nums[j] + nums[k] === 0) {
+              // add the unique triplet to my end result
+              rtn.push([nums[i], nums[j], nums[k]]);
+              // narrow the indexes
+              j++;
+              k--;
+              
+              //increment nums[j] if it repeats itself
+              while (j < k && nums[j] == nums[j - 1]) {
+                j++;
+              }
 
-				rtn.push([nums[i], nums[j], nums[k]]);
-				j++;
-        k--;
-        
-
-				while (j < k && nums[j] == nums[j - 1]) {
-					j++;
-				}
-				while (j < k && nums[k] == nums[k + 1]) {
-					k--;
-        }
+              
+              //increment nums[k] if it repeats itself
+              while (j < k && nums[k] == nums[k + 1]) {
+                k--;
+              }
         
 
       } 
+
+      
+      // if my result is bigger than 0, you need to reduce it.
+      // that will happen if I reduce k so i can go to smaller numbers
+      // which will reduce the total sum
       else if (nums[i] + nums[j] + nums[k] > 0) {
 				k--;
       }
-       else {
+
+      // if my result is less than 0, I need to increase the total sum, 
+      // therefore I increase the j index, going to bigger numbers.
+
+      else {
+
 				j++;
 			}
 		}
 	}
 	return rtn;
 };
+
+
 
 
 console.log(threeSum(
