@@ -1,1 +1,1 @@
-    const h = Array(m).fill(Array(n).fill(0))
+c^2
