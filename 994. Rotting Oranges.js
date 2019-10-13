@@ -126,8 +126,11 @@ var orangesRotting = function(grid) {
     const q = [];
     let dep = 0;
     
+    //subcases
     if(grid[0] === undefined || grid[0][0] === undefined) return dep;
     
+
+    //scan for rotten, save [i,j,0] if found to my queue q
     for(let row = 0; row < grid.length; row++) {
         for(let col = 0; col < grid[row].length; col++) {
             if(grid[row][col] === 2) {
@@ -136,6 +139,7 @@ var orangesRotting = function(grid) {
         }
     }
     
+    // handle rotten triplets, if any
     while(q.length) {
         
         const [_row, _col, _dep] = q.shift();
@@ -143,6 +147,7 @@ var orangesRotting = function(grid) {
         // start rotting around this orange
         if(grid[_row][_col] === 2) {
             
+
             const directions = [
                 [_row, _col + 1],
                 [_row, _col - 1],
@@ -150,12 +155,18 @@ var orangesRotting = function(grid) {
                 [_row + 1, _col],
             ]; 
            
+
             for(let dir of directions) {
+
                 if(grid[dir[0]] === undefined || grid[dir[0]][dir[1]] === undefined) continue;
+
+
+                //found an 1 adjacent to a 2, will change to 2 
                 if(grid[dir[0]][dir[1]] === 1) {
                     grid[dir[0]][dir[1]] = 2;
                     q.push([dir[0], dir[1], _dep + 1]);
                 }
+
             }
 
         }
@@ -163,6 +174,9 @@ var orangesRotting = function(grid) {
         dep = Math.max(dep, _dep);
     }
        
+
+
+
     //scans the matrix for 1, if found returns -1, as its never gonna change
     for(let row = 0; row < grid.length; row++) {
         for(let col = 0; col < grid[row].length; col++) {
