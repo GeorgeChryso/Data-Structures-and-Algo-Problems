@@ -189,10 +189,64 @@ var orangesRotting = function(grid) {
     return dep;
     
 };
+
+
+var orangesRotting = function(A) {
+    var fresh=0
+    var d=0
+    
+
+    // If the given A[i][j]==1, returns 1, otherwise 0
+    // and changes any 1 into d+3
+    function rot(M,i,j,d){
+        if( i<0 || j<0 || i>= M.length || j>= M[i].length || M[i][j]!=1){
+            return 0
+        }
+
+        A[i][j] = d + 3; //change the 1 to d+3
+        return 1
+    }
+
+    // count all the fresh oranges
+    for (let i = 0; i < A.length; i++) {
+       for (let j = 0; j < A[i].length; j++) {
+            if(A[i][j]===1)fresh++           
+       }
+        
+    }
+
+
+    var curr_fresh=fresh
+
+    while(fresh>0){
+
+        for (let i = 0; i < A.length; i++) {
+            for (let j = 0; j < A[i].length; j++) {
+                
+                 
+                 if(A[i][j]===d+2){
+                    fresh-=rot(A,i+1,j,d)+rot(A,i,j+1,d)+ rot(A,i-1,j,d)+ rot(A,i,j-1,d)  
+                 }        
+            }
+
+             
+        }            
+
+        if(fresh==curr_fresh)return -1 // nothing changed overnight
+        d++
+        curr_fresh=fresh
+    }
+
+    return d
+}
+// Time: O(h * w * (h + w)), where h and w are the dimension of the grid. We are scanning h + w times (maximum distance between two cells) through all grid cells.
+// Memory: O(1).
+
+
 console.log(orangesRotting(
     [
         [2,1,1],
-        [0,1,1],
-        [1,0,1]
+        [1,1,0],
+        [0,1,1]
     ]
 ))
