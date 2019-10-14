@@ -12,17 +12,18 @@
 
 
 
-
+// BREADTH FIRST SEARCH APPROACH
 var orangesRotting = function(grid) {
      
     const q = [];
-    let dep = 0;
+    let dep = 0; //TIME OF THEIR ROTTING
     
     //subcases
     if(grid[0] === undefined || grid[0][0] === undefined) return dep;
     
 
-    //scan for rotten, save [i,j,0] if found to my queue q
+    // SEARCH FOR ALL THE ROTTEN ORANGES AT THE START
+    // PUSH THEIR POSITION TO q
     for(let row = 0; row < grid.length; row++) {
         for(let col = 0; col < grid[row].length; col++) {
             if(grid[row][col] === 2) {
@@ -31,38 +32,40 @@ var orangesRotting = function(grid) {
         }
     }
     
-    // handle rotten triplets, if any
+
+
+    // START ROTTING AROUND THE ORANGES UNTIL YOU NO LONGER CAN
     while(q.length) {
         
-        const [_row, _col, _dep] = q.shift();
-        
-        // start rotting around this orange
-        if(grid[_row][_col] === 2) {
-            
 
-            const directions = [
+        //REMOVE THE FIRST ELEMENT AND ROT AROUND IT
+        const [_row, _col, _dep] = q.shift(); //ES6 STYLEISH BOIII
+        
+
+        const directions = [
                 [_row, _col + 1],
                 [_row, _col - 1],
                 [_row - 1, _col],
                 [_row + 1, _col],
-            ]; 
+        ]; 
            
-
-            for(let dir of directions) {
+        // change the 1s to 2s, and push them to my bfs queue
+        for(let dir of directions) {
 
                 if(grid[dir[0]] === undefined || grid[dir[0]][dir[1]] === undefined) continue;
 
 
                 //found an 1 adjacent to a 2, will change to 2 
                 if(grid[dir[0]][dir[1]] === 1) {
-                    grid[dir[0]][dir[1]] = 2;
+                    grid[dir[0]][dir[1]] = 2; //dont 4get to update the matrix itself
                     q.push([dir[0], dir[1], _dep + 1]);
                 }
 
-            }
-
         }
+
         
+        // the fact that you rotted an element represents its minimum time needed to rot
+        // I m searching for the maximum said time so everything can be rotten, yay!
         dep = Math.max(dep, _dep);
     }
        
@@ -157,3 +160,10 @@ console.log(orangesRotting(
         [0,1,1]
     ]
 ))
+
+
+[
+    [2,1,1],
+    [0,1,1],
+    [1,0,1]
+]
