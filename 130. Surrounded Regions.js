@@ -3,7 +3,7 @@
 // A region is captured by flipping all 'O's into 'X's in that surrounded region.
 
 
-// Switch all the border to 3s, it is a dfs
+//  dfs
 var solve = function(A) {
     if (A.length<=1)return A
 
@@ -84,7 +84,7 @@ var solve = function(A) {
 
 
 
-    //queue now has the border's plagued elements
+    // queue now has the border's plagued elements
     // I will keep adding to the queue the 'O's connected 
     // to the plagued elements and plaguing them aswell
     while(queue.length){
