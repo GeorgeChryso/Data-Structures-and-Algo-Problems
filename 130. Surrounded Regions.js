@@ -45,7 +45,7 @@ var solve = function(A) {
     }
 
 
-     // replace all plagued with 'O' and the rest with 'X'
+    // replace all plagued with 'O' and the rest with 'X'
     for (let i = 0; i < A.length; i++) {
         for (let j = 0; j < A[0].length; j++) {
                 
@@ -125,6 +125,7 @@ var solve = function(A) {
     }
     return A
 };
+
 
 console.log(solve(
     
