@@ -1,7 +1,7 @@
 
 //Start End Dictionary
 
-
+//typical BrFS where time matters. 
 var ladderLength = function(S, E, D) {
     if (!D.includes(E))return 0
 
@@ -15,10 +15,16 @@ var ladderLength = function(S, E, D) {
 
 
     while(queue.length){
-        const next=[] // Helps us with segregating between the times
+        const next=[] // Helps us with segregating between the times ( levels )
+        // I will process all the elements of my queue, and push their children()to next
+        // Then next will become my new queue
         for (var T of queue) {
+            console.log(T,dict)
             if(T===E)return time
-            
+
+
+
+            //essentially try replacing each letter of T with any letter, therefore creating a new word. Test that word against your dictionary and if it's there push it to next.( Cos It is a children of T )
             for (let i = 0; i < T.length; i++) {
                 for (let j = 0; j < 26; j++) {
                     const W= T.slice(0,i)
@@ -33,9 +39,9 @@ var ladderLength = function(S, E, D) {
                 }
             }
 
-
+          
         }
-
+        console.log(next)
         queue= next;
         time++;
     }
