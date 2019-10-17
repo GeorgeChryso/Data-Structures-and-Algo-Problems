@@ -7,86 +7,68 @@
 var ladderLength = function(S, E, D) {
     if (!D.includes(E))return 0
      // array of sequences [arrays]
-    
-    var time=1
-    var queue=[S]
-    var stoptime=Infinity
+    var finish=false
 
     const dict = new Set(D);
+    var queue=[ [S,dict] ]
+    var time=1
 
 
-    var indexList=[]
+    var startPath=[  [S]  ]
+    var curChildren=[]
 
-    var startPath=[[S]]
-
-
-    while(queue.length&&time<stoptime){
-console.log(startPath)
+    while(queue.length && time<D.length+1){
+        
+        var childInfo=[]
         var result=[]
-
-        const curChildren=[] // Helps us with segregating between the times ( levels )
-        // I will process all the elements of my queue, and push their children()to curChildren
-        // Then curChildren will become my new queue
-        indexList=[]
-
-        // [child node, parent node, available dictionary]
-        for (var T of queue) {
-
-            if(T===E){
-                time=stoptime
-                    }
+        for (const [PARENT,DICT] of queue) {
+            
 
 
-
-            //essentially try replacing each letter of T with any letter, therefore creating a new word. Test that word against your dictionary and if it's there push it to curChildren.( Cos It is a children of T )
-            var numberOfChildren=0
-
-            for (let i = 0; i < T.length; i++) {
-
+            for (let i = 0; i < PARENT.length; i++) {
                 for (let j = 0; j < 26; j++) {
-                    const W= T.slice(0,i)
+                    const W= PARENT.slice(0,i)
                     +String.fromCharCode(97 + j) // all letters of the alphabet (IN ORDER)
-                    +T.slice(i + 1);
-                    
-                    if (dict.has(W)) {
-                        if(W==E){
-                            numberOfChildren++
-                            curChildren.push([W,T])  
-                            continue;
+                    +PARENT.slice(i + 1);
+                    if (DICT.has(W)) {
+                        if(W===E){
+                            finish=true
                         }
-                      numberOfChildren++
-                      curChildren.push(W)  
-                      dict.delete(W)
+                        DICT.delete(W)
+                      childInfo.push([W,PARENT])
+                      curChildren.push([W,DICT])
                     }
 
                 }
             }
-            indexList.push(numberOfChildren)
+
         }
 
 
-console.log(indexList, curChildren, `finished?: ${time==stoptime}` )
 
-        var j=1
+        for (let i = 0,j=0; i < startPath.length; i++) {
 
-        startPath.forEach((path,i)=>{
 
-                for (let k=0; k<=indexList[i];k++, j++) {
-                    if(curChildren[j-1]!==undefined){
-                        result.push(
-                            path.concat(curChildren[j-1])
-                        )                    
-                    }
+
+                 
+                while(j<childInfo.length 
+                    && childInfo[j][1]===(startPath[i][startPath.length-1])){
+                    result.push(
+                        startPath[i].concat(childInfo[j][0])
+                    )
+                    j++
+                  
                 }
-        })
 
-
-
- console.log(`new paths: \n`,result,'\n','\n','\n')
-
+              
+        }
+        if(finish){
+            return result.filter(d=>d[d.length-1]==E)
+        }
+        console.log(curChildren,result)
         startPath=result
+        result=[]
         queue= curChildren;
-        time++;
     }
 
     return result.length?result:[]
