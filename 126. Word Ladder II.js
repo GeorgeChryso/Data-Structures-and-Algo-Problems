@@ -5,7 +5,7 @@
 
 
 var ladderLength = function(S, E, D) {
-    if (!D.includes(E))return 0
+    if (!D.includes(E))return []
      // array of sequences [arrays]
     var finish=false
 
@@ -21,12 +21,16 @@ var ladderLength = function(S, E, D) {
         
         var childInfo=[]
         var result=[]
-        for (const [PARENT,DICT] of queue) {
+        curChildren=[]
+
+        //find the children of the parents
+        for (const [PARENT,DICTION] of queue) {
             
 
 
             for (let i = 0; i < PARENT.length; i++) {
                 for (let j = 0; j < 26; j++) {
+                    var DICT= new Set(DICTION)
                     const W= PARENT.slice(0,i)
                     +String.fromCharCode(97 + j) // all letters of the alphabet (IN ORDER)
                     +PARENT.slice(i + 1);
@@ -44,15 +48,20 @@ var ladderLength = function(S, E, D) {
 
         }
 
+//console.log(`my startPath is `,startPath)
+//console.log(` found the children `,curChildren)
+//console.log(`with info `,childInfo)
 
 
+        //create the result sequences for this level
         for (let i = 0,j=0; i < startPath.length; i++) {
 
 
 
                  
                 while(j<childInfo.length 
-                    && childInfo[j][1]===(startPath[i][startPath.length-1])){
+                    && childInfo[j][1]===(startPath[i][startPath[i].length-1])){
+
                     result.push(
                         startPath[i].concat(childInfo[j][0])
                     )
@@ -62,20 +71,108 @@ var ladderLength = function(S, E, D) {
 
               
         }
+//console.log('\n sequences created',result)
+
+        // finish filter
         if(finish){
+            console.log('finish',result)
             return result.filter(d=>d[d.length-1]==E)
         }
-        console.log(curChildren,result)
+
+
+console.log(time,'\n \n \n \n')
         startPath=result
-        result=[]
         queue= curChildren;
+        time++
     }
 
     return result.length?result:[]
 
 };
-console.log(ladderLength(
-    beginWord = "hit",
-endWord = "cog",
-wordList = ["hot","dot","dog","lot","log","cog"]
-))
+
+
+var ladderLength = function(S, E, D) {
+    if (!D.includes(E))return []
+     // array of sequences [arrays]
+    var finish=false
+
+    const dict = new Set(D);
+    var queue=[ [[S],dict]  ]
+    var time=1
+
+
+    var curPaths=[]
+
+    while(queue.length && time<D.length+1){
+        
+        
+
+        //find the children of the parents
+        for (var [[...head,tail],DICTI] of queue) {
+            
+
+
+            for (let i = 0; i < PARENT.length; i++) {
+
+
+                for (let j = 0; j < 26; j++) {
+                    var DICT= new Set(DICTI)
+                    var possibleTransmutation= tail.slice(0,i)
+                    +String.fromCharCode(97 + j) // all letters of the alphabet (IN ORDER)
+                    +tail.slice(i + 1);
+
+
+                    if (DICT.has(possibleTransmutation)) {
+                        if(possibleTransmutation===E){
+                            finish=true
+                        }
+                        
+                        
+                        DICT.delete(possibleTransmutation)
+                        
+                        curPaths.push(
+                            [head.concat(tail,possibleTransmutation),DICT]
+                        )
+                    }
+
+                }
+            }
+
+        }
+
+//console.log(`my startPath is `,startPath)
+//console.log(` found the children `,curChildren)
+//console.log(`with info `,childInfo)
+
+
+       
+//console.log('\n sequences created',result)
+
+        // finish filter
+        if(finish){
+            return curPaths.map(d=>{
+                if(d[0][d[0].length-1]===E){
+                    return d[0]
+                }
+                return []  
+            }).filter(d=>d.length)
+        }
+
+
+        queue= curPaths
+        time++
+    }
+
+    return result.length?result:[]
+
+};
+console.log(laddderLength(
+    "hit",
+    "cog",
+    ["hot","dot","dog","lot","log"]
+    
+    
+    )
+    
+    
+    )
