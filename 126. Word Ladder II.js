@@ -3,7 +3,7 @@
 // Only one letter can be changed at a time
 // Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
 
-
+// SO UNECESSARY!!!!
 var ladderLength = function(S, E, D) {
     if (!D.includes(E))return []
      // array of sequences [arrays]
@@ -91,7 +91,9 @@ console.log(time,'\n \n \n \n')
 };
 
 
-var ladderLength = function(S, E, D) {
+
+// WORKS, but MEMORY PROBLEM, HEAP EXCEEDED
+var findLadders = function(S, E, D) {
     if (!D.includes(E))return []
      // array of sequences [arrays]
     var finish=false
@@ -104,25 +106,28 @@ var ladderLength = function(S, E, D) {
     var curPaths=[]
 
     while(queue.length && time<D.length+1){
-        
-        
+        curPaths=[]
+        console.log(queue)
 
         //find the children of the parents
-        for (var [[...head,tail],DICTI] of queue) {
+        for (let [T,DICTI] of queue) {
             
+           let tail=T[T.length-1]
+           console.log(queue,tail)
 
-
-            for (let i = 0; i < PARENT.length; i++) {
+            for (let i = 0; i < tail.length; i++) {
 
 
                 for (let j = 0; j < 26; j++) {
-                    var DICT= new Set(DICTI)
-                    var possibleTransmutation= tail.slice(0,i)
+                    let DICT= new Set(DICTI)
+
+                    let possibleTransmutation= tail.slice(0,i)
                     +String.fromCharCode(97 + j) // all letters of the alphabet (IN ORDER)
                     +tail.slice(i + 1);
 
 
                     if (DICT.has(possibleTransmutation)) {
+                        console.log('DICT HAS',possibleTransmutation)
                         if(possibleTransmutation===E){
                             finish=true
                         }
@@ -131,7 +136,7 @@ var ladderLength = function(S, E, D) {
                         DICT.delete(possibleTransmutation)
                         
                         curPaths.push(
-                            [head.concat(tail,possibleTransmutation),DICT]
+                            [T.concat(possibleTransmutation),DICT]
                         )
                     }
 
@@ -140,16 +145,12 @@ var ladderLength = function(S, E, D) {
 
         }
 
-//console.log(`my startPath is `,startPath)
-//console.log(` found the children `,curChildren)
-//console.log(`with info `,childInfo)
-
 
        
-//console.log('\n sequences created',result)
 
         // finish filter
         if(finish){
+            console.log('finished')
             return curPaths.map(d=>{
                 if(d[0][d[0].length-1]===E){
                     return d[0]
@@ -163,13 +164,15 @@ var ladderLength = function(S, E, D) {
         time++
     }
 
-    return result.length?result:[]
+    return curPaths.length?curPaths:[]
 
 };
-console.log(laddderLength(
+
+
+console.log(findLadders(
     "hit",
     "cog",
-    ["hot","dot","dog","lot","log"]
+    ["hot","dot","dog","lot","log","cog"]
     
     
     )
