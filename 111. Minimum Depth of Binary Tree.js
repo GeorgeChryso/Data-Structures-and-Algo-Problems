@@ -12,7 +12,7 @@ var minDepth = function(A) {
     if(!A)return 0
     if(A.val===null||A.val===undefined)return 0
     if( A.right===A.left && A.right===null)return 1
-    
+
     var level=1
     var queue=[A]
 
@@ -47,6 +47,38 @@ var minDepth = function(A) {
 
     return level
 
+};
+
+// DFS
+var minDepth = function(A) {
+    var minDepth = Infinity;
+    
+    if (A === null) {
+        return 0;
+    }
+    
+    function find(node, depth = 1) {
+        if (node.left === null && node.right === null) {
+            if (depth < minDepth) {
+                minDepth = depth;
+                if (minDepth === 1) {
+                    return;
+                }
+            }
+        }
+        
+        if (node.left !== null) {
+            find(node.left, depth+1);
+        }
+        
+        if (node.right !== null) {
+            find(node.right, depth+1);
+        }
+    }
+    
+    find(A);
+    
+    return minDepth;
 };
 console.log(minDepth(
     [3,9,20,null,null,15,7]))
