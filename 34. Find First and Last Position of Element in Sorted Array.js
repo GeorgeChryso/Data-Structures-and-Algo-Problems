@@ -104,14 +104,11 @@ var searchRange = function(A, T) {
     var start=0
     var end = A.length-1
     
-    while (start<=end){  
-        let length=1+end-start
-        if(!length)break
-       
+    while (start<=end){         
 
-        let splitIndex=length%2?
-        (start+(length-1)/2):
-        (start+(length-2/2))
+        let splitIndex=(1+end-start)%2?
+        (start+(end-start)/2):
+        (start+(end-start-1)/2)
 
         if(A[splitIndex]===T){
             var endIndex=new Number(splitIndex)
