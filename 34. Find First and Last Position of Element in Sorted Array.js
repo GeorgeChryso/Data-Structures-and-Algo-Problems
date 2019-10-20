@@ -4,19 +4,18 @@
 
 // If the target is not found in the array, return [-1, -1].
 
-
+// BINARY search for less than O(logn)
 var searchRange = function(A, T) {
 
 
-    var finished=false
     var tIndex=-1
     var result=[-1,-1]
     if(!A.length){return result}
 
-    var dp=(start,end)=>{
+    function dp(start,end){
         let length=1+end-start
 
-        if(!length || finished)return
+        if(!length)return
 
         if (length%2){
             var splitIndex=(length-1)/2
@@ -24,13 +23,19 @@ var searchRange = function(A, T) {
         else {
             var splitIndex=length/2-1
         }
-        console.log(`CALLED [${start},${end}] with splitIndex ${splitIndex}`)
+      
 
         if(A[start+splitIndex]==T){
-            console.log('hi')
-            finished=true
             tIndex=start+splitIndex
-             
+            var endIndex=new Number(tIndex)
+            while(A[tIndex]===T){
+                tIndex--
+            }
+            while(A[endIndex]===T){
+                endIndex++
+            }
+            result=[tIndex+1,endIndex-1]
+            return
         }
         else if( A[start+splitIndex]<T){
             if(splitIndex+1==start){
@@ -53,20 +58,8 @@ var searchRange = function(A, T) {
     }
 
     dp(0,A.length-1)
-    console.log('finalized tIndex:',tIndex)
-
-    var endIndex=new Number(tIndex)
-    if(tIndex!=-1){
-        while(A[tIndex]===T){
-            tIndex--
-        }
-        while(A[endIndex]===T){
-            endIndex++
-        }
-     result[0]=tIndex+1
-     result[1]=endIndex-1
-    }
-   
+    
+    
 
     return result
 };
