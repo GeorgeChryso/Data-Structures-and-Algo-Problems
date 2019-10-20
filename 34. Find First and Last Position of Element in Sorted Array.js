@@ -96,22 +96,20 @@ var searchRange = function(A, T) {
 
 //BINARY SEARCH with a WHILE 
 var searchRange = function(A, T) {
-
-
-    var result=[-1,-1]
-    if(!A.length){return result}
+    if(!A.length){return [-1,-1]}
 
     var start=0
     var end = A.length-1
     
-    while (start<=end){         
+    while (start<=end){      
+        
+        
+        let splitIndex = Math.floor((l + r) / 2);
 
-        let splitIndex=(1+end-start)%2?
-        (start+(end-start)/2):
-        (start+(end-start-1)/2)
-
+        
         if(A[splitIndex]===T){
-            var endIndex=new Number(splitIndex)
+
+            let endIndex=new Number(splitIndex)
             while(A[splitIndex]===T){
                 splitIndex--
             }
@@ -130,8 +128,10 @@ var searchRange = function(A, T) {
 
     }
 
-    return result
+    return [-1,-1]
 };
+
+
 
 console.log(searchRange(
    // [-99999,-99998,-9999,-999,-99,-9,-1],0
