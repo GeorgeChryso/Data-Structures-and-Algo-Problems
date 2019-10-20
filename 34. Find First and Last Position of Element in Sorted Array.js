@@ -4,7 +4,7 @@
 
 // If the target is not found in the array, return [-1, -1].
 
-// BINARY search for less than O(logn)
+// BINARY search with dynamic programming
 var searchRange = function(A, T) {
 
 
@@ -59,7 +59,79 @@ var searchRange = function(A, T) {
 
     dp(0,A.length-1)
     
+    var start=0
+    var end = A.length-1
     
+    while (start<end){  
+        let length=1+end-start
+        if(!length)break
+       
+
+        let splitIndex=length%2?
+        (start+(length-1)/2):
+        (start+(length-2/2))
+
+        if(A[splitIndex]===T){
+            var endIndex=new Number(splitIndex)
+            while(A[splitIndex]===T){
+                splitIndex--
+            }
+            while(A[endIndex]===T){
+                endIndex++
+            }
+            return [splitIndex+1,endIndex-1]
+            
+        }
+        else if (A[splitIndex]<T){
+            start=splitIndex+1
+        }
+        else{
+            end=splitIndex-1
+        }
+
+    }
+
+    return result
+};
+
+//BINARY SEARCH with a WHILE 
+var searchRange = function(A, T) {
+
+
+    var result=[-1,-1]
+    if(!A.length){return result}
+
+    var start=0
+    var end = A.length-1
+    
+    while (start<=end){  
+        let length=1+end-start
+        if(!length)break
+       
+
+        let splitIndex=length%2?
+        (start+(length-1)/2):
+        (start+(length-2/2))
+
+        if(A[splitIndex]===T){
+            var endIndex=new Number(splitIndex)
+            while(A[splitIndex]===T){
+                splitIndex--
+            }
+            while(A[endIndex]===T){
+                endIndex++
+            }
+            return [splitIndex+1,endIndex-1]
+            
+        }
+        else if (A[splitIndex]<T){
+            start=splitIndex+1
+        }
+        else{
+            end=splitIndex-1
+        }
+
+    }
 
     return result
 };
@@ -67,6 +139,6 @@ var searchRange = function(A, T) {
 console.log(searchRange(
    // [-99999,-99998,-9999,-999,-99,-9,-1],0
    //[2,2],3
-  //[1],1
-   //[5,7,7,8,8,10],6
+ // [1],1
+   [5,7,7,8,8,10],10
     ))
