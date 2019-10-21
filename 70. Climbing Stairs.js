@@ -27,6 +27,7 @@ var climbStairs = function(n) {
 };
 
 
+// Memoization, realising  A[i]=A[i-1]+A[i-2] 
 
 var climbStairs = function(n) {
     var A=Array(n+1).fill(0)
@@ -38,8 +39,29 @@ var climbStairs = function(n) {
     return A[n]
 };
 
+// Constant Space
+var climbStairs = function(n) {
+    var A=[1,2,3]
+    if(n<A.length)return A[n-1]
+    for (let i = 2; i < n; i++) {
+        A[2]=A[0]+A[1]
+        A[0]=A[1]
+        A[1]=A[2]
+
+    }
+    return A[2]
+};
+
+// FIBONACCI FORMULA for Fibonacci numbers
+var climbStairs = function(n) {
+    var sq5=Math.sqrt(5)
+    var fibn= Math.pow((1+sq5)/2 ,n+1) - Math.pow((1-sq5)/2,n+1)
+
+    return Math.round(fibn/(sq5))
+};
 
 
 console.log(climbStairs(
-    5
+    9
 ))
+
