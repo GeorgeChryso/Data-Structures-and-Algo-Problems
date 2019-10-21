@@ -28,6 +28,18 @@ var climbStairs = function(n) {
 
 
 
+var climbStairs = function(n) {
+    var A=Array(n+1).fill(0)
+    A[1]=1
+    A[2]=2
+    for (let i = 3; i < A.length; i++) {
+       A[i]=A[i-1]+A[i-2] 
+    }
+    return A[n]
+};
+
+
+
 console.log(climbStairs(
     5
 ))
