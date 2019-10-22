@@ -62,10 +62,9 @@ var climbStairs = function(n) {
 
 
 var climbStairs = function(n) {
-    var sq5=Math.sqrt(5)
-    var fibn= Math.pow((1+sq5)/2 ,n+1) - Math.pow((1-sq5)/2,n+1)
 
-    return Math.round(fibn/(sq5))
+
+    return Math.round((Math.pow((1+Math.sqrt(5))/2 ,n+1) - Math.pow((1-Math.sqrt(5))/2,n+1))/(Math.sqrt(5)))
 };
 
 
