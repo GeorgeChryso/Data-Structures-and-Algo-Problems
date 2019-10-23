@@ -2,7 +2,6 @@
 
 
 // naive O(N^2)
-
 var subarraySum = function(A, K) {
     var result=0
 
@@ -20,3 +19,36 @@ var subarraySum = function(A, K) {
 
     return result
 };
+
+
+var subarraySum = function(A, k) {
+    const map = new Map([[0, 1]]);
+    const obj={}
+    let sum = 0;
+    let result = 0;
+    for (let num of nums) {
+        sum = sum + num;
+        result+=(obj[sum-k]||0)
+
+        result += (map.get(sum - k) || 0);
+        map.set(sum, (map.get(sum) || 0) + 1);
+        obj[sum]=(obj[sum]||0)+1
+    }
+    
+    return result;
+};
+
+var subarraySum = function(A, k) {
+    const obj={0:1}
+    let sum = 0;
+    let result = 0;
+    
+    for (let num of A) {
+        sum = sum + num;
+        result+=(obj[sum-k]||0)
+        obj[sum]=(obj[sum]||0)+1
+    }
+    
+    return result;
+};
+
