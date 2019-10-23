@@ -39,16 +39,25 @@ var subarraySum = function(A, k) {
 };
 
 var subarraySum = function(A, k) {
-    const obj={0:1}
+    const frequencyOfSum={0:1}
     let sum = 0;
     let result = 0;
     
     for (let num of A) {
-        sum = sum + num;
-        result+=(obj[sum-k]||0)
-        obj[sum]=(obj[sum]||0)+1
+
+        
+        sum+=num;
+
+        result+=(frequencyOfSum[sum-k]||0)
+
+        frequencyOfSum[sum]=(frequencyOfSum[sum]||0)+1
+
+
     }
     
     return result;
 };
 
+console.log(subarraySum(
+    [0,-1,1,4,-3,0,1,3,-2],1
+))
