@@ -63,6 +63,22 @@ var subarraysDivByK = function(A, K) {
     return result;
 };
 
+
+var subarraysDivByK = function(A, K) {
+    let mod = new Array(K).fill(0);
+    mod[0]=1
+    let sum = 0;
+    let count=0;
+    for(let i = 0; i < A.length; i++){
+        sum=(sum+A[i])%K
+        if(sum<0)sum+=K
+        count+=mod[sum]
+        map[sum]++
+    }
+    return count
+    
+
+};
 console.log(
     subarraysDivByK(
 
