@@ -34,7 +34,7 @@ var subarraysDivByK = function(A, k) {
         
         sum+=num;
 
-        result+=(frequencyOfSum[sum%k]||0)
+        result+=(frequencyOfSum[sum%k]||frequencyOfSum[-(sum%k)]||0)
 
         frequencyOfSum[sum%k]=(frequencyOfSum[sum%k]||0)+1
 
@@ -44,11 +44,28 @@ var subarraysDivByK = function(A, k) {
     return result;
 };
 
+var subarraysDivByK = function(A, K) {
+    let mod = new Array(K).fill(0);
+    let sum = 0;
+    for(let i = 0; i < A.length; i++){
+       sum += A[i]; 
+       mod[((sum % K) + K)%K]++
+    }
+    
+    let result = 0;
+    
+    for(let i = 0; i < K; i++){
+        if(mod[i] > 1)
+            result += (mod[i]*(mod[i]-1))/2
+    }
+    result += mod[0]; 
 
+    return result;
+};
 
 console.log(
     subarraysDivByK(
-        [-1,2,9],
-2
+
+        [2,-2,2,-4],6
     )
 )
