@@ -102,19 +102,16 @@ var subarraysDivByK = function(A, K) {
 
 
 var subarraysDivByK = function(A, K) {
-    let frequency = new Array(K).fill(0);//
-   
-    // so by creating the mod Array we already have our 
-    // "key-value" pairs that refer to
-    // "moduloK : times I've seen It"
 
-    // If the subarray starts from i=0 and has a remainder of 0
-    frequency[0]=1 // the sum%K is already 0,
+    let freq = new Array(K).fill(0); // "moduloK : Times I've seen it so far"
 
-    // This is the sum of the elements of A
+
+    freq[0]=1 //  Explained below
+
+    // This is the accumulative sum of the elements of A
     let sum = 0;
 
-    // The count of wanted subarrays, whose Sum modulo K equals to zero
+    // The count of wanted subarrays, whose Sum%K= zero
     let count=0;
 
     for(let i = 0; i < A.length; i++){
@@ -124,12 +121,13 @@ var subarraysDivByK = function(A, K) {
 
         var remainder= sum%K
 
-        if(remainder<0)remainder+=K //ALWAYS CHOOSE THE POSITIVE REMAINDER
-            
+        //ALWAYS CHOOSE THE POSITIVE REMAINDER
+        if(remainder<0)remainder+=K // Explained below
 
-        count+=frequency[remainder]
 
-        frequency[remainder]++
+        count+=freq[remainder]
+
+        freq[remainder]++
     }
     return count
     
