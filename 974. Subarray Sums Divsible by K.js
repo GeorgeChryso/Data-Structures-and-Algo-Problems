@@ -24,64 +24,126 @@ var subarraysDivByK = function(A, K) {
     return result
 };
 
-var subarraysDivByK = function(A, k) {
-    const frequencyOfSum={0:1}
-    let sum = 0;
-    let result = 0;
-    
-    for (let num of A) {
+ // Each modulo K (remainder of the division of a number by K) will ALWAYS
+ // be less than K, according to the Euclidean Theorem of Division. 
 
-        
-        sum+=num;
-
-        result+=(frequencyOfSum[sum%k]||frequencyOfSum[-(sum%k)]||0)
-
-        frequencyOfSum[sum%k]=(frequencyOfSum[sum%k]||0)+1
-
-
-    }
-    
-    return result;
-};
+// The idea: 
 
 var subarraysDivByK = function(A, K) {
-    let mod = new Array(K).fill(0);
-    let sum = 0;
-    for(let i = 0; i < A.length; i++){
-       sum += A[i]; 
-       mod[((sum % K) + K)%K]++
-    }
-    
-    let result = 0;
-    
-    for(let i = 0; i < K; i++){
-        if(mod[i] > 1)
-            result += (mod[i]*(mod[i]-1))/2
-    }
-    result += mod[0]; 
+    let mod = new Array(K).fill(0);//
+   
+    // so by creating the mod Array we already have our 
+    // "key-value" pairs that refer to
+    // "moduloK : times I've seen It"
 
-    return result;
-};
-
-
-var subarraysDivByK = function(A, K) {
-    let mod = new Array(K).fill(0);
+    // WHY
     mod[0]=1
+
+    // This is the sum of the moduli of K 
     let sum = 0;
+
+    // The count of wanted subarrays, whose Sum modulo K equals to zero
     let count=0;
+
     for(let i = 0; i < A.length; i++){
+
+        //WHY
         sum=(sum+A[i])%K
+
+        //WHY        
         if(sum<0)sum+=K
+
+
         count+=mod[sum]
+
         map[sum]++
     }
     return count
     
 
 };
+
+
+var subarraysDivByK = function(A, K) {
+    let mod = new Array(K).fill(0);//
+   
+    // so by creating the mod Array we already have our 
+    // "key-value" pairs that refer to
+    // "moduloK : times I've seen It"
+
+    // WHY
+    mod[0]=1
+
+    // This is the sum of the moduli of K 
+    let sum = 0;
+
+    // The count of wanted subarrays, whose Sum modulo K equals to zero
+    let count=0;
+
+    for(let i = 0; i < A.length; i++){
+
+        //WHY
+        sum=(sum+A[i])%K
+
+        //WHY        
+        if(sum<0)sum+=K
+
+
+        count+=mod[sum]
+
+        map[sum]++
+    }
+    return count
+    
+
+};
+
+
+
+
+var subarraysDivByK = function(A, K) {
+    let frequency = new Array(K).fill(0);//
+   
+    // so by creating the mod Array we already have our 
+    // "key-value" pairs that refer to
+    // "moduloK : times I've seen It"
+
+    // If the subarray starts from i=0 and has a remainder of 0
+    frequency[0]=1 // the sum%K is already 0,
+
+    // This is the sum of the elements of A
+    let sum = 0;
+
+    // The count of wanted subarrays, whose Sum modulo K equals to zero
+    let count=0;
+
+    for(let i = 0; i < A.length; i++){
+
+        sum=sum+A[i]
+
+
+        var remainder= sum%K
+
+        if(remainder<0)remainder+=K //ALWAYS CHOOSE THE POSITIVE REMAINDER
+            
+
+        count+=frequency[remainder]
+
+        frequency[remainder]++
+    }
+    return count
+    
+
+};
+
+
 console.log(
     subarraysDivByK(
 
-        [2,-2,2,-4],6
+        [2,3,1,2],2
     )
 )
+
+
+console.log((-1)%2)
+console.log(1%2)
