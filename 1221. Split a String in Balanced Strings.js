@@ -21,3 +21,4 @@ var balancedStringSplit = function(S) {
 
     return counter
 };
+// Optimized O(n)
