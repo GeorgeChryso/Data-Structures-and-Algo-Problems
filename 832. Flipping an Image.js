@@ -7,13 +7,24 @@
 
 var flipAndInvertImage = function(A) {
     
- A.forEach((d,i)=>{
-     var q=[]
-     d.forEach((k,j)=>{
-        q.unshift(Number(!k))
-     })
-     A[i]=q
- })
+ for (let i = 0; i < A.length; i++) {
+    
+    var l=A[i].length%2?Math.floor(A[i].length/2):(-1+A[i].length/2)
+  
+    for (let j = 0; j <= l ; j++) {
+        var temp=A[i][j]
+        A[i][j]=A[i][A[i].length-1-j]^1
+        A[i][A[i].length-1-j]=temp^1
+    }
+
+ }     
+ 
+    
+ 
 
  return A
 };
+
+console.log(flipAndInvertImage(
+    [[1,1,0,0],[1,0,0,1],[0,1,1,1],[1,0,1,0]]
+))
