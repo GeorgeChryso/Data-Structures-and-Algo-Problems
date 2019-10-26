@@ -64,41 +64,6 @@ var subarraysDivByK = function(A, K) {
 };
 
 
-var subarraysDivByK = function(A, K) {
-    let mod = new Array(K).fill(0);//
-   
-    // so by creating the mod Array we already have our 
-    // "key-value" pairs that refer to
-    // "moduloK : times I've seen It"
-
-    // WHY
-    mod[0]=1
-
-    // This is the sum of the moduli of K 
-    let sum = 0;
-
-    // The count of wanted subarrays, whose Sum modulo K equals to zero
-    let count=0;
-
-    for(let i = 0; i < A.length; i++){
-
-        //WHY
-        sum=(sum+A[i])%K
-
-        //WHY        
-        if(sum<0)sum+=K
-
-
-        count+=mod[sum]
-
-        map[sum]++
-    }
-    return count
-    
-
-};
-
-
 
 
 var subarraysDivByK = function(A, K) {
@@ -142,6 +107,3 @@ console.log(
     )
 )
 
-
-console.log((-1)%2)
-console.log(1%2)
