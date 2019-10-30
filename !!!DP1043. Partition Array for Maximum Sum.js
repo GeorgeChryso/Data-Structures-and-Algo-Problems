@@ -12,7 +12,7 @@
 // Output: 84
 // Explanation: A becomes [15,15,15,9,10,10,10]
 
-/*var maxSumAfterPartitioning = function(A, K) {
+var maxSumAfterPartitioning = function(A, K) {
     let l = A.length;
     let dp = new Array(l + 1).fill(0);
 
@@ -26,8 +26,10 @@
             dp[i] = Math.max(dp[i], dp[i - j] + m * j);
         }
     }
+
+    
     return dp[l];
-}; */
+}; 
 
 
 
