@@ -1,2 +1,1 @@
-
-        return true
+0
