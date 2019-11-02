@@ -31,9 +31,10 @@
 var mctFromLeafValues = function(arr) {
     let sum_of_products = 0;
     let min_i = arr.indexOf(Math.min(...arr));
+
     while(arr.length > 1){
         if(min_i == 0){
-            sum_of_products+=(arr[min_i] * arr[min_i+1]);
+            sum_of_products+=(arr[0] * arr[1]);
         }
         else if(min_i == arr.length-1){
             sum_of_products+=(arr[min_i] * arr[min_i-1]);
