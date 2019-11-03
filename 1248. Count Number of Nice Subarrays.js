@@ -31,7 +31,21 @@ var numberOfSubarrays = function(A, K) {
     return count
 };
 
-
+// sliding window god LEE215
 var numberOfSubarrays = function(A, K) {
+    var atMost=(A,K)=>{
+        var res=0
+        var i=0
+        var n= A.length
+        for (let j = 0; j < n; j++) {
+            K-=A[j]%2
+            while (K < 0)K += A[i++] % 2;   
+            res+=j-i+1
+        }
+        return res
+    }
+   return atMost(A,K)-atMost(A,K-1)
     
 };
+
+
