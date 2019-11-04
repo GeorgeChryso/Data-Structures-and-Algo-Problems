@@ -86,7 +86,7 @@ var medianSlidingWindow = function(A,K) {
 
 
 
-
+// class queue
 const medianSlidingWindow = (nums, k) => {
 
     class Queue {
@@ -121,12 +121,16 @@ const medianSlidingWindow = (nums, k) => {
 }
 
 
-
+//splicing the window, ineffective, runs ok 
 var medianSlidingWindow = function(nums, k) {
+    // create my window of size K and sort it
     const window = nums.slice(0, k).sort((a, b) => a - b);
 
 
+    //calculate the median of the given array a
     const median = a => k % 2 === 0 ? (a[k/2 - 1] + a[k/2]) / 2 : a[~~(k/2)];
+
+
 
 
     const biset = target => {
@@ -145,14 +149,26 @@ var medianSlidingWindow = function(nums, k) {
 
 
     for (let i = 1; i <= nums.length - k; i++) {
+
+        //pre einai i thesi tou nums[i-1] sto window mou
         const pre = biset(nums[i - 1]);
+        // vgalto 
         window.splice(pre, 1);
+        
+
+        //cur einai ekei pou prepei na mpei to kainourgio stoixeio
         const cur = biset(nums[i + k - 1])
+        //valto 
         window.splice(cur, 0, nums[i + k - 1])
+
+
+        //upologise to neo median 
         ans.push(median(window));
     }
     return ans
 }
+
+
 console.log(medianSlidingWindow(
   // [1,3,-1,-3,5,3,6,7],3
   // [1,4,2,3],4
