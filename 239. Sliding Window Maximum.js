@@ -1,5 +1,56 @@
 // Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position. Return the max sliding window.
 
+
+// It's actually inefficient, as I have to process every element and resort the array O(n*(K+K))
+var maxSlidingWindow=(A,K)=>{
+  var sorted=Array(K).fill(0)
+  var result=[]
+
+  sorted=A.slice(0,K).sort((a,b)=>a-b)
+  result.push(sorted[K-1])
+
+  var removeEl=(x)=>{
+    console.log(sorted,`removed`,  x)
+    let i=0
+    while (x!==sorted[i])i++
+    //i einai o deiktis tou stoixeiou pou prepei na tzasw
+    
+    while(i<K-1){
+      sorted[i]=sorted[i+1]
+      i++
+    }
+    sorted[K-1]=Infinity
+    console.log(sorted ,'\n')
+
+  }
+
+
+  var insertEl=(x)=>{
+    console.log(sorted,`inserted`,  x)
+
+    let i=0 
+    while(sorted[i]<x)i++
+    // i einai o diktis tou prwtou megaluterou tou
+    var j=K-2
+    while(j>=i){
+      sorted[j+1]=sorted[j]
+      j--
+    }
+    sorted[i]=x
+    console.log(sorted ,'\n')
+  }
+
+  for (let i = K; i < A.length; i++) {
+      removeEl(A[i-K])
+      insertEl(A[i])
+      result.push(sorted[K-1])
+  }
+  
+
+  return result
+}
+
+
 var maxSlidingWindow = (nums, k) => {
 
     // Store the max values for each window position
@@ -78,53 +129,6 @@ var maxSlidingWindow = (A, K) =>{
   }
 
 
-var maxSlidingWindow=(A,K)=>{
-  var sorted=Array(K).fill(0)
-  var result=[]
-
-  sorted=A.slice(0,K).sort((a,b)=>a-b)
-  result.push(sorted[K-1])
-
-  var removeEl=(x)=>{
-    console.log(sorted,`removed`,  x)
-    let i=0
-    while (x!==sorted[i])i++
-    //i einai o deiktis tou stoixeiou pou prepei na tzasw
-    
-    while(i<K-1){
-      sorted[i]=sorted[i+1]
-      i++
-    }
-    sorted[K-1]=Infinity
-    console.log(sorted ,'\n')
-
-  }
-
-
-  var insertEl=(x)=>{
-    console.log(sorted,`inserted`,  x)
-
-    let i=0 
-    while(sorted[i]<x)i++
-    // i einai o diktis tou prwtou megaluterou tou
-    var j=K-2
-    while(j>=i){
-      sorted[j+1]=sorted[j]
-      j--
-    }
-    sorted[i]=x
-    console.log(sorted ,'\n')
-  }
-
-  for (let i = K; i < A.length; i++) {
-      removeEl(A[i-K])
-      insertEl(A[i])
-      result.push(sorted[K-1])
-  }
-  
-
-  return result
-}
 
   console.log(maxSlidingWindow(
     [1,3,-1,-3,5,3,6,7],3
