@@ -90,7 +90,9 @@ var medianSlidingWindow = function(A,K) {
 const medianSlidingWindow = (nums, k) => {
 
     class Queue {
-        constructor () { this.list = [] }
+        constructor () {
+             this.list = [] }
+
         size () { return this.list.length }
         removeNum (num) { this.list.splice(this.bs(num), 1) }
         addNum (num) { this.list.splice(this.bs(num), 0, num) }
@@ -132,7 +134,8 @@ var medianSlidingWindow = function(nums, k) {
 
 
 
-
+    //upologizei pou prepei na mpei ena neo stoixeio 'target'
+    // sto 'window' pou exw kanei, dinei diladi to index sto opoio tha prepei na mpei
     const biset = target => {
         let l = 0, r = window.length;
 
