@@ -61,8 +61,37 @@ var findLengthOfLCIS = function(A) {
     
 };
 
+// Subproblem, if they ask me to output the actual array
+var findLengthOfLCIS = function(A) {
+    if(!A.length)return 0
+
+    var wantedArr=[]
+    var indicesMemo=[-1,-1] // the indexes of my  wanted Array
+    var start=0 // start of the window
+
+    var result=0 // maximum length witnessed until current window
+    
+    for (let end = 0; end < A.length; end++) {
+        
+        // window reset when the first Anomaly is witnessed
+        if(A[end-1]>=A[end]){
+            start=end
+        }
+
+        if( end-start+1 >result){
+            indicesMemo[0]=start
+            indicesMemo[1]=end
+            result=end-start+1
+        }
+    }
+
+
+    wantedArr=A.slice(indicesMemo[0],indicesMemo[1]+1)
+    return wantedArr
+    
+};
+
 console.log(
     findLengthOfLCIS(
-        [2,2,2,2,2]
-    )
+        [1,3,5,4,7]    )
 )
