@@ -7,10 +7,11 @@ var subsetSum=(A,K)=>{
     var M=A.reduce((acc,curr)=>acc+curr) // the sum of the array
 
 
-    var m=Array(M+10).fill(0)
+    var m=Array(M).fill(0)
     m[0]=1
     for (let i = 0; i < A.length; i++) {   
         for (let j = M; j >= A[i]; j--) {
+            console.log(m+'')
             m[j]|=m[j-A[i]]
             
         }        
@@ -22,5 +23,5 @@ var subsetSum=(A,K)=>{
 }
 
 console.log(subsetSum(
-    [3,3,3,4,13],2
+    [4,2,0,0,3],2
 ))
