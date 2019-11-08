@@ -58,6 +58,121 @@ var lengthOfLISz = function(A) {
 };
 
 
+
+
+// O(Nlogn) Binary Search
+var lengthOfLIS = function(nums) {
+    const lis = [];
+
+    function insertLIS(lis, n) {
+        const len = lis.length;
+
+        // find a new max, create a new array that ends on n 
+        if (len < 1 || n > lis[len - 1]) return lis.push(n)
+
+        //find a new min, potentially starting anew array
+        if (n < lis[0] && len === 1) return lis[0] = n
+        if (n < lis[0] && len > 1) return
+        
+
+        // Binary search
+        let left = 0;
+        let right = len - 1;
+        while (left <= right) {
+            let mid = Math.ceil((left + right) / 2);
+            if (n > lis[mid]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        lis[left] = n;
+      }
+
+
+    for (let n = 0; n < nums.length; n++) {
+      insertLIS(lis, nums[n]);
+    }
+
+
+    return lis.length;
+  };
+  
+  
+//  Linear search
+var lengthOfLIS = function(nums) {
+    const lis = [];
+
+    function insertLIS( n) {
+        const len = lis.length;
+
+        // find a new max, create a new array that ends on n 
+        if (len < 1 || n > lis[len - 1]) return lis.push(n)
+
+        //if n is less than all my current ends
+        if (n < lis[0] && len === 1) return lis[0] = n
+        if (n < lis[0] && len > 1) return
+        
+
+        // looking for first bigger element in the array len
+        // so i can have better chances of lenghtening the appropriate array ending at an index bigger than this. 
+        let i=0
+        while( n>lis[i]){
+            i++
+        }
+        lis[i]=n
+      }
+
+
+    for (let n = 0; n < nums.length; n++) {
+      insertLIS( nums[n]);
+    }
+
+
+    return lis.length;
+};
+
+
+// PATIENCE SORTING
+// O(NlogN) no secondary function approach
+var lengthOfLIS = function(A) {
+    if(!A.length) return 0;
+    let tails = []; // the possible ends of arrays of length i+1, if tails[0]=3, then i have 1 subarray of length 0+1=1, [3]
+    tails[0] = A[0]; // the subarray ending at itself of length 1
+
+    for(let i=1; i<A.length; i++){
+        
+        // If my curr element is bigger than all possible tails, i just need to create a new subarray, which of course will be of length tails.length-1 +1
+        if(A[i]>tails[tails.length-1]){
+            tails.push(A[i]);
+        }
+
+        // If my element is less than every possible end, hence the first element, I need to consider starting a new array, this will not hinder my current longest array as I already have saved it
+        else if(A[i] < tails[0]){
+            tails[0] = A[i];
+        }
+
+        // if my element is inbetween every other element , i just need to find somewhere to place it, inface i need to find the first greater element so i can have better chances of creating a longest array. for example
+        // If tails=[,....3, 5,9] and I come across an element A[i]= 4, then by replacing 5 with 4 I have a better chance of coming across an element bigger than 4 in the future, let's say another 5, therefore extending my current array.
+        else{
+            let lo=0, hi = tails.length-1;
+            //binary search to find where to place my current element so i have more chances of creating a bigger subarray
+            while(lo<hi){
+                let mid = Math.floor((lo+hi)/2);
+                if(tails[mid] < A[i]){
+                    lo = mid+1;
+                }else{
+                    hi = mid;
+                }
+            }
+            tails[lo] = A[i];
+        }
+    }
+    
+    return tails.length;// meaning the length of the longest possible subarray
+};
+
 console.log(
     lengthOfLIS(
       [1,3,5,4,7]
