@@ -59,7 +59,7 @@ var maxSlidingWindow=(A,K)=>{
 
 
 
-// MONOTONIC QUEUE
+// MONOTONIC QUEUE O(N), no class
 function maxSlidingWindow(nums, k) {
   const res = [];
   const q = [];
@@ -121,52 +121,10 @@ var maxSlidingWindow = (nums, k) => {
 
 
 
-// class queue
-var maxSlidingWindow = function(nums, k) {
-  class Queue {
-    constructor() {
-        this.queue = [];
-    }
-    
-    push(e) {
-        //remove all elements that less then e
-        while(this.queue.length > 0 && e > this.queue[this.queue.length - 1]){
-            this.queue.pop();
-        }
-        
-        this.queue.push(e);
-    }
-    
-    pop() {
-        this.queue.shift();
-    } 
-    
-    max() {
-        return this.queue[0];
-    }
-  }
-
-
-  let q = new Queue();
-  let res = [];
-  
-  for(let i = 0; i < nums.length; i++){
-      console.log(q.queue)
-      q.push(nums[i]);
-      if(i + 1 >= k){
-          res.push(q.max());
-          if(q.max() === nums[i + 1 - k]) q.pop();
-      }
-  }   
-  
-  return res;
-};
 
 
 
-
-
-// MY CLASS
+// MY CLASS O(n)
 var maxSlidingWindow = function(A, K) {
   if (!A.length)return []
   var result=[]
@@ -176,9 +134,13 @@ var maxSlidingWindow = function(A, K) {
     constructor(){
       this.dq=[]
     }
-
+    getMax(){
+      return this.dq[0]
+    }
 
     pushy(x){
+
+      //
       while(this.dq.length&&x>this.dq[this.dq.length-1]){
         this.dq.pop()
         }
@@ -186,23 +148,14 @@ var maxSlidingWindow = function(A, K) {
     }
  
 
-    getMax(){
-      return this.dq[0]
-    }
+    
 
-    maintainWindowAtIndex(i){
-      //if we have a Window and not just the first Z elements with Z<K
-      // the current window is [i-K+1, i]
-      // so for example [0,3], [1,4], [2,5] if k=4 
-      // so we want i-K+1>=0 so we  have our full window
-      if(i-K+1>=0){
-        result.push(deque1.getMax())
-
-        let lastEle=A[i-K+1]
-        if(lastEle==this.getMax()){
+    deleteCurrStart(i){
+     
+        if(A[i]==this.getMax()){
           this.dq.shift()
         }
-      }
+      
 
     }
   }
@@ -212,12 +165,22 @@ var maxSlidingWindow = function(A, K) {
 
 
 
-  // process the rest and keep pushing to the result
   for (let i = 0; i <A.length; i++) {
    
-    deque1.pushy(A[i])
+       deque1.pushy(A[i])
 
-    deque1.maintainWindowAtIndex(i)
+
+      //if we have a Window and not just the first Z elements with Z<K
+      // the current window is [i-K+1, i]
+      // so for example [0,3], [1,4], [2,5] if k=4 
+      // so we want i-K+1>=0 so we  have our full window
+      if(i-K+1>=0){
+        result.push(deque1.getMax())
+        
+        //If my current window start equals the Biggest element, i need to remove it manually
+        deque1.deleteCurrStart(i-K+1)
+
+      }
 
    
     
@@ -233,3 +196,5 @@ var maxSlidingWindow = function(A, K) {
    // [1,3,-1,-3,5,3,6,7],3
    [1,-1],1
   ))
+
+
