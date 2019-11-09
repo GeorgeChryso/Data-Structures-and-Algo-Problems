@@ -163,6 +163,73 @@ var maxSlidingWindow = function(nums, k) {
 };
 
 
+
+
+
+// MY CLASS
+var maxSlidingWindow = function(A, K) {
+  if (!A.length)return []
+  var result=[]
+  
+  class dequeue {
+
+    constructor(){
+      this.dq=[]
+    }
+
+
+    pushy(x){
+      while(this.dq.length&&x>this.dq[this.dq.length-1]){
+        this.dq.pop()
+        }
+      this.dq.push(x)
+    }
+ 
+
+    getMax(){
+      return this.dq[0]
+    }
+
+    maintainWindowAtIndex(i){
+      //if we have a Window and not just the first Z elements with Z<K
+      // the current window is [i-K+1, i]
+      // so for example [0,3], [1,4], [2,5] if k=4 
+      // so we want i-K+1>=0 so we  have our full window
+      if(i-K+1>=0){
+        result.push(deque1.getMax())
+
+        let lastEle=A[i-K+1]
+        if(lastEle==this.getMax()){
+          this.dq.shift()
+        }
+      }
+
+    }
+  }
+
+  var deque1=new dequeue
+  
+
+
+
+  // process the rest and keep pushing to the result
+  for (let i = 0; i <A.length; i++) {
+   
+    deque1.pushy(A[i])
+
+    deque1.maintainWindowAtIndex(i)
+
+   
+    
+  }
+
+  return result
+  
+};
+
+
   console.log(maxSlidingWindow(
-    [1,3,-1,-3,5,3,6,7],3
+  //  [-7,-8,7,5,7,1,6,0],4
+   // [1,3,-1,-3,5,3,6,7],3
+   [1,-1],1
   ))
