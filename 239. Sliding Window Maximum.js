@@ -121,7 +121,7 @@ var maxSlidingWindow = (nums, k) => {
 
 
 
-
+// STOIXEIO STI THESI i , me i<j, den GINETAI na thewrithei MAXIMUM se window pou na perilamvanei to a[j], an a[i]<a[j]. auto simainei oti gia OLA ta windows sta opoia simmetexoun kai to i kai to j, den xreiazetai na kanoume consider to a[i]
 
 
 // MY CLASS O(n)

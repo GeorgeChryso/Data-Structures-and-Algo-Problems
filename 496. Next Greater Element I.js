@@ -39,7 +39,64 @@ var nextGreaterElement = function(nums1, nums2) {
     )
      
 };
+
+
+//Dequeue O(N)  + MEMO APPROACH, ANTRIKIA PRAGMATA
+var nextGreaterElement = function(A, B) {
+    
+    //store the next greater element for EACH element of B
+    var memo={
+
+    }
+    class dequeue {
+
+        constructor(){
+          this.dq=[]
+        }
+        getMax(){
+          return this.dq[0]
+        }
+    
+        pushy(x){
+    
+          //
+          while(this.dq.length&&x>this.dq[this.dq.length-1]){
+            memo[this.dq.pop()]=x
+            }
+          this.dq.push(x)
+        }
+     
+    
+        
+    
+        deleteCurrStart(i){
+         
+            if(A[i]==this.getMax()){
+              this.dq.shift()
+            }
+          
+    
+        }
+      }
+    
+      var deque1=new dequeue
+      
+    for (let i = 0; i < B.length; i++) {
+
+        deque1.pushy(B[i])
+    }
+
+    deque1.dq.forEach(d=>memo[d]=-1)
+    return A.map(d=>memo[d])
+
+     
+};
+
+
+
+
 //
 console.log(nextGreaterElement(
-    [4,1,2],[1,3,4,2]
+  //  [4,1,2],[1,3,4,2]
+    [2,4],[1,2,3,4]
 ))
