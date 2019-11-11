@@ -25,6 +25,7 @@ var nextGreaterElement = function(nums1, nums2) {
      
 };
 
+//flwruba.exe
 var nextGreaterElement = function(nums1, nums2) {
     return  nums1.map(
         (d,i)=>{
@@ -42,6 +43,13 @@ var nextGreaterElement = function(nums1, nums2) {
 
 
 //Dequeue O(N)  + MEMO APPROACH, ANTRIKIA PRAGMATA
+
+// NOTICE: an eixe duplicates opoiadipote lista, tin eixa putsisei, to parakatw den tha ginotan. 
+// [ 1,2,3,1,3] px, to memo gia to 1 tha katelhge na htan 3.
+// kai tha mas edine 
+// [3,3,-1,3,-1] enw to swsto tha htan
+// [2,3,-1,3,-1] 
+
 var nextGreaterElement = function(A, B) {
     
     //store the next greater element for EACH element of B
@@ -53,41 +61,29 @@ var nextGreaterElement = function(A, B) {
         constructor(){
           this.dq=[]
         }
-        getMax(){
-          return this.dq[0]
-        }
-    
+
         pushy(x){
     
-          //
-          while(this.dq.length&&x>this.dq[this.dq.length-1]){
+          //keeps popping all the smaller elements off of the top of the queue, the fact that they re being popped
+          /// means that a bigger element was met. Not just any element, the next greater element. 
+          //  SO SMART INTENSIFIES. 
+          while( this.dq.length &&  x>this.dq[this.dq.length-1]){
             memo[this.dq.pop()]=x
             }
           this.dq.push(x)
         }
      
-    
-        
-    
-        deleteCurrStart(i){
-         
-            if(A[i]==this.getMax()){
-              this.dq.shift()
-            }
-          
-    
-        }
       }
     
-      var deque1=new dequeue
+    var deque1=new dequeue
       
     for (let i = 0; i < B.length; i++) {
-
         deque1.pushy(B[i])
     }
-
-    deque1.dq.forEach(d=>memo[d]=-1)
-    return A.map(d=>memo[d])
+    //ok , IF there are some elements still in the dq, that means that the poor SOULS have no next greater element. 
+    // That means that they have no memo :( 
+    // In their stead, place -1
+    return A.map(d=>memo[d]?memo[d]:-1)
 
      
 };
