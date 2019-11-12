@@ -25,9 +25,10 @@ var rangeSumBST = function(root, L, R) {
         if(node.left===node.right && node.right===null)return
         if(node!==null && node.val<=R && node.val>=L )result+=node.val
 
-        dp(node.left)
-        dp(node.right)
+        if(node.val>L)dp(node.left)
+        if(node.val<R)dp(node.right)
     }
+
 
     dp(root)
     return result
