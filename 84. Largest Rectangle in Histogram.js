@@ -62,8 +62,9 @@ var largestRectangleArea = function(H) {
                         let valueOfPopped=H[poppedIndex]   
 
 
-                        //I may never find a smaller element, so the default for my last element is index 0 no matter what
+                        //I may never find a LEFTMOST smaller element, so the default for my last element is index -1
                         lastElement=this.q[this.q.length-1]||-1
+
                         valueOfLast=H[lastElement]
     
                         //Calculate The Area of the popped element
@@ -93,9 +94,9 @@ var largestRectangleArea = function(H) {
             let valueOfPopped=H[popped]
             
 
-            //If there is no last element that satisfies what I want, set it -1
+            //If there is no Leftmost Smaller element, consider it to be the beginning of the array
             let lastElement=this.q[this.q.length-1]||-1
-            let valueOfLast=H[lastElement]
+
             
             // since i m calling this for the remaining elements, that means that whatever remained on my stack DOES NOT HAVE A RIGHTMOST SMALLER ELEMENT AT ALL, SO I CONSIDER IT TO BE THE END OF MY ARRAY
             let AreaOfPopped=valueOfPopped*( (H.length)-lastElement-1 )
