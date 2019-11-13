@@ -19,6 +19,8 @@ var largestRectangleArea = function(H) {
     if(!H.length)return 0
 
     var MaxAreaIndexCanGive=Array(H.length)
+
+
     for (var i in H) {
         var leftLow= Number(i)
         var rightLow= Number(i)
@@ -32,9 +34,103 @@ var largestRectangleArea = function(H) {
 };
 
 
+
+// Stack /Monotonic Queue solution
+var largestRectangleArea = function(H) {
+
+    class Stack {
+        constructor(){
+            //I will store Indices here.
+            this.q=[]
+            
+        }
+        
+        push=(indexOfCurr)=>{
+            let lastElement=this.q[this.q.length-1]
+            let valueOfLast=H[lastElement]
+            let valueOfCurr=H[indexOfCurr]
+
+
+            if(!this.q.length|| valueOfLast<=valueOfCurr){
+                this.q.push(indexOfCurr)
+            }
+            else if( valueOfLast>valueOfCurr){
+
+                while (valueOfLast>valueOfCurr && this.q.length) {
+                   
+                        let poppedIndex=this.q.pop() //the index of the first Rightmost
+                        let valueOfPopped=H[poppedIndex]   
+
+
+                        //I may never find a smaller element, so the default for my last element is index 0 no matter what
+                        lastElement=this.q[this.q.length-1]||-1
+                        valueOfLast=H[lastElement]
+    
+                        //Calculate The Area of the popped element
+                        // WHY THO?
+                        //Cos by popping this element I have everything that I need to calculate Its Area.
+                        // The valueOfCurr is the RIGHTMOST FIRST SMALLER VALUE, that resulted in popping the valueOFLast, since (valueofCurr<valueOfLast) 
+                        // so its index is the RIGHTMOST index we re looking for. 
+                        //AND GUESS WHAT?
+                        // the value on its LEFT, that means the new Last element of my stack is the  INDEX of the first SMALLER VALUE ON THE RIGHT, we already had that. 
+                        let AreaOfPopped=valueOfPopped*(indexOfCurr-lastElement-1 )
+                      //  console.log(AreaOfPopped,poppedIndex,lastElement)
+
+                        // keep a maximum
+                        Max=Math.max(Max,AreaOfPopped)
+
+                } 
+                this.q.push(indexOfCurr)
+            
+            }
+
+        }
+
+        remainder=()=>{
+         
+
+            let popped=this.q.pop()
+            let valueOfPopped=H[popped]
+            
+
+            //If there is no last element that satisfies what I want, set it -1
+            let lastElement=this.q[this.q.length-1]||-1
+            let valueOfLast=H[lastElement]
+            
+            // since i m calling this for the remaining elements, that means that whatever remained on my stack DOES NOT HAVE A RIGHTMOST SMALLER ELEMENT AT ALL, SO I CONSIDER IT TO BE THE END OF MY ARRAY
+            let AreaOfPopped=valueOfPopped*( (H.length)-lastElement-1 )
+            Max=Math.max(Max,AreaOfPopped)
+
+        }
+
+
+
+    }
+
+    var Max=0
+    var stacky=new Stack
+
+    //done with all the elements
+    for (var i in H) {
+        stacky.push(i)
+    }
+
+
+    // I may still have elements up there, indexes in ascending order that is
+    // what do they mean tho?
+    // They mean that they have NO RIGHTMOST Bigger Elements. thats why they re still there
+    // So i just have to assume that the end of the array is their rightmost bigger element (H.length)
+    while(stacky.q.length){
+        stacky.remainder()
+
+    }
+
+    return Max
+};
+
 console.log(largestRectangleArea(
     
     
-    [1,1]   
-   // [2,1,5,6,2,3]
+ //  [1,1]   
+    [2,1,5,6,2,3]
 ))
