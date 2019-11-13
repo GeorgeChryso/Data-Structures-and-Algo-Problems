@@ -16,25 +16,26 @@
 // Them a max area will of course be H[i](indexofRightmostSmaller-indexofLeftmostSmaller -1)
 // However this is TLE
 var largestRectangleArea = function(H) {
-    if(!H.length)return 0
+  if (!H.length) return 0;
 
-    var MaxAreaIndexCanGive=Array(H.length)
+  var MaxAreaIndexCanGive = Array(H.length);
 
-for (var i in H) {
-        var leftLow= Number(i)
-        var rightLow= Number(i)
-        while(H[i]<=H[leftLow]&&leftLow>=0)leftLow--
-        while(H[i]<=H[rightLow]&&rightLow<=H.length)rightLow++
+  for (var i in H) {
+    var leftLow = Number(i);
+    var rightLow = Number(i);
+    while (H[i] <= H[leftLow] && leftLow >= 0) leftLow--;
+    while (H[i] <= H[rightLow] && rightLow <= H.length) rightLow++;
 
-        MaxAreaIndexCanGive[i]= H[i]*(rightLow==leftLow?1:(rightLow-leftLow-1))
-    }
+    MaxAreaIndexCanGive[i] =
+      H[i] * (rightLow == leftLow ? 1 : rightLow - leftLow - 1);
+  }
 
-    return Math.max(...MaxAreaIndexCanGive)
+  return Math.max(...MaxAreaIndexCanGive);
 };
 
 
 
-// Stack /Monotonic Queue solution
+// Stack /Monotonic Queue solution O(n), because each element can only be popped from or pushed to the stack only once. 
 var largestRectangleArea = function(H) {
 
     class Stack {
@@ -45,9 +46,9 @@ var largestRectangleArea = function(H) {
         }
         
         push=(indexOfCurr)=>{
-            let lastElement=this.q[this.q.length-1]
-            let valueOfLast=H[lastElement]
-            let valueOfCurr=H[indexOfCurr]
+            let lastElement=this.q[this.q.length-1]//current lastelement, (index)
+            let valueOfLast=H[lastElement] //its value
+            let valueOfCurr=H[indexOfCurr] // the value of my CurrentElement
 
 
             if(!this.q.length|| valueOfLast<=valueOfCurr){
@@ -109,7 +110,8 @@ var largestRectangleArea = function(H) {
     var Max=0
     var stacky=new Stack
 
-    //done with all the elements
+    // this handles all the elements that do have a LeftMost Smaller
+    // and RightMost Bigger Elements
     for (var i in H) {
         stacky.push(i)
     }
@@ -126,6 +128,28 @@ var largestRectangleArea = function(H) {
 
     return Max
 };
+
+
+// faster? Reduced Readibility
+var largestRectangleArea = function(height) {
+    if (height.length === 0) return 0;
+    const stack = [];
+    let maxArea = 0;
+  
+    for (let i = 0; i <= height.length; i++) {
+        const cur = i === height.length ? -1 : height[i];
+  
+        while (stack.length !== 0 && cur < height[stack[stack.length-1]]) {
+            const index = stack.pop();
+            const top = height[index];
+            const width = stack.length === 0 ? i : i - stack[stack.length-1]-1;
+            maxArea = Math.max(maxArea, top * width);
+        }
+        stack.push(i);
+    }
+    return maxArea;
+  };
+
 
 console.log(largestRectangleArea(
     
