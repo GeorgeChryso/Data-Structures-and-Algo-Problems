@@ -20,8 +20,7 @@ var largestRectangleArea = function(H) {
 
     var MaxAreaIndexCanGive=Array(H.length)
 
-
-    for (var i in H) {
+for (var i in H) {
         var leftLow= Number(i)
         var rightLow= Number(i)
         while(H[i]<=H[leftLow]&&leftLow>=0)leftLow--
@@ -74,7 +73,7 @@ var largestRectangleArea = function(H) {
                         //AND GUESS WHAT?
                         // the value on its LEFT, that means the new Last element of my stack is the  INDEX of the first SMALLER VALUE ON THE RIGHT, we already had that. 
                         let AreaOfPopped=valueOfPopped*(indexOfCurr-lastElement-1 )
-                      //  console.log(AreaOfPopped,poppedIndex,lastElement)
+                        // console.log(AreaOfPopped,poppedIndex,lastElement)
 
                         // keep a maximum
                         Max=Math.max(Max,AreaOfPopped)
