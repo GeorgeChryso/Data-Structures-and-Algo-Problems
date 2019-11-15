@@ -5,15 +5,15 @@
 
 
 
-// Intuition: At any given index i, we can say A[i] is the height of the current rectangle we re examining.
+// Intuition: At any given index i, we can say A[i] is the height of the current POTENTIAL rectangle we re examining.
 // This rectangle starts on some index j, such that j is of course less than i , j<i
 // This index j , has to be the first index on the left of i, such that A[j]<A[i], otherwise the length of my current rectangle cannot be A[i].
 // Same goes for the end index of my rectangle. It has to be the first index on the right of i, lets say k>i such that A[i]>A[k]
 
 
 //O(n^2) TLE
-//Essentally for Each element, i m searching its leftmost and rightmost FIRST smaller elements.
-// Them a max area will of course be H[i](indexofRightmostSmaller-indexofLeftmostSmaller -1)
+//Essentally for Each element, i m searching its leftmost and rightmost FIRST smaller elements. 
+// Then a max area will of course be H[i](indexofRightmostSmaller-indexofLeftmostSmaller -1)
 // However this is TLE
 var largestRectangleArea = function(H) {
   if (!H.length) return 0;
@@ -24,7 +24,7 @@ var largestRectangleArea = function(H) {
     var leftLow = Number(i);
     var rightLow = Number(i);
     while (H[i] <= H[leftLow] && leftLow >= 0) leftLow--;
-    while (H[i] <= H[rightLow] && rightLow <= H.length) rightLow++;
+    while (H[i] <= H[rightLow] && rightLow <= H.length-1) rightLow++;
 
     MaxAreaIndexCanGive[i] =
       H[i] * (rightLow == leftLow ? 1 : rightLow - leftLow - 1);
@@ -32,10 +32,29 @@ var largestRectangleArea = function(H) {
 
   return Math.max(...MaxAreaIndexCanGive);
 };
+// faster? Reduced Readibility
+var largestRectangleArea = function(height) {
+    if (height.length === 0) return 0;
+    const stack = [];
+    let maxArea = 0;
+  
+    for (let i = 0; i <= height.length; i++) {
+        const cur = i === height.length ? -1 : height[i];
+  
+        while (stack.length !== 0 && cur < height[stack[stack.length-1]]) {
+            const index = stack.pop();
+            const top = height[index];
+            const width = stack.length === 0 ? i : i - stack[stack.length-1]-1;
+            maxArea = Math.max(maxArea, top * width);
+        }
+        stack.push(i);
+    }
+    return maxArea;
+  };
 
 
-
-// Stack /Monotonic Queue solution O(n), because each element can only be popped from or pushed to the stack only once. 
+// THE COOLEST OF ALL O(n)
+// Stack /Monotonic Queue solution , because each element can only be popped from or pushed to the stack only once.  
 var largestRectangleArea = function(H) {
 
     class Stack {
@@ -62,7 +81,7 @@ var largestRectangleArea = function(H) {
                         let valueOfPopped=H[poppedIndex]   
 
 
-                        //I may never find a LEFTMOST smaller element, so the default for my last element is index -1
+                        //If there is no Leftmost Smaller element, consider it to be the beginning of the array (index -1)
                         lastElement=this.q[this.q.length-1]||-1
 
                         valueOfLast=H[lastElement]
@@ -131,25 +150,6 @@ var largestRectangleArea = function(H) {
 };
 
 
-// faster? Reduced Readibility
-var largestRectangleArea = function(height) {
-    if (height.length === 0) return 0;
-    const stack = [];
-    let maxArea = 0;
-  
-    for (let i = 0; i <= height.length; i++) {
-        const cur = i === height.length ? -1 : height[i];
-  
-        while (stack.length !== 0 && cur < height[stack[stack.length-1]]) {
-            const index = stack.pop();
-            const top = height[index];
-            const width = stack.length === 0 ? i : i - stack[stack.length-1]-1;
-            maxArea = Math.max(maxArea, top * width);
-        }
-        stack.push(i);
-    }
-    return maxArea;
-  };
 
 
 console.log(largestRectangleArea(
