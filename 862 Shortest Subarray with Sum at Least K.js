@@ -24,15 +24,17 @@ var shortestSubarray = (A, K) => {
 
 // DEQUEUE  O(N) time and space godLee
 var shortestSubarray = (A, K) => {
-  var P = [];
+  if(A.length==1 && A[0]>=K)return 1
+  var PrefixSum = [0];
   var currSum = 0;
-  var currBestLength = Infinity;
-
+  var currBestLength = A.length+1;
 
   for (var val of A) {
-    currSum+=val
-    P.push(currSum)
+    currSum += val;
+    PrefixSum.push(currSum);
   }
+
+
 
   class dequeue {
     constructor() {
@@ -42,12 +44,16 @@ var shortestSubarray = (A, K) => {
 
     push = x => {
       //mystery
-      while (this.q.length && P[x] - P[this.q[0]] >= K) {
-        currBestLength = Math.min(currBestLength, x - this.q.shift());
+      while (this.q.length && PrefixSum[x] - PrefixSum[this.q[0]] >= K) {
+        //pop the smallest index (first)
+        let smallest = this.q.shift()
+        //update the result
+        currBestLength = Math.min(currBestLength, x - smallest);
       }
 
       //keeps the dq increasing
-      while (this.q.length && P[this.q[this.q.length - 1]] >= P[x]) {
+      //handles negative numbers
+      while (this.q.length && PrefixSum[x]<=PrefixSum[this.q[this.q.length-1]]) {
         this.q.pop();
       }
       this.q.push(x);
@@ -56,18 +62,43 @@ var shortestSubarray = (A, K) => {
 
   var dq = new dequeue();
 
-  for (let i in P) {
+  //push every index in the dequeue
+  for (let i = 0; i < A.length+1; i++) {
     dq.push(i);
   }
-  return currBestLength;
+
+  return currBestLength<=A.length?currBestLength:-1;
+};
+
+
+
+//dequeue without class
+var shortestSubarray = function(A, K) {
+  let n = A.length;
+  let min = n+1;
+  let B = new Array(n+1).fill(0);
+  for(let i=0; i<n; i++) B[i+1] = B[i] + A[i];
+  console.log(B)
+  let stack = [];
+  for(let i=0; i<n+1; i++){
+      while(stack.length > 0 && B[i]-B[stack[0]] >= K){
+          min = Math.min(min, i-stack[0]);
+          stack.shift();
+      }
+      while(stack.length > 0 && B[i] <= B[stack[stack.length-1]]){
+          stack.pop();
+      }
+      stack.push(i);
+  }
+  return min <= n ? min : -1;
 };
 
 console.log(
   shortestSubarray(
     //    [1,2],4 //-1
-    // [1],1 //1
-    // [2,-1,2], 3  //3
-    [84, -37, 32, 40, 95],
-    167 //3
+   
+   // [1],1 //1
+     [2,-1,2], 3  //3
+    //[84, -37, 32, 40, 95],167 //3
   )
 );
