@@ -81,7 +81,12 @@ var shortestSubarray = (A, K) => {
       // and keep doing that until my condition is broken.
 
       // 2) Maintain the increasing PrefixSum index subarray this.q .
-      // I want to maintain
+      // I want to maintain the increasing order of the subarray, as each index represents the END of the array I'm about to examine. 
+
+
+
+
+      // HANDLES THE BEGINNING OF THE SUBARRAY I M EXAMINING
       while (this.q.length && PrefixSum[x] - PrefixSum[this.q[0]] >= K) {
         //pop the smallest index (first)
         let smallest = this.q.shift();
@@ -89,8 +94,8 @@ var shortestSubarray = (A, K) => {
         currBestLength = Math.min(currBestLength, x - smallest);
       }
 
-      //keeps the dq increasing
-      //handles negative numbers
+ 
+      //handles negative numbers AND THE ENDING OF THE SUBARRAY I M EXAMINING 
       while (
         this.q.length &&
         PrefixSum[x] <= PrefixSum[this.q[this.q.length - 1]]
@@ -120,3 +125,4 @@ console.log(
     //[84, -37, 32, 40, 95],167 //3
   )
 );
+
