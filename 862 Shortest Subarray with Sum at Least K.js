@@ -8,6 +8,8 @@ var shortestSubarray = (A, K) => {
   var currSum = 0;
   var start = 0;
 
+
+  // sliding window
   for (let end = 0; end < A.length; end++) {
     currSum += A[end];
 
@@ -22,9 +24,29 @@ var shortestSubarray = (A, K) => {
   return currBestLength == Infinity ? -1 : currBestLength;
 };
 
+//dequeue without class
+var shortestSubarray = function(A, K) {
+  let n = A.length;
+  let min = n+1;
+  let B = new Array(n).fill(0);
+  for(let i=0; i<n; i++) B[i+1] = B[i] + A[i];
+  console.log(B)
+  let stack = [];
+  for(let i=0; i<n+1; i++){
+      while(stack.length > 0 && B[i]-B[stack[0]] >= K){
+          min = Math.min(min, i-stack[0]);
+          stack.shift();
+      }
+      while(stack.length > 0 && B[i] <= B[stack[stack.length-1]]){
+          stack.pop();
+      }
+      stack.push(i);
+  }
+  return min <= n ? min : -1;
+};
+ 
 // DEQUEUE  O(N) time and space godLee
 var shortestSubarray = (A, K) => {
-  if(A.length==1 && A[0]>=K)return 1
   var PrefixSum = [0];
   var currSum = 0;
   var currBestLength = A.length+1;
@@ -72,33 +94,16 @@ var shortestSubarray = (A, K) => {
 
 
 
-//dequeue without class
-var shortestSubarray = function(A, K) {
-  let n = A.length;
-  let min = n+1;
-  let B = new Array(n+1).fill(0);
-  for(let i=0; i<n; i++) B[i+1] = B[i] + A[i];
-  console.log(B)
-  let stack = [];
-  for(let i=0; i<n+1; i++){
-      while(stack.length > 0 && B[i]-B[stack[0]] >= K){
-          min = Math.min(min, i-stack[0]);
-          stack.shift();
-      }
-      while(stack.length > 0 && B[i] <= B[stack[stack.length-1]]){
-          stack.pop();
-      }
-      stack.push(i);
-  }
-  return min <= n ? min : -1;
-};
+
+
+
 
 console.log(
   shortestSubarray(
     //    [1,2],4 //-1
    
-   // [1],1 //1
-     [2,-1,2], 3  //3
+   //[1],1 //1
+    // [2,-1,2], 3  //3
     //[84, -37, 32, 40, 95],167 //3
   )
 );
