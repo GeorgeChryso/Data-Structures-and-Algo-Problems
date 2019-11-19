@@ -22,7 +22,9 @@ function minWindow(s, t) {
     
     // 1. process hashmap
     var map = {};
+    // store the "letter":"frequency" of T
     t.split('').forEach(ch => map[ch] = (map[ch] || 0) + 1);
+    // The count of the different letters of t
     var count = Object.keys(map).length;
     
     // 2. traverse s to find boundaries
