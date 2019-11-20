@@ -1,1 +1,1 @@
-<= n ? min : -1;
+ dictionary[d] || 0 
