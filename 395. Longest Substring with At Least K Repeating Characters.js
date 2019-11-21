@@ -53,3 +53,34 @@ var longestSubstring = function(A, K) {
 };
 
 console.log(longestSubstring("ABC"));
+
+
+var longestSubstringSlidingWindow = function(s, k) {
+    var ls = function(u) {
+        let start = 0, end = 0, curU = 0, curK = 0, max = 0; 
+        let hash = {};
+        while(end<s.length) {;
+            hash[s[end]] = hash[s[end]]+1||1;
+            if (hash[s[end]]==1) curU++;
+            if (hash[s[end]]==k) curK++;
+            end++;
+
+            // extra letter coming in, so we shrink left
+            while(curU > u) {
+                if (hash[s[start]]-- == k) curK--; // start will be < k
+                if (hash[s[start++]] == 0) curU--; // start is 0
+            }
+
+            if (curU == curK && curU == u) {
+                max = Math.max((end-start), max);
+            }
+        }
+        return max;
+    }
+
+    let max = 0;
+    for (let i=0;i<26;i++) {
+        max = Math.max(max, ls(i+1));
+    }
+    return max;
+};
