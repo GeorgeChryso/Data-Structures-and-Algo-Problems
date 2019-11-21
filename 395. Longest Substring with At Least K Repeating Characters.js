@@ -2,32 +2,51 @@
 
 var longestSubstring = function(A, K) {
   A = A.split("");
-  var result = 0;
-  var dictionary = {};
-  var currSet = new Set();
-  var start = 0;
-  for (var end = 0; end < K; end++) {
-    dictionary[A[end]] = dictionary[A[end]] || 0 + 1;
-    currSet.add(A[end]);
-  }
 
-  if (currSet.size == 1) {
-    currSet = new Set();
-    result = K;
-  }
+  var dictionary={}
+  var count=0
+  var countOfDiff=0
+  var result=0
+  var start =0
+  var end=0 
+  var done=0
 
-  for (end; end < A.length; end++) {
-    dictionary[A[end]] = dictionary[A[end]] || 0 + 1;
-
-    if (dictionary[A[end]] >= K) {
-      if (currSet.has(A[end])) currSet.delete(A[end]);
-      if (!currSet.size) {
-        result = Math.max(result, end - start + 1);
-      }
-    } 
-    else {
-        currSet.add(A[end])    
+  while(end<A.length){
+    
+    if(dictionary[end]===undefined){
+        countOfDiff++
+        dictionary[end]=1
     }
+    else{
+        dictionary[end]++
+        if(dictionary[end]==K){
+            done++
+        }
+    }    
+
+    if(done==countOfDiff)break
+
+  }
+
+  result=Math.max(result,end-start+1)
+
+  while(end<A.length){
+        while(done==countOfDiff){
+            end++
+            if(dictionary[end]===undefined){
+                countOfDiff++
+                dictionary[end]=1
+            }
+            else{
+                dictionary[end]++
+                if(dictionary[end]>=K){
+                    result=Math.max(result,end-start+1)
+                }
+            }    
+        }
+
+
+
   }
 
   return result;
