@@ -54,8 +54,8 @@ var longestSubstring = function(A, K) {
 
 console.log(longestSubstring("ABC"));
 
-
-var longestSubstringSlidingWindow = function(s, k) {
+// Sliding Window
+var longestSubstring = function(s, k) {
     var ls = function(u) {
         let start = 0, end = 0, curU = 0, curK = 0, max = 0; 
         let hash = {};
@@ -84,3 +84,18 @@ var longestSubstringSlidingWindow = function(s, k) {
     }
     return max;
 };
+
+// Recursion
+var longestSubstring = function(s, k) {
+    let hash = {}, max = 0;
+    s.split('').forEach((val)=>{hash[val]=hash[val]+1||1})
+    let c = Object.entries(hash).filter(([key, val])=>val<k);
+    
+    if (c[0]){
+        for (let seg of s.split(c.shift()[0])) {
+            max = Math.max(longestSubstring(seg, k), max)
+        }
+        return max;
+    }
+    return s.length;
+}
