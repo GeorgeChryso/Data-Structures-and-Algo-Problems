@@ -3,3 +3,5 @@ README
 tempCodeRunnerFile
 node_modules
 package-lock
+.eslintrc
+.prettierrc

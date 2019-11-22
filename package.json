@@ -1,0 +1,23 @@
+{
+  "name": "leetcode",
+  "version": "1.0.0",
+  "description": "LeetCode solutions",
+  "main": "!! Stack739. Daily Temperatures.js",
+  "dependencies": {
+    "prettier": "^1.19.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeChryso/LeetCode.git"
+  },
+  "author": "George Chrys",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeorgeChryso/LeetCode/issues"
+  },
+  "homepage": "https://github.com/GeorgeChryso/LeetCode#readme"
+}
