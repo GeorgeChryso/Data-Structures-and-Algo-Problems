@@ -1,13 +1,13 @@
 // Find the length of the longest substring T of a given string (consists of lowercase letters only) such that every character in T appears no less than k times.
 
-// Sliding Window
+// Sliding Window + Hashmap O(26*N)=O(N)
 var longestSubstring = function(s, k) {
     // this function finds the maximum length of a substring (window)
     // that has u distinct characters and
     // EACH character's frequency is at least k
     var maxLengthofSusbtrWith_u_distinct_andFreq_K = function(u) {
         let start = 0,
-            end = 0; //the start and end index of my currrent window
+            end = 0; // the start and end index of my currrent window
         let curU = 0; // the number of the Unique elements in my current window
         let curK = 0; // the number of elements with frequency>=K in my current window
 
@@ -18,7 +18,7 @@ var longestSubstring = function(s, k) {
 
         //Sliding window
         while (end < s.length) {
-            //fill the hash
+            // fill the hash
             hash[s[end]] = hash[s[end]] + 1 || 1;
             // if its the first log of the element( unique element)
             if (hash[s[end]] == 1) curU++;
@@ -30,7 +30,7 @@ var longestSubstring = function(s, k) {
             // extra letter coming in, so we shrink left
             // if the number of unique elements on my hash is bigger than u I want to find a window where curU==u so ...
             while (curU > u) {
-                //  I have to somehow reduce the unique numbers to u
+                // I have to somehow reduce the unique numbers to u
                 // I will do that by moving the window's start 1 element to the right
 
                 // First I have to remove that element from the hashmap
@@ -45,7 +45,7 @@ var longestSubstring = function(s, k) {
                     curU--;
                 }
 
-                // and I finially move the window to the right
+                // and I finally expand the window to the right
                 start++;
             }
 
@@ -79,9 +79,16 @@ var longestSubstring = function(s, k) {
     s.split('').forEach(val => {
         hash[val] = hash[val] + 1 || 1;
     });
+
+    // [...[key,val]] with val>=K
     let c = Object.entries(hash).filter(([key, val]) => val < k);
 
+    //if there is a key value pair with value>=K
     if (c[0]) {
+        // for each substring()
+        // c.shift()=[key,val]
+        // [key,val]][0]=key
+        // for (seg of s.split(key) )
         for (let seg of s.split(c.shift()[0])) {
             max = Math.max(longestSubstring(seg, k), max);
         }
@@ -89,5 +96,37 @@ var longestSubstring = function(s, k) {
     }
     return s.length;
 };
+// recursion again
+var longestSubstring = function(s, k) {
+    if (!s.length) return 0;
+
+    const hash = {};
+    //fill hash
+    for (let c of s) hash[c] = (hash[c] || 0) + 1;
+
+    // if there is no frequency  less than k
+    if (!Object.values(hash).some(d => d < k)) {
+        return s.length;
+    } else {
+        let begin = 0,
+            end = 0,
+            res = 0;
+
+        while (end < s.length) {
+            if (hash[s[end]] < k) {
+                res = Math.max(
+                    res,
+                    longestSubstring(s.substring(begin, end), k)
+                );
+                begin = end + 1;
+            }
+            end++;
+        }
+        res = Math.max(res, longestSubstring(s.substring(begin), k));
+        return res;
+    }
+};
 
 console.log(longestSubstring('ABC'));
+
+console.log('Abcc'.split('c')); // returns ['Ab','','']
