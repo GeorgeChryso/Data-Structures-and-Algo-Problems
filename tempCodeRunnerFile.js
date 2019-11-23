@@ -1,1 +1,1 @@
- dictionary[d] || 0 
+-Infinity

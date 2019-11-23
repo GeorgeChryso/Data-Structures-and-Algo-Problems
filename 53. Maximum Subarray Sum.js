@@ -9,49 +9,53 @@
 
 // If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
 
-
 var maxSubArray = function(nums) {
-    
-    for (let i = 1; i < nums.length; i++){
-       nums[i] = Math.max(nums[i], nums[i] + nums[i - 1]);
-   } 
+    for (let i = 1; i < nums.length; i++) {
+        nums[i] = Math.max(nums[i], nums[i] + nums[i - 1]);
+    }
 
-
- return Math.max(...nums)  
+    return Math.max(...nums);
 };
 
-
-var maxSubArray=(A)=>{
-    var result=0
-    var start=0
-    var prefixSum=[]
-    var currSum=0
+var maxSubArray = A => {
+    if (A.length == 1) return A[0];
+    var result = -Infinity;
+    var prefixSum = [];
+    var currSum = 0;
 
     //prefix Sum
-    for (let end = 0; end < A.length; end++) {
-        currSum+=A[end]
-        prefixSum[end]=currSum
+    for (let i = 0; i < A.length; i++) {
+        currSum += A[i];
+        prefixSum[i] = currSum;
     }
-    console.log(prefixSum)
-    var stack=[]
+    console.log(prefixSum);
+
+    // 
+    var stack = [];
     for (let i = 0; i < prefixSum.length; i++) {
-        if(!stack.length||prefixSum[i]>=stack[stack.length-1]){
-            stack.push(prefixSum[i])
-            result=Math.max(result,prefixSum[i]-stack[0])
-        }
-        else{
-            while(prefixSum[i]<stack[stack.length-1] && stack.length){
-                stack.pop()
+        if (!stack.length || prefixSum[i] >= stack[stack.length - 1]) {
+            stack.push(prefixSum[i]);
+            if (stack.length == 1) {
+                result = Math.max(stack[0], result);
+            } else {
+                result = Math.max(result, prefixSum[i] - stack[0]);
             }
-            stack.push(prefixSum[i])
-
-        }        
+        } else {
+            while (prefixSum[i] < stack[stack.length - 1] && stack.length) {
+                result = Math.max(result, prefixSum[i] - stack.pop());
+            }
+            stack.push(prefixSum[i]);
+        }
     }
 
-    return result
+    return Math.max(result, Math.max(...prefixSum));
+};
 
-}
-
-console.log(maxSubArray(
-    [-2,1,-3,4,-1,2,1,-5,4]
-))
+console.log(
+    maxSubArray(
+        // [-1]
+        // [1,2]
+        //[-2,-1]
+       // [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+    )
+);
