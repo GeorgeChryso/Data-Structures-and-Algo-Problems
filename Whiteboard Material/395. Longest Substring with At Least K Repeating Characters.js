@@ -129,4 +129,3 @@ var longestSubstring = function(s, k) {
 
 console.log(longestSubstring('ABC'));
 
-console.log('Abcc'.split('c')); // returns ['Ab','','']
