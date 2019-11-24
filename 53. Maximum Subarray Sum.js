@@ -17,6 +17,7 @@ var maxSubArray = function(nums) {
     return Math.max(...nums);
 };
 
+// Works O(N),but is overcomplicated , i use prefix sum + a stack to keep track of the minimum prefix sum
 var maxSubArray = A => {
     if (A.length == 1) return A[0];
     var result = -Infinity;
@@ -30,7 +31,7 @@ var maxSubArray = A => {
     }
     console.log(prefixSum);
 
-    // 
+    //
     var stack = [];
     for (let i = 0; i < prefixSum.length; i++) {
         if (!stack.length || prefixSum[i] >= stack[stack.length - 1]) {
@@ -51,11 +52,30 @@ var maxSubArray = A => {
     return Math.max(result, Math.max(...prefixSum));
 };
 
+// Intuition find a pair (minSum, result)
+// such that the minSum is the leftside minimum prefix Sum of Result, the maximum Prefix Sum of the array
+// Essentially, on each Prefix Sum, I'm searching for the leftmost minmimum element so their difference (PrefixSum - leftminimum) yields the highest result( sum of the corresponding subarray)
+
+var maxSubArray = A => {
+    if(!A.length)return 0
+    var minSum = A[0];
+    var PrefixSum = [minSum];
+    var result = minSum;
+
+    for (let i = 0; i < A.length; i++) {
+        PrefixSum[i + 1] = PrefixSum[i] + A[i];
+        result = Math.max(result, PrefixSum[i + 1] - minSum);
+        minSum = Math.min(minSum, PrefixSum[i + 1]);
+    }
+
+    return result;
+};
+
 console.log(
     maxSubArray(
-        // [-1]
+      //  [-1]
         // [1,2]
         //[-2,-1]
-       // [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+        // [-2, 1, -3, 4, -1, 2, 1, -5, 4]
     )
 );
