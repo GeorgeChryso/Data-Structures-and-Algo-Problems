@@ -5,7 +5,6 @@
 // Note that you cannot sell a stock before you buy one.
 
 
-
 // essentially i  need to find the lowest shizzle before the highest price in order to maximize profit. If i come across a lower value than my highest,I need to start over
 var maxProfit=A=>{
     var answer=0
@@ -66,9 +65,22 @@ var maxProfit = function(A) {
 
 };
 
+// doesnt work
+var maxProfit=A=>{
+    var max_Profit=0
+    var minmum_so_far=A[0]
+    
+    for (var price in A) {
+        minmum_so_far=Math.min(minmum_so_far,price)
+        let currProfit= price-minmum_so_far// bought minimum so far and sold for current price
+        max_Profit=Math.max(currProfit,max_Profit)
+    }
+    return max_Profit
+}
 
 console.log(
     maxProfit(
-        [7,1,5,3,6,4]
+        [7,6,4,3,1]
+       // [7,1,5,3,6,4]
     )
 )
