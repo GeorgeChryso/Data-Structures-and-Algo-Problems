@@ -51,3 +51,8 @@ var maxDepth = function(A) {
 
     return count
 };
+
+//DFS
+//Recursion
+var maxDepth=A=>A==null?0:Math.max(maxDepth(A.left)+1,maxDepth(A.right)+1)
+
