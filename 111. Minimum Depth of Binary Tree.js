@@ -49,7 +49,7 @@ var minDepth = function(A) {
 
 };
 
-// DFS
+// DFS- recursion
 var minDepth = function(A) {
     var minDepth = Infinity;
     
@@ -59,12 +59,7 @@ var minDepth = function(A) {
     
     function find(node, depth = 1) {
         if (node.left === null && node.right === null) {
-            if (depth < minDepth) {
-                minDepth = depth;
-                if (minDepth === 1) {
-                    return;
-                }
-            }
+            minDepth=Math.min(depth,minDepth)
         }
         
         if (node.left !== null) {
