@@ -21,27 +21,58 @@ var mergeTrees = function(t1, t2) {
     }
     let answ = new TreeNode();
 
-    var series = [];
 
-    var dp = (n1, n2) => {
-        if (n1 === null) {
+    
+    var queue1=[t1]
+    var queue2=[t2]
+
+    var result1=[]
+    var result2=[]
+
+
+    while (queue1.length){
+        let current=queue1.shift()
+        if( current===null) {
+            result.push(null)
+            continue
         }
-        if (n2 === null) {
+        result.push(current.val)
+        queue1.push(current.left)
+        queue1.push(current.right)
+    }
+    while (queue2.length){
+        let current=queue2.shift()
+        if( current===null) {
+            result.push(null)
+            continue
         }
-
-        let res = new TreeNode();
-        if (n1.val !== null && n2.val !== null) {
-            res.val = n1.val + n2.val;
-        } else if (n1.val !== null) {
-            res.val = n1.val;
-        } else if (n2.val !== null) {
-            res.val = n2.val;
-        } else {
-            res == null;
+        result.push(current.val)
+        queue1.push(current.left)
+        queue1.push(current.right)
+    }
+    
+    var result3=Array(Math.max(result1.length,result2.length))
+    for (let i = 0; i < result3.length; i++) {
+        if(result1[i]!==null && result2 !==null){
+            result3[i]=result1[i]+result2[i]
         }
+        else if( result1[i]!==null && result2[i]===null){
+            result3[i]=result1[i]
+        }
+        else if( result1[i]==null && result2[i]!==null){
+            result3[i]=result2[i]
+        }
+        else{
+            result3[i]=null
+        }
+    }
 
-        series.push(res);
-    };
+    var final
+    while(result3.length){
 
-    while (dp(t1, t2)) {}
+        let curr= new TreeNode(result3.shift())
+        curr.left=new TreeNode(result3.shift())
+        curr.right=new TreeNode(result3.shift())
+
+    }
 };
