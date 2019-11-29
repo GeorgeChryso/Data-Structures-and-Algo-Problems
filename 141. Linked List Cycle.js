@@ -6,9 +6,13 @@
 
 
 var hasCycle = function(head) {
+    //if there is no node, or next node to the first, return false
     if(head==null||head.val===null||head.next===null)return false  
     var map=new Map();
+
+    //while there is a next node, continue
     while(head){
+        //if u come across a previously seen node (reference of node) return true
         if( map.has(head))return true
         map.set(head)
         head=head.next
