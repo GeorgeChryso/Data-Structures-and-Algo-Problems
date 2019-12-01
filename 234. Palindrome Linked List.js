@@ -36,11 +36,8 @@ var isPalindrome = function(head) {
 // R:O(n) S:O(1), 
 // essentially reverse the second half of the linked list using two pointers
 var isPalindrome = function(head) {
-    //store the values on an array
-    var count=0
-    
     // 2 pointers
-    let fast=head;
+    let fast=head; //moves twice as fast to reach the end first
     let slow=head;
     
 
@@ -49,16 +46,23 @@ var isPalindrome = function(head) {
         slow=slow.next
         fast=fast.next.next
     }
+    if (fast != null){
+        slow = slow.next;
+    }
     
     //gonna reverse the slow now, cos i know that slow is at the half of my LL 
-    let [prev,current]=[null,slow]
-
-    while(current.next){
-        [prev,current,current.next]=[current,current.next,prev]
+    let reverseList = function(head) {
+        let [prev, current] = [null, head]
+        while(current) {
+          //  [current.next, prev, current] = [prev, current, current.next]
+    
+            [prev,current.next,current]=[current,prev,current.next]
+        }
+        return prev
     }
-
+    
     //  DONT FORGET THIS ESSENTIAL STEP, TO RESET BACK THE SLOW POINTER TO THE BEGINNING OF YOUR REVERSED ll
-    slow=prev
+    slow=reverseList(slow)
 
     // resetting the fast
     fast=head
@@ -66,10 +70,45 @@ var isPalindrome = function(head) {
 
     //checking for palindrome
     while(slow){
-        console.log(slow.val,fast.val)
         if(slow.val!==fast.val)return false
         [slow,fast]=[slow.next,fast.next]
     }
 
     return true
+};
+
+
+
+
+
+
+
+
+
+// make it a double linked List , time O(n), space O(n)
+var isPalindrome = function(head) {
+    if (!head) {
+        return true;
+    }
+    let tail = head;
+
+    //set the previous for each elemenet
+    while (tail.next) {
+        tail.next.prev = tail;
+        tail = tail.next;
+    }
+
+
+    //traverse from both ends and see if the tail and head match
+    while (tail && head) {
+        if (tail === head || tail.prev === head && tail.val === head.val) {
+            return true;
+        }
+        if (tail.val !== head.val) {
+            return false;
+        }
+        tail = tail.prev;
+        head = head.next;
+    }
+    return true;
 };
