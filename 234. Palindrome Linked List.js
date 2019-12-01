@@ -39,7 +39,6 @@ var isPalindrome = function(head) {
     // 2 pointers
     let fast=head; //moves twice as fast to reach the end first
     let slow=head;
-    
 
     //fast moves at twice the speed, so when fast.next==null that means the end is reached
     while(fast && fast.next){
@@ -51,7 +50,7 @@ var isPalindrome = function(head) {
     }
     
     //gonna reverse the slow now, cos i know that slow is at the half of my LL 
-    let reverseList = function(head) {
+    let reverseList = head=> {
         let [prev, current] = [null, head]
         while(current) {
           //  [current.next, prev, current] = [prev, current, current.next]
@@ -70,20 +69,12 @@ var isPalindrome = function(head) {
 
     //checking for palindrome
     while(slow){
-        if(slow.val!==fast.val)return false
+        if(slow.val!==fast.val)return false;
+
         [slow,fast]=[slow.next,fast.next]
     }
-
     return true
 };
-
-
-
-
-
-
-
-
 
 // make it a double linked List , time O(n), space O(n)
 var isPalindrome = function(head) {
@@ -112,3 +103,24 @@ var isPalindrome = function(head) {
     }
     return true;
 };
+
+
+//for testing purposes
+var ArrayToLinkedList=(arr)=>{
+    function ListNode(val) {
+        this.val = val;
+            this.next = null;
+        }
+
+    let head=new ListNode(arr[0])
+
+    let start=head
+    for (let i = 1; i < test.length; i++) {
+        head.next=new ListNode(arr[i])    
+        head=head.next
+    }
+    return start
+}
+
+console.log(isPalindrome(ArrayToLinkedList([1,2,3,4])))
+
