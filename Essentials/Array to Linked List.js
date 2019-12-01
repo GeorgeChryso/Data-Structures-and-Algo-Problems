@@ -7,7 +7,7 @@ var ArrayToLinkedList=(arr)=>{
     let head=new ListNode(arr[0])
 
     let start=head
-    for (let i = 1; i < test.length; i++) {
+    for (let i = 1; i < arr.length; i++) {
         head.next=new ListNode(arr[i])    
         head=head.next
     }
