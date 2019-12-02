@@ -49,3 +49,44 @@ var getIntersectionNode = function(headA, headB) {
 
     return null
 };  
+
+
+//two pointers O(n), O(1)
+var getIntersectionNode = function(headA, headB) {
+    if(!headA||!headB)return null
+    var pointerA=headA
+    var pointerB=headB
+    let lastelementA=1
+    let lastelementB=1
+
+    //if a pointer reaches null, reset him to the other head
+    //eventually they will meet at the intersection point
+    while( pointerA || pointerB){
+        
+        //if they do not have the same last element they have no intersection
+        if(lastelementA!==1&&lastelementB!==1&&lastelementA!==lastelementB)return null
+
+        //if pointer A/B reaches its end, update the lastelement
+       if(!pointerA){
+           lastelementA=tempA
+           pointerA=headB;
+       }
+       if(!pointerB){
+           lastelementA=tempA
+           pointerB=headA;
+       }
+
+       tempA=pointerA
+       tempB=pointerB
+
+
+       if(pointerA===pointerB)return pointerA
+       pointerA=pointerA.next
+       pointerB=pointerB.next
+    }
+
+    //If two lists have intersection, then their last nodes must be the same one. So when pA/pB reaches the end of a list, record the last element of A/B respectively. If the two last elements are not the same one, then the two lists have no intersections.
+   
+
+    return null
+};  
