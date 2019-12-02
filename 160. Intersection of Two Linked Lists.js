@@ -7,7 +7,7 @@
 // You may assume there are no cycles anywhere in the entire linked structure.
 // Your code should preferably run in O(n) time and use only O(1) memory.
 
-//wrong 
+//wrong because i m not just looking for the first value that is the same, i m looking for the first shared REFERENCE instead;
 var getIntersectionNode = function(headA, headB) {
     var dict={}
     var counter=1
@@ -31,7 +31,9 @@ var getIntersectionNode = function(headA, headB) {
     return result[1]?result[1]:null
 };  
 
+// so in order to check for the first shared reference i Store every reference of each node to a map and the moment i come across an already seen one, i return it, otherwise i return null
 
+//that would be O(n) time and space;
 var getIntersectionNode = function(headA, headB) {
     var dict=new Map();
   
