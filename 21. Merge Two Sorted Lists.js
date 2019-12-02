@@ -51,56 +51,44 @@ var mergeTwoLists = function(l1, l2) {
 
 
 //wrong, remains to be solved
-var mergeTwoLists = function(A, B) {
+
+var mergeTwoLists=(A,B)=>{
     function ListNode(val) {
         this.val = val;
             this.next = null;
         }
 
-    var head=new ListNode(Infinity)
-    var start=start
+    var result=new ListNode()
+    var pointer=result;
+    var respoint=result
     while(A||B){
-        
         if(A){
-            while(A.val<=B.val){
-                head.next=new ListNode(A.val)
-                head=head.next
-                A=A.next
-            }
-            head.next=new ListNode(B.val)
-            head=head.next
-            B=B.next
+            while(B&&B.val<=A.val){
+                pointer.next=new ListNode(B.val)
+                pointer=pointer.next
+                B=B.next
+            }   
+            pointer.next=new ListNode(A.val)
+            pointer=pointer.next
+            A=A.next
         }
         if(B){
-            while(B.val<=A.val){
-                head.next=new ListNode(B.val)
-                head=head.next
-                B=B.next
-            }
-            head.next=new ListNode(A.val)
-            head=head.next
-            A=A.next
-
-        }
-    }
-    return temp
-};
-
-let ArrayToLinkedList=(arr)=>{
-    function ListNode(val) {
-        this.val = val;
-            this.next = null;
+            while(A&&A.val<=B.val){
+                pointer.next=new ListNode(A.val)
+                pointer=pointer.next
+                A=A.next
+            }   
+            pointer.next=new ListNode(B.val)
+            pointer=pointer.next
+            B=B.next
         }
 
-    let head=new ListNode(arr[0])
 
-    let start=head
-    for (let i = 1; i < arr.length; i++) {
-        head.next=new ListNode(arr[i])    
-        head=head.next
     }
-    return start
+
+    return respoint;
 }
+
 
 console.log(mergeTwoLists(
     ArrayToLinkedList([1,2,3,4]),
