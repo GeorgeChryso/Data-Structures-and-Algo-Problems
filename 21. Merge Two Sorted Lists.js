@@ -48,10 +48,7 @@ var mergeTwoLists = function(l1, l2) {
     return ArrayToLinkedList(resultArray)
 };
 
-
-
-//wrong, remains to be solved
-
+// create the result array O(m+n) O(m+n)
 var mergeTwoLists=(A,B)=>{
     function ListNode(val) {
         this.val = val;
@@ -89,7 +86,32 @@ var mergeTwoLists=(A,B)=>{
     return respoint;
 }
 
+var mergeTwoLists = function(l1, l2) {
+    let itr = { val: 0, next: null };
+  const head = itr;
 
+  while (l1 || l2) {
+    if (!l1) {
+      itr.next = l2
+      l2 = null;
+    } else if (!l2) {
+      itr.next = l1
+      l1 = null;
+    } else {
+      if (l1.val < l2.val) {
+        itr.next = l1;
+        l1 = l1.next;
+      } else {
+        itr.next = l2;
+        l2 = l2.next;
+      }
+    }
+
+    itr = itr.next;
+  }
+
+  return head.next;
+};
 console.log(mergeTwoLists(
     ArrayToLinkedList([1,2,3,4]),
     ArrayToLinkedList([1,3,4,5])
