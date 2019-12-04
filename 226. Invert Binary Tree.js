@@ -91,15 +91,18 @@ var invertTree = function(root) {
     let queueArray = [];
     queueArray.push(root);
     
+    //essentially, for each element in the queue, switch its left and right values
     while (queueArray.length !== 0) {
         let temp = queueArray.shift();
+
         if (temp === null) continue;
-        let tempRight = temp.right;
-        temp.right = temp.left;
-        temp.left = tempRight;
+        //switch the values
+        [temp.right,temp.left]=[temp.left,temp.right]
+
+        //and push the children to the array
+        // REMEMBER, THESE ARE ALL REFERENCES THAT ALTER THE TREE ITSELF.
         if (temp.left !== null || temp.right !== null) {
-            queueArray.push(temp.left);
-            queueArray.push(temp.right);
+            queueArray.push(temp.left,temp.right);
         }
     }
     return root;
