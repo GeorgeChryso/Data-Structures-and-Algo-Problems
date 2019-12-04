@@ -9,6 +9,25 @@
 // Time : ( O(Math.max(l1.length,l2.length)))
 // Space: (O(Math.max(l1.length,l2.length)))
 
+
+var ArrayToLinkedList=(arr)=>{
+    function ListNode(val) {
+        this.val = val;
+            this.next = null;
+        }
+
+    let head=new ListNode(arr[0])
+
+    let start=head
+    for (let i = 1; i < arr.length; i++) {
+        head.next=new ListNode(arr[i])    
+        head=head.next
+    }
+    return start
+}
+
+
+
 // Create two arrays from two LL, sort them, create the result LL
 var mergeTwoLists = function(l1, l2) {
     // if there's a null , return the other one 
@@ -144,10 +163,49 @@ var mergeTwoLists = function(l1, l2) {
 
 
 
-var mergeTwoLists = function(l1, l2) {
-    typ
+var mergeTwoLists = function(A, B) {
+    if(!A||!B)return A||B
 
+
+    var start
+    if(A.val<=B.val){
+     start=A
+    }
+    else{
+        start=B
+    }
+    var result=start
+    while(A&&B){
+
+        if(A.val<=B.val){
+            let temp=A.next
+            start.next=A
+            start=start.next
+            A=temp;
+            continue
+        }
+        
+        if(B.val<=A.val){
+            let temp=B.next
+            start.next=B
+            start=start.next
+            B=temp;
+        }
+
+    }
+
+    if(!A && B){
+        start.next=B
+    }
+    if(!B&&A){
+        start.next=A
+    }
+
+    return result.next
 };
+
+
+
 console.log(mergeTwoLists(
     ArrayToLinkedList([1,2,3,4]),
     ArrayToLinkedList([1,3,4,5])
