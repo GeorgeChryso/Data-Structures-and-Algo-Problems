@@ -31,6 +31,38 @@
  * @return {TreeNode}
  */
 var invertTree = function(A) {
-    var answer=new TreeNode(A)
+    if(!A)return null
+    var start=A
+
+
+    var dp=current=>{
+        if(!current.left&&!current.right)return
+
+        if(current.left&&current.right){
+            [current.left,current.right]=[current.right,current.left]   
+            dp(current.left)
+            dp(current.right)
+            return
+        }
+
+        if(current.left && !current.right){
+            [current.left,current.right]=[null,current.left]
+            dp(current.right)
+            return
+        }
+        
+        if(!current.left && current.right){
+            [current.left,current.right]=[current.right,null]
+            dp(current.left)
+            return
+        }
+
+   
+    }
+
+    dp(A)
+
+    return start
+
     
 };
