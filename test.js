@@ -1,9 +1,15 @@
-var a = {
-	b: 1
-};
+var a=3
+var x=a
+a++
 
-if (a["b"]-- == 1) {
-	console.log("HAAAY");
-}
+var b=[1,2,3]
+var c=b
+var q=b[b.length-1]
+b.push(2)
 
-console.log(a["b"]);
+x--
+console.log(a,x)
+
+c.push(3)
+console.log(typeof b)
+console.log(b,c,q)

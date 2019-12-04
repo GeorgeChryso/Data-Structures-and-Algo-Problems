@@ -141,6 +141,13 @@ var mergeTwoLists = function(l1, l2) {
     return rootNode.next;
 };
 
+
+
+
+var mergeTwoLists = function(l1, l2) {
+    typ
+
+};
 console.log(mergeTwoLists(
     ArrayToLinkedList([1,2,3,4]),
     ArrayToLinkedList([1,3,4,5])
