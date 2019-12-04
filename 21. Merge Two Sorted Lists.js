@@ -10,6 +10,10 @@
 // Space: (O(Math.max(l1.length,l2.length)))
 
 
+
+
+
+// testing material
 var ArrayToLinkedList=(arr)=>{
     function ListNode(val) {
         this.val = val;
@@ -25,6 +29,19 @@ var ArrayToLinkedList=(arr)=>{
     }
     return start
 }
+
+let LinkedListToArray=(head)=>{
+    var result=[]
+    
+    while(head){
+       result.push(head.val) 
+       head=head.next
+    }
+    
+    return result
+}
+
+
 
 
 
@@ -105,83 +122,48 @@ var mergeTwoLists=(A,B)=>{
     return respoint;
 }
 
-// needs work
-var mergeTwoLists = function(l1, l2) {
-    let itr = { val: 0, next: null };
-  const head = itr;
-
-  while (l1 || l2) {
-    if (!l1) {
-      itr.next = l2
-      l2 = null;
-    } else if (!l2) {
-      itr.next = l1
-      l1 = null;
-    } else {
-      if (l1.val < l2.val) {
-        itr.next = l1;
-        l1 = l1.next;
-      } else {
-        itr.next = l2;
-        l2 = l2.next;
-      }
-    }
-
-    itr = itr.next;
-  }
-
-  return head.next;
-};
-
-
-//
-var mergeTwoLists = function(l1, l2) {
-    let currentNode = { val: null, next: l1 && l2 ? l1.val > l2.val ? l2 : l1 : l1 || l2 };
-    let rootNode = currentNode;
-    
-    while (currentNode !== null) {
-        if (l1 !== null) {
-            if (l2 !== null && l2.val <= l1.val) {
-                currentNode.next = l2;
-                currentNode = currentNode.next;
-                l2 = l2.next;
-            } else {
-                currentNode.next = l1;
-                currentNode = currentNode.next;
-                l1 = l1.next;
-            }
-        } else {
-            currentNode.next = l2;
-            currentNode = currentNode.next;
-            if (l2) l2 = l2.next;
-        }
-    }
-    
-    return rootNode.next;
-};
 
 
 
 
+
+// O(n), O(1)
+// essentially I rewire all the LL so that the result doesnt need extra space
 var mergeTwoLists = function(A, B) {
     if(!A||!B)return A||B
 
-
-    var start
+    //this is the current node
+    var mainLine
     if(A.val<=B.val){
-     start=A
+        mainLine=A
     }
     else{
-        start=B
+        mainLine=B
     }
-    var result=start
+
+
+
+    var start=mainLine
+
+
     while(A&&B){
 
         if(A.val<=B.val){
-            let temp=A.next
-            start.next=A
-            start=start.next
-            A=temp;
+
+            // Notice that temp serves as saving temporary the continuation of my A LL, so that it doesnt get altered when I say (mainline.next=A and mainLine=mainLine.next
+             let temp=A.next
+            
+            //my new element will be the smallest(A)
+               mainLine.next=A
+            // my new current element will be the next element
+               mainLine=mainLine.next
+               A=temp;
+
+            // this would solve my problem without needing the temp
+            // [A,mainline.next,mainLine]=[A.next,A,A]
+            // mainline=mainLine.next
+
+            //[A,mainLine,mainLine.next]=[A.next,A.next,A]
             continue
         }
         
@@ -192,22 +174,31 @@ var mergeTwoLists = function(A, B) {
             B=temp;
         }
 
+
     }
 
+
+
+    // i m out of the while loop, so either A or B has reached their end. 
+    // Note that the first List that reaches its end, means that my result, (mainline) has no option but to keep going from the non-fnished List
     if(!A && B){
-        start.next=B
+        mainLine.next=B
     }
-    if(!B&&A){
-        start.next=A
+    if(!B && A){
+        mainLine.next=A
     }
 
-    return result.next
+    return start
 };
 
 
 
-console.log(mergeTwoLists(
-    ArrayToLinkedList([1,2,3,4]),
-    ArrayToLinkedList([1,3,4,5])
+console.log(
+    LinkedListToArray(mergeTwoLists(
+//    ArrayToLinkedList([1,2,3,4]),ArrayToLinkedList([1,3,4,5]))
+ArrayToLinkedList([2]),ArrayToLinkedList([1])
+
     )
+
+)
 )
