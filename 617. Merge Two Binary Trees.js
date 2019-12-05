@@ -15,64 +15,39 @@
  * @return {TreeNode}
  */
 var mergeTrees = function(t1, t2) {
-    function TreeNode(val) {
-        this.val = val;
-        this.left = this.right = null;
-    }
-    let answ = new TreeNode();
+    if(!t1||!t2)return t1||t2
 
-
+    var result=t1
+    t1.val=t1.val+t2.val
     
-    var queue1=[t1]
-    var queue2=[t2]
-
-    var result1=[]
-    var result2=[]
-
-
-    while (queue1.length){
-        let current=queue1.shift()
-        if( current===null) {
-            result.push(null)
-            continue
-        }
-        result.push(current.val)
-        queue1.push(current.left)
-        queue1.push(current.right)
-    }
-    while (queue2.length){
-        let current=queue2.shift()
-        if( current===null) {
-            result.push(null)
-            continue
-        }
-        result.push(current.val)
-        queue1.push(current.left)
-        queue1.push(current.right)
-    }
-    
-    var result3=Array(Math.max(result1.length,result2.length))
-    for (let i = 0; i < result3.length; i++) {
-        if(result1[i]!==null && result2 !==null){
-            result3[i]=result1[i]+result2[i]
-        }
-        else if( result1[i]!==null && result2[i]===null){
-            result3[i]=result1[i]
-        }
-        else if( result1[i]==null && result2[i]!==null){
-            result3[i]=result2[i]
+    var merge=(A=null,B=null)=>{
+        if(!A||!B){
+          A=A||B  
+          return
         }
         else{
-            result3[i]=null
+          A.val+=B.val
+        }
+
+        
+        if(A.left){
+            if(B.left)merge(A.left,B.left)
+            else merge(A.left)
+        }
+        else{
+            if(B.left)A.left=B.left
+        }
+
+        if(A.right){
+            if(B.right)merge(A.right,B.right)
+            else merge(A.right)
+        }
+        else{
+            if(B.right)A.right=B.right
         }
     }
 
-    var final
-    while(result3.length){
-
-        let curr= new TreeNode(result3.shift())
-        curr.left=new TreeNode(result3.shift())
-        curr.right=new TreeNode(result3.shift())
-
-    }
+    merge(t1,t2)
+    return result
 };
+
