@@ -14,11 +14,13 @@
  * @param {TreeNode} t2
  * @return {TreeNode}
  */
+
+
+ //dfs
 var mergeTrees = function(t1, t2) {
     if(!t1||!t2)return t1||t2
 
     var result=t1
-    t1.val=t1.val+t2.val
     
     var merge=(A=null,B=null)=>{
         if(!A||!B){
@@ -50,4 +52,15 @@ var mergeTrees = function(t1, t2) {
     merge(t1,t2)
     return result
 };
+
+
+//dfs more beautiful
+var mergeTrees=(A,B)=>{
+    if(A==null||B==null)return A||B
+    A.val+=B.val
+    A.left=mergeTrees(A.left,B.left)
+    A.right=mergeTrees(A.right,B.right)
+    return A    
+}
+
 
