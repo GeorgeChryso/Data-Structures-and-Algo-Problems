@@ -64,3 +64,22 @@ var mergeTrees=(A,B)=>{
 }
 
 
+//bfs
+var mergeTrees = function(t1, t2) {
+    if (!t1) return t2;
+    if (!t2) return t1;
+  
+    const tree = t1;
+    const stack = [[t1, t2]];
+
+    while (stack.length) {
+      [t1, t2] = stack.pop();
+      if (t1 && t2) {
+        t1.val = t1.val + t2.val;
+        t1.left ? stack.push([t1.left, t2.left]) : (t1.left = t2.left);
+        t1.right ? stack.push([t1.right, t2.right]) : (t1.right = t2.right);
+      }
+    }
+  
+    return tree;
+  };
