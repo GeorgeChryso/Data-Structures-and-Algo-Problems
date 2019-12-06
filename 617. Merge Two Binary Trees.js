@@ -74,6 +74,8 @@ var mergeTrees = function(t1, t2) {
 
     while (stack.length) {
       [t1, t2] = stack.pop();
+
+      // den xreiazetai na diaxeristw tis alles periptwseis giati tis kaluptw mesa sto if, px an den uparxei to t1.left h uparxei panta kataligoume me ta swsta children
       if (t1 && t2) {
         t1.val = t1.val + t2.val;
         t1.left ? stack.push([t1.left, t2.left]) : (t1.left = t2.left);
