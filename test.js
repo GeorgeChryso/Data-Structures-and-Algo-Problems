@@ -13,7 +13,21 @@
 // console.log(b, c, qe);
 var a='[1,2,3,null,null,4,5]'
 
-var res=a.replace(/[\[\]']/g,'').split(',')
-res.map(d=>d==='null'?null:Number(d))
+var res=a.replace(/[\[\]']/g,'').split(',')//.map(Number)
+for (let i = 0; i < res.length; i++) {
+     if(res[i]==='null'){
+   res[i]=null
+     }
+else res[i]=Number(res[i])
+    }
 
-console.log( res)
+
+for (let i = 0; i < res.length; i++) {
+    if(res[i])res[i]=res[i].toString()
+    else res[i]='null'    
+}
+res[0]='['+res[0]
+res[res.length-1]=res[res.length-1]+']'
+res=res.join(',')
+
+console.log(typeof res)
