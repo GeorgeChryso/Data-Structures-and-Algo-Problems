@@ -10,6 +10,7 @@ var ArrayToBinaryTree = A => {
 
     //string to array for BTrees
     function StringToArray(a) {
+        if(a.length<=2)return []
         let res = a.replace(/[\[\]']/g, '').split(','); //.map(Number)
         for (let i = 0; i < res.length; i++) {
             if (res[i] === 'null') {
@@ -25,54 +26,55 @@ var ArrayToBinaryTree = A => {
 
     var start = new TreeNode(A[0]);
     var curr = start;
-    for (let i = 1; i < A.length; i += 2) {
-        start.left = A[i];
-        start.right = A[i + 1];
-    }
 
     var queue = [start];
     var level = 2;
-    var arrayLeftAt = 0;
+    var arrayLeftAt = 1;
     while (queue.length) {
-        var children = [];
-        for (let i = 0; i < level; i++) {
-            arrayLeftAt++;
+       
 
-            if (A[arrayLeftAt] !== undefined) {
-                if(A[arrayLeftAt]===null)children.push(null)
-                else children.push(new TreeNode(A[arrayLeftAt]));
-            }
-        }
-
-        var childrenCounter = 0;
-        queue.forEach(d => {
+        var temp=[]
+        queue.forEach(d=>{
             if(d!==null){
-                d.left = children[childrenCounter];
-                childrenCounter++;
-                d.right = children[childrenCounter];
-                childrenCounter++;
-            }
-            else{
-                childrenCounter++;
-            }
-          
-        });
+                
+                let leftone=A[arrayLeftAt]
+                let rightone=A[arrayLeftAt+1]
+                if(leftone!==undefined){
+                    if(leftone===null){
+                        d.left=null
+                    }
+                    else{
+                        d.left=new TreeNode(leftone)
+                        temp.push(d.left)
+                    } 
+                }
 
-        queue = children;
-        level *= 2;
+                if(rightone!==undefined){
+                    if(rightone===null){
+                        d.right=null
+                    }
+                    else {
+                        d.right=new TreeNode(rightone)
+                        temp.push(d.right)
+                    }
+                }
+                arrayLeftAt+=2
+
+           
+            }
+        })
+        queue=temp
+
     }
 
 
-    console.log(`
-        THIS...    
-    \n`,curr)
     return curr;
 };
 
 
 var BinaryTreeToArray = root => {
     console.log(`but... \n`,root, ` BECOMES`)
-    
+    if(!root)return '[]'
     var result = [];
 
     var queue = [root];
@@ -94,7 +96,7 @@ var BinaryTreeToArray = root => {
 
     function ArrayToString(res) {
         for (let i = 0; i < res.length; i++) {
-            if (res[i]) res[i] = res[i].toString();
+            if (res[i]!==null) res[i] = res[i].toString();
             else res[i] = 'null';
         }
         res[0] = '[' + res[0];
@@ -110,6 +112,12 @@ var BinaryTreeToArray = root => {
 
 console.log(BinaryTreeToArray(
     ArrayToBinaryTree(
-        "[1,2,3,null,null,4,5]"
+        "[5,2,3,null,null,2,4,3,1]"
+      // "[1,2,3,null,null,4,5]"
+     //  "[]"
+     //   "[5,2,3,null,null,2,4,3,1]"
+      // "[-1,0,1]"
+     //
+     //"[1,2,null,3,null,4,null,5]"
     )
 ))
