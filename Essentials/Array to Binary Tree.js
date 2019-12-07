@@ -28,7 +28,6 @@ var ArrayToBinaryTree = A => {
     var curr = start;
 
     var queue = [start];
-    var level = 2;
     var arrayLeftAt = 1;
     while (queue.length) {
        
