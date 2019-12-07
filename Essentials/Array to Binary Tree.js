@@ -5,9 +5,6 @@ function TreeNode(val) {
 
 
 var ArrayToBinaryTree = A => {
-    console.log(`
-    ${A}  ...   BECOMES`)
-
     //string to array for BTrees
     function StringToArray(a) {
         if(a.length<=2)return []
@@ -20,18 +17,17 @@ var ArrayToBinaryTree = A => {
 
         return res;
     }
-
     A = StringToArray(A);
     if (!A.length) return null;
 
-    var start = new TreeNode(A[0]);
-    var curr = start;
 
+
+    var start = new TreeNode(A[0]);
     var queue = [start];
     var arrayLeftAt = 1;
-    while (queue.length) {
-       
 
+    //create it with bst
+    while (queue.length) {
         var temp=[]
         queue.forEach(d=>{
             if(d!==null){
@@ -67,7 +63,7 @@ var ArrayToBinaryTree = A => {
     }
 
 
-    return curr;
+    return start;
 };
 
 
