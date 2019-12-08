@@ -104,43 +104,8 @@ var pathSum = function(root, sum) {
 };
 
 
-//so this is a little bit more sophisticated 
-// **FIXED(but still slow because  copying an object takes time)FIXED
-// THATS RIGHT, its optimal now. O(n)
-// essentially check LC 560, Prefix Sum+Memo
-var pathSum=function(root,sum){
 
-    let counter=0
-
-
-    var dfsPrefix=(node,currSum,dict)=>{
-        if(!node)return 
-        currSum+=node.val
-        counter+=(dict[currSum-sum]||0)
-
-
-        dict[currSum]=(dict[currSum]||0) +1
-
-        if(node.left)prefIt(node.left,currSum,dict)
-        if(node.right)prefIt(node.right,currSum,dict)  
-        
-
-        // ESSENTIAL STEP, IF U RE SEEING THIS AFTER A WHILE YOU DONT UNDERSTAND IT. MAKE A TREE ON YOUR HEAD AND PROCESS THIS NEXT LINE VERY CAREFULLY
-        // NOW, THIS LINE EXISTS BECAUSE:
-        // ESSENTIALLY, MY DICTIONARY IS UNIVERSAL FOR ALL THE TREE, I AM NOT CREATING NEW VERSIONS OF IT TO PASS TO THE CHILDREN NODES BECAUSE THAT WOULD TAKE A LOT OF TIME.
-        // SO I NEED TO BACKTRACK ON MY CURRENT STEP OF DFS IN ORDER FOR THE REST OF THE TREE TO BE ABLE TO PROCESS ITS ELEMENTS WITHOUT THE DICTIONARY ENTRIES THIS PART OF THE TREE HAS CAUSED
-        dict[currSum]=dict[currSum]-1
-    }
-
-
-    dfsPrefix(root,0,{0:1})
-
- 
-    return counter
-}
-
-
-//using a map same
+//using a map same as optimal further down
 var pathSum = function(root, sum) {
     if (!root) return 0
     const map = new Map();
@@ -177,7 +142,48 @@ function helper(node, target,map, currentSum ){
 
 
 
-//dp solution
+
+//so this is a little bit more sophisticated 
+// **FIXED(but still slow because  copying an object takes time)FIXED
+// THATS RIGHT, its optimal now. O(n)
+// essentially check LC 560, Prefix Sum+Memo
+var pathSum=function(root,sum){
+
+    let counter=0
+
+
+    var dfsPrefix=(node,currSum,dict)=>{
+        if(!node)return 
+        currSum+=node.val
+
+        //essential step, increment the counter by the number of times u can achieve the current sum so far, which would be the times you ve seen the remainder 
+        counter+=(dict[currSum-sum]||0)
+
+
+        dict[currSum]=(dict[currSum]||0) +1
+
+        if(node.left)dfsPrefix(node.left,currSum,dict)
+        if(node.right)dfsPrefix(node.right,currSum,dict)  
+        
+
+        // ESSENTIAL STEP, IF U RE SEEING THIS AFTER A WHILE YOU DONT UNDERSTAND IT. MAKE A TREE ON YOUR HEAD AND PROCESS THIS NEXT LINE VERY CAREFULLY
+        // NOW, THIS LINE EXISTS BECAUSE:
+        // ESSENTIALLY, MY DICTIONARY IS UNIVERSAL FOR ALL THE TREE, I AM NOT CREATING NEW VERSIONS OF IT TO PASS TO THE CHILDREN NODES BECAUSE THAT WOULD TAKE A LOT OF TIME.
+        // SO I NEED TO BACKTRACK ON MY CURRENT STEP OF DFS IN ORDER FOR THE REST OF THE TREE TO BE ABLE TO PROCESS ITS ELEMENTS WITHOUT THE DICTIONARY ENTRIES THIS PART OF THE TREE HAS CAUSED
+        dict[currSum]=dict[currSum]-1
+    }
+
+
+    dfsPrefix(root,0,{0:1})
+
+ 
+    return counter
+}
+
+
+
+
+//dp solution Understand it
 let pathSum = function(root, sum) {
     if (!root) return 0;
     return sumHelper(root, 0, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
