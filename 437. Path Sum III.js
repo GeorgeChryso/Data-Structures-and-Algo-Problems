@@ -105,13 +105,15 @@ var pathSum = function(root, sum) {
 
 
 //so this is a little bit more sophisticated 
-// but still slow because  copying an object takes time
-
+// **FIXED(but still slow because  copying an object takes time)FIXED
+// THATS RIGHT, its optimal now. O(n)
 // essentially check LC 560, Prefix Sum+Memo
 var pathSum=function(root,sum){
 
     let counter=0
-    var prefIt=(node,currSum,dict)=>{
+
+
+    var dfsPrefix=(node,currSum,dict)=>{
         if(!node)return 
         currSum+=node.val
         counter+=(dict[currSum-sum]||0)
@@ -120,25 +122,25 @@ var pathSum=function(root,sum){
         dict[currSum]=(dict[currSum]||0) +1
 
         if(node.left)prefIt(node.left,currSum,dict)
-
+        if(node.right)prefIt(node.right,currSum,dict)  
         
-        if(node.right){
-            if(node.left)dict[currSum+node.left.val]=(dict[currSum+node.left.val]-1)||0
-           
-            prefIt(node.right,currSum,dict)  
-            dict[currSum+node.right.val]-=1
-        }
+
+        // ESSENTIAL STEP, IF U RE SEEING THIS AFTER A WHILE YOU DONT UNDERSTAND IT. MAKE A TREE ON YOUR HEAD AND PROCESS THIS NEXT LINE VERY CAREFULLY
+        // NOW, THIS LINE EXISTS BECAUSE:
+        // ESSENTIALLY, MY DICTIONARY IS UNIVERSAL FOR ALL THE TREE, I AM NOT CREATING NEW VERSIONS OF IT TO PASS TO THE CHILDREN NODES BECAUSE THAT WOULD TAKE A LOT OF TIME.
+        // SO I NEED TO BACKTRACK ON MY CURRENT STEP OF DFS IN ORDER FOR THE REST OF THE TREE TO BE ABLE TO PROCESS ITS ELEMENTS WITHOUT THE DICTIONARY ENTRIES THIS PART OF THE TREE HAS CAUSED
+        dict[currSum]=dict[currSum]-1
     }
 
 
-    prefIt(root,0,{0:1})
+    dfsPrefix(root,0,{0:1})
 
  
     return counter
 }
 
 
-//using a map, better
+//using a map same
 var pathSum = function(root, sum) {
     if (!root) return 0
     const map = new Map();
@@ -172,6 +174,23 @@ function helper(node, target,map, currentSum ){
     return count;
     
 }
+
+
+
+//dp solution
+let pathSum = function(root, sum) {
+    if (!root) return 0;
+    return sumHelper(root, 0, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+};
+
+let sumHelper = (root, pre, sum) => {
+  if (!root) return 0;
+  let total  = pre + root.val;
+  return (total === sum) + sumHelper(root.left, total, sum) + sumHelper(root.right, total, sum);
+};
+
+
+
 console.log(pathSum(
     ArrayToBinaryTree(
 //[1,null,2,null,3,null,4,null,5]
