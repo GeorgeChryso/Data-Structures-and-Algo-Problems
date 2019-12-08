@@ -96,6 +96,9 @@ var isSymmetric = function(root) {
 
 // Their two roots have the same value.
 // The right subtree of each tree is a mirror reflection of the left subtree of the other tree.
+
+// Runtime O(N), i check every node once
+// space O(h), depends on height of tree
 var isSymmetric = function(node) {
 
 
