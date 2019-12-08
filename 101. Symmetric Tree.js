@@ -56,7 +56,7 @@ var ArrayToBinaryTree = A => {
 
 
 
-
+//bfs
 var isSymmetric = function(root) {
     if(!root)return false
 
@@ -87,6 +87,37 @@ var isSymmetric = function(root) {
 
     return true
 };
+
+
+//dp
+// essentially for a tree to be symmetrical, its left and righht subtree have to be mirrored versions of each other
+
+// Two trees are a mirror reflection of each other if:
+
+// Their two roots have the same value.
+// The right subtree of each tree is a mirror reflection of the left subtree of the other tree.
+var isSymmetric = function(node) {
+
+
+    function isMirror(A, B) {
+
+        //if they re both null
+        if (!A && !B) return true;
+        //if only one of them is null
+        if (!A || !B) return false;
+
+        //  return whether they have the same values
+        // and continue the symmetric checks, A outer left B outer right, A  A inner right B inner left
+        return (A.val === B.val) 
+          && isMirror(A.left, B.right)
+          && isMirror(A.right, B.left)
+      }
+
+
+
+    return isMirror(node, node);
+};
+
 
 
 console.log(
