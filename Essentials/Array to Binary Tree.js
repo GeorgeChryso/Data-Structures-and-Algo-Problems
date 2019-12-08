@@ -1,4 +1,8 @@
-
+function TreeNode(A) {
+    this.val=A
+    this.left=null
+    this.right=null
+}
 
 var ArrayToBinaryTree = A => {
     //string to array for BTrees
