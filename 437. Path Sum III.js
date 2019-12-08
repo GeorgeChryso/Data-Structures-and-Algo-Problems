@@ -71,19 +71,23 @@ var pathSum = function(root, sum) {
 
     function isSum(node,curr=0) {
         if(!node)return
-
-        if(curr==0)dict.set(node)
         curr+=node.val
         if(curr==sum){
         counter++}
 
         if(node.left){
-           if(curr)isSum(node.left,curr)
-            if(!dict.has(node.left))isSum(node.left)
+            isSum(node.left,curr)
+            if(!dict.has(node.left)){
+                dict.set(node.left)
+                isSum(node.left)
+            }
         }
         if(node.right){
-            if(curr)isSum(node.right,curr)
-            if(!dict.has(node.right))isSum(node.right)
+            isSum(node.right,curr)
+            if(!dict.has(node.right)){
+                dict.set(node.right)
+                isSum(node.right)
+            }
     
         }
        
