@@ -25,7 +25,15 @@ var inorderTraversal = function(root) {
     return result
 };
 
-//iterative solution
+//Threaded Binary Tree
+// Morris Traversal
+
+// A binary tree is made threaded by making all right child pointers that would normally be NULL point to the inorder successor of the node (if it exists).
+
+//Single Threaded: Where a NULL right pointers is made to point to the inorder successor (if successor exists)
+//Double Threaded: Where both left and right NULL pointers are made to point to inorder predecessor and inorder successor respectively. The predecessor threads are useful for reverse inorder traversal and postorder traversal.
+
 var inorderTraversal = function(root) {
+
     
 };
