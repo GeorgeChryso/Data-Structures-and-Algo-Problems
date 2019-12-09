@@ -3,7 +3,7 @@
 
 //recursive solution (dfs)
 // Runtime O(n):visit each node only once
-// Length O(n): result
+// Length O(n): result array
 var inorderTraversal = function(root) {
     if(!root)return []
     var result=[]
