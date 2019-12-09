@@ -13,25 +13,23 @@ var diameterOfBinaryTree = function(root) {
     let result=1
     
 
-
-    var dfs=(node)=>{
-
+    //dfs
+    var MaxLenthOfArrow=(node)=>{
         if(!node)return 0
 
-        //the length of the longest arrow starting from node.left and node.right
-        var L=dfs(node.left)
-        var R=dfs(node.right)
 
+         //the length of the longest arrow starting from node.left and node.right
+        let LeftLongest=MaxLenthOfArrow(node.left)
+        let RightLongest=MaxLenthOfArrow(node.right)
+        
         //update result since I found a potential length ( L+R+1 )
-        result=Math.max(result,L+R+1)
+        result=Math.max(result,LeftLongest+RightLongest+1)
 
-        //this line is THE MAXIMUM length of the ARROW starting from a node,cos remember i m going backwards with dfs, first the leaves will be reached which obviously have length 0, but if i am to find the maximum length of an arrow which starts from a child of a node, i have to keep adding 1 while going upwards and choosing the maximum length path 
-        return Math.max(L,R)+1
+         //this line is THE MAXIMUM length of the ARROW starting from a node,cos remember i m going backwards with dfs, first the leaves will be reached which obviously have length 0, but if i am to find the maximum length of an arrow which starts from a child of a node, i have to keep adding 1 while going upwards and choosing the maximum length path 
+        return Math.max(LeftLongest,RightLongest)+1
     }
 
-    
-
-    dfs(root)
+    MaxLenthOfArrow(root)
     return result-1
 };
 
