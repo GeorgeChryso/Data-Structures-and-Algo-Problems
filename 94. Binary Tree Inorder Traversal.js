@@ -10,7 +10,7 @@ var inorderTraversal = function(root) {
     var stack=[]
 
 
-    //this doesnt actually return anything, its just that the way of the inorder traversal fits perfectly with how dfs traverses the tree;
+    //this doesnt actually return anything, its just that the way of the inorder traversal fits perfectly with how dfs traverses the tree;dadas
     var dfs=(node)=>{
         if(!node){
             if(stack.length)result.push(stack.pop())
