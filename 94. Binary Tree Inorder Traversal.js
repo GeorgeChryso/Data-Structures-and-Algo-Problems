@@ -1,7 +1,7 @@
 // Given a binary tree, return the inorder traversal of its nodes' values.
 
 
-//recursive solution (dfs)
+// recursive solution (dfs)
 // Runtime O(n):visit each node only once
 // Length O(n): result array
 var inorderTraversal = function(root) {
@@ -10,7 +10,7 @@ var inorderTraversal = function(root) {
     var stack=[]
 
 
-    //this doesnt actually return anything, its just that the way of the inorder traversal fits perfectly with how dfs traverses the tree;dadas
+    //this doesnt actually return anything, its just that the way of the inorder traversal fits perfectly with how dfs traverses the tree;
     var dfs=(node)=>{
         if(!node){
             if(stack.length)result.push(stack.pop())
@@ -23,4 +23,9 @@ var inorderTraversal = function(root) {
     
     dfs(root)
     return result
+};
+
+//iterative solution
+var inorderTraversal = function(root) {
+    
 };
