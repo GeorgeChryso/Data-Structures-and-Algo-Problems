@@ -5,12 +5,24 @@
 
 
 var findTargetSumWays = function(Arr, S) {
+    if(!Arr.length)return 0
     let count=0
 
     var dfs=(i,acc)=>{
-        
+        if(i>Arr.length-1){
+            if(acc==S)count++
+            return
+        }
+
+        dfs(i+1,acc+Arr[i])
+        dfs(i+1,acc-Arr[i])
     }
 
-
+    dfs(0,0)
     return count
 };
+
+
+console.log(findTargetSumWays(
+    [1, 1, 1, 1, 1],3 
+))
