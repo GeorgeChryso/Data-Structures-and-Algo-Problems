@@ -3,7 +3,9 @@
 // Find out how many ways to assign symbols to make sum of integers equal to target S.
 
 
-
+//dfs naive solution 
+//Time complexity : O(2^n) Size of recursion tree will be 2^n
+//Space complexity : O(n)). The depth of the recursion tree can go upto n.
 var findTargetSumWays = function(Arr, S) {
     if(!Arr.length)return 0
     let count=0
