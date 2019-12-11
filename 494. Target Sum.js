@@ -25,6 +25,56 @@ var findTargetSumWays = function(Arr, S) {
 };
 
 
+//recursion with memoization
+
+var findTargetSumWays = function(Arr, S) {
+    let count={0:1}
+    for (const x of Arr) {
+        let count2={}
+            for (const tmpSum of count2) {
+                count2[tmpSum+x]=(count2[tmpSum+x]||0) +count[tmpSum]
+                count2[tmpSum-x]=(count2[tmpSum-x]||0) -count[tmpSum]
+            }
+        
+        count=count2
+    }
+
+    return count[S]
+};
+
+
+//?? yuxiangmusic
+var findTargetSumWays = function(Arr, S) {
+    var sum=Arr.reduce((acc,curr)=>acc+curr)
+    
+    // S+sum explanation:
+    // So the problem becomes
+    // Find a subset P of nums such that sum(P) = (target + sum(nums)) / 2
+    // where P is the positives that I choose
+    if((sum<S)||(S+sum)%2)return 0
+
+    //??
+    S=(S+sum)>>1
+
+
+
+    //prolly storing the sums here
+    let dp=Array(S+1).fill(0)
+    dp[0]=1
+    for (const n of Arr) {
+        for (let i = S; i>=n; i--) { 
+            dp[i]+=dp[i-n]            
+        }
+    }
+    return dp[S]
+};
+
+
+
+
+
+
+
 console.log(findTargetSumWays(
     [1, 1, 1, 1, 1],3 
 ))
