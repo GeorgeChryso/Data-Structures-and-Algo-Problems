@@ -78,7 +78,7 @@ var findTargetSumWays = function(nums, S, sum = 0, i = 0, memo = new Map()){
     return memo.get(key);
 };
 
-//knapsack concept
+//knapsack concept have to write it down
 
 
 
