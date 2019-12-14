@@ -31,11 +31,12 @@ var findTargetSumWays = function(Arr, S) {
     let count={0:1}
     for (const x of Arr) {
         let count2={}
-            for (const tmpSum of count2) {
-                count2[tmpSum+x]=(count2[tmpSum+x]||0) +count[tmpSum]
-                count2[tmpSum-x]=(count2[tmpSum-x]||0) -count[tmpSum]
-            }
-        
+            if(Object.keys(count2).length){
+                for (const tmpSum of count2) {
+                    count2[tmpSum+x]=(count2[tmpSum+x]||0) +count[tmpSum]
+                    count2[tmpSum-x]=(count2[tmpSum-x]||0) -count[tmpSum]
+                }
+           }
         count=count2
     }
 
