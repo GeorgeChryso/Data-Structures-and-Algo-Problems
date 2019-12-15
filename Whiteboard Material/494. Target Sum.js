@@ -25,24 +25,6 @@ var findTargetSumWays = function(Arr, S) {
 };
 
 
-//recursion with memoization
-
-var findTargetSumWays = function(Arr, S) {
-    let count={0:1}
-    for (const x of Arr) {
-        let count2={}
-            if(Object.keys(count2).length){
-                for (const tmpSum of count2) {
-                    count2[tmpSum+x]=(count2[tmpSum+x]||0) +count[tmpSum]
-                    count2[tmpSum-x]=(count2[tmpSum-x]||0) -count[tmpSum]
-                }
-           }
-        count=count2
-    }
-
-    return count[S]
-};
-
 
 //?? yuxiangmusic
 var findTargetSumWays = function(Arr, S) {
@@ -81,8 +63,30 @@ var findTargetSumWays = function(nums, S, sum = 0, i = 0, memo = new Map()){
 
 //knapsack concept have to write it down
 
+var findTargetSumWays = function(Arr, S) {
+    
+    var sum=Arr.reduce((acc,curr)=>acc+curr)
+    if(S<-sum||S>sum)return 0
+
+    var dp=Array(Arr.length+1).fill(null).map(d=>Array(2*sum+1))
+
+    dp[0][0+sum]=1// 0+sum means 0, 0means  -sum
+    //giati to euros twn lusewn mou einai apo [-sum, sum]
+    
+    for (let i = 1; i < Arr.length; i++) {
+        for (let j = 0; j < (2  * sum + 1); j++) {
+            if((j + Arr[i - 1]) < (2  * sum + 1)) dp[i][j] += dp[i - 1][j + Arr[i - 1]];
+            if((j - Arr[i - 1] )>= 0) dp[i][j] += dp[i - 1][j - Arr[i - 1]];
+            
+        }        
+    }
+
+    return dp[Arr.length][sum+S]
+};
 
 
 console.log(findTargetSumWays(
     [1, 1, 1, 1, 1],3 
 ))
+
+
