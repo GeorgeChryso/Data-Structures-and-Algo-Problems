@@ -51,7 +51,8 @@ var findTargetSumWays = function(Arr, S) {
     var sum=Arr.reduce((acc,curr)=>acc+curr)
     if(S<-sum||S>sum)return 0
 
-    // each cell dp[i][j] represents the number of ways I can reach sum equal to j-sum 
+
+    // dp[i][j], means the number of ways I can arrange the first i items , in order for their sum to be the J-TH possible one
     var dp=Array(Arr.length+1).fill().map(d=>new Array(2*sum+1).fill(0))
 
     dp[0][0+sum]=1 // j=0+sum means 0, j=0 means -sum
