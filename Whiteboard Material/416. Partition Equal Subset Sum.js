@@ -55,5 +55,31 @@ var canPartition = function(A) {
      //now, theoretically, I could fill the whole board and then check my column but that's BOOOOOOOOOOORING
      // so let's look at my formula again
      // dp[i][j]=dp[i-1][j]+dp[i-1][j-A[i-1]]
+     // so that means, any element will eithter use the item above it( on the previous row or same column), or an item on the previous row but on a smaller number of column
+     // so It's ok not to fill the whole board and just go up to my desired column (A/2)
+   
 
+     //here i=0 cos everything other column (sum) of this row cannot be created with 0 elements
+     for (let i = 1; i < dp.length; i++) {
+         for (let j = 0; j <=sumA/2; j++) {
+
+            //I know that i-1>=0 so i dont need an extra check for that
+            dp[i][j]+=dp[i-1][j]
+            if(j-A[i-1]>=0)dp[i][j]+=dp[i-1][j-A[i-1]]
+
+
+              // here i check whether the element of the row I'm concerned about was positive, if so that means a target Subset was found
+             if(j==sumA/2 && dp[i][j])return true
+         }
+      
+     }
+     console.log(dp.forEach(d=>console.log(d+'')))
+     return false
 };
+
+
+console.log(
+    canPartition(
+        [1,5,11,5]
+    )
+)
