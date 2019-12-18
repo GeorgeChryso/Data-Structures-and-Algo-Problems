@@ -7,7 +7,7 @@
 
 
 
-
+//  K   N   A   P   S   A   C   K       S   O   L   U   T   I   O   N
 // Let us see what we seek: Whether (boolean) there is a pair of partition subsets
 // A1,A2, such that sum(A1)=sum(A2)
 //  now let's advance what we seek to a clearer formula
@@ -29,6 +29,9 @@
 // the number of ways I can reach the same sum with the previous i-1 elements (which basically means I didnt choose the i-th item)
 // plus
 // the number of ways I can reach the same sum minus the sum of the i-1th item , which means that I chose the last item in order to get to my sum J 
+
+// Runtime O(N*sum(A))
+// Space O(N*sum(A))=> can be reduced by just alternating between just two rows, because my formula only relies on just the previous row
 var canPartition = function(A) {
     //calculate the sum of my Array
     var sumA=A.reduce((acc,curr)=>acc+curr)
@@ -77,6 +80,45 @@ var canPartition = function(A) {
      return false
 };
 
+// ok let's optimize this a bit by just creating 2 rows of length sumA/2 +1
+// which should be sufficient
+var canPartition = function(A) {
+    var sumA=A.reduce((acc,curr)=>acc+curr)
+
+    if(sumA%2)return false
+
+   
+    var previous=new Array(sumA/2 +1).fill(0)
+    var current=new Array(sumA/2 +1).fill(0)
+    //or if youre kewl
+    // var current=[...previous] // copies the array, same as
+    // var current=Array.from(previous) //l8am8a
+    previous[0]=1
+
+     for (let i = 1; i < previous.length; i++) {
+         for (let j = 0; j <=sumA/2; j++) {
+            current[j]=0
+            //I know that i-1>=0 so i dont need an extra chec   k for that
+            current[j]+=previous[j]
+            if(j-A[i-1]>=0)current[j]+=previous[j-A[i-1]]
+
+
+         
+             if(j==sumA/2 && current[j])return true
+         }
+         //that's O(sumA/2+1) complexity
+         //copy the array
+       //  previous=current.slice() // seems to be faster than spread operator
+       //  previous=Object.values(current)
+       //deep clone
+       //   previous=current.map(d=>d)
+        // previous=JSON.parse(JSON.stringify(current))
+         //previous=Array.from(current)
+
+     }
+     
+     return false
+};
 
 console.log(
     canPartition(
