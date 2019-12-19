@@ -77,35 +77,47 @@ var canPartition = function(A) {
 };
 
 // ok let's optimize this a bit by just creating 2 rows of length sumA/2 +1
-// which should be sufficient
+// which should be sufficient to reduce memory constraints
 var canPartition = function(A) {
     var sumA = A.reduce((acc, curr) => acc + curr);
 
     if (sumA % 2) return false;
 
     var previous = new Array(sumA / 2 + 1).fill(0);
-    var current = new Array(sumA / 2 + 1).fill(0);
-    //or if youre kewl
-    // var current=[...previous] // copies the array, same as
-    // var current=Array.from(previous) //l8am8a
+    //with the new way I end up not needing as second array
+        //var current = new Array(sumA / 2 + 1).fill(0);
+        //or if youre kewl
+        // var current=[...previous] // copies the array, same as
+        // var current=Array.from(previous) //l8am8a
     previous[0] = 1;
 
     for (let i = 1; i < previous.length; i++) {
-        for (let j = 0; j <= sumA / 2; j++) {
-            current[j] = 0;
-            //I know that i-1>=0 so i dont need an extra chec   k for that
-            current[j] += previous[j];
-            if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
 
-            if (j == sumA / 2 && current[j]) return true;
-        }
-        //that's O(sumA/2+1) complexity
-        //copy the array
-        previous = current.slice(); // seems to be faster than spread operator
-        //  previous=Object.values(current)
-        //   previous=current.map(d=>d)
-        // previous=JSON.parse(JSON.stringify(current))
-        //previous=Array.from(current)
+        //OLD WAY ,with hard copying the previous array
+                // for (let j = 0; j <= sumA / 2; j++) {
+                //     current[j] = 0;
+                //     //I know that i-1>=0 so i dont need an extra chec   k for that
+                //     current[j] += previous[j];
+                //     if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
+
+                //     if (j == sumA / 2 && current[j]) return true;
+                // }
+                //that's O(sumA/2+1) complexity
+                //copy the array (choose one of them)
+                    // previous = current.slice(0); // seems to be faster than spread operator
+                    //  previous=Object.values(current)
+                    //   previous=current.map(d=>d)
+                    // previous=JSON.parse(JSON.stringify(current))
+                    //previous=Array.from(current)
+
+
+        // New way, better runtime and space cos i m not hard copying the array
+            //ok it's actually big brain time, what if I only use just one array and traverse it from right to left HUUUUUUUUH? what if I just use previous and just update it leftwards in order for me to not alter the important columns
+            for (let j = sumA/2; j >=0; j--){
+                previous[j]+=(j - A[i - 1] >= 0)?previous[j - A[i - 1]]:0 
+                if (j == sumA / 2 && previous[j]) return true;
+            }
+            // inb4 it actually works and its better(O(sumA+1 constant space))
     }
 
     return false;
