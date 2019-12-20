@@ -16,63 +16,55 @@
 // Explanation:
 // 'e' is the letter that was added
 
+//memo, O(n), O(n)
 var findTheDifference = function(s, t) {
-    var objy={
-
-    }
+    var objy = {};
 
     for (let i = 0; i < s.length; i++) {
-            if(Object.is(objy[s[i]],undefined)){
-                objy[s[i]]=1
-            }else{
-                objy[s[i]]++
-            }       
+        objy[s[i]] = (objy[s[i]] || 0) + 1;
     }
 
     for (let i = 0; i < t.length; i++) {
-        if(Object.is(objy[t[i]],undefined) || objy[t[i]]==0){
-            return t[i]
-        }else{
-            objy[t[i]]--
-        }        
+        if (!objy[t[i]]) return [t[i]];
+        objy[t[i]]--;
+        if (objy[t[i]] < 0) return [t[i]];
     }
-
 };
 
-
 // Essentially we will be taking advantage of the Bitwise XOR ^ operator.
-// For every **NUMBER**   X, we have  
-// * **X^X=0**  
-// and  
+// For every **NUMBER**   X, we have
+// * **X^X=0**
+// and
 // * **X^0=X**
 
-// So the **plan** is: 
+// So the **plan** is:
 // 	**1.** Iterate over the shortest array **s**
 //    **2.** Keep accumulating (XOR ^ing) the elements of both s and t, after we have converted them to **Numbers** with CharCodeAt() so the XOR can work
 //    **3.** Return the **converted back to character** final sum
-   
- 
 
-
+// O(n), O(1)
 var findTheDifference = function(s, t) {
-    var sum=0 // initialize the accumulator
-	
-	// t.length < s.length because there will always be 1 extra letter on t (the one we want to return)
-    for (var i = 0; i < s.length; i++) {
-		sum^=                       // accumulate with XOR 
-		t[i].charCodeAt()^          // the converted to Number t[i]
-        s[i].charCodeAt()           // along with a converted to Number s[i],
-                                    
-    }
-    sum^=t[i].charCodeAt()          // add the remaining letter of t
-   return String.fromCharCode(sum)  // return the converted to Character total
+    var sum = 0; // initialize the accumulator
 
+    // t.length < s.length because there will always be 1 extra letter on t (the one we want to return)
+    for (var i = 0; i < s.length; i++) {
+        sum ^= t[i].charCodeAt() ^ s[i].charCodeAt(); // accumulate with XOR // the converted to Number t[i] // along with a converted to Number s[i],
+    }
+    sum ^= t[i].charCodeAt(); // add the remaining letter of t
+    return String.fromCharCode(sum); // return the converted to Character total
 };
 
+// O(n), O(1)
 
-console.log(findTheDifference(
-   "abcd" ,"abecd"
-))
+var findTheDifference = function(s, t) {
+    let sum = 0;
 
-charCodeAt()
-console.log(25^0)
+    for (const letter of s) {
+        sum ^= letter.charCodeAt();
+    }
+    for (const letter of t) {
+        sum ^= letter.charCodeAt();
+    }
+    return String.fromCharCode(sum);
+};
+console.log(findTheDifference('a', 'aa'));
