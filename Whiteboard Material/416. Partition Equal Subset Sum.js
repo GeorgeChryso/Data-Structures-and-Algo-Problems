@@ -135,4 +135,18 @@ var canPartition = function(nums){
     return !(acc & 1) && bits >> BigInt(acc >> 1) & 1n
 };
 
+
+//
+var canPartition = function(A){
+    var sumA = A.reduce((acc, curr) => acc + curr);
+    if (sumA % 2) return false;
+    //to idio if(! sumA & 1)return false
+    let intitial=1
+    for (const weight of A) {
+        intitial=intitial|intitial<<weight
+    }
+    return  intitial[sumA >> 1];
+};
+
+
 console.log(canPartition([1, 5, 11, 5]));
