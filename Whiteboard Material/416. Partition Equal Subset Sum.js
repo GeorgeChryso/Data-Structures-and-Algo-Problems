@@ -139,50 +139,26 @@ var DcanPartition = function(A) {
     console.log(start.toString(2))
 
     var previous=start
-
+    console.log(`sumA /2 =`,sumA/2)
     for (const weight of A) {
         console.log(previous.toString(2) , `weight was `,weight)
         previous=(previous)|(previous>>weight)
+        //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
+        //so i need to check the sumA/2'th column (bit) and return true if its set
+        console.log(`checking`)
+        let ta=1
+        ta=ta<<(sumA/2-1)
+        ta=ta<<25
+        console.log(ta.toString(2))
+        if(previous&ta )return true
+
+        if(previous&(1<<((sumA/2 +1)-1)) )return true
     }
+    console.log(previous.toString(2) )
+
+    return false
 
 
-
-    // var previous = new Array((sumA / 2) + 1).fill(0);
-
-
-    //     //var current = new Array(sumA / 2 + 1).fill(0);
-    //     //or if youre kewl
-    // var current=[...previous] // copies the array, same as
-    //     // var current=Array.from(previous) //l8am8a
-    // previous[0] = 1;
-
-    // for (let i = 1; i < A.length; i++) {
-    //     console.log(A[i-1])
-    //     console.log(previous+'')
-
-    //     //OLD WAY ,with hard copying the previous array
-    //             for (let j = 0; j <= sumA / 2; j++) {
-    //                 current[j] = 0;
-    //                 //I know that i-1>=0 so i dont need an extra chec   k for that
-    //                 current[j] += previous[j];
-    //                 if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
-
-    //                 if (j == sumA / 2 && current[j]) return true;
-    //             }
-    //             //that's O(sumA/2+1) complexity
-    //             //copy the array (choose one of them)
-    //                  previous = current.slice(0); // seems to be faster than spread operator
-    //                 //  previous=Object.values(current)
-    //                 //   previous=current.map(d=>d)
-    //                 // previous=JSON.parse(JSON.stringify(current))
-    //                 //previous=Array.from(current)
-
-
-    // }
-    // console.log(previous+'')
-
-
-    return false;
 };
 
 
@@ -275,10 +251,15 @@ var canPartition = function(A){
 
 // Best optimized way using BITS
 var canPartition = function(nums){
-    const bits = nums.reduce((acc, num) => acc | acc << BigInt(num),1n)
     const acc = nums.reduce((acc, num) => acc + num)
-    return !(acc & 1) && bits >> BigInt(acc >> 1) & 1n
+    if(! acc&1)return false
+
+    const bits = nums.reduce((acc, num) => acc | acc << BigInt(num),1n)
+    return bits >> BigInt(acc >> 1) & 1n
 };
 
 
-console.log(DcanPartition([1, 5, 11, 5]));
+console.log(DcanPartition(
+
+    [1,1]
+        ));
