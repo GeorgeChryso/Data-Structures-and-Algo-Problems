@@ -136,11 +136,24 @@ var canPartition = function(nums){
 };
 
 
-//
+// so let's see
 var canPartition = function(A){
     var sumA = A.reduce((acc, curr) => acc + curr);
-    if (sumA % 2) return false;
-    //to idio if(! sumA & 1)return false
+    //sumA&1 means => take the bit representation of sumA and & it with ...00001\
+    // if the last bit ends in 1 , that means that sumA&1 will return true
+    // that means that sumA is not divisible by two, becaue its last bit is one
+    // and 1&1=1, so the result will be 0000001=1 => true
+    // On the other hand, if the number isn't odd, that means that its last bit is definitely 0, so by extension sumA&1=....0 & ...01=...00 cos 0&1=0
+    // So i could definitely replace 
+    // if (sumA % 2) return false;
+    // with 
+    if(! (sumA&1))return false
+    // another way to check if a number is even or odd is 
+    // shifting left and right by 1 bit on order to see if the last bit was 0 in the first place
+    // if(sumA>>1<<1===sumA) then sumA is even because I removed 1 zero and readded it with the left shift and the number did not change 
+    // whereas if sumA was odd
+    // sumA>>1<<1 != sumA, cos the last bit was 1, i shifted it to the right( removed it) and placed a 0 as the last bit on its stead, creating a different number
+    
     let intitial=1
     for (const weight of A) {
         intitial=intitial|intitial<<weight
