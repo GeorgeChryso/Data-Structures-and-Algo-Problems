@@ -78,6 +78,116 @@ var canPartition = function(A) {
 
 // ok let's optimize this a bit by just creating 2 rows of length sumA/2 +1
 // which should be sufficient to reduce memory constraints
+var DcanPartition = function(A) {
+    var sumA = A.reduce((acc, curr) => acc + curr);
+
+    if (sumA % 2) return false;
+
+    var previous = new Array((sumA / 2) + 1).fill(0);
+
+
+        //var current = new Array(sumA / 2 + 1).fill(0);
+        //or if youre kewl
+    var current=[...previous] // copies the array, same as
+        // var current=Array.from(previous) //l8am8a
+    previous[0] = 1;
+
+    for (let i = 1; i < A.length; i++) {
+        console.log(A[i-1])
+        console.log(previous+'')
+
+        //OLD WAY ,with hard copying the previous array
+                for (let j = 0; j <= sumA / 2; j++) {
+                    current[j] = 0;
+                    //I know that i-1>=0 so i dont need an extra chec   k for that
+                    current[j] += previous[j];
+                    if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
+
+                    if (j == sumA / 2 && current[j]) return true;
+                }
+                //that's O(sumA/2+1) complexity
+                //copy the array (choose one of them)
+                     previous = current.slice(0); // seems to be faster than spread operator
+                    //  previous=Object.values(current)
+                    //   previous=current.map(d=>d)
+                    // previous=JSON.parse(JSON.stringify(current))
+                    //previous=Array.from(current)
+
+
+    }
+    console.log(previous+'')
+
+
+    return false;
+};
+
+// optimization using bits and 2 states
+var DcanPartition = function(A) {
+    var sumA = A.reduce((acc, curr) => acc + curr);
+
+    if (sumA % 2) return false;
+
+
+    // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
+    console.log((sumA/2 ).toString(2))
+    let start=(sumA/2)&0 
+    //essentially switch the first bit of start to 1
+    start|=start^1<<1
+
+    //extend the bits so ican have more 0s
+    start=start<<25
+    console.log(start.toString(2))
+
+    var previous=start
+
+    for (const weight of A) {
+        console.log(previous.toString(2) , `weight was `,weight)
+        previous=(previous)|(previous>>weight)
+    }
+
+
+
+    // var previous = new Array((sumA / 2) + 1).fill(0);
+
+
+    //     //var current = new Array(sumA / 2 + 1).fill(0);
+    //     //or if youre kewl
+    // var current=[...previous] // copies the array, same as
+    //     // var current=Array.from(previous) //l8am8a
+    // previous[0] = 1;
+
+    // for (let i = 1; i < A.length; i++) {
+    //     console.log(A[i-1])
+    //     console.log(previous+'')
+
+    //     //OLD WAY ,with hard copying the previous array
+    //             for (let j = 0; j <= sumA / 2; j++) {
+    //                 current[j] = 0;
+    //                 //I know that i-1>=0 so i dont need an extra chec   k for that
+    //                 current[j] += previous[j];
+    //                 if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
+
+    //                 if (j == sumA / 2 && current[j]) return true;
+    //             }
+    //             //that's O(sumA/2+1) complexity
+    //             //copy the array (choose one of them)
+    //                  previous = current.slice(0); // seems to be faster than spread operator
+    //                 //  previous=Object.values(current)
+    //                 //   previous=current.map(d=>d)
+    //                 // previous=JSON.parse(JSON.stringify(current))
+    //                 //previous=Array.from(current)
+
+
+    // }
+    // console.log(previous+'')
+
+
+    return false;
+};
+
+
+
+// optimization one row
 var canPartition = function(A) {
     var sumA = A.reduce((acc, curr) => acc + curr);
 
@@ -94,6 +204,8 @@ var canPartition = function(A) {
     previous[0] = 1;
 
     for (let i = 1; i < A.length; i++) {
+        console.log(A[i-1])
+        console.log(previous+'')
 
         //OLD WAY ,with hard copying the previous array
                 // for (let j = 0; j <= sumA / 2; j++) {
@@ -119,21 +231,20 @@ var canPartition = function(A) {
 
                 previous[j]+=(j - A[i - 1] >= 0)?previous[j - A[i - 1]]:0 
 
-                if (j == sumA / 2 && previous[j]) return true;
+                if (j == sumA / 2 && previous[j]){
+                    console.log(A[i])
+                    console.log(previous+'')
+                    return true;
+                }
             }
          // inb4 it actually works and its better(O(sumA+1)) space
     }
+    console.log(previous+'')
+
 
     return false;
 };
 
-
-// Best optimized way using BITS
-var canPartition = function(nums){
-    const bits = nums.reduce((acc, num) => acc | acc << BigInt(num),1n)
-    const acc = nums.reduce((acc, num) => acc + num)
-    return !(acc & 1) && bits >> BigInt(acc >> 1) & 1n
-};
 
 
 // so let's see
@@ -162,4 +273,12 @@ var canPartition = function(A){
 };
 
 
-console.log(canPartition([1, 5, 11, 5]));
+// Best optimized way using BITS
+var canPartition = function(nums){
+    const bits = nums.reduce((acc, num) => acc | acc << BigInt(num),1n)
+    const acc = nums.reduce((acc, num) => acc + num)
+    return !(acc & 1) && bits >> BigInt(acc >> 1) & 1n
+};
+
+
+console.log(DcanPartition([1, 5, 11, 5]));
