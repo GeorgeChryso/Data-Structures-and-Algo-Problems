@@ -121,50 +121,6 @@ var canPartition = function(A) {
     return false;
 };
 
-// optimization using bits and 2 states
-var canPartition = function(A) {
-    var sumA = A.reduce((acc, curr) => acc + curr);
-
-    if (sumA % 2) return false;
-
-
-    // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
-    console.log((sumA/2 ).toString(2))
-    let start=BigInt(1)<<BigInt((sumA/2)+1)
-    //essentially switch the first bit of start to 1
-    // start|=start^1<<1
-
-    //extend the bits so ican have more 0s
-    // start=start<<25
-    console.log(start.toString(2))
-
-    var previous=start
-    console.log(`sumA /2 =`,sumA/2)
-    for (const weight of A) {
-        console.log(previous.toString(2) , `weight was `,weight)
-        previous=(previous)|(previous>>BigInt(weight))
-        //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
-        //so i need to check the sumA/2'th column (bit) and return true if its set
-        console.log(`checking`)
-        let ta=1n
-        //ti thelw na elegksw an einai 1
-        ta=ta<<(BigInt(sumA/2+1)-BigInt(sumA/2))
-        console.log(ta.toString(2),`=ta`,)
-        if(previous&ta ){
-            console.log(previous.toString(2) ,`check`)
-            return true
-        }
-
-       // if(previous&(1<<((sumA/2 +1)-1)) )return true
-    }
-    console.log(previous.toString(2) )
-
-    return false
-
-
-};
-
-
 
 // optimization one row
 var canPartition = function(A) {
@@ -226,31 +182,38 @@ var canPartition = function(A) {
 
 
 
-// so let's see
-var canPartition = function(A){
-    var sumA = A.reduce((acc, curr) => acc + curr);
-    //sumA&1 means => take the bit representation of sumA and & it with ...00001\
-    // if the last bit ends in 1 , that means that sumA&1 will return true
-    // that means that sumA is not divisible by two, becaue its last bit is one
-    // and 1&1=1, so the result will be 0000001=1 => true
-    // On the other hand, if the number isn't odd, that means that its last bit is definitely 0, so by extension sumA&1=....0 & ...01=...00 cos 0&1=0
-    // So i could definitely replace 
-    // if (sumA % 2) return false;
-    // with 
-    if(! (sumA&1))return false
-    // another way to check if a number is even or odd is 
-    // shifting left and right by 1 bit on order to see if the last bit was 0 in the first place
-    // if(sumA>>1<<1===sumA) then sumA is even because I removed 1 zero and readded it with the left shift and the number did not change 
-    // whereas if sumA was odd
-    // sumA>>1<<1 != sumA, cos the last bit was 1, i shifted it to the right( removed it) and placed a 0 as the last bit on its stead, creating a different number
-    
-    let intitial=1
-    for (const weight of A) {
-        intitial=intitial|(intitial<<weight)
-    }
-    return  intitial[sumA >> 1];
-};
 
+
+// optimization using bits and 2 states
+var canPartition = function(A) {
+    var sumA = A.reduce((acc, curr) => acc + curr);
+
+    if (sumA % 2) return false;
+    // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
+    let start=BigInt(1)<<BigInt((sumA/2)+1)
+ 
+
+    var previous=start
+    for (const weight of A) {
+        previous=(previous)|(previous>>BigInt(weight))
+        //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
+        //so i need to check the sumA/2'th column (bit) and return true if its set
+        let ta=1n
+        //ti thelw na elegksw an einai 1
+        ta=ta<<(BigInt(sumA/2+1)-BigInt(sumA/2))
+        if(previous&ta ){
+            console.log(previous.toString(2) ,`check`)
+            return true
+        }
+
+       // if(previous&(1<<((sumA/2 +1)-1)) )return true
+    }
+    console.log(previous.toString(2) )
+
+    return false
+
+
+};
 
 
 
