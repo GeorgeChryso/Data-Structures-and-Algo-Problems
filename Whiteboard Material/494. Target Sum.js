@@ -119,12 +119,12 @@ var findTargetSumWays = function(Arr, S) {
     // where P is the positives that I choose
     if((sum<S)||(S+sum)%2)return 0
 
-    //??
+    //lol that's actually dividing the S+sum by two
     S=(S+sum)>>1
 
 
 
-    //prolly storing the sums here
+    //and just using one array optimization for a classic knapsack
     let dp=Array(S+1).fill(0)
     dp[0]=1
 
