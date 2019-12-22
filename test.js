@@ -34,4 +34,4 @@
 
 
 
-console.log(Boolean(5&1))
+console.log(21&5)

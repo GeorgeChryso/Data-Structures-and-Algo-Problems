@@ -130,29 +130,32 @@ var DcanPartition = function(A) {
 
     // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
     console.log((sumA/2 ).toString(2))
-    let start=(sumA/2)&0 
+    let start=BigInt(1)<<BigInt((sumA/2)+1)
     //essentially switch the first bit of start to 1
-    start|=start^1<<1
+    // start|=start^1<<1
 
     //extend the bits so ican have more 0s
-    start=start<<25
+    // start=start<<25
     console.log(start.toString(2))
 
     var previous=start
     console.log(`sumA /2 =`,sumA/2)
     for (const weight of A) {
         console.log(previous.toString(2) , `weight was `,weight)
-        previous=(previous)|(previous>>weight)
+        previous=(previous)|(previous>>BigInt(weight))
         //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
         //so i need to check the sumA/2'th column (bit) and return true if its set
         console.log(`checking`)
-        let ta=1
-        ta=ta<<(sumA/2-1)
-        ta=ta<<25
-        console.log(ta.toString(2))
-        if(previous&ta )return true
+        let ta=1n
+        //ti thelw na elegksw an einai 1
+        ta=ta<<(BigInt(sumA/2+1)-BigInt(sumA/2))
+        console.log(ta.toString(2),`=ta`,)
+        if(previous&ta ){
+            console.log(previous.toString(2) ,`check`)
+            return true
+        }
 
-        if(previous&(1<<((sumA/2 +1)-1)) )return true
+       // if(previous&(1<<((sumA/2 +1)-1)) )return true
     }
     console.log(previous.toString(2) )
 
@@ -243,23 +246,66 @@ var canPartition = function(A){
     
     let intitial=1
     for (const weight of A) {
-        intitial=intitial|intitial<<weight
+        intitial=intitial|(intitial<<weight)
     }
     return  intitial[sumA >> 1];
 };
 
 
+
+//dp without memo
+var canPartition = function(nums) {
+    nums.sort((a, b) => a - b);
+  
+    const sum = nums.reduce((acc, item) => acc + item);
+  
+    if (sum % 2 !== 0) {
+      return false;
+    }
+    const halfSum = sum / 2;
+  
+  
+  
+    const KS = (nums, s1, s2, i) => {
+        if (s1 < 0 || s2 < 0) return false;
+            if (i < 0) return s1 == 0 && s2 == 0;
+          if (nums[i] > s1) return KS(nums, s1, s2 - nums[i], i - 1);
+          else if (nums[i] > s2) return KS(nums, s1 - nums[i], s2, i - 1);
+          else return KS(nums, s1 - nums[i], s2, i - 1) ||
+              KS(nums, s1, s2 - nums[i], i - 1);
+    }
+  
+    return KS(nums, halfSum, halfSum, nums.length - 1);
+  };
+
+
+  
 // Best optimized way using BITS
+// now essentially this is a mirrored version of the knapsack table
+// not to worry, it's not that difficult to understand
 var canPartition = function(nums){
-    const acc = nums.reduce((acc, num) => acc + num)
-    if(! acc&1)return false
+    //start the accumulator as a BigInt(1)
+    // because the total sum can be bigger than 32 (but the standard numbers are 32-bit integer, so if i am to calculate higher shizzle u better turn tahat shit to BigInt)
+    // and keep leftshifting and |-ing every weight
+    let bits = nums.reduce((acc, num) => acc | acc << BigInt(num),1n)
+    // sum the array
+    let acc = nums.reduce((acc, num) => acc + num)
 
-    const bits = nums.reduce((acc, num) => acc | acc << BigInt(num),1n)
-    return bits >> BigInt(acc >> 1) & 1n
+    // if acc&1=1 that means that acc's last bit was 1, so acc was odd. As we said earlier we dont want it to be odd, so that has to acc&1 must be 0 (false)
+    // now, the bloke is left shifting 
+    if(acc&1)return false
+    // acc is definitely even now
+    // so acc/2 == acc>>1
+    acc=BigInt(acc/2)
+     
+    return Boolean((bits>>acc )&1n)
+    
+    // but what did the bloke do with the booleans?
+    // so esssentially i m moving the
+    return !(acc & 1) && bits >> BigInt(acc >> 1) & 1n
 };
-
-
-console.log(DcanPartition(
-
-    [1,1]
+console.log(canPartition(
+    //[23,13,11,7,6,5,5]
+   [1,1]
+   // [1,2,5]
         ));
