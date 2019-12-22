@@ -78,7 +78,7 @@ var canPartition = function(A) {
 
 // ok let's optimize this a bit by just creating 2 rows of length sumA/2 +1
 // which should be sufficient to reduce memory constraints
-var DcanPartition = function(A) {
+var canPartition = function(A) {
     var sumA = A.reduce((acc, curr) => acc + curr);
 
     if (sumA % 2) return false;
@@ -122,7 +122,7 @@ var DcanPartition = function(A) {
 };
 
 // optimization using bits and 2 states
-var DcanPartition = function(A) {
+var canPartition = function(A) {
     var sumA = A.reduce((acc, curr) => acc + curr);
 
     if (sumA % 2) return false;
@@ -253,30 +253,6 @@ var canPartition = function(A){
 
 
 
-//dp without memo
-var canPartition = function(nums) {
-    nums.sort((a, b) => a - b);
-  
-    const sum = nums.reduce((acc, item) => acc + item);
-  
-    if (sum % 2 !== 0) {
-      return false;
-    }
-    const halfSum = sum / 2;
-  
-  
-  
-    const KS = (nums, s1, s2, i) => {
-        if (s1 < 0 || s2 < 0) return false;
-            if (i < 0) return s1 == 0 && s2 == 0;
-          if (nums[i] > s1) return KS(nums, s1, s2 - nums[i], i - 1);
-          else if (nums[i] > s2) return KS(nums, s1 - nums[i], s2, i - 1);
-          else return KS(nums, s1 - nums[i], s2, i - 1) ||
-              KS(nums, s1, s2 - nums[i], i - 1);
-    }
-  
-    return KS(nums, halfSum, halfSum, nums.length - 1);
-  };
 
 
   
@@ -299,13 +275,30 @@ var canPartition = function(nums){
     acc=BigInt(acc/2)
      
     return Boolean((bits>>acc )&1n)
-    
-    // but what did the bloke do with the booleans?
-    // so esssentially i m moving the
-    return !(acc & 1) && bits >> BigInt(acc >> 1) & 1n
+
 };
+
+
+//backtracking 
+var canPartition=(A)=>{
+    A.sort((a,b)=>a-b)
+    const sum= A.reduce((acc,curr)=>acc+curr)
+    if(sum&1)return false
+
+    let target=sum/2
+
+    var twoChoices=(pick,ignore,index)=>{
+        if(pick<target|| ignore<target ||index<0)return false
+        if(pick==target||ignore==target)return true
+
+        return twoChoices(pick-A[index],ignore,index-1)||twoChoices(ignore-A[index],pick,index-1)
+
+    }
+
+    return twoChoices(sum,sum,A.length-1)
+}
 console.log(canPartition(
     //[23,13,11,7,6,5,5]
-   [1,1]
-   // [1,2,5]
+ // [1,1]
+   [1,2,5]
         ));
