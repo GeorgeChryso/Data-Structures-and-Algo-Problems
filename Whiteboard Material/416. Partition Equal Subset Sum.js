@@ -7,70 +7,95 @@
 
 // O(n^2)
 const canPartition = A => {
-    let totalSum = nums.reduce((acc,curr)=>acc+curr);
-    if (totalSum%2) return false;
+    let totalSum = nums.reduce((acc, curr) => acc + curr);
+    if (totalSum % 2) return false;
 
-    const target=totalSum/2
+    const target = totalSum / 2;
     const memo = new Set([0]);
 
     for (let number of A) {
-        let possibleSums=Array.from(memo)
+        let possibleSums = Array.from(memo);
         for (let possibleSum of possibleSums) {
-            memo.add(possibleSum+number)
+            memo.add(possibleSum + number);
         }
     }
     return memo.has(target);
-}
+};
 
 const canPartition = nums => {
-    let total = nums.reduce((c,a)=>a+c,0);
-    if (total%2 !== 0) return false;
-    total/=2;
+    let total = nums.reduce((c, a) => a + c, 0);
+    if (total % 2 !== 0) return false;
+    total /= 2;
     const memo = new Set([0]);
-    console.log(0,0,true)
-    for (let i=0; i<nums.length; i++){
+    console.log(0, 0, true);
+    for (let i = 0; i < nums.length; i++) {
         const num = nums[i];
-        Array.from(memo).forEach(subTotal=>memo.add(subTotal+num));
+        Array.from(memo).forEach(subTotal => memo.add(subTotal + num));
     }
     return memo.has(total);
-}
+};
 
+//backtracking
+var canPartition = A => {
+    A.sort((a, b) => a - b); //key
+    const sum = A.reduce((acc, curr) => acc + curr);
+    if (sum & 1) return false;
 
-//backtracking 
-var canPartition=(A)=>{
-    A.sort((a,b)=>a-b)
-    const sum= A.reduce((acc,curr)=>acc+curr)
-    if(sum&1)return false
+    let target = sum / 2;
 
-    let target=sum/2
+    var twoChoices = (pick, ignore, index) => {
+        if (pick < target || ignore < target || index < 0) return false;
+        if (pick == target || ignore == target) return true;
 
-    var twoChoices=(pick,ignore,index)=>{
-        if(pick<target|| ignore<target ||index<0)return false
-        if(pick==target||ignore==target)return true
+        return (
+            twoChoices(pick - A[index], ignore, index - 1) ||
+            twoChoices(ignore - A[index], pick, index - 1)
+        );
+    };
 
-        return twoChoices(pick-A[index],ignore,index-1)||twoChoices(ignore-A[index],pick,index-1)
+    return twoChoices(sum, sum, A.length - 1);
+};
 
-    }
+// bottom-top bktrk TLE
+var canPartition = A => {
+    A.sort((a, b) => a - b);
+    const sum = A.reduce((acc, curr) => acc + curr);
+    if (sum & 1) return false;
 
-    return twoChoices(sum,sum,A.length-1)
-}
+    let target = sum / 2;
 
-//dfs (2^n)
-var canPartition=(A)=>{
-    const sum= A.reduce((acc,curr)=>acc+curr)
-    if(sum&1)return false
+    var twoChoices = (pick, ignore, index) => {
+        if (pick < target || ignore < target || index >= A.length) return false;
+        if (pick == target || ignore == target) return true;
 
-    let target=sum/2
+        return (
+            twoChoices(pick - A[index], ignore, index + 1) ||
+            twoChoices(ignore - A[index], pick, index + 1)
+        );
+    };
 
-    var twoChoices=(currSum, index)=>{
-       if(currSum==target)return true
-       if(currSum>target || index>=A.length)return false
-       
-       return twoChoices(currSum+A[index],index+1)||twoChoices(currSum,index+1)
-    }
+    return twoChoices(sum, sum, 0);
+};
 
-    return twoChoices(0,0)
-}
+//dfs (2^n) TLE
+var canPartition = A => {
+    const sum = A.reduce((acc, curr) => acc + curr);
+    if (sum & 1) return false;
+
+    let target = sum / 2;
+
+    var twoChoices = (currSum, index) => {
+        if (currSum == target) return true;
+        if (currSum > target || index >= A.length) return false;
+
+        return (
+            twoChoices(currSum + A[index], index + 1) ||
+            twoChoices(currSum, index + 1)
+        );
+    };
+
+    return twoChoices(0, 0);
+};
 
 //  K   N   A   P   S   A   C   K       S   O   L   U   T   I   O   N
 // Let us see what we seek: Whether (boolean) there is a pair of partition subsets
@@ -148,40 +173,35 @@ var canPartition = function(A) {
 
     if (sumA % 2) return false;
 
-    var previous = new Array((sumA / 2) + 1).fill(0);
+    var previous = new Array(sumA / 2 + 1).fill(0);
 
-
-        //var current = new Array(sumA / 2 + 1).fill(0);
-        //or if youre kewl
-    var current=[...previous] // copies the array, same as
-        // var current=Array.from(previous) //l8am8a
+    //var current = new Array(sumA / 2 + 1).fill(0);
+    //or if youre kewl
+    var current = [...previous]; // copies the array, same as
+    // var current=Array.from(previous) //l8am8a
     previous[0] = 1;
 
     for (let i = 1; i < A.length; i++) {
-   
         //OLD WAY ,with hard copying the previous array
-                for (let j = 0; j <= sumA / 2; j++) {
-                    current[j] = 0;
-                    //I know that i-1>=0 so i dont need an extra chec   k for that
-                    current[j] += previous[j];
-                    if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
+        for (let j = 0; j <= sumA / 2; j++) {
+            current[j] = 0;
+            //I know that i-1>=0 so i dont need an extra chec   k for that
+            current[j] += previous[j];
+            if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
 
-                    if (j == sumA / 2 && current[j]) return true;
-                }
-                //that's O(sumA/2+1) complexity
-                //copy the array (choose one of them)
-                     previous = current.slice(0); // seems to be faster than spread operator
-                    //  previous=Object.values(current)
-                    //   previous=current.map(d=>d)
-                    // previous=JSON.parse(JSON.stringify(current))
-                    //previous=Array.from(current)
-
-
+            if (j == sumA / 2 && current[j]) return true;
+        }
+        //that's O(sumA/2+1) complexity
+        //copy the array (choose one of them)
+        previous = current.slice(0); // seems to be faster than spread operator
+        //  previous=Object.values(current)
+        //   previous=current.map(d=>d)
+        // previous=JSON.parse(JSON.stringify(current))
+        //previous=Array.from(current)
     }
 
     return false;
 };
-
 
 // optimization one row
 var canPartition = function(A) {
@@ -189,61 +209,53 @@ var canPartition = function(A) {
 
     if (sumA % 2) return false;
 
-    var previous = new Array((sumA / 2) + 1).fill(0);
-
+    var previous = new Array(sumA / 2 + 1).fill(0);
 
     //with the new way I end up not needing as second array (LOOK further down)
-        //var current = new Array(sumA / 2 + 1).fill(0);
-        //or if youre kewl
-        // var current=[...previous] // copies the array, same as
-        // var current=Array.from(previous) //l8am8a
+    //var current = new Array(sumA / 2 + 1).fill(0);
+    //or if youre kewl
+    // var current=[...previous] // copies the array, same as
+    // var current=Array.from(previous) //l8am8a
     previous[0] = 1;
 
     for (let i = 1; i < A.length; i++) {
-        console.log(A[i-1])
-        console.log(previous+'')
+        console.log(A[i - 1]);
+        console.log(previous + '');
 
         //OLD WAY ,with hard copying the previous array
-                // for (let j = 0; j <= sumA / 2; j++) {
-                //     current[j] = 0;
-                //     //I know that i-1>=0 so i dont need an extra chec   k for that
-                //     current[j] += previous[j];
-                //     if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
+        // for (let j = 0; j <= sumA / 2; j++) {
+        //     current[j] = 0;
+        //     //I know that i-1>=0 so i dont need an extra chec   k for that
+        //     current[j] += previous[j];
+        //     if (j - A[i - 1] >= 0) current[j] += previous[j - A[i - 1]];
 
-                //     if (j == sumA / 2 && current[j]) return true;
-                // }
-                //that's O(sumA/2+1) complexity
-                //copy the array (choose one of them)
-                    // previous = current.slice(0); // seems to be faster than spread operator
-                    //  previous=Object.values(current)
-                    //   previous=current.map(d=>d)
-                    // previous=JSON.parse(JSON.stringify(current))
-                    //previous=Array.from(current)
-
+        //     if (j == sumA / 2 && current[j]) return true;
+        // }
+        //that's O(sumA/2+1) complexity
+        //copy the array (choose one of them)
+        // previous = current.slice(0); // seems to be faster than spread operator
+        //  previous=Object.values(current)
+        //   previous=current.map(d=>d)
+        // previous=JSON.parse(JSON.stringify(current))
+        //previous=Array.from(current)
 
         // New way, better runtime and space cos i m not hard copying the array
-            //ok it's actually big brain time, what if I only use just one array and traverse it from right to left HUUUUUUUUH? what if I just use previous and just update it leftwards in order for me to not alter the important columns
-            for (let j = sumA/2; j >=0; j--){
+        //ok it's actually big brain time, what if I only use just one array and traverse it from right to left HUUUUUUUUH? what if I just use previous and just update it leftwards in order for me to not alter the important columns
+        for (let j = sumA / 2; j >= 0; j--) {
+            previous[j] += j - A[i - 1] >= 0 ? previous[j - A[i - 1]] : 0;
 
-                previous[j]+=(j - A[i - 1] >= 0)?previous[j - A[i - 1]]:0 
-
-                if (j == sumA / 2 && previous[j]){
-                    console.log(A[i])
-                    console.log(previous+'')
-                    return true;
-                }
+            if (j == sumA / 2 && previous[j]) {
+                console.log(A[i]);
+                console.log(previous + '');
+                return true;
             }
-         // inb4 it actually works and its better(O(sumA+1)) space
+        }
+        // inb4 it actually works and its better(O(sumA+1)) space
     }
-    console.log(previous+'')
-
+    console.log(previous + '');
 
     return false;
 };
-
-
-
-
 
 // optimization using bits and 2 states
 var canPartition = function(A) {
@@ -251,52 +263,44 @@ var canPartition = function(A) {
 
     if (sumA % 2) return false;
     // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
-    let start=1n<<BigInt((sumA/2)+1)
- 
+    let start = 1n << BigInt(sumA / 2 + 1);
 
-    var previous=start
+    var previous = start;
     for (const weight of A) {
-        previous=(previous)|(previous>>BigInt(weight))
+        previous = previous | (previous >> BigInt(weight));
         //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
         //so i need to check the sumA/2'th column (bit) and return true if its set
-        let checking=1n<<(BigInt(sumA/2+1)-BigInt(sumA/2))
-        if(previous&checking)return true
-        
+        let checking = 1n << (BigInt(sumA / 2 + 1) - BigInt(sumA / 2));
+        if (previous & checking) return true;
     }
-    return false
-
-
+    return false;
 };
 
-
-
-
-  
 // Best optimized way using BITS
 // now essentially this is a mirrored version of the knapsack table
 // not to worry, it's not that difficult to understand
-var canPartition = function(nums){
+var canPartition = function(nums) {
     //start the accumulator as a BigInt(1)
     // because the total sum can be bigger than 32 (but the standard numbers are 32-bit integer, so if i am to calculate higher shizzle u better turn tahat shit to BigInt)
     // and keep leftshifting and |-ing every weight
-    let bits = nums.reduce((acc, num) => acc | acc << BigInt(num),1n)
+    let bits = nums.reduce((acc, num) => acc | (acc << BigInt(num)), 1n);
     // sum the array
-    let acc = nums.reduce((acc, num) => acc + num)
+    let acc = nums.reduce((acc, num) => acc + num);
 
     // if acc&1=1 that means that acc's last bit was 1, so acc was odd. As we said earlier we dont want it to be odd, so that has to acc&1 must be 0 (false)
-    // now, the bloke is left shifting 
-    if(acc&1)return false
+    // now, the bloke is left shifting
+    if (acc & 1) return false;
     // acc is definitely even now
     // so acc/2 == acc>>1
-    acc=BigInt(acc/2)
-     
-    return Boolean((bits>>acc )&1n)
+    acc = BigInt(acc / 2);
 
+    return Boolean((bits >> acc) & 1n);
 };
 
-
-console.log(canPartition(
-    //[23,13,11,7,6,5,5]
- // [1,1]
-   [1,2,5]
-        ));
+console.log(
+    canPartition(
+        //[23,13,11,7,6,5,5]
+        // [1,1]
+        [1, 2, 5]
+    )
+);
