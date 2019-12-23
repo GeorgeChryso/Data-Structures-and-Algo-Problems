@@ -5,7 +5,72 @@
 // Each of the array element will not exceed 100.
 // The array size will not exceed 200.
 
+// O(n^2)
+const canPartition = A => {
+    let totalSum = nums.reduce((acc,curr)=>acc+curr);
+    if (totalSum%2) return false;
 
+    const target=totalSum/2
+    const memo = new Set([0]);
+
+    for (let number of A) {
+        let possibleSums=Array.from(memo)
+        for (let possibleSum of possibleSums) {
+            memo.add(possibleSum+number)
+        }
+    }
+    return memo.has(target);
+}
+
+const canPartition = nums => {
+    let total = nums.reduce((c,a)=>a+c,0);
+    if (total%2 !== 0) return false;
+    total/=2;
+    const memo = new Set([0]);
+    console.log(0,0,true)
+    for (let i=0; i<nums.length; i++){
+        const num = nums[i];
+        Array.from(memo).forEach(subTotal=>memo.add(subTotal+num));
+    }
+    return memo.has(total);
+}
+
+
+//backtracking 
+var canPartition=(A)=>{
+    A.sort((a,b)=>a-b)
+    const sum= A.reduce((acc,curr)=>acc+curr)
+    if(sum&1)return false
+
+    let target=sum/2
+
+    var twoChoices=(pick,ignore,index)=>{
+        if(pick<target|| ignore<target ||index<0)return false
+        if(pick==target||ignore==target)return true
+
+        return twoChoices(pick-A[index],ignore,index-1)||twoChoices(ignore-A[index],pick,index-1)
+
+    }
+
+    return twoChoices(sum,sum,A.length-1)
+}
+
+//dfs (2^n)
+var canPartition=(A)=>{
+    const sum= A.reduce((acc,curr)=>acc+curr)
+    if(sum&1)return false
+
+    let target=sum/2
+
+    var twoChoices=(currSum, index)=>{
+       if(currSum==target)return true
+       if(currSum>target || index>=A.length)return false
+       
+       return twoChoices(currSum+A[index],index+1)||twoChoices(currSum,index+1)
+    }
+
+    return twoChoices(0,0)
+}
 
 //  K   N   A   P   S   A   C   K       S   O   L   U   T   I   O   N
 // Let us see what we seek: Whether (boolean) there is a pair of partition subsets
@@ -93,9 +158,7 @@ var canPartition = function(A) {
     previous[0] = 1;
 
     for (let i = 1; i < A.length; i++) {
-        console.log(A[i-1])
-        console.log(previous+'')
-
+   
         //OLD WAY ,with hard copying the previous array
                 for (let j = 0; j <= sumA / 2; j++) {
                     current[j] = 0;
@@ -115,8 +178,6 @@ var canPartition = function(A) {
 
 
     }
-    console.log(previous+'')
-
 
     return false;
 };
@@ -190,7 +251,7 @@ var canPartition = function(A) {
 
     if (sumA % 2) return false;
     // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
-    let start=BigInt(1)<<BigInt((sumA/2)+1)
+    let start=1n<<BigInt((sumA/2)+1)
  
 
     var previous=start
@@ -198,18 +259,10 @@ var canPartition = function(A) {
         previous=(previous)|(previous>>BigInt(weight))
         //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
         //so i need to check the sumA/2'th column (bit) and return true if its set
-        let ta=1n
-        //ti thelw na elegksw an einai 1
-        ta=ta<<(BigInt(sumA/2+1)-BigInt(sumA/2))
-        if(previous&ta ){
-            console.log(previous.toString(2) ,`check`)
-            return true
-        }
-
-       // if(previous&(1<<((sumA/2 +1)-1)) )return true
+        let checking=1n<<(BigInt(sumA/2+1)-BigInt(sumA/2))
+        if(previous&checking)return true
+        
     }
-    console.log(previous.toString(2) )
-
     return false
 
 
@@ -242,24 +295,6 @@ var canPartition = function(nums){
 };
 
 
-//backtracking 
-var canPartition=(A)=>{
-    A.sort((a,b)=>a-b)
-    const sum= A.reduce((acc,curr)=>acc+curr)
-    if(sum&1)return false
-
-    let target=sum/2
-
-    var twoChoices=(pick,ignore,index)=>{
-        if(pick<target|| ignore<target ||index<0)return false
-        if(pick==target||ignore==target)return true
-
-        return twoChoices(pick-A[index],ignore,index-1)||twoChoices(ignore-A[index],pick,index-1)
-
-    }
-
-    return twoChoices(sum,sum,A.length-1)
-}
 console.log(canPartition(
     //[23,13,11,7,6,5,5]
  // [1,1]
