@@ -32,6 +32,11 @@
 
 // console.log(typeof res)
 
+let da=new Set()
+da.add([2,2,3])
 
+let du=new Map()
+du.set([1],2)
 
-console.log(21&5)
+console.log(da.has([2,2,3]))
+console.log(du.has([1]))

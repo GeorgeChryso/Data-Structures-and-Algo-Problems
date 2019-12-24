@@ -58,7 +58,7 @@ var canPartition = A => {
 
 //backtracking v2 O(2^n)
 var canPartition = A => {
-    A.sort((a, b) => a - b); //key
+   // A.sort((a, b) => a - b); //key
     const sum = A.reduce((acc, curr) => acc + curr);
     if (sum & 1) return false;
 
