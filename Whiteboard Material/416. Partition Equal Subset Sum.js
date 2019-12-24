@@ -56,6 +56,48 @@ var canPartition = A => {
     return twoChoices(sum, sum, A.length - 1);
 };
 
+//backtracking v2 O(2^n)
+var canPartition = A => {
+    A.sort((a, b) => a - b); //key
+    const sum = A.reduce((acc, curr) => acc + curr);
+    if (sum & 1) return false;
+
+    let target = sum / 2;
+
+    var twoChoices = (currSum, remaining, index) => {
+        if (currSum>target ||(currSum+remaining)<target|| index >=A.length) return false;
+        if (currSum == target || remaining == target) return true;
+
+        return (
+            twoChoices(currSum+A[index],remaining-A[index],index+1)||twoChoices(currSum,remaining-A[index],index+1)
+        );
+    };
+
+    return twoChoices(0, sum, 0);
+};
+
+// optimzied ?
+var canPartition = A => {
+    A.sort((a, b) => a - b); //key
+    const sum = A.reduce((acc, curr) => acc + curr);
+    if (sum & 1) return false;
+
+    let target = sum / 2;
+
+    var twoChoices = (currSum, remaining, index) => {
+        if (currSum>target ||(currSum+remaining)<target|| index <0) return false;
+        if (currSum == target || remaining == target) return true;
+
+        return (
+            twoChoices(currSum+A[index],remaining-A[index],index-1)||twoChoices(currSum,remaining-A[index],index-1)
+        );
+    };
+
+    return twoChoices(0, sum, A.length-1);
+};
+
+
+
 // bottom-top bktrk TLE
 var canPartition = A => {
     A.sort((a, b) => a - b);
@@ -65,16 +107,16 @@ var canPartition = A => {
     let target = sum / 2;
 
     var twoChoices = (pick, ignore, index) => {
-        if (pick < target || ignore < target || index >= A.length) return false;
+        if (pick > target || ignore > target || index >= A.length) return false;
         if (pick == target || ignore == target) return true;
 
         return (
-            twoChoices(pick - A[index], ignore, index + 1) ||
-            twoChoices(ignore - A[index], pick, index + 1)
+            twoChoices(pick +A[index], ignore, index + 1) ||
+            twoChoices(ignore + A[index], pick, index + 1)
         );
     };
 
-    return twoChoices(sum, sum, 0);
+    return twoChoices(0, 0, 0);
 };
 
 //dfs (2^n) TLE
