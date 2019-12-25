@@ -67,27 +67,27 @@ var combinationSum = function(A, target) {
 
 //optimized
   const combinationSum = (candidates, target) => {
-    const candidateslen = candidates.length
-    const resultArr = []
-    const backtracking = (arr, sum, start) => {
-      if (sum > target) {
-        return
+    const result = []
+    const backtracking = (path, currSum, index) => {
+      if (currSum > target)return
+      if (currSum === target)return result.push(path.slice(0))
+      
+    
+      while(index<candidates.length){
+        const item = candidates[index]
+        path.push(item)
+        //try to add the element
+        backtracking(path, currSum + item,index)
+        //when ure here all the possibilities will be explored
+        path.pop()
+        index++
       }
-      if (sum === target) {
-        resultArr.push([...arr])
-        return
-      }
-      for (let i = start; i < candidateslen; i += 1) {
-        const item = candidates[i]
-        arr.push(item)
-        backtracking(arr, sum + item, i)
-        arr.pop()
-      }
+      
     }
   
     backtracking([], 0, 0)
   
-    return resultArr
+    return result
   } 
 console.log(dcombinationSum(
    [2,3,6,7],7
