@@ -71,7 +71,6 @@ var canPartition = (candidates) => {
     const backtracking = (remaining, index) => {
         if (remaining <0  || index<0)return false
         if (remaining === 0)return true
-        console.log(remaining)
 
         return backtracking(remaining-candidates[index],index-1)||backtracking(remaining,index-1)
 

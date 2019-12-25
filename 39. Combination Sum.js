@@ -70,7 +70,7 @@ var combinationSum = function(A, target) {
     const result = []
     const backtracking = (path, currSum, index) => {
       if (currSum > target)return
-      if (currSum === target)return result.push(path.slice(0))
+      if (currSum === target)return result.push([...path])
       
     
       while(index<candidates.length){
@@ -82,13 +82,36 @@ var combinationSum = function(A, target) {
         path.pop()
         index++
       }
-      
+
     }
   
     backtracking([], 0, 0)
   
     return result
   } 
+
+
+  function combinationSum(candidates, target) {
+    candidates.sort((a, b) => a - b);
+  
+    var length = candidates.length;
+    var res = [];
+
+    function search(idx, prefix, target) {
+        if (idx === length || target<=0) return;
+        if (target === 0)return res.push(prefix.slice());
+  
+        prefix.push(candidates[idx]);
+        search(idx, prefix, target - candidates[idx]);
+        prefix.pop();
+        search(idx + 1, prefix, target);
+      }
+    
+    search(0, [], target);
+    return res;
+  
+   
+  };
 console.log(dcombinationSum(
    [2,3,6,7],7
     //[1],2
