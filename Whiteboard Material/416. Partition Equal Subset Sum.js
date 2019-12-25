@@ -5,7 +5,7 @@
 // Each of the array element will not exceed 100.
 // The array size will not exceed 200.
 
-// O(n^2)
+// O(2^n)
 var canPartition = A => {
     let totalSum = nums.reduce((acc, curr) => acc + curr);
     if (totalSum % 2) return false;
@@ -22,65 +22,10 @@ var canPartition = A => {
     return memo.has(target);
 };
 
-var canPartition = nums => {
-    let total = nums.reduce((c, a) => a + c, 0);
-    if (total % 2 !== 0) return false;
-    total /= 2;
-    const memo = new Set([0]);
-    console.log(0, 0, true);
-    for (let i = 0; i < nums.length; i++) {
-        const num = nums[i];
-        Array.from(memo).forEach(subTotal => memo.add(subTotal + num));
-    }
-    return memo.has(total);
-};
 
 
-
-//backtracking v2 O(2^n)
-var canPartition = A => {
-   // A.sort((a, b) => a - b); //key
-    const sum = A.reduce((acc, curr) => acc + curr);
-    if (sum & 1) return false;
-
-    let target = sum / 2;
-
-    var twoChoices = (currSum, remaining, index) => {
-        if (currSum>target ||(currSum+remaining)<target|| index >=A.length) return false;
-        if (currSum == target || remaining == target) return true;
-
-        return (
-            twoChoices(currSum+A[index],remaining-A[index],index+1)||twoChoices(currSum,remaining-A[index],index+1)
-        );
-    };
-
-    return twoChoices(0, sum, 0);
-};
-
-// optimzied ?
-var canPartition = A => {
-    A.sort((a, b) => a - b); //key
-    const sum = A.reduce((acc, curr) => acc + curr);
-    if (sum & 1) return false;
-
-    let target = sum / 2;
-
-    var twoChoices = (currSum, remaining, index) => {
-        if (currSum>target ||(currSum+remaining)<target|| index <0) return false;
-        if (currSum == target || remaining == target) return true;
-
-        return (
-            twoChoices(currSum+A[index],remaining-A[index],index-1)||twoChoices(currSum,remaining-A[index],index-1)
-        );
-    };
-
-    return twoChoices(0, sum, A.length-1);
-};
-
-
-
+//TLE starting from the target
 var canPartition=candidates=>{
-    candidates.sort((a, b) => a - b); //key
     let target=candidates.reduce((acc, curr) => acc + curr)
     if (target%2) return false;
     target/=2
@@ -89,7 +34,6 @@ var canPartition=candidates=>{
     const backtracking = (remaining, index) => {
         if (remaining <candidates[index]  || index>=candidates.length)return false
         if (remaining === candidates[index])return true
-        console.log(remaining)
 
         return backtracking(remaining-candidates[index],index+1)||backtracking(remaining,index+1)
 
@@ -138,27 +82,24 @@ var canPartition = (candidates) => {
   } 
 
   //backtracking works fast
-var DDcanPartition = A => {
-    A.sort((a, b) => a - b); //key
-    const sum = A.reduce((acc, curr) => acc + curr);
-    if (sum & 1) return false;
+  var canPartition=candidates=>{
+  
+    candidates.sort((a, b) => b- a); //key FOR TLE OJ
+    let target=candidates.reduce((acc, curr) => acc + curr)
+    if (target%2) return false;
+    target/=2
 
-    let target = sum / 2;
+    
+    const backtracking = (remaining, index) => {
+        if (remaining <candidates[index]  || index>=candidates.length)return false
+        if (remaining === candidates[index])return true
 
-    var twoChoices = (pick, ignore, index) => {
-        console.log(pick,ignore,index)
-        if (pick < target || ignore < target || index < 0) return false;
-        if (pick == target || ignore == target) return true;
+        return backtracking(remaining-candidates[index],index+1)||backtracking(remaining,index+1)
 
-        return (
-            twoChoices(pick - A[index], ignore, index - 1) ||
-            twoChoices(ignore - A[index], pick, index - 1)
-        );
-    };
-
-    return twoChoices(sum, sum, A.length - 1);
-};
-
+    }
+  
+    return backtracking(target,0)
+}
 
 
 //  K   N   A   P   S   A   C   K       S   O   L   U   T   I   O   N
