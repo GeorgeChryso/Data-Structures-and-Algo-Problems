@@ -34,9 +34,17 @@
 
 let da=new Set()
 da.add([2,2,3])
+let z=[2,2,3]
+da.add(z)
+
 
 let du=new Map()
 du.set([1],2)
 
+let wm=new WeakMap()
+wm.set([2,2,3])
+
+console.log(da.has(z))
+console.log(wm.has([2,2,3]))
 console.log(da.has([2,2,3]))
 console.log(du.has([1]))
