@@ -24,24 +24,6 @@ var canPartition = A => {
 
 
 
-//TLE starting from the target
-var canPartition=candidates=>{
-    let target=candidates.reduce((acc, curr) => acc + curr)
-    if (target%2) return false;
-    target/=2
-
-    
-    const backtracking = (remaining, index) => {
-        if (remaining <candidates[index]  || index>=candidates.length)return false
-        if (remaining === candidates[index])return true
-
-        return backtracking(remaining-candidates[index],index+1)||backtracking(remaining,index+1)
-
-    }
-  
-    return backtracking(target,0)
-}
-
 //clear backtracking, TLE
 var canPartition = (candidates) => {
     let target=candidates.reduce((acc, curr) => acc + curr)
