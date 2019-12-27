@@ -223,7 +223,7 @@ var canPartition = function(A) {
         //  previous=Object.values(current)
         //   previous=current.map(d=>d)
         // previous=JSON.parse(JSON.stringify(current))
-        //previous=Array.from(current)
+        // previous=Array.from(current)
 
         // New way, better runtime and space cos i m not hard copying the array
         //ok it's actually big brain time, what if I only use just one array and traverse it from right to left HUUUUUUUUH? what if I just use previous and just update it leftwards in order for me to not alter the important columns
