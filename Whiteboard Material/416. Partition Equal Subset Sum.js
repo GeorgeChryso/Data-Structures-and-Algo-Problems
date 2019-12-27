@@ -249,17 +249,17 @@ var canPartition = function(A) {
 
     if (sumA % 2) return false;
     // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
-    let start = 1n << BigInt(sumA / 2 + 1);
+    let start = 1n << BigInt(sumA / 2 );
 
     var previous = start;
     for (const weight of A) {
         previous = previous | (previous >> BigInt(weight));
         //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
         //so i need to check the sumA/2'th column (bit) and return true if its set
-        let checking = 1n << (BigInt(sumA / 2 + 1) - BigInt(sumA / 2));
-        if (previous & checking) return true;
+      
     }
-    return false;
+    // check the the column corresponding to the sum by bitwise ANDing it with just 1,so if the first bit is 1, it will return true, otherwise false
+    return previous&1n;
 };
 
 // Best optimized way using BITS
