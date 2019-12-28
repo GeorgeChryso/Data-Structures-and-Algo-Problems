@@ -26,23 +26,29 @@ var canPartition = A => {
 
 //clear backtracking, TLE
 var canPartition = (candidates) => {
+    
+    //sumA
     let target=candidates.reduce((acc, curr) => acc + curr)
-    if (target%2) return false;
+    if (target%2) return false; //As we said our sum has to be dividible by two
     target/=2
 
     
     const backtracking = (currSum, index) => {
+        //if our Sum is bigger than my target there's no reason to continue expanding
         if (currSum > target || index>=candidates.length)return false
+        // when I reach my target, return true
         if (currSum === target)return true
-      
 
         return backtracking(currSum + candidates[index],index+1)||backtracking(currSum,index+1)
 
     }
   
     return backtracking(0,0)
-
   } 
+
+  //get's TLE'd on 
+  //[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,100]
+
 //  clear backtracking top bottom TLE
 var canPartition = (candidates) => {
     let target=candidates.reduce((acc, curr) => acc + curr)
@@ -65,7 +71,7 @@ var canPartition = (candidates) => {
   //backtracking works fast
   var canPartition=candidates=>{
   
-    candidates.sort((a, b) => b- a); //key FOR TLE OJ
+    candidates.sort((a, b) => b- a); //key for TLE :Essentially means: If you fail,do it fast
     let target=candidates.reduce((acc, curr) => acc + curr)
     if (target%2) return false;
     target/=2
@@ -150,6 +156,49 @@ var canPartition = function(A) {
     }
     console.log(dp.forEach(d => console.log(d + '')));
     return false;
+};
+
+
+var canPartition = function(A) {
+    //calculate the sum of my Array
+    var sumA = A.reduce((acc, curr) => acc + curr);
+
+    if (sumA % 2) return false;
+
+    //create Rows
+    // i want a row for each of my candidate elements+ one for my
+    // 0th element( no element ) which I know for a fact can add up to 0 if selected
+    var dp = new Array(A.length + 1).fill(null);
+
+    // create Columns
+    // My final total sum ranges from 0 to sumA, which are totally sumA+1 candidate weights(sums)
+    dp = dp.map(d => Array(sumA/2).fill(false));
+
+    // now that the matrix is created i have to use my base case which is:
+    // If there is a way for me to get sum=0, with 0 elements
+    dp[0][0] = true;    // of course there is
+
+
+    //now let's see what I actaully want to find
+    //if there is ANY subset, that adds Up to sumA/2
+    //so that would mean ANY element of the column A/2, that would be dp[;][A/2]
+
+
+    //here i=0 cos everything other column (sum) of this row cannot be created with 0 elements
+    for (let i = 1; i < A.length; i++) {
+        for (let j = 0; j <= sumA / 2; j++) {
+            //I know that i-1>=0 so i dont need an extra check for that
+            if (j - A[i - 1] >= 0){
+                dp[i][j] = dp[i - 1][j - A[i - 1]]||dp[i - 1][j];
+            }
+            else{
+                dp[i][j] = dp[i - 1][j];
+
+            }
+            
+        }
+    }
+    return dp[A.length-1][sumA/2];
 };
 
 // ok let's optimize this a bit by just creating 2 rows of length sumA/2 +1
@@ -249,12 +298,10 @@ var canPartition = function(A) {
 
     if (sumA % 2) return false;
     // to start with, i want the number with 1 as its first element so i can mimic the previous[0]=1 state, and length of bits= the length of bits of my desired sum (sumA/2)
-    let row = 1n << BigInt(sumA / 2 );
+    let row = 1n << BigInt(sumA / 2 ); //using bigint cos my sum may consist of more than 32bits
 
     for (const weight of A) {
         row = row | (row >> BigInt(weight));
-        //number & (1 << (k - 1)))  checks if the k'th set of a number is set to 1
-        //so i need to check the sumA/2'th column (bit) and return true if its set
       
     }
     // check the the column corresponding to the sum by bitwise ANDing it with just 1,so if the first bit is 1, it will return true, otherwise false
@@ -281,7 +328,103 @@ var canPartition = function(nums) {
 
     return Boolean((bits >> acc) & 1n);
 };
+//
 
+
+//knapsacks with booleans
+var canPartition = function(A) {
+    //calculate the sum of my Array
+    var sumA = A.reduce((acc, curr) => acc + curr);
+
+    if (sumA % 2) return false;
+
+    //create Rows
+    // i want a row for each of my candidate elements+ one for my
+    // 0th element( no element ) which I know for a fact can add up to 0 if selected
+    var B = new Array(A.length + 1).fill(null);
+
+    // create Columns
+    // My final total sum ranges from 0 to sumA, which are totally sumA+1 candidate weights(sums)
+    B = B.map(d => Array((sumA/2)+1).fill(false));
+
+    // now that the matrix is created i have to use my base case which is:
+    // If there is a way for me to get sum=0, with 0 elements
+    B[0][0] = true;    // of course there is
+
+
+    //now let's see what I actaully want to find
+    //if there is ANY subset, that adds Up to sumA/2
+    //so that would mean ANY element of the column A/2, that would be dp[;][A/2]
+
+
+    //here i=0 cos everything other column (sum) of this row cannot be created with 0 elements
+    for (let i = 1; i <= A.length; i++) {
+        for (let j = 0; j <= sumA / 2 ; j++) {
+            //I know that i-1>=0 so i dont need an extra check for that
+            if (j - A[i - 1] >= 0){
+                B[i][j] = B[i - 1][j - A[i - 1]]||B[i - 1][j];
+            }
+            else{
+                B[i][j] = B[i - 1][j];
+
+            }
+            
+        }
+    }
+
+    return B[A.length][sumA/2];
+};
+
+
+var canPartition = function(A) {
+    var sumA = A.reduce((acc, curr) => acc + curr);
+
+    if (sumA % 2) return false;
+  
+    var previousRow = new Array((sumA/2)+1).fill(false);
+    var currentRow= new Array((sumA/2)+1).fill(false);
+    
+    previousRow[0] = true; // base case  
+
+
+    for (let i = 1; i <= A.length; i++) {
+        for (let j = 0; j <= sumA / 2 ; j++) {
+           
+            if (j - A[i - 1] >= 0){
+                currentRow[j] = previousRow[j - A[i - 1]]||previousRow[j];
+            }
+            else{
+                currentRow[j] = previousRow[j];
+
+            }
+            
+        }
+        previousRow=currentRow.slice(0) // make previous=current
+    }
+
+    return currentRow[sumA/2];
+};
+
+var canPartition = function(A) {
+    var sumA = A.reduce((acc, curr) => acc + curr);
+
+    if (sumA % 2) return false;
+  
+    var row = new Array((sumA/2)+1).fill(false);
+    
+    row[0] = true; // base case  
+
+
+    for (let i = 1; i <= A.length; i++) {
+        for (let j = sumA / 2; j >= 0; j--) {
+            if (j - A[i - 1] >= 0){
+                row[j] = row[j - A[i - 1]]||row[j];
+            }
+        }
+    }
+
+    return row[sumA/2];
+};
 console.log(
     DDcanPartition(
         [23,13,11,7,6,5,5]
