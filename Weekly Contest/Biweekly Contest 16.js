@@ -168,26 +168,26 @@ var deepestLeavesSum = function(root) {
 
 var pathsWithMaxScore = function(A) {
     var sumsMemo={}
-    var set=new Set([1,2,3,4,5,6,7,8,9])
     var dp=(i,j,curSum)=>{
         if(i<0 ||j<0) return
-        if(i==0&&j==0){
+        if(A[i][j]=='E'){
             sumsMemo[Number(curSum)]=(sumsMemo[Number(curSum)]||0) +1
-            console.log(sumsMemo)
             return
         }
-
-        if(j>=1&&A[i][j-1]!=='X'){
-            dp(i,j-1,curSum+ set.has(Number(A[i][j]))?Number(A[i][j]):0)
-        }
-        if(i>=1&&A[i-1][j]!=='X'){
-            dp(i-1,j,curSum+  set.has(Number(A[i][j]))?Number(A[i][j]):0)
-        }
-        if(i>=1&&j>=1&&A[i-1][j-1]!=='X'){
-            dp(i-1,j-1,curSum+  set.has(Number(A[i][j]))?Number(A[i][j]):0)
-        }
+        else if(A[i][j]!='X'&&A[i][j]!='S') curSum=curSum+parseInt(A[i][j],10)
+        
+            if(j>=1&&A[i][j-1]!='X'){
+                dp(i,j-1,curSum)
+            }
+            if(i>=1&&A[i-1][j]!='X'){
+                dp(i-1,j,curSum)
+            }
+            if(i>=1&&j>=1&&A[i-1][j-1]!='X'){
+                dp(i-1,j-1,curSum)
+            }
+        
+        
     }
-    console.log(sumsMemo)
 
     dp(A.length-1,A[0].length-1,0)
     let result=Math.max(...Object.keys(sumsMemo).map(d=>parseInt(d)))
