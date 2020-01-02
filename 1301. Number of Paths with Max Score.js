@@ -32,7 +32,8 @@ var pathsWithMaxScore = function(A) {
         
     }
     dp(A.length-1,A[0].length-1,0)
-        if(!Object.keys(sumsMemo).length)return[0,0]
+
+    if(!Object.keys(sumsMemo).length)return[0,0]
 
     let result=Math.max(...Object.keys(sumsMemo).map(d=>parseInt(d)))
     let ways=sumsMemo[result]
@@ -46,27 +47,35 @@ var pathsWithMaxScore = function(A) {
 
 // NEEDS memoization
 var pathsWithMaxScore = function(A) {
+
     var DIRECTIONS=[
-        [0,-1],
-        [-1,0],
-        [-1,-1]
+        [0,-1], // go left
+        [-1,0], // go up
+        [-1,-1] // go up-left (diagonally)
     ]
 
     const M=A.length //rows
     const N=A[0].length // columns
-    let dpSum= Array(M).fill(null).map(d=> Array(N).fill(null))
+    let dpSum= Array(M).fill(null).map(d=> Array(N).fill(null)) 
     let dpCount=Array(M).fill(null).map(d=> Array(N).fill(null))
     
-    dpCount[M - 1][N - 1] = 1
+    dpCount[M - 1][N - 1] = 1 //set the start count to 1
 
 
-    for (let r = M - 1; r >= 0; r--) {
+    for (let r = M - 1; r >= 0; r--) { 
         for (let c = N - 1; c >= 0; c--) {
+
             if (dpCount[r][c] == 0) continue; // can't reach to this square
+
+
             for (let dir of DIRECTIONS) {
-                let nr = r + dir[0], nc = c + dir[1];
+                let nr = r + dir[0]
+                let nc = c + dir[1]
+
                 if (nr >= 0 && nc >= 0 && A[nr][nc] != 'X') {
+
                     let nsum = dpSum[r][c];
+
                     if (A[nr][nc] != 'E')
                         nsum += A[nr][nc] - '0';
                     if (nsum > dpSum[nr][nc]) {
@@ -82,6 +91,41 @@ var pathsWithMaxScore = function(A) {
 
     if(!dpCount[0][0]||!dpSum[0][0])return [0,0]
     else return [dpSum[0][0],dpCount[0][0]]
+};
+
+
+// dfs 
+var pathsWithMaxScore = function(A) {
+
+    var dp=(i,j,count)=>{
+        if(i<0 ||j<0||A[i][j]=='X') return [-Infinity,-Infinity]
+
+        if(A[i][j]=='E'){
+            return [0,1]
+        }
+        
+        let temp= A[i][j]=='S'?0:Number(A[i][j])
+        count=0
+
+
+        let goLeft= dp(i,j-1,count+1) // go left
+        let goUp=  dp(i-1,j,count+1) // go up       
+        let goDiag=  dp(i-1,j-1,count+1) // go diagonally
+
+        let MaxPathSum= Math.max(goLeft[0],goUp[0],goDiag[0])
+
+        for (const [sum,times] of [goLeft,goUp,goDiag]) {
+            if(sum==MaxPathSum)count+=times
+        }
+
+        return [temp+MaxPathSum , count]
+        
+    }
+
+    let [a,b]=dp(A.length-1,A[0].length-1,0)
+
+    if(a!=-Infinity||b!=-Infinity) return [a%1000000007, b%1000000007]
+    else return [0,0]
 };
 
 console.log(
