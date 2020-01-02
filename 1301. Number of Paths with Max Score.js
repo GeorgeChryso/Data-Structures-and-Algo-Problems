@@ -45,3 +45,47 @@ var pathsWithMaxScore = function(A) {
 
 
 // NEEDS memoization
+var pathsWithMaxScore = function(A) {
+    var DIRECTIONS=[
+        [0,-1],
+        [-1,0],
+        [-1,-1]
+    ]
+
+    const M=A.length //rows
+    const N=A[0].length // columns
+    let dpSum= Array(M).fill(null).map(d=> Array(N).fill(null))
+    let dpCount=Array(M).fill(null).map(d=> Array(N).fill(null))
+    
+    dpCount[M - 1][N - 1] = 1
+
+
+    for (let r = M - 1; r >= 0; r--) {
+        for (let c = N - 1; c >= 0; c--) {
+            if (dpCount[r][c] == 0) continue; // can't reach to this square
+            for (let dir of DIRECTIONS) {
+                let nr = r + dir[0], nc = c + dir[1];
+                if (nr >= 0 && nc >= 0 && A[nr][nc] != 'X') {
+                    let nsum = dpSum[r][c];
+                    if (A[nr][nc] != 'E')
+                        nsum += A[nr][nc] - '0';
+                    if (nsum > dpSum[nr][nc]) {
+                        dpCount[nr][nc] = dpCount[r][c];
+                        dpSum[nr][nc] = nsum;
+                    } else if (nsum == dpSum[nr][nc]) {
+                        dpCount[nr][nc] = (dpCount[nr][nc] + dpCount[r][c]) % 1000000007;
+                    }
+                }
+            }
+        }
+    }
+
+    if(!dpCount[0][0]||!dpSum[0][0])return [0,0]
+    else return [dpSum[0][0],dpCount[0][0]]
+};
+
+console.log(
+    pathsWithMaxScore(
+        ["E23","2X2","12S"]
+    )
+)
