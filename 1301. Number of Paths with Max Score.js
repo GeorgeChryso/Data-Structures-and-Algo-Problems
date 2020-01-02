@@ -96,17 +96,23 @@ var pathsWithMaxScore = function(A) {
 
 // dfs 
 var pathsWithMaxScore = function(A) {
+    const M=A.length //rows
+    const N=A[0].length // columns
+    let dpSumCount= Array(M).fill(null).map(d=> Array(N).fill([null,null])) 
+
 
     var dp=(i,j,count)=>{
         if(i<0 ||j<0||A[i][j]=='X') return [-Infinity,-Infinity]
-
         if(A[i][j]=='E'){
             return [0,1]
         }
-        
+
         let temp= A[i][j]=='S'?0:Number(A[i][j])
         count=0
 
+        if(dpSumCount[i][j]&&dpSumCount[i][j][0]<temp){
+            
+        }
 
         let goLeft= dp(i,j-1,count+1) // go left
         let goUp=  dp(i-1,j,count+1) // go up       
@@ -118,6 +124,10 @@ var pathsWithMaxScore = function(A) {
             if(sum==MaxPathSum)count+=times
         }
 
+
+        //MEMO addition
+        dpSumCount[i][j]= [temp+MaxPathSum , count]
+        
         return [temp+MaxPathSum , count]
         
     }
