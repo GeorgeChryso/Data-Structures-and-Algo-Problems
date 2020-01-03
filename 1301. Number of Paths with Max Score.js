@@ -6,7 +6,7 @@
 
 // In case there is no path, return [0, 0].
 
-//DFS TLE
+//DFS TLE,needs memo
 var pathsWithMaxScore = function(A) {
     var sumsMemo = {};
     var dp = (i, j, curSum) => {
@@ -40,7 +40,7 @@ var pathsWithMaxScore = function(A) {
     return res;
 };
 
-// NEEDS memoization
+// memo without recursion
 var pathsWithMaxScore = function(A) {
     var DIRECTIONS = [
         [0, -1], // go left
@@ -87,159 +87,76 @@ var pathsWithMaxScore = function(A) {
     else return [dpSum[0][0], dpCount[0][0]];
 };
 
-// dfs
-var pathsWithMaxScore = function(A) {
-    const M = A.length; //rows
-    const N = A[0].length; // columns
-    let dpSumCount = Array(M)
-        .fill(null)
-        .map(d => Array(N).fill([null, null]));
 
-    var dp = (i, j, count) => {
-        if (i < 0 || j < 0 || A[i][j] == 'X') return [-Infinity, -Infinity];
-        if (A[i][j] == 'E') {
-            return [0, 1];
-        }
 
-        let temp = A[i][j] == 'S' ? 0 : Number(A[i][j]);
-        count = 0;
-
-        if (dpSumCount[i][j] && dpSumCount[i][j][0] < temp) {
-        }
-
-        let goLeft = dp(i, j - 1, count + 1); // go left
-        let goUp = dp(i - 1, j, count + 1); // go up
-        let goDiag = dp(i - 1, j - 1, count + 1); // go diagonally
-
-        let MaxPathSum = Math.max(goLeft[0], goUp[0], goDiag[0]);
-
-        for (const [sum, times] of [goLeft, goUp, goDiag]) {
-            if (sum == MaxPathSum) count += times;
-        }
-
-        //MEMO addition
-        dpSumCount[i][j] = [temp + MaxPathSum, count];
-
-        return [temp + MaxPathSum, count];
-    };
-
-    let [a, b] = dp(A.length - 1, A[0].length - 1, 0);
-
-    if (a != -Infinity || b != -Infinity)
-        return [a % 1000000007, b % 1000000007];
-    else return [0, 0];
-};
-
-//optimal memo
-var pathsWithMaxScore = A => {
-    const M = A.length;
-    const N = A[0].length;
-    const dp = Array(M)
-        .fill(null)
-        .map(d => Array(N).fill(null));
-    const m = 10 ** 9 + 7;
-
-    const traverse = (r, c) => {
-        if (r < 0 || c < 0) {
-            return [0, 0];
-        }
-
-        if (dp[r][c] === null) {
-            const value = A[r][c];
-
-            if (value === 'X') {
-                dp[r][c] = [0, 0]; // set that impossible path
-            } else if (value === 'E') {
-                dp[r][c] = [0, 1]; // there's one way to complete this
-            } else {
-                const l = traverse(r, c - 1);
-                const u = traverse(r - 1, c);
-                const ul = traverse(r - 1, c - 1);
-
-                if (l[0] === 0 && u[0] === 0 && ul[0] === 0) {
-                    // either we can reach the end with 0 cost, or we cant reach the end at all
-                    if (l[1] === 0 && u[1] === 0 && ul[1] === 0) {
-                        // we cant reach the end at all
-                        dp[r][c] = [0, 0];
-                    } else {
-                        // we  can reach it automatically
-                        dp[r][c] = [Number(value), 1];
-                    }
-                } else {
-                    const max = Math.max(l[0], u[0], ul[0]);
-                    let count = 0;
-                    if (l[0] === max) {
-                        count += l[1];
-                    }
-                    if (u[0] === max) {
-                        count += u[1];
-                    }
-                    if (ul[0] === max) {
-                        count += ul[1];
-                    }
-                    const iv = parseInt(v, 10) || 0;
-                    dp[r][c] = [max + iv, count % m];
-                }
-            }
-        }
-
-        return dp[r][c];
-    };
-
-    return traverse(n - 1, n - 1);
-};
 
 
 // OK, here goes the memoization approach
 // each cell of the matrix dp[i][j], holds the maximum value of the paths that lead to the end of every possible direction
-
-
+// DFS+MEMO
 var pathsWithMaxScore = A => {
+    //matrix initialization
     const M = A.length;
     const N = A[0].length;
     const dp = Array(M)
         .fill(null)
         .map(d => Array(N).fill(null));
-    const m = 10 ** 9 + 7;
+    const m = 10 ** 9 + 7; // i need to return the count%m
 
-
-    const findMaximumPath=(i,j)=>{
-        if(i<0||j<0){
-            return [0,0]
+    //dfs formula
+    const findMaximumPath = (i, j) => {
+        //if we go out of boundaries, the path is cancelled
+        if (i < 0 || j < 0) {
+            return [0, 0];
         }
-        if(i==0&&j==0){
-            dp[i][j]=[0,1]
+        if (i == 0 && j == 0) {
+            dp[i][j] = [0, 1]; //if we reach the end, we just found a way to reach it,so counter=1, however there is no end value (A[0][0]), so we return [0,1]
         }
-        if(A[i][j]=='X'){
-            dp[i][j]=[0,0]
+        if (A[i][j] == 'X') {
+            //if we run into an obstacle, the path is cancelled
+            dp[i][j] = [0, 0];
         }
 
-        if(dp[i][j]!==null) return dp[i][j]
+        // MEMOIZATION STEP
+        if (dp[i][j] !== null) return dp[i][j]; // that's the most important step.
+        // It saves me the extra work, and that's the point of memoization
+        // If there is an element on my board, that means that the maximum value path that starts from
+        // the element A[i][j] is already calculated, therefore there is no need to expand it since I already have its maximum Value path and its counter
 
-        const left=findMaximumPath(i,j-1)
-        const up=findMaximumPath(i-1,j)
-        const diag=findMaximumPath(i-1,j-1)
-        
-        let maxValue=Math.max(left[0],up[0],diag[0])
-        let maxValueCounter=[left,up,diag].reduce( ([accS,accCount],[sum,counter])=>{
-            if(sum>accS){
-                return [sum,counter]
-            }
-            else if ( sum===accS){
-                return [sum,counter+accCount]
-            }
-            return [accS,accCount]
-        },[0,0])[1]
+        const left = findMaximumPath(i, j - 1);
+        const up = findMaximumPath(i - 1, j);
+        const diag = findMaximumPath(i - 1, j - 1);
 
-        dp[i][j]=[maxValue+Number(A[i][j]),maxValueCounter%m]
+        // deciding on the best solution out of the three for the cell A[i][j] as the start of our optimal path
+        let maxValue = Math.max(left[0], up[0], diag[0]);
+        let maxValueCounter = [left, up, diag].reduce(
+            ([accS, accCount], [sum, counter]) => {
+                if (sum > accS) {
+                    return [sum, counter];
+                } else if (sum === accS) {
+                    return [sum, counter + accCount];
+                }
+                return [accS, accCount];
+            },
+            [0, 0]
+        )[1];
 
-        return dp[i][j]
-    }
+        // MEMO STEP, set the dp[i][j] to be equal to the best path found, so that if another candidate
+        // path ends up on this cell, it knows the Value of following this path
+        dp[i][j] = [maxValue + (Number(A[i][j]) || 0), maxValueCounter % m];
 
-    let result= findMaximumPath(N - 1, N - 1);
+        return dp[i][j];
+    };
 
-    console.log(dp)
-    return result
+    let result = findMaximumPath(N - 1, N - 1);
+
+    //if the end dp[0][0] is not reached, return [0,0] otherwise there is a result
+    return dp[0][0] ? result : [0, 0];
 };
 
-console.log(pathsWithMaxScore(['E23', '2X2', '12S']));
+console.log(
+    pathsWithMaxScore(
+        //  ['E23', '2X2', '12S']
+        ['E11', 'XXX', '11S']
+    )
+);
