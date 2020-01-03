@@ -131,7 +131,7 @@ var pathsWithMaxScore = function(A) {
 };
 
 //optimal memo
-const pathsWithMaxScore = A => {
+var pathsWithMaxScore = A => {
     const M = A.length;
     const N = A[0].length;
     const dp = Array(M)
@@ -188,4 +188,58 @@ const pathsWithMaxScore = A => {
 
     return traverse(n - 1, n - 1);
 };
+
+
+// OK, here goes the memoization approach
+// each cell of the matrix dp[i][j], holds the maximum value of the paths that lead to the end of every possible direction
+
+
+var pathsWithMaxScore = A => {
+    const M = A.length;
+    const N = A[0].length;
+    const dp = Array(M)
+        .fill(null)
+        .map(d => Array(N).fill(null));
+    const m = 10 ** 9 + 7;
+
+
+    const findMaximumPath=(i,j)=>{
+        if(i<0||j<0){
+            return [0,0]
+        }
+        if(i==0&&j==0){
+            dp[i][j]=[0,1]
+        }
+        if(A[i][j]=='X'){
+            dp[i][j]=[0,0]
+        }
+
+        if(dp[i][j]!==null) return dp[i][j]
+
+        const left=findMaximumPath(i,j-1)
+        const up=findMaximumPath(i-1,j)
+        const diag=findMaximumPath(i-1,j-1)
+        
+        let maxValue=Math.max(left[0],up[0],diag[0])
+        let maxValueCounter=[left,up,diag].reduce( ([accS,accCount],[sum,counter])=>{
+            if(sum>accS){
+                return [sum,counter]
+            }
+            else if ( sum===accS){
+                return [sum,counter+accCount]
+            }
+            return [accS,accCount]
+        },[0,0])[1]
+
+        dp[i][j]=[maxValue+Number(A[i][j]),maxValueCounter%m]
+
+        return dp[i][j]
+    }
+
+    let result= findMaximumPath(N - 1, N - 1);
+
+    console.log(dp)
+    return result
+};
+
 console.log(pathsWithMaxScore(['E23', '2X2', '12S']));
