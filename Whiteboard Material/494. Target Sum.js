@@ -37,6 +37,7 @@ var findTargetSumWays = function(nums, S, sum = 0, i = 0, memo = new Map()){
     return memo.get(key);
 };
 
+
 //knapsack concept have to write it down
 
 // classic knapsack: Choose the item or not, with a total weight constraint in order to maximize value
@@ -77,6 +78,7 @@ var findTargetSumWays = function(Arr, S) {
 
 
 // Here i m turning the space complexity to O(sum) (still using Knapsack memo)
+// but with 2 rows
 var findTargetSumWays = function(Arr, S) {
     
     var sum=Arr.reduce((acc,curr)=>acc+curr)
@@ -109,18 +111,14 @@ var findTargetSumWays = function(Arr, S) {
     return previous[sum+S]?previous[sum+S]:0
 };
 
-// yuxiangmusic
+// this is still a knapsack, but with optimized Space, essentially just using 1 row 
 var findTargetSumWays = function(Arr, S) {
     var sum=Arr.reduce((acc,curr)=>acc+curr)
-    
-    // S+sum explanation:
-    // So the problem becomes
-    // Find a subset P of nums such that sum(P) = (target + sum(nums)) / 2
-    // where P is the positives that I choose
+    // the range of the possible sums is [-S,S]
     if((sum<S)||(S+sum)%2)return 0
 
     //lol that's actually dividing the S+sum by two
-    S=(S+sum)>>1
+    S=(S+sum)>>1 // S+sum/2 is my new target and refers to S
 
 
 
@@ -135,6 +133,24 @@ var findTargetSumWays = function(Arr, S) {
     }
     return dp[S]
 };
+
+//dp memo using the patterns
+var findTargetSumWays=(A,S)=>{
+    var dp=Array(2*S+1).fill(0)
+    dp[0]=1
+    for (let i = S; i >=A[S-i]; i--) { //for each potential sum
+        for (let j = 0; j < A.length; j++) {
+            if(i-A[j]>=0){
+                dp[i]+=dp[i-A[j]]
+            }
+            
+        }
+        
+    }
+    console.log(dp)
+    return dp[S]
+}
+
 
 console.log(findTargetSumWays(
     //[1, 2, 1, 3],4 
