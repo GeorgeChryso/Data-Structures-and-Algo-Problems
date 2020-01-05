@@ -19,7 +19,7 @@ var minCostClimbingStairs = function(A) {
     return result
 };
 
-
+// top bottom approach
 //dp memo solution
 // O(n) runtime, O(n) space
 var minCostClimbingStairs = function(A) {
@@ -59,6 +59,25 @@ var minCostClimbingStairs = function(A) {
     }
     return Math.min(A[0],A[1])
 };
+
+// pattern dp memo bottom top approach
+var minCostClimbingStairs=(cost)=>{
+    var dp=Array(cost.length+1).fill(null) // Here I will save the Minimum Sum to reach the index i
+
+    // base cases are where I'm starting from
+    dp[0]=cost[0]// cost[0] is the minimum cost to reach index 0
+    dp[1]=cost[1] // cost[1] is the minimum cost to reach index 1, cos i m starting from 1
+    // If the problem stated that i could start from another index, that would make it
+    //dp[k]=cost[k]
+
+    //Population of my dp memo
+    for (let i = 2; i <= cost.length; ++i) {
+        dp[i] = Math.min(dp[i-1], dp[i-2]) + (i == cost.length ? 0 : cost[i]); 
+    }
+    //So i just need to find the minimum sum to reach the index cost.length,
+    // which is the end of my array
+    return dp[cost.length]
+}
 console.log(minCostClimbingStairs(
    // [10, 15, 20]
   // [0,1,1,0]
