@@ -2,6 +2,7 @@
 
 
 // naive dfs TLE
+// O(2^n)
 var minPathSum = function(A) {
     let result=Infinity
     var dp=(i,j,value)=>{
@@ -63,10 +64,29 @@ var minPathSum = function(A) {
     return dp(0,0)
 };
 
+//No extra space
+var minPathSum = function(A) {
+    // I alter my table to save to A[i][j] to the minimum sum to reach A[i][j] 
+    // the first row consists only of moving right options,therefore the minimum sum comes from just adding the elements from left to right
+    for (let i = 1; i < A[0].length; i++) {
+        A[0][i]+=+A[0][i-1]       
+    }
 
+    // as for any other element, it comes from adding its value to the minimum of coming from up or left
+    for (let i = 1; i < A.length; i++) {
+        for (let j =0;j<A[0].length;j++) {
+            if(j==0)A[i][j]+=A[i-1][j]
+            else A[i][j]+=Math.min(A[i-1][j],A[i][j-1])
+        }
+    }
+    
+    // therefore
+    return A[A.length-1][A[0].length-1]
+};
 console.log(minPathSum(
     [
     [1,3,1],
     [1,5,1],
-    [4,2,1]]
+    [4,2,1]
+]
 ))
