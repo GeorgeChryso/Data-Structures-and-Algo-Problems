@@ -35,21 +35,24 @@ var coinChange = function(A, T) {
     return result==Infinity?-1:result
 };
 
-//knapsack infinite try // doesnt work
+//memo dp?
 var coinChange = function(A, T) {
-    A.sort((a,b)=>a-b)
-    var result=0
-    var target=T+0
-    
-    for (let i = A.length-1; i >=0 ; i--) {
-        let times=Math.floor(target/ A[i])  
-        result+=times  
-        target-=times*A[i]
-        
-        if(target==0)return result
+    let result=Infinity
+
+    let dp=(index,totalSum,numCoins)=>{
+        if(totalSum>T||index>=A.length){
+            return
+        }
+        if(totalSum==T){
+            result=Math.min(result,numCoins)
+        }
+        dp(index,totalSum+A[index],numCoins+1)
+        dp(index+1,totalSum+A[index],numCoins+1)
+        dp(index+1,totalSum,numCoins)
 
     }
-    return result
+    dp(0,0,0)
+    return result==Infinity?-1:result
 };
 
 
