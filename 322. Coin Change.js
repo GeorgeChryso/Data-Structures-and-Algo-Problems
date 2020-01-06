@@ -12,8 +12,7 @@
 
 //You may assume that you have an infinite number of each kind of coin.
 
-// GELAW STA MOUTRA SAS GIATI EISTE TRASHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-// KNAPSACK WITH INFINITE ITEMS 
+
 
 //naive TLE
 var coinChange = function(A, T) {
@@ -35,7 +34,7 @@ var coinChange = function(A, T) {
     return result==Infinity?-1:result
 };
 
-//memo dp
+//memo dp 
 //Runtime O(n*T) space O(T)
 var coinChange = function(A, T) {
     let dp=Array(T+1).fill(Infinity)
@@ -55,11 +54,94 @@ var coinChange = function(A, T) {
     return dp[T]===Infinity?-1:dp[T]
 };
 
+// How is this from classic knapsack? I can use the same item infinite times
 
 
+//recursive solution tle
+var coinChange=(A,T)=>{
+ let dp=Array(T+1).fill(Infinity)
+ dp[0]=0
+
+ let rec=(sum)=>{
+    if(sum<0)return Infinity
+    if(dp[sum]!==Infinity)return dp[sum]
+    //same as above
+    dp[sum]=Math.min(dp[sum],
+        A.reduce((acc,weight)=>Math.min(acc,rec(sum-weight)+1),Infinity))
+    return dp[sum]
+ }
+
+ return rec(T)!=Infinity?dp[T]:-1
+}
+
+//recursive solution
+var coinChange = function(coins, amount) {
+     if(amount <= 0) return 0; /* test for amount edge cases */
+     var minCoins = Infinity; /* this is what we will return eventually */
+     coins = coins.sort((a,b) => b - a); /* sort coins decending */
+     
+     function combo(amount, ind, count){
+         if(ind >= coins.length) return; 
+         /* do not continue if ind is past the possible range */
+         for(var i = Math.floor(amount/ coins[ind]); i >= 0; i--){
+             var newCount = count + i;
+             var rem = amount - coins[ind] * i;
+             if(rem > 0 && newCount < minCoins) {
+                 /* if the remainder is greater than 0 we haven't found the perfect combo 
+                 yet so we need to continue trying other coins */
+                 combo(rem, ind + 1, newCount);
+             } else if(newCount < minCoins){
+                 /* if the remainder is 0 and the newCount is less than the current 
+                 minCoins count then we set the minCoins to newCount */
+                 minCoins = newCount;
+             } else if(newCount >= minCoins - 1){
+                 /* if the newCount is greater than minCoins then we don't need to 
+                 continue with this combination */
+                 break;
+             }
+         }
+     }
+     combo(amount, 0, 0);
+     return minCoins == Infinity ? -1 : minCoins;
+ };
+
+//BFS solution , where the depth of the tree equals the amount of coins used
+var coinChange=(A,T)=>{
+    if(T<=0)return 0
+    let ItemsCount=0
+    let queue=[T]
+    let memo=new Set(queue) //store all the expanded  values so I do not reprocess the same sums
+    while(queue.length){
+      
+
+        let expand=queue.reduce((acc,curr)=>{
+
+                let temparr=A.map(d=>curr-d).filter(d=>{
+                    //i dont want to process already seen sums
+                    if(memo.has(d))return false
+
+                    if(d>=0){
+                        memo.add(d)
+                        return true
+                    }
+                })
+
+                return acc.concat(temparr)
+            },[]
+        )       
+        queue=expand
+        ItemsCount++
+        //solution
+        if(memo.has(0))return ItemsCount
+    }
+
+    return -1
+}
 console.log(coinChange(
-    //[3,7,405,436],8839
-    [2],3//-1
-    //[1,2,5],11
-
+   // [3,7,405,436],8839
+   // [2],3//-1
+ //  [1,2,5],11
+ // [1],0
+ //[336,288,378,16,319,146],9212 //TLE
+ [317,127,99,56,137,300],3871 //TLE
 ))  
