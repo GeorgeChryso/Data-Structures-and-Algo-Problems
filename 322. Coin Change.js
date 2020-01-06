@@ -26,7 +26,7 @@ var coinChange = function(A, T) {
         if(totalSum==T){
             result=Math.min(result,numCoins)
         }
-        dp(index,totalSum+A[index],numCoins+1)
+        dp(index,totalSum+A[index],numCoins+1) //
         dp(index+1,totalSum+A[index],numCoins+1)
         dp(index+1,totalSum,numCoins)
 
@@ -35,28 +35,31 @@ var coinChange = function(A, T) {
     return result==Infinity?-1:result
 };
 
-//memo dp?
+//memo dp
+//Runtime O(n*T) space O(T)
 var coinChange = function(A, T) {
-    let result=Infinity
-
-    let dp=(index,totalSum,numCoins)=>{
-        if(totalSum>T||index>=A.length){
-            return
+    let dp=Array(T+1).fill(Infinity)
+    //dp[j] means : The minimum number of items to achieve sum=J
+    dp[0]=0// base case, the min number of coins to reach sum=0, is 0 coins
+    for (let j = 1; j <= T; ++j) {
+        for (let i = 0; i < A.length; ++i) {
+            if (j-A[i]>=0) {
+                dp[j] = Math.min(
+                    dp[j],              //either the min number of coins to achieve it
+                    dp[j - A[i]] + 1    //or the min number of coins to reach A[j-A[i]] +1 (the other item A[i])
+                    );
+            }
         }
-        if(totalSum==T){
-            result=Math.min(result,numCoins)
-        }
-        dp(index,totalSum+A[index],numCoins+1)
-        dp(index+1,totalSum+A[index],numCoins+1)
-        dp(index+1,totalSum,numCoins)
-
     }
-    dp(0,0,0)
-    return result==Infinity?-1:result
+    console.log(dp)
+    return dp[T]===Infinity?-1:dp[T]
 };
 
 
 
 console.log(coinChange(
-    [3,7,405,436],8839
-))
+    //[3,7,405,436],8839
+    [2],3//-1
+    //[1,2,5],11
+
+))  
