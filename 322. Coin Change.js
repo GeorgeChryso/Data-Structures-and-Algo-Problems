@@ -34,6 +34,40 @@ var coinChange = function(A, T) {
     return result==Infinity?-1:result
 };
 
+ //slow bfs Passes
+//BFS solution , where the depth of the tree equals the amount of coins used
+var coinChange=(A,T)=>{
+    if(T<=0)return 0
+    let ItemsCount=0
+    let queue=[T]
+    let memo=new Set(queue) //store all the expanded  values so I do not reprocess the same sums
+    while(queue.length){
+      
+
+        let expand=queue.reduce((acc,curr)=>{
+
+                let temparr=A.map(d=>curr-d).filter(d=>{
+                    //i dont want to process already seen sums
+                    if(memo.has(d))return false
+
+                    if(d>=0){
+                        memo.add(d)
+                        return true
+                    }
+                })
+
+                return acc.concat(temparr)
+            },[]
+        )       
+        queue=expand
+        ItemsCount++
+        //solution
+        if(memo.has(0))return ItemsCount
+    }
+
+    return -1
+}
+
 //memo dp 
 //Runtime O(n*T) space O(T)
 var coinChange = function(A, T) {
@@ -53,6 +87,17 @@ var coinChange = function(A, T) {
     console.log(dp)
     return dp[T]===Infinity?-1:dp[T]
 };
+// outer loop 
+var coinChange=(A,T)=>{
+    let dp=Array(T+1).fill(Infinity) //dp[i] the minimum items needed to reach sum i
+    dp[0]=0// 
+    for (const coin of A) {
+        for (let i = coin; i <=T; i++) {
+               dp[i]=Math.min(dp[i],dp[i-coin]+1)         
+        }
+    }
+    return dp[T]==Infinity?-1:dp[T]
+}
 
 // How is this from classic knapsack? I can use the same item infinite times
 
@@ -105,38 +150,12 @@ var coinChange = function(coins, amount) {
      return minCoins == Infinity ? -1 : minCoins;
  };
 
-//BFS solution , where the depth of the tree equals the amount of coins used
-var coinChange=(A,T)=>{
-    if(T<=0)return 0
-    let ItemsCount=0
-    let queue=[T]
-    let memo=new Set(queue) //store all the expanded  values so I do not reprocess the same sums
-    while(queue.length){
-      
 
-        let expand=queue.reduce((acc,curr)=>{
 
-                let temparr=A.map(d=>curr-d).filter(d=>{
-                    //i dont want to process already seen sums
-                    if(memo.has(d))return false
 
-                    if(d>=0){
-                        memo.add(d)
-                        return true
-                    }
-                })
 
-                return acc.concat(temparr)
-            },[]
-        )       
-        queue=expand
-        ItemsCount++
-        //solution
-        if(memo.has(0))return ItemsCount
-    }
+//2 dp solutions
 
-    return -1
-}
 console.log(coinChange(
    // [3,7,405,436],8839
    // [2],3//-1
