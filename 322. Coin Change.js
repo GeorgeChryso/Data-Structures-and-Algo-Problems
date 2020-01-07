@@ -68,8 +68,36 @@ var coinChange=(A,T)=>{
     return -1
 }
 
+//cleaner bfs
+var coinChange=(A,T)=>{
+    let queue=new Set([0])
+    let seen=new Set([0])
+    let numberOfCoins=0
+    let memo=[]
+    while(queue.size){
+     //   console.log(queue.size,memo)
+        if(queue.has(T))return numberOfCoins
+        memo=[]
+        for (let coins of A) {
+            for (let roots of queue.keys()) {
+                let expanded=coins+roots
+                if(!seen.has(expanded)&&(expanded<=T)){
+                    seen.add(expanded)
+                    memo.push(expanded)
+                }
+            }
+        }
+        queue.clear()
+        memo.forEach(d=>queue.add(d))
+        numberOfCoins++
+    }
+    return -1
+}
+
+
 //memo dp 
 //Runtime O(n*T) space O(T)
+// inner loop variant
 var coinChange = function(A, T) {
     let dp=Array(T+1).fill(Infinity)
     //dp[j] means : The minimum number of items to achieve sum=J
@@ -152,15 +180,11 @@ var coinChange = function(coins, amount) {
 
 
 
-
-
-//2 dp solutions
-
 console.log(coinChange(
    // [3,7,405,436],8839
-   // [2],3//-1
- //  [1,2,5],11
+    [2],3//-1
+   //[1,2,5],11
  // [1],0
  //[336,288,378,16,319,146],9212 //TLE
- [317,127,99,56,137,300],3871 //TLE
+ //[317,127,99,56,137,300],3871 //TLE
 ))  
