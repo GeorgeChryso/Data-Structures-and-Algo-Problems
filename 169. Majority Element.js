@@ -56,4 +56,14 @@ var majorityElement = function(nums) {
 };
 
 // Boyer moore
+var majorityElement = function(nums) {
+    let count=0
+    let candidate=null
+    for (z of nums ){
+      if(!count)candidate=z
+      count+=(z==candidate)?1:-1
+    };
+    return candidate
+};
+
 majorityElement([3,2,3])
