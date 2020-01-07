@@ -43,4 +43,17 @@ var majorityElement = function(nums) {
 
 };
 
+//simplified Hash O(n) O(n)
+var majorityElement = function(nums) {
+    
+    let objy={};
+    for (z of nums ){
+      objy[z]=(objy[z]||0)+1
+      if(objy[z]>Math.floor(nums.length/2))return z
+
+    };
+        
+};
+
+// Boyer moore
 majorityElement([3,2,3])
