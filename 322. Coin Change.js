@@ -179,6 +179,26 @@ var coinChange = function(coins, amount) {
  };
 
 
+//  recursive with memo 
+var coinChange=(A,T,hashTableCalls={})=>{
+    if(T==0)return 0
+    if(hashTableCalls[T]!==undefined)return hashTableCalls[T]
+    let n=T+1
+    for (const coins of A) {
+        let curr=0
+        if(T-coins>=0){
+            let next=coinChange(A,T-coins,hashTableCalls)
+            if(next>=0)curr=1+next
+        }
+        if(curr>0){
+            n=Math.min(n,curr)
+        }
+    }
+    let finalCount= (n==T+1)?-1:n
+    hashTableCalls[T]=finalCount
+    return finalCount
+}
+
 
 console.log(coinChange(
    // [3,7,405,436],8839
