@@ -35,24 +35,56 @@ var minFallingPathSum = function(A) {
     return Math.min(...A[0])
 };
 
+//recursion+memo
+// top -bottom, O(nm) runtime,space
 var minFallingPathSum=A=>{
-    let result=Infinity
+
     let dp=Array(A.length).fill(null).map(d=>Array(A[0].length).fill(null))
     // dp[i][j] the minimum distance from the beginning to A[i][j]
-    dp[0]=A[0] // base case 
+    dp[0]=A[0] // base case the min distance from the beginning to the beginning is A[i][j] 
     let recursion=(i,j)=>{
         if(i>=A.length||j<0||j>=A[0].length)return Infinity
         if(dp[i][j]!==null)return dp[i][j]
-        dp[i][j]= Math.min(recursion(i+1,j),recursion(i+1,j-1),recursion(i+1,j+1))+A[i][j]
+
+        //careful on the recursion, the maximum sum on a (next) line can only come from the Minimum of the previous lines plus the carrying sum 
+        dp[i][j]= Math.min(recursion(i-1,j),recursion(i-1,j-1),recursion(i-1,j+1))+A[i][j]
         return dp[i][j]
     }
-    A[0].forEach( (el,j) => {
-        recursion(0,j)        
+
+    // start the recursion
+    A[A.length-1].forEach( (el,j) => {
+        recursion(A.length-1,j)        
     });
-    console.log(dp)
+    
+
+    // Since I want to find the maximum ditance from the beginning to the last row
     return Math.min(...dp[A.length-1])
 }
 
+//bottom top recursion+memo
+var minFallingPathSum=A=>{
+
+    let dp=Array(A.length).fill(null).map(d=>Array(A[0].length).fill(null))
+    // dp[i][j] the minimum distance from the END (last row) to A[i][j]
+    dp[A.length-1]=A[A.length-1] // base case the min distance from the end to the end is A[i][j] 
+    let recursion=(i,j)=>{
+        if(i>=A.length||j<0||j>=A[0].length)return Infinity
+        if(dp[i][j]!==null)return dp[i][j]
+
+        //careful on the recursion, the maximum sum on a (next) line can only come from the Minimum of the previous lines plus the carrying sum 
+        dp[i][j]= Math.min(recursion(i+1,j),recursion(i+1,j-1),recursion(i+1,j+1))+A[i][j]
+        return dp[i][j]
+    }
+
+    // start the recursion
+    A[0].forEach( (el,j) => {
+        recursion(0,j)        
+    });
+    
+
+    // Since I want to find the maximum ditance from the beginning to the last row
+    return Math.min(...dp[0])
+}
 
 console.log(
     minFallingPathSum(
