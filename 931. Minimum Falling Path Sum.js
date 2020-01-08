@@ -86,6 +86,19 @@ var minFallingPathSum=A=>{
     return Math.min(...dp[0])
 }
 
+// O(nm), O(1)
+// 1row appraoch
+var minFallingPathSum=A=>{
+
+    let previous=Array(A[0].length).fill(0) //1st step, no elements
+    for (let i = 0; i < A.length; i++) {
+            previous=previous.map((val,j)=>
+                Math.min(j>=1?previous[j-1]:Infinity,previous[j],j+1<=previous.length-1?previous[j+1]:Infinity)+A[i][j]
+            )
+    }
+
+    return Math.min(...previous)
+}
 console.log(
     minFallingPathSum(
         //[[1,2,3],[4,5,6],[7,8,9]]
