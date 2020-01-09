@@ -6,6 +6,7 @@
 
 //smells like a knapsack problem where I create the array of squares
 // But: I can choose the same element more than once. 
+// knapsack Iterative (O(A)) space
 var numSquares = function(n) {
     let A=[]
     let i=1
