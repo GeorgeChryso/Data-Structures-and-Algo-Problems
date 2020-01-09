@@ -59,14 +59,21 @@ var numSquares = function(n) {
 
     let possSums={} //possSums[i] is the minimum numbers of perfect squares(items) needed to reach the sum=i 
 
+
+
+    // recursion(sum) returns the min number of elements needed to reach sum
     let recursion=(sum)=>{
         if(sum<0)return Infinity
         if(sum==0){
+            //the base case : 0 elements needed to reach sum 0
             return 0
         }
+        //utilizing the memo to avoid excess computations
         if(possSums[sum]!==undefined)return possSums[sum]
 
+    
         for (let item of A) {
+            // the known formula
             possSums[sum]=Math.min(possSums[sum]!==undefined?possSums[sum]:Infinity,recursion(sum-item)+1)
         }
 
