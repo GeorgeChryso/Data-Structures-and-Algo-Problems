@@ -19,7 +19,7 @@ var numSquares = function(n) {
     let possSums=Array(n+1).fill(Infinity) //possSums[i] is the minimum numbers of perfect squares(items) needed to reach the sum=i 
 
     //base case
-    possSums[0]=0
+    possSums[0]=0 //to reach sum=0 i need 0 items
     
     for (let j= 0; j < A.length; j++) {
      
@@ -43,6 +43,37 @@ var numSquares = function(n) {
     // return possSums[n]==Infinity?-1:possSums[n]
 
     return possSums[n]==Infinity?-1:possSums[n]
+};
+
+
+
+//dp  recursion +memo
+var numSquares = function(n) {
+    let A=[]
+    let i=1
+
+
+    // i create my wanted squares
+    while(i*i<=n)A.push(i*(i++))
+    //from which Imma make a choice
+
+    let possSums={} //possSums[i] is the minimum numbers of perfect squares(items) needed to reach the sum=i 
+
+    let recursion=(sum)=>{
+        if(sum<0)return Infinity
+        if(sum==0){
+            return 0
+        }
+        if(possSums[sum]!==undefined)return possSums[sum]
+
+        for (let item of A) {
+            possSums[sum]=Math.min(possSums[sum]!==undefined?possSums[sum]:Infinity,recursion(sum-item)+1)
+        }
+
+        return possSums[sum]
+    }
+
+    return recursion(n)
 };
 
 console.log(numSquares(12))

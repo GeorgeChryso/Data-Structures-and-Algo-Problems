@@ -130,7 +130,7 @@ var coinChange=(A,T)=>{
 // How is this from classic knapsack? I can use the same item infinite times
 
 
-//recursive solution tle
+//recursive solution tle  (cos of no memo)
 var coinChange=(A,T)=>{
  let dp=Array(T+1).fill(Infinity)
  dp[0]=0
@@ -182,8 +182,8 @@ var coinChange = function(coins, amount) {
 //  recursive with memo 
 var coinChange=(A,T,hashTableCalls={})=>{
     if(T==0)return 0
-    if(hashTableCalls[T]!==undefined)return hashTableCalls[T]
-    let n=T+1
+    if(hashTableCalls[T]!==undefined)return hashTableCalls[T] //hashTableCalls[T] means that the least amount of coins i can get to reach a sum of T
+    let n=Infinity
     for (const coins of A) {
         let curr=0
         if(T-coins>=0){
@@ -194,7 +194,7 @@ var coinChange=(A,T,hashTableCalls={})=>{
             n=Math.min(n,curr)
         }
     }
-    let finalCount= (n==T+1)?-1:n
+    let finalCount= (n==Infinity)?-1:n
     hashTableCalls[T]=finalCount
     return finalCount
 }
