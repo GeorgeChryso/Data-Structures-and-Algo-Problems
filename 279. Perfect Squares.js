@@ -102,16 +102,39 @@ var numSquares = function(n) {
             count = Math.min(count, recs+1);
             return;
         }
-        
-        for(let i = index; i < squares.length && count > recs + 1; i++){
-            let square = squares[i];
-            if(square <= n){
-                helper(n - square, recs + 1, i)
-            }
+        for (const index in squares) {
+            if(squares[index]<=n)helper(n-squares[index],recs+1,index+1)
         }
+
     }
+
     helper(n);
     return count;
 };
+
+
+// static dp?
+var numSquares = function(n) {
+    const squares = [];
+    for(let i = n; i >= 1; i--){
+        if(Number.isInteger(Math.sqrt(i))){
+            squares.push(i)
+        }
+    }
+    let countPS=[0]
+
+    while (countPS.length<=n) {
+        let length=countPS.length
+        let count=Infinity
+        for (let i = 1; i*i <=length; i++) {
+            count=Math.min(count,countPS[length-i*i]+1)
+        }
+
+        countPS.push(count)
+    }
+
+    return countPS[n];
+};
+
 
 console.log(numSquares(12))
