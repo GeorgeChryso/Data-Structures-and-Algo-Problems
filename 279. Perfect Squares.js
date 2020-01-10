@@ -7,7 +7,7 @@
 //smells like a knapsack problem where I create the array of squares
 // But: I can choose the same element more than once. 
 // knapsack Iterative (O(A)) space
-var numSquares = function(n) {
+var AnumSquares = function(n) {
     let A=[]
     let i=1
 
@@ -41,6 +41,7 @@ var numSquares = function(n) {
     //     }
     // }
     // return possSums[n]==Infinity?-1:possSums[n]
+    console.log(possSums)
 
     return possSums[n]==Infinity?-1:possSums[n]
 };
@@ -76,7 +77,7 @@ var numSquares = function(n) {
             // the known formula
             possSums[sum]=Math.min(possSums[sum]!==undefined?possSums[sum]:Infinity,recursion(sum-item)+1)
         }
-
+        console.log(possSums)
         return possSums[sum]
     }
 
@@ -113,7 +114,7 @@ var numSquares = function(n) {
 };
 
 
-// static dp?
+// static dp? The same as the above dp+memo
 var numSquares = function(n) {
     const squares = [];
     for(let i = n; i >= 1; i--){
@@ -122,9 +123,12 @@ var numSquares = function(n) {
         }
     }
     let countPS=[0]
+    
 
+    //essentially runs for n times( cos each time i m adding exactly one element)
+    // so its a funny way of describing every possible sum up to n, same with my previous solution really.
     while (countPS.length<=n) {
-        let length=countPS.length
+        let length=countPS.length // this also represents every possible sum to n
         let count=Infinity
         for (let i = 1; i*i <=length; i++) {
             count=Math.min(count,countPS[length-i*i]+1)
@@ -132,9 +136,9 @@ var numSquares = function(n) {
 
         countPS.push(count)
     }
-
+    console.log(countPS)
     return countPS[n];
 };
 
 
-console.log(numSquares(12))
+console.log(AnumSquares(12))
