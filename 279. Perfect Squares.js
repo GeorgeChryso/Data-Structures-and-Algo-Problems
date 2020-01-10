@@ -148,30 +148,38 @@ var numSquares = function(n) {
 var numSquares=n=>{
 
     //returns if the number x is a valid square root
-    let isSquare=x=>Math.sqrt(x)*Math.sqrt(x)===x
-    
+    let isSquare=x=>Math.floor(Math.sqrt(x))*Math.floor(Math.sqrt(x))===x
     // that would be the fact that its equal to itself
     if(isSquare(n))return 1
     //the result is 4, if and only if  n can be written in the form
 
-    // Legendre's three square theorem: A natural number n can be represented as the sum of three squares of integers if and only if : n= 4^x ( 8*m+7)
+    // Legendre's three square theorem: A natural number n can be represented as the sum of three squares of integers if and only if : n!= 4^x ( 8*m+7)
 
-    // that means that my number is not written as such, my result is immediately 4
+    // that means that my number is  written as such, my result is immediately 4
     // so i m just gonna keep dividing by 4, and my mod8  has to be 7, otherwise the return 
     //for every x=2^i, n&x=n%(x+1)
     // n&3=n%4 
     // tldr: while possible, keep dividing the number by 4
-   // while(n&3===0)n=n>>2 // divides the number by 4,  equivalent to n=n/4
-    while(! (n%4)) n/=4
+    // while(n&3===0)n=n>>2 // divides the number by 4,  equivalent to n=n/4
+    while(n%4===0) n/=4
     // n&7=n%8
-   // if(n&7==7)return 4
-    if(n%8!=7)return 4
+    // if(n&7==7)return 4
+    if(n%8===7)return 4
+    //ok, we ruled out the possibility of result 4
+    // there are only 2 results remaining, 2 and 3
+  
+    // FERMAT'S THEOREM OF TWO SQUARES
+    // An odd prime p can be expressed as the sum of 2 squares 
+    // if and only if p=1mod4 
+
+    //An integer greater than one can be written as a sum of two squares if and only if its prime decomposition contains no prime= 3 modulo 4 raised to an odd power
 
     for (let i = 1; i <= Math.sqrt(n); i++) {
+        //if there exists a valid square between 1 and sqrt(n)
         if(isSquare(n-i*i))return 2
     }
 
     return 3
 }
 
-console.log(numSquares(12))
+console.log(numSquares(21))
