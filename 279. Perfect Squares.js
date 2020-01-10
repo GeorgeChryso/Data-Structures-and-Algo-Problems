@@ -7,7 +7,7 @@
 //smells like a knapsack problem where I create the array of squares
 // But: I can choose the same element more than once. 
 // knapsack Iterative (O(A)) space
-var AnumSquares = function(n) {
+var numSquares = function(n) {
     let A=[]
     let i=1
 
@@ -141,4 +141,37 @@ var numSquares = function(n) {
 };
 
 
-console.log(AnumSquares(12))
+// Lagrange's theorem fo four squares: Every number can be written as the sum of four squares of integers
+// so my potential answers are 0,1,2,3,4
+// 0 never happens because there's always an answer
+// 1 happens when the number itself is a valid square 
+var numSquares=n=>{
+
+    //returns if the number x is a valid square root
+    let isSquare=x=>Math.sqrt(x)*Math.sqrt(x)===x
+    
+    // that would be the fact that its equal to itself
+    if(isSquare(n))return 1
+    //the result is 4, if and only if  n can be written in the form
+
+    // Legendre's three square theorem: A natural number n can be represented as the sum of three squares of integers if and only if : n= 4^x ( 8*m+7)
+
+    // that means that my number is not written as such, my result is immediately 4
+    // so i m just gonna keep dividing by 4, and my mod8  has to be 7, otherwise the return 
+    //for every x=2^i, n&x=n%(x+1)
+    // n&3=n%4 
+    // tldr: while possible, keep dividing the number by 4
+   // while(n&3===0)n=n>>2 // divides the number by 4,  equivalent to n=n/4
+    while(! (n%4)) n/=4
+    // n&7=n%8
+   // if(n&7==7)return 4
+    if(n%8!=7)return 4
+
+    for (let i = 1; i <= Math.sqrt(n); i++) {
+        if(isSquare(n-i*i))return 2
+    }
+
+    return 3
+}
+
+console.log(numSquares(12))
