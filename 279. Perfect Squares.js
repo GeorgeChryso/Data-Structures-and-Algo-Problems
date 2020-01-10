@@ -83,4 +83,35 @@ var numSquares = function(n) {
     return recursion(n)
 };
 
+// just recursion? and faster
+var numSquares = function(n) {
+    const squares = [];
+    let count = n;
+    for(let i = n; i >= 1; i--){
+        if(Number.isInteger(Math.sqrt(i))){
+            squares.push(i)
+        }
+    }
+
+    var helper = function(n, recs = 0, index = 0){
+        if(n === 0){
+            count = Math.min(count, recs);
+            return;
+        }
+        if(Number.isInteger(Math.sqrt(n))){
+            count = Math.min(count, recs+1);
+            return;
+        }
+        
+        for(let i = index; i < squares.length && count > recs + 1; i++){
+            let square = squares[i];
+            if(square <= n){
+                helper(n - square, recs + 1, i)
+            }
+        }
+    }
+    helper(n);
+    return count;
+};
+
 console.log(numSquares(12))
