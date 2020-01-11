@@ -178,5 +178,31 @@ var numSquares=n=>{
     return 3
 }
 
+
+//bfs
+var numSquares = function(n) {
+    const squares = [];
+    for(let i = n; i >= 1; i--){
+        if(Number.isInteger(Math.sqrt(i))){
+            squares.push(i)
+        }
+    }
+    let memo={}
+    let queue=[n]
+    while(queue.length){
+        let temp=[]
+        queue.forEach(
+            element=>{
+                if(memo[element]!==undefined)return memo[element]
+                for (const square of squares) {
+                    memo[element]=Math.min(element-square,memo[element])
+                }
+            }
+        )
+    }
+
+};
+
+
 console.log(numSquares(21))
 
