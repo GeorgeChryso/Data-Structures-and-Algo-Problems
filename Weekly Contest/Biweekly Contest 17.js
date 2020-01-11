@@ -127,61 +127,15 @@ console.log(
     )
 )
 
-var matrixBlockSum = function(A, K) {
-    let result=Array(A.length).fill(null).map(d=>Array(A[0].length).fill(0))
-
-    for (let r = 0; r < A.length; r++) {
-        for (let c = 0; c < A[0].length; c++) {
-                for (let i = r-K; i <=r+K; i++) {
-                    for (let j =c-K; j <=c+K; j++) {
-                        if(i>=0&&i<A.length&&j>=0&&j<A[0].length)result[i][j]+=A[r][c]                    
-
-                    }
-                }    
-        }        
-    }
-    return result
-};
-
-console.log(matrixBlockSum(
-    [[1,2,3],[4,5,6],[7,8,9]],1
-))
-
-
 var distinctEchoSubstrings = function(A) {
-    let memo={}
-    let result=0
-
-    let start=[]
-    for (let i = 0; i < A.length; i++) {
-        let dict={}
-        for (let j = 1; j <= A.length; j++) {
-            dict[A.substring(i,j)]=true
-        }        
-        start.push(Object(dict))
-    }
-    console.log(memoir)
-    let end=[]
-    for (let i = 0; i < A.length; i++) {
-        let dict={}
-        for (let j = 1; j <= A.length; j++) {
-            dict[A.substring(i+1,j)]=true
-        }        
-        start.push(Object(dict))
-    }
-
-
-
-    for (let i = 1; i < memoir.length; i++) {
-        for (const key of   Object.keys(memoir[i]) ) {
-            if(memoir[i-1][key]&&memo[key]==undefined){
-                memo[key]=1
-                result++
-            }
-        }        
-    }
+    let memo=Array(A.length).fill(null).map(d=>{})
+    memo[0]='d'
     console.log(memo)
-    return result
+    for (let start = 0; start < A.length; start++) {
+        for (let end = 0; end < A.length; end++) {
+            
+        }        
+    }
 };
 
 
