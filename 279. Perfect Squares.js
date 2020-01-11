@@ -179,7 +179,7 @@ var numSquares=n=>{
 }
 
 
-//bfs
+//bfs with memo (slow)
 var numSquares = function(n) {
     const squares = [];
     for(let i = n; i >= 1; i--){
@@ -187,22 +187,28 @@ var numSquares = function(n) {
             squares.push(i)
         }
     }
+    let result=0
     let memo={}
     let queue=[n]
     while(queue.length){
         let temp=[]
         queue.forEach(
             element=>{
-                if(memo[element]!==undefined)return memo[element]
+                if(memo[element]!==undefined)return
+
                 for (const square of squares) {
-                    memo[element]=Math.min(element-square,memo[element])
+                    memo[element]=Math.min(element-square,memo[element]!==undefined?memo[element]:Infinity)
+                    temp.push(element-square)
                 }
             }
         )
+        queue=temp
+        result++
+        if(memo[0]!==undefined)return result-1
     }
-
+    return -1
 };
 
 
-console.log(numSquares(21))
+console.log(numSquares(12))
 
