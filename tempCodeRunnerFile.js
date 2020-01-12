@@ -1,1 +1,1 @@
-    console.log(memodays)
+30

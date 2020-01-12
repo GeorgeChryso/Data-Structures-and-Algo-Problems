@@ -25,24 +25,52 @@ var mincostTickets = function(A, costs) {
         if(price==costs[2])return 30
     }
     let dp=Array(A[A.length-1]+1).fill(Infinity)
-    let memodays=new Set(A)
-    //dp[i] is the mi
+    //dp[i] holds the minimum dollars I have to spent in order to travel from day i to the end
+    let memodays=new Set(A) //this grants me O(1) access to the traveldays
 
     //base case 
     dp=dp.concat(Array(30).fill(0))
+    // this "end" is considered any day after the last day. The maximum days I can get to travel after my last day are 30. That happens if I purchase a 30 day pass on the last day. Therefore all these days cost me 0 
+
     for (let i =A[A.length-1]; i >=0; i--) {
-            //BUY ONLY ON DAYS THAT U HAVE TO TRAVEL OR DONT BUY AT ALL
+            // I consider buying only on travel days so I can maximize my profit
             if(memodays.has(i)){
-                costs.forEach(cost =>dp[i]=Math.min(dp[i+days(cost)]+cost,dp[i])
-                );
-                console.log(dp[i])
+                costs.forEach(cost =>dp[i]=Math.min(dp[i+days(cost)]+cost,dp[i]));
             }else{
                 dp[i]=dp[i+1]
             }
     }
 
 
+    // and my result is the minimum dollars I have to spend in order to trave from day 0 to the end, the end being any day past my higher value A[A.length-1]
     return dp[0]
+};
+
+//dp top-bottom approach added
+var mincostTickets = function(A, costs) {
+    let days=price=>{
+        if(price==costs[0])return 1
+        if(price==costs[1])return 7
+        if(price==costs[2])return 30
+    }
+    let dp=Array(A[A.length-1]+1).fill(Infinity)
+    //dp[i] holds the minimum dollars I have to spent in order to travel from start 0 to day i
+    let memodays=new Set(A) //this grants me O(1) access to the traveldays
+
+    //base case 
+    dp=(Array(30).fill(0)).concat(dp)
+    // this "start" is considered any day before the first day. The maximum days I can get to travel after my last days are 30. That happens if I purchase a 30 day pass on the first day. Therefore all these days cost me 0 
+
+    for (let i =30; i <dp.length; i++) {
+            // I consider buying only on travel days so I can maximize my profit
+            if(memodays.has(i-30)){
+                costs.forEach(cost =>dp[i]=Math.min(dp[i-days(cost)]+cost,dp[i]));
+            }else{
+                dp[i]=dp[i-1]
+            }
+    }
+    // and my result is the minimum dollars I have to spend in order to travel from day 0 to the end, 30+A[A.length-1]
+    return dp[30+A[A.length-1]]
 };
 
 
