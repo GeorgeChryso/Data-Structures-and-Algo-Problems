@@ -73,7 +73,25 @@ var mincostTickets = function(A, costs) {
     return dp[30+A[A.length-1]]
 };
 
+// O(n)
+var mincostTickets=(A,costs)=>{
+    let cost=0
+    let last7=[]
+    let last30=[]
 
+    for (const day of A) {
+        while(last7.length && (last7[0][0]+7)<=day)last7.pop()
+        while(last30.length &&(last30[0][0]+30)<=day)last30.pop()
+        last7.push([day,cost+costs[1]])
+        last30.push([day,cost+costs[2]])
+        cost=Math.min( cost+costs[0],last7[0][1],last30[0][1])
+    }
+
+
+    return cost
+}
 console.log(mincostTickets(
-    [1,4,6,7,8,20],[2,7,15]
+ //   [1,4,6,7,8,20],[2,7,15]
+    [4,5,9,11,14,16,17,19,21,22,24],
+[1,4,18]
 ))
