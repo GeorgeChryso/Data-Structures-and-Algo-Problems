@@ -17,31 +17,35 @@ var mincostTickets=(A,costs)=>{
 
 }
 
+// dp bottom-top with memo
 var mincostTickets = function(A, costs) {
     let days=price=>{
         if(price==costs[0])return 1
         if(price==costs[1])return 7
         if(price==costs[2])return 30
     }
-    let dp=Array(386).fill(Infinity)
+    let dp=Array(A[A.length-1]+1).fill(Infinity)
     let memodays=new Set(A)
-    //dp[i]
+    //dp[i] is the mi
 
     //base case 
-    dp[0]=0 // need 0 dollars to travel to day 0
-
-   
-    for (let i = 1; i <=365; i++) {
+    dp=dp.concat(Array(30).fill(0))
+    for (let i =A[A.length-1]; i >=0; i--) {
             //BUY ONLY ON DAYS THAT U HAVE TO TRAVEL OR DONT BUY AT ALL
             if(memodays.has(i)){
-                costs.forEach(cost => dp[i]=Math.min(dp[i+days(cost)]+cost,dp[i]));
+                costs.forEach(cost =>dp[i]=Math.min(dp[i+days(cost)]+cost,dp[i])
+                );
+                console.log(dp[i])
+            }else{
+                dp[i]=dp[i+1]
             }
     }
-    console.log(dp+'')
-    return Math.min(...dp.slice(365))
+
+
+    return dp[0]
 };
 
 
 console.log(mincostTickets(
-    [1,4,6,7,8,20],  [2,7,15]
+    [1,4,6,7,8,20],[2,7,15]
 ))
