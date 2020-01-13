@@ -77,6 +77,8 @@ let minSteps=n=>{
 }
 
 
+//'https://leetcode.com/problems/2-keys-keyboard/discuss/105932/Java-solutions-from-naive-DP-to-optimized-DP-to-non-DP' for more in depth 
+
 [1,2,3,1,5,6,8,7,12,23,26,71].forEach(d => {
     console.log(d+'         ',minSteps(d),AminSteps(d))
 });
