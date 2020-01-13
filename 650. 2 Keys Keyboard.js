@@ -31,8 +31,29 @@ var minSteps=n=>{
     recursion(1,1,0,false)
     return result
 }
-console.log(minSteps
-    (
-        6
-    )
-)
+
+
+// dp memo
+var AminSteps=n=>{
+    let dp=Array(n+1).fill(Infinity)
+    //dp[i] is the minimum number of steps required to get i
+    
+    //base case
+    dp[0]=0
+    dp[1]=0
+
+
+    for (let i = 2; i <=n; i++) {
+        for (let j = i; j >0; j--) {
+            dp[i]=Math.min(dp[i],dp[i-j]+1,dp[i-j]+dp[j])+1
+        }              
+    }
+
+
+    return dp[n]
+}
+
+
+[1,2,3,1,5,6,8,7,12].forEach(d => {
+    console.log(d+'         ',minSteps(d),AminSteps(d))
+});
