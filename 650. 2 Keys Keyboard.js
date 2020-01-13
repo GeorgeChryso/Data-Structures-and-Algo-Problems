@@ -35,7 +35,7 @@ var minSteps=n=>{
 
 // dp memo
 var AminSteps=n=>{
-    let dp=Array(n+1).fill(Infinity)
+    let dp=Array(n+1).fill(Infinity).map((d,i)=>i)
     //dp[i] is the minimum number of steps required to get i
     
     //base case
@@ -44,8 +44,8 @@ var AminSteps=n=>{
 
 
     for (let i = 2; i <=n; i++) {
-        for (let j = i; j >0; j--) {
-            dp[i]=Math.min(dp[i],dp[i-j]+1,dp[i-j]+dp[j])+1
+        for (let j = i; j >=0; j--) {
+            if(i%j==0)dp[i]=Math.min(dp[i],dp[j]+i/j)
         }              
     }
 
@@ -54,6 +54,6 @@ var AminSteps=n=>{
 }
 
 
-[1,2,3,1,5,6,8,7,12].forEach(d => {
+[1,2,3,1,5,6,8,7,12,23,26,71].forEach(d => {
     console.log(d+'         ',minSteps(d),AminSteps(d))
 });
