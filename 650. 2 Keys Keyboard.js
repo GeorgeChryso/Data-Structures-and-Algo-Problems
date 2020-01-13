@@ -37,7 +37,7 @@ var minSteps=n=>{
 var AminSteps=n=>{
     let dp=Array(n+1).fill(Infinity).map((d,i)=>i)
     //dp[i] is the minimum number of steps required to get i
-    
+    // firstm
     //base case
     dp[0]=0
     dp[1]=0
