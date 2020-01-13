@@ -33,7 +33,7 @@ var minSteps=n=>{
 }
 
 
-// dp memo
+// dp memo is good enough
 var minSteps=n=>{
     let dp=Array(n+1).fill(Infinity).map((d,i)=>i)
     //the maximum steps required to get i, is i obviously
@@ -62,6 +62,15 @@ var minSteps=n=>{
 
 
     return dp[n]
+}
+
+//recursive Optimized based on maths
+let minSteps=n=>{
+    if(n==1)return 0
+    for (let i = 2; i <n; i++) {
+        if(n%i==0)return i+minSteps(n/i)        
+    }
+    return n
 }
 
 
