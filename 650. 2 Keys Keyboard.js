@@ -65,6 +65,9 @@ var minSteps=n=>{
 }
 
 //recursive Optimized based on maths
+// IT IS ALWAYS BETTER DTO DIVIDE WHENEVER POSSIBLE
+// so it turns into a problem for finding the sum of all possible factors of a number,
+// so essentially the dp/memo is not needed
 let minSteps=n=>{
     if(n==1)return 0
     for (let i = 2; i <n; i++) {
