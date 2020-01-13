@@ -34,8 +34,10 @@ var minSteps=n=>{
 
 
 // dp memo
-var AminSteps=n=>{
+var minSteps=n=>{
     let dp=Array(n+1).fill(Infinity).map((d,i)=>i)
+    //the maximum steps required to get i, is i obviously
+
     //dp[i] is the minimum number of steps required to get i
     // firstm
     //base case
@@ -43,10 +45,19 @@ var AminSteps=n=>{
     dp[1]=0
 
 
+    // I can get 6 only by dp[2]+COPYPASTEPASTE 
+    // I can get 2 by dp[2]=dp[1]+CP=dp[1]+2
+    // so I can get 6 by dp[6]=dp[2]+3=dp[1]+2+3=5
+    // OR 
+    // dp[6]=dp[3]+CP=dp[3]+2
+    // .. so i can get any number k, dp[k]=dp[j]+k/j, assuming k%j==0
     for (let i = 2; i <=n; i++) {
-        for (let j = i; j >=0; j--) {
+        // for (let j = i; j >=0; j--) { // same thing 
+        //     if(i%j==0)dp[i]=Math.min(dp[i],dp[j]+i/j)
+        // }              
+        for (let j = 0; j < i; j++) {
             if(i%j==0)dp[i]=Math.min(dp[i],dp[j]+i/j)
-        }              
+        }
     }
 
 
