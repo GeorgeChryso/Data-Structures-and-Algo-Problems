@@ -1,6 +1,22 @@
 // Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below.
 
 
+// let's use a naive dfs solution
+// TLE
+var minimumTotal=A=>{
+    let result=Infinity
+
+    let dfs=(i,j,total)=>{
+        if(i>A.length-1)return result=Math.min(result,total)
+         dfs(i+1,j,total+A[i][j])
+         dfs(i+1,j+1,total+A[i][j])
+
+    }
+
+    dfs(0,0,0)
+    return result
+}
+
 //classic dp bottom top
 var minimumTotal = function(A) {
     let dp= Array(A[A.length-1].length).fill(null).map((d,i)=>A[A.length-1][i])
@@ -32,6 +48,7 @@ var minimumTotal = function(A) {
     return A[0][0]
 
 };
+
 
 console.log(minimumTotal(
 //     [
