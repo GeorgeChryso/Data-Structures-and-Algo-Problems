@@ -32,8 +32,6 @@ var minimumTotal = function(A) {
     return A[0][0]
 
 };
-//cooler syntax
-var minimumTotal=A
 
 console.log(minimumTotal(
 //     [
