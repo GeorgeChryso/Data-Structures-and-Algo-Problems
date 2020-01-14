@@ -49,7 +49,21 @@ var minimumTotal = function(A) {
 
 };
 
+// and let's do it top bottom
+var minimumTotal = function(A) {
+    // here A[i][j] will instead represent the minimum sum required to get from the start to A[i][j] element
+    
+    for (let i = 1; i <A.length; i++) {
+          for (let j = 0; j < A[i].length; j++) {
+                if(j==0)A[i][j]+=A[i-1][j]
+                else if (j==A[i].length-1 )A[i][j]+=A[i-1][A[i-1].length-1]
+                else A[i][j]+=Math.min(A[i-1][j],A[i-1][j-1])
+          }          
+    }
 
+    return Math.min(...A[A.length-1])
+
+};
 console.log(minimumTotal(
 //     [
 //         [2],
