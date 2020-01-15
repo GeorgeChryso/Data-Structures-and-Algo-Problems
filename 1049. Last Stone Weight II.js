@@ -88,7 +88,24 @@ var lastStoneWeightII=A=>{
 }
 
 // I can translate that to bits
+// Optimized, same as above using bits. 
+var lastStoneWeightII=A=>{
+    let total=A.reduce((a,b)=>a+b)
+    let dp=1n<<BigInt(total+1)
+    
+    for (const item of A) {
+        dp=dp|(dp>>BigInt(item))
+    }
 
+    let index=0
+    let result=total
+    while(dp){
+        if((dp=dp>>1n)&1n)result=Math.min(result,Math.abs(total-2*index))
+        index++
+    }
+
+    return result==total?0:result
+}
 
 
 console.log(lastStoneWeightII(
