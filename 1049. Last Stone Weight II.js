@@ -31,7 +31,9 @@ var lastStoneWeightII=A=>{
     // here: total+1 refers to sum 0
     dp[total+1]=1
 
+    //for each item
     for (let i = 0; i < A.length; i++) {
+        //for each sum, entertain the idea of it being possible by adding or subtracting the current element 
         dp=dp.map( (el,j)=>{
             let result=0
             //result j can only be achieved either by adding the current adding the current element
@@ -44,8 +46,7 @@ var lastStoneWeightII=A=>{
 
 
     // As i said, i m only interested in positive results. Therefore I m searching for the index of the first 1, the smallest possible sum
-  
-
+    // after the 0 that corresponds to index total+1 
     for (let i = total+1; i < dp.length; i++) {
         if(dp[i])return i-total-1       
     }
@@ -56,7 +57,41 @@ var lastStoneWeightII=A=>{
    // return dp.indexOf(1)==-1?0:dp.indexOf(1)
 }
 
+// ok I think i got an optimization.
+// Essentially, Since my result= sumP-sumN ,where P and N are a partition of my array, I need to minimize my result
+// <=> sumP+sumN-sumN+sumN
+// <=> sumA-2sumN=result 
+// <=> minimize(result)=minimize(sumA-2sumN)=min|sumA-2sumN| , so i just need to minimize the sum of a subgroup in order for me to get the minimized result 
+
+// translates to a knapsack problem where I need to find every possible sum I can get using all my items
+// less runtime less space
+var lastStoneWeightII=A=>{
+    let total=A.reduce((a,b)=>a+b)
+    let dp=Array(total+1).fill(0)
+    dp[0]=1
+    // dp[i] is whether sum i can be reached
+
+    for (const item of A) {
+       dp= dp.map((el,j)=>{
+            let result=el
+            if(j-item>=0)result=dp[j-item]||el
+            return result
+        })
+    }
+
+    // find me the minimum result (Math.abs(total-2*index(represents sum) )) of all the possible sums ( curr==1)
+    let result=dp.reduce((acc,curr,index)=>{
+        return curr?Math.min(acc,Math.abs(total-2*index)):acc
+    },Infinity)
+    if(result==total)return 0
+    return result
+}
+
+// I can translate that to bits
+
+
 
 console.log(lastStoneWeightII(
-    [2,7,4,1,8,1]
+   // [2,7,4,1,8,1]
+    [1,2]
 ))
