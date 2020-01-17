@@ -11,24 +11,22 @@
 // Note that if the car reaches a gas station with 0 fuel left, the car can still refuel there.  If the car reaches the destination with 0 fuel left, it is still considered to have arrived.
 
 
-
+// knapsack problem
 var minRefuelStops = function(target, startFuel, stations) {
-    let dp=Array(target+1).fill(null).map((d)=>Array(stations.length).fill(null).map((k,i)=>[0,startFuel-i]))
-    //dp[i][0] is the min number of stops i must make to reach i miles to the right, while i still have dp[i][1] liters in the tank 
-    dp[0][0]=[0,startFuel]//i need to make 0 stops to reach 0 miles to the right while having startfuel in the tank
-    
+    let dp=Array(stations.length+1)
+    // dp[i] is the maximum number of miles I can make using i refueling stops
+    // base case
+    dp[0]=startfuel // I can get a maximum of startfuel miles using 0 stops
+    //recursion
+    //dp[i]=Math.max(dp[j],dp[j-1]+stations[i][1])
+
 
     for (let i = 0; i < stations.length; i++) {
-        let [S_miles,S_liters]=stations[i]
-        for (let j = S_miles; j < dp.length; j++) {
-            //dp[j] the min number of stations i have to visit to reach j'th mile
-            let currmile=j
-            let [minsteps,tank]=dp[i][j]
-
-            if(tank<0)continue
-            dp[i][j]=Math.min(1+dp[i-1][j-S_miles],dp[i-1][j])
-            
-
-        }        
+        const [st_miles,st_tank]=stations[i]
+        for (let stops = i; stops>=0 && dp[stops]>=st_miles; stops--) {
+            dp[stops + 1] = Math.max(dp[stops + 1], dp[stops] + st_tank);    
+        }
     }
+    return dp.indexOf((d,i)=>dp[t]>=target)
 };
+
