@@ -13,20 +13,22 @@
 
 // knapsack problem
 var minRefuelStops = function(target, startFuel, stations) {
-    let dp=Array(stations.length+1)
+    let dp=Array(stations.length+1).fill(null).map(d=>0)
     // dp[i] is the maximum number of miles I can make using i refueling stops
     // base case
-    dp[0]=startfuel // I can get a maximum of startfuel miles using 0 stops
-    //recursion
-    //dp[i]=Math.max(dp[j],dp[j-1]+stations[i][1])
+    dp[0]=startFuel // I can get a maximum of startfuel miles using 0 stops
 
 
     for (let i = 0; i < stations.length; i++) {
         const [st_miles,st_tank]=stations[i]
-        for (let stops = i; stops>=0 && dp[stops]>=st_miles; stops--) {
-            dp[stops + 1] = Math.max(dp[stops + 1], dp[stops] + st_tank);    
+        for (let stops = i+1; stops>0 && dp[stops-1]>=st_miles; stops--) {
+            dp[stops] = Math.max(dp[stops], dp[stops-1] + st_tank);   
         }
     }
-    return dp.indexOf((d,i)=>dp[t]>=target)
+    
+    return dp.findIndex(d=>d>=target) 
 };
 
+console.log(minRefuelStops(
+    1,1,[]
+))
