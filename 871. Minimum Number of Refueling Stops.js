@@ -20,15 +20,20 @@ var minRefuelStops = function(target, startFuel, stations) {
 
 
     for (let i = 0; i < stations.length; i++) {
-        const [st_miles,st_tank]=stations[i]
-        for (let stops = i+1; stops>0 && dp[stops-1]>=st_miles; stops--) {
-            dp[stops] = Math.max(dp[stops], dp[stops-1] + st_tank);   
-        }
+        let [st_miles,st_tank]=stations[i]
+
+        dp=dp.map( (maxmiles,stops)=>{
+            if(dp[stops-1]<st_miles||stops-1<0||stops>i+1)return maxmiles
+            
+            return Math.max(maxmiles,dp[stops-1]+st_tank)
+        })
     }
-    
+
     return dp.findIndex(d=>d>=target) 
 };
 
 console.log(minRefuelStops(
-    1,1,[]
+   // 1,1,[]
+    100,10,[[10,60],[20,30],[30,30],[60,40]] 
+ //100,1,[[10,100]]
 ))

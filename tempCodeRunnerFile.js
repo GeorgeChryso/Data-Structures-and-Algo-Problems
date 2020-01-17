@@ -1,12 +1,4 @@
-var minimumTotal = function(A) {
-
-    
-    for (let i = A.length-2; i >=0; i--) {
-          for (let j = 0; j < A[i].length; j++) {
-              A[i][j]+=Math.min(A[i+1][j],A[i+1][j+1])
-          }          
-    }
-
-    return A[0]
-
-};
+for (let stops = i+1; stops>0; stops--) {
+        //     if(dp[stops-1]>=st_miles)break
+        //     dp[stops] = Math.max(dp[stops], dp[stops-1] + st_tank);   
+        // }
