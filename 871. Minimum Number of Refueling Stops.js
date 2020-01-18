@@ -20,14 +20,15 @@ var minRefuelStops = function(target, startFuel, stations) {
     dp[0] = startFuel; // I can get a maximum of startfuel miles using 0 stops
 
     for (let i = 0; i < stations.length; i++) {
-        let [st_miles, st_tank] = stations[i];
-        console.log(dp);
+        let [st_location, st_tank] = stations[i];
+
         dp = dp.map((maxmiles, stops) => {
             if (
-                dp[stops - 1] < st_miles || // the max distance I can get to using the previous stops is less than the distance my station's at, so I cant reach him
+                dp[stops - 1] < st_location || //the station isnt reachable
                 stops == 0 || // I never need to meddle with the base case
-                stops > i + 1 // and I never need to meddle with the next stations as I m examining one station at a time. remember that i=0 means the FIRST station
-                // but stops=0 means 0 stops, so for 2 stops stops=2 but i=3
+                stops > i + 1 // and I never need to meddle with the next stations as I m examining one station at a time that can only affect the previous results so far. 
+                // remember that i=0 means the FIRST station but stops=0 means 0 stops
+                // so for 2 stops stops=2 but i=1
             )
                 return maxmiles;
 
@@ -41,14 +42,51 @@ var minRefuelStops = function(target, startFuel, stations) {
 
     return dp.findIndex(d => d >= target);
 };
+// What bugs me about this knapsack:
+// It's essentially as if the stations act both as rows and columns of my knapsack board
+// There's no clear constraint and instead of maximizing profit i m trying to minimize it, profit being the number of stations.
 
+// same approach, better readability
+var minRefuelStops=(target,startFuel,stations)=>{
+
+    let dp=Array(stations.length+1).fill(null).map(d=>Array(stations.length+1).fill(0))
+    //dp[i][j] is the Max distance I can cover using i stations, while wanting to get to j'th station
+
+    //base case
+    dp[0]=Array(stations.length+1).fill(startFuel)//using 0 stations I only have startFuel
+
+    for (let i = 1; i <=stations.length; i++) {
+        console.log(dp)
+
+         dp[i][0]=startFuel //base case, never changes
+
+          // currStop=i
+         let [st_location,st_tank]=stations[i-1]
+        //for each station
+        for (let j = 1; j <=i; j++) {
+
+            if(dp[i-1][j-1]>=st_location){ //if the current station is reachable
+                dp[i][j]=Math.max(dp[i-1][j] //either the max distance ignoring the current station
+                             ,dp[i-1][j-1]+st_tank // or by using the current station on the previous stop
+                             )
+                }
+            else{
+                dp[i][j]=dp[i-1][j]
+            }
+        }
+        
+    }
+    console.log(dp)
+    return dp[stations.length].findIndex(d=>d>=target)
+    
+}
 console.log(
     minRefuelStops(
         // 1,1,[]
         100,
         10,
         [
-            [10, 60],
+            [10, 90],
             [20, 30],
             [30, 30],
             [60, 40]
