@@ -26,7 +26,7 @@ var minRefuelStops = function(target, startFuel, stations) {
             if (
                 dp[stops - 1] < st_location || //the station isnt reachable
                 stops == 0 || // I never need to meddle with the base case
-                stops > i + 1 // and I never need to meddle with the next stations as I m examining one station at a time that can only affect the previous results so far. 
+                stops > i + 1 // and I never need to meddle with the next stations as I m examining one station at a time that can only affect the previous results so far.
                 // remember that i=0 means the FIRST station but stops=0 means 0 stops
                 // so for 2 stops stops=2 but i=1
             )
@@ -47,39 +47,39 @@ var minRefuelStops = function(target, startFuel, stations) {
 // There's no clear constraint and instead of maximizing profit i m trying to minimize it, profit being the number of stations.
 
 // same approach, better readability
-var minRefuelStops=(target,startFuel,stations)=>{
-
-    let dp=Array(stations.length+1).fill(null).map(d=>Array(stations.length+1).fill(0))
+var minRefuelStops = (target, startFuel, stations) => {
+    let dp = Array(stations.length + 1)
+        .fill(null)
+        .map(d => Array(stations.length + 1).fill(0));
     //dp[i][j] is the Max distance I can cover using i stations, while wanting to get to j'th station
 
     //base case
-    dp[0]=Array(stations.length+1).fill(startFuel)//using 0 stations I only have startFuel
+    dp[0] = Array(stations.length + 1).fill(startFuel); //using 0 stations I only have startFuel
 
-    for (let i = 1; i <=stations.length; i++) {
-        console.log(dp)
+    for (let i = 1; i <= stations.length; i++) {
+        console.log(dp);
 
-         dp[i][0]=startFuel //base case, never changes
+        dp[i][0] = startFuel; //base case, never changes
 
-          // currStop=i
-         let [st_location,st_tank]=stations[i-1]
-        //for each station
-        for (let j = 1; j <=i; j++) {
+        // currStop=i
+        let [st_location, st_tank] = stations[i - 1];
+        //for each station up to my current station
+        for (let j = 1; j <= i; j++) {
+            if (dp[i - 1][j - 1] >= st_location) {
+                //if the current station is reachable from the last station
 
-            if(dp[i-1][j-1]>=st_location){ //if the current station is reachable
-                dp[i][j]=Math.max(dp[i-1][j] //either the max distance ignoring the current station
-                             ,dp[i-1][j-1]+st_tank // or by using the current station on the previous stop
-                             )
-                }
-            else{
-                dp[i][j]=dp[i-1][j]
+                dp[i][j] = Math.max(
+                    dp[i - 1][j], //either the max distance ignoring the current station
+                    dp[i - 1][j - 1] + st_tank // or by using the current station on the previous stop
+                );
+            } else {
+                dp[i][j] = dp[i - 1][j];
             }
         }
-        
     }
-    console.log(dp)
-    return dp[stations.length].findIndex(d=>d>=target)
-    
-}
+    console.log(dp);
+    return dp[stations.length].findIndex(d => d >= target);
+};
 console.log(
     minRefuelStops(
         // 1,1,[]
