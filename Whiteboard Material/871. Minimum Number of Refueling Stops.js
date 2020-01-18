@@ -65,6 +65,7 @@ var minRefuelStops = (target, startFuel, stations) => {
         let [st_location, st_tank] = stations[i - 1];
         //for each station up to my current station
         for (let j = 1; j <= i; j++) {
+            // i is the station i m considering, j is the target station
             if (dp[i - 1][j - 1] >= st_location) {
                 //if the current station is reachable from the last station
 
