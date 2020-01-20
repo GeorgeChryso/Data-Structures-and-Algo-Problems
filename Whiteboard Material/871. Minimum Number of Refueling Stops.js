@@ -83,17 +83,21 @@ var minRefuelStops = (target, startFuel, stations) => {
 };
 
 //priority queue: (monoq)
-var minRefuelStops=(target, startFuel, stations)=>{
-    let nextRstop=0
-    let pq=[]
-    let cur=startFuel
-    for (var res = 0; cur < target ; res++) {
-        while(nextRstop<stations.length && stations[nextRstop][0]<=cur)pq.push(stations[nextRstop++][1])
-        if(! (pq.length))return -1
-        cur +=pq.pop()
+var minRefuelStops = function(target, startFuel, stations) {
+    let pq = [];
+    let ret = 0, stationId = 0, range = startFuel;
+    while (range < target) {
+       while (stationId < stations.length && stations[stationId][0] <= range) {
+            pq.push(stations[stationId++][1]);
+        }
+        if (!pq.length) return -1;
+        let max = Math.max(...pq)
+        range += max;
+        pq.splice(pq.indexOf(max),1);
+        ret++;
     }
-    return res
-}
+    return ret;
+};
 console.log(
     minRefuelStops(
         // 1,1,[]
