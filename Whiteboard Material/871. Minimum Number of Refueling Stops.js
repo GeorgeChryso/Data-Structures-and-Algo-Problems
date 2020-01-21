@@ -93,12 +93,13 @@ var minRefuelStops=(target,startFuel,stations)=>{
         while(stationIdx<stations.length && stations[stationIdx][0]<=current){
             prq.push(stations[stationIdx++][1])
         }
-        
-        //if(current>=target)return timesRefueled
+        console.log(current,prq)
+
+        //if(current>=target)return timesRefueled dsdsd ssdsdsuhu
         if(!(prq.length))return -1
         //current+=prq.shift()
 
-        //?
+        //pick the station with the most fuel supply to extend my range
         let max=Math.max(...prq)
         current+=max
         prq.splice(prq.indexOf(max),1)
@@ -109,8 +110,8 @@ console.log(
     minRefuelStops(
         // 1,1,[]
         100,
-        50,
-        [[25,50],[50,25]]
+        13,
+        [[10,20],[13,14],[,50],[50,25]]
         //100,1,[[10,100]]
     )
 );
