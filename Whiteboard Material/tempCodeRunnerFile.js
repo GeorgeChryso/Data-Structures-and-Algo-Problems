@@ -1,2 +1,3 @@
-s[stationIdx++][1])
-        }
+rn timesRefueled
+}
+console.lo

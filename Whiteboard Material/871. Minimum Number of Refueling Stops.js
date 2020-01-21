@@ -82,23 +82,7 @@ var minRefuelStops = (target, startFuel, stations) => {
     return dp[stations.length].findIndex(d => d >= target);
 };
 
-//priority queue: (monoq)
-var minRefuelStops = function(target, startFuel, stations) {
-    let pq = [];
-    let ret = 0, stationId = 0, range = startFuel;
-    while (range < target) {
-       while (stationId < stations.length && stations[stationId][0] <= range) {
-            pq.push(stations[stationId++][1]);
-        }
 
-        if (!pq.length) return -1;
-        let max = Math.max(...pq)
-        range += max;
-        pq.splice(pq.indexOf(max),1);
-        ret++;
-    }
-    return ret;
-};
 
 
 var minRefuelStops=(target,startFuel,stations)=>{
@@ -107,10 +91,17 @@ var minRefuelStops=(target,startFuel,stations)=>{
     let current=startFuel
     for (var timesRefueled = 0; current<target; timesRefueled++) {
         while(stationIdx<stations.length && stations[stationIdx][0]<=current){
-            prq.push(-stations[stationIdx++][1])
+            prq.push(stations[stationIdx++][1])
         }
+        
+        //if(current>=target)return timesRefueled
         if(!(prq.length))return -1
-        current+=(-prq.shift())
+        //current+=prq.shift()
+
+        //?
+        let max=Math.max(...prq)
+        current+=max
+        prq.splice(prq.indexOf(max),1)
     }
     return timesRefueled
 }
@@ -119,7 +110,7 @@ console.log(
         // 1,1,[]
         100,
         50,
-        [[25,25],[50,50]]
+        [[25,50],[50,25]]
         //100,1,[[10,100]]
     )
 );
