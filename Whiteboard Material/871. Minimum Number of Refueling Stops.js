@@ -90,6 +90,7 @@ var minRefuelStops = function(target, startFuel, stations) {
        while (stationId < stations.length && stations[stationId][0] <= range) {
             pq.push(stations[stationId++][1]);
         }
+
         if (!pq.length) return -1;
         let max = Math.max(...pq)
         range += max;
@@ -98,12 +99,27 @@ var minRefuelStops = function(target, startFuel, stations) {
     }
     return ret;
 };
+
+
+var minRefuelStops=(target,startFuel,stations)=>{
+    let prq=[]
+    let stationIdx=0
+    let current=startFuel
+    for (var timesRefueled = 0; current<target; timesRefueled++) {
+        while(stationIdx<stations.length && stations[stationIdx][0]<=current){
+            prq.push(-stations[stationIdx++][1])
+        }
+        if(!(prq.length))return -1
+        current+=(-prq.shift())
+    }
+    return timesRefueled
+}
 console.log(
     minRefuelStops(
         // 1,1,[]
         100,
         50,
-        [[25,50],[50,25]]
+        [[25,25],[50,50]]
         //100,1,[[10,100]]
     )
 );
