@@ -89,12 +89,7 @@ var minRefuelStops = (target, startFuel, stations) => {
     var timesRefueled=0
     while (currentPotentialRange < target) {
         //keep going to the next station while you can (is reachable , within my proximity range)
-        for (
-            stationIdx;
-            stationIdx < stations.length &&
-            stations[stationIdx][0] <= currentPotentialRange;
-            stationIdx++
-        ){
+        for (stationIdx;stationIdx < stations.length &&stations[stationIdx][0] <= currentPotentialRange;stationIdx++){
             //and push the reachable's station gas tank onto my priority queue
             prq.push(stations[stationIdx][1]);
         }
