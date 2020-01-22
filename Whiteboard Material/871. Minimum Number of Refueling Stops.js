@@ -82,38 +82,44 @@ var minRefuelStops = (target, startFuel, stations) => {
     return dp[stations.length].findIndex(d => d >= target);
 };
 
-
-
-
-var minRefuelStops=(target,startFuel,stations)=>{
-    let prq=[]
-    let stationIdx=0
-    let currentPotentialRange=startFuel // that's where I can go (my range)
-    for (var timesRefueled = 0; current<target; timesRefueled++) {
-      
-        //keep going to the next station while you can
-        for (stationIdx; stationIdx < stations.length&& stations[stationIdx][0]<=currentPotentialRange ; stationIdx++) {
+var minRefuelStops = (target, startFuel, stations) => {
+    let prq = []; // essentially this holds gases, gases that I can get to extend my travel range.
+    let stationIdx = 0;
+    let currentPotentialRange = startFuel; // that's where I can go (my range)
+    var timesRefueled=0
+    while (currentPotentialRange < target) {
+        //keep going to the next station while you can (is reachable , within my proximity range)
+        for (
+            stationIdx;
+            stationIdx < stations.length &&
+            stations[stationIdx][0] <= currentPotentialRange;
+            stationIdx++
+        ){
             //and push the reachable's station gas tank onto my priority queue
-            prq.push(stations[stationIdx][1])
+            prq.push(stations[stationIdx][1]);
         }
 
-        //if(current>=target)return timesRefueled dsdsd ssdsdsuhu
-        if(!(prq.length))return -1
-        //current+=prq.shift()
+        if (!prq.length) return -1;
 
         //pick the station with the most fuel supply to extend my range
-        let max=Math.max(...prq)
-        currentPotentialRange+=max // and refuel
-        prq.splice(prq.indexOf(max),1)
+        let max = Math.max(...prq);
+        currentPotentialRange += max; // and refuel. increasing my proximity by picking the best station (with the most gas) in my proximity
+        prq.splice(prq.indexOf(max), 1); // remove my station's gas as I just used it
+        timesRefueled++; // and increase the number of stops cos I just used one.
     }
-    return timesRefueled
-}
+    return timesRefueled;
+};
 console.log(
     minRefuelStops(
         // 1,1,[]
         100,
         13,
-        [[10,20],[13,14],[,50],[50,25]]
+        [
+            [10, 20],
+            [13, 14],
+            [, 50],
+            [50, 25]
+        ]
         //100,1,[[10,100]]
     )
 );
