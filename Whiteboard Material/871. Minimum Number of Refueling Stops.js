@@ -88,12 +88,14 @@ var minRefuelStops = (target, startFuel, stations) => {
 var minRefuelStops=(target,startFuel,stations)=>{
     let prq=[]
     let stationIdx=0
-    let current=startFuel
+    let currentPotentialRange=startFuel // that's where I can go (my range)
     for (var timesRefueled = 0; current<target; timesRefueled++) {
-        while(stationIdx<stations.length && stations[stationIdx][0]<=current){
-            prq.push(stations[stationIdx++][1])
+      
+        //keep going to the next station while you can
+        for (stationIdx; stationIdx < stations.length&& stations[stationIdx][0]<=currentPotentialRange ; stationIdx++) {
+            //and push the reachable's station gas tank onto my priority queue
+            prq.push(stations[stationIdx][1])
         }
-        console.log(current,prq)
 
         //if(current>=target)return timesRefueled dsdsd ssdsdsuhu
         if(!(prq.length))return -1
@@ -101,7 +103,7 @@ var minRefuelStops=(target,startFuel,stations)=>{
 
         //pick the station with the most fuel supply to extend my range
         let max=Math.max(...prq)
-        current+=max
+        currentPotentialRange+=max // and refuel
         prq.splice(prq.indexOf(max),1)
     }
     return timesRefueled
