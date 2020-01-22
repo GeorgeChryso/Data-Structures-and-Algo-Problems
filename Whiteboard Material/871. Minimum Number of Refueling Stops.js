@@ -83,7 +83,7 @@ var minRefuelStops = (target, startFuel, stations) => {
 };
 
 var minRefuelStops = (target, startFuel, stations) => {
-    let prq = []; // essentially this holds gases, gases that I can get to extend my travel range.
+    let prq = []; // essentially this holds gases FROM THE CANDIDATE STATIONS OF MY PROXIMITY, gases that I can get to extend my travel range.
     let stationIdx = 0;
     let currentPotentialRange = startFuel; // that's where I can go (my range)
     var timesRefueled=0
@@ -94,7 +94,7 @@ var minRefuelStops = (target, startFuel, stations) => {
             prq.push(stations[stationIdx][1]);
         }
 
-        if (!prq.length) return -1;
+        if (!prq.length) return -1;// there are no stations in my proximity
 
         //pick the station with the most fuel supply to extend my range
         let max = Math.max(...prq);
