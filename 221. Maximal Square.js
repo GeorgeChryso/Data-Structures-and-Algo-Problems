@@ -14,11 +14,16 @@ var maximalSquare = function(M) {
         for(let j = i+1; j < M.length; j++) {
 
             start&=M[j]
-            let counter=0
+            var counter=0
+            let consecutive=0
             for (const bit of start.toString(2)) {
-                if(bit)counter++
+                if(bit==1){
+                    counter++
+                    consecutive=Math.max(counter,consecutive)
+                }
+                else counter=0
             }
-            if(counter>=j-i-1)result=Math.max(result,Math.pow(j-i-1,2))
+            if(consecutive>=j-i+1)result=Math.max(result,Math.pow(j-i+1,2))
         }
         
     }
@@ -27,7 +32,8 @@ var maximalSquare = function(M) {
 };
 
 console.log(maximalSquare(
-    [["1","1"],["1","1"]]
+   // [["1","1"],["1","1"]]
     // [["1"]]
-    //[["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+   // [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+   [["1","0","1","0"],["1","0","1","1"],["1","0","1","1"],["1","1","1","1"]]
     ))
