@@ -23,21 +23,24 @@ var maximalSquare = function(M) {
 
         // Essentially forming my rectangle.
         for(let j = i+1; j < M.length; j++) {
-            start=start.map((d,i)=>d&M[j][i])
+            start.forEach((d,i)=>start[i]=d&M[j][i])// Base Intuition
 
             let consecutive=0 // the consecutive ones I meet
+            let max=0   //helps with my early termination -200ms
             for (const bit of start) {
 
                 if(Number(bit)==1){
                     consecutive++
+                    max=Math.max(consecutive,max)
                     if(consecutive==j-i+1)result=Math.max(result,Math.pow(consecutive,2))
 
                 }
                 else {
                     consecutive=0
                 }
-
             }
+            if(max<j-i+1)break // a rectangle is not possible further down
+
         }
         
     }
