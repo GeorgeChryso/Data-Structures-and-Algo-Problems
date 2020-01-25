@@ -1,3 +1,1 @@
-rn timesRefueled
-}
-console.lo
+S < minimum
