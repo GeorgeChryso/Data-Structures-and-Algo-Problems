@@ -114,22 +114,46 @@ var diagonalSort = function(A) {
 
 
 var maxValueAfterReverse = function(A) {
-    let result=-1
+    let maxgain=-1
     let change=[3,3]
 
     let findVal=S=>{
+        console.log(S)
         let sum=0
         S.forEach((d,i)=>{
             if(i!==S.length-1)sum+=Math.abs(S[i]-S[i+1])
         })
         return sum
     }
-    for (let start = 1; start < A.length-1; start++) {
-        for (let end = start+1; end < A.length-1; end++) {
-            let temp=Math.abs(A[start-1]-A[end])+Math.abs(A[end]-A[start+1])+Math.abs(A[start]-A[end+1])+Math.abs(A[end-1]-A[start])
-            let gain=temp-(Math.abs(A[start-1]-A[start])+Math.abs(A[end]-A[end+1]))+Math.abs(A[start]-A[start+1])+Math.abs(A[end-1]-A[end])
-            if(gain>result){
-                result=temp
+    for (let start = 0; start < A.length; start++) {
+        for (let end = start+1; end < A.length; end++) {
+
+            let temps,tempend,norms,normend
+            if(start-1>=0){
+                norms=Math.abs(A[start-1]-A[start])+Math.abs(A[start]-A[start+1])
+                temps=Math.abs(A[start-1]-A[end])+Math.abs(A[end]-A[start+1])
+            }
+            else{
+                norms=Math.abs(A[start]-A[start+1])
+                temps=Math.abs(A[end]-A[start+1])
+              
+            }
+            if( end+1<=A.length-1){
+                normend=Math.abs(A[end]-A[end+1])+Math.abs(A[end-1]-A[end])
+                tempend=Math.abs(A[start]-A[end+1])+Math.abs(A[end-1]-A[start])
+            }
+            else{
+                normend=Math.abs(A[end-1]-A[end])
+                tempend=Math.abs(A[end-1]-A[start])
+            }
+            let norm=norms+normend
+            let temp=temps+tempend
+
+            let gain=temp-norm
+            console.log(norm,temp)
+
+            if(gain>maxgain){
+                maxgain=gain
                 change[0]=start
                 change[1]=end
             }   
@@ -137,11 +161,13 @@ var maxValueAfterReverse = function(A) {
     }
 
     let [starto,endo]=change
+    console.log(change,maxgain)
     return Math.max(findVal(A),findVal(A.slice(0,starto).concat(A.slice(starto,endo+1).reverse()).concat(A.slice(endo+1)))
     )
 };
 console.log(maxValueAfterReverse(
-    //[2,3,1,5,4]
+   // [2,5,1,3,4]
+   // [2,3,1,5,4]
    [2,4,9,24,2,1,10]
 ));
 
