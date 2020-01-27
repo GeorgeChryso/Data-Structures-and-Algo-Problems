@@ -48,6 +48,45 @@ var maximalSquare = function(M) {
     return result
 };
 
+//dp Solution
+var maximalSquare=A=>{
+    let dp=Array(A.length).fill(null).map(d=>Array(A[0].length).fill(0))
+    //dp[i][j] means the maximum length of the side of a square whose bottom right corner end is the index i,j
+    let maxSide=0;
+    for (let i = 0; i < A.length; i++) {
+        for (let j = 0; j < A[0].length; j++) {
+            if (i==0 || j==0 || A[i][j] == '0') { 
+                dp[i][j] = A[i][j] ; //If I come across a 0 the max length is 0, cos no square can be formed. As for the first line, if i see 1 or a 0 the result is whatever I see. 
+            } else { // If A[i][j]=='1' I can extend my 3 squares..How?
+                dp[i][j] =Math.min(     //I need the minimum of the 3 sides    
+                    dp[i - 1][j - 1],   
+                    Math.min(dp[i - 1][j], dp[i][j - 1]) 
+                    ) + 1;
+            }
+             maxSide=Math.max(maxSide,dp[i][j])
+        }        
+
+    }
+    return maxSide*maxSide
+}
+
+
+
+                //                          |
+                //             dp[i-1][j-1] | dp[i-1][j]
+                //                   _______|_______
+                //                          |
+                //               dp[i][j-1] | dp[i][j]
+                //                          |
+                //                          
+                //   dp[i][j] essentially forms the biggest square with a bottom right index at i,j
+                // That relies on the other cells though, as for me to form the biggest square at index i,j There have to be
+
+
+
+
+
+
 console.log(maximalSquare(
    // [["1","1"],["1","1"]]
     // [["1"]]
