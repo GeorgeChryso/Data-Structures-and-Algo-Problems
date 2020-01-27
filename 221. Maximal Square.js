@@ -60,7 +60,8 @@ var maximalSquare=A=>{
             } else { // If A[i][j]=='1' I can extend my 3 squares..How?
                 dp[i][j] =Math.min(     //I need the minimum of the 3 sides    
                     dp[i - 1][j - 1],   
-                    Math.min(dp[i - 1][j], dp[i][j - 1]) 
+                    dp[i - 1][j],
+                    dp[i][j - 1]
                     ) + 1;
             }
              maxSide=Math.max(maxSide,dp[i][j]) // watch this pattern of keeping record on a row
@@ -72,20 +73,49 @@ var maximalSquare=A=>{
 
 
 
-                //                          |
-                //             dp[i-1][j-1] | dp[i-1][j]
-                //                   _______|_______
-                //                          |
-                //               dp[i][j-1] | dp[i][j]
-                //                          |
-                //                          
-                //   dp[i][j] essentially forms the biggest square with a bottom right index at i,j
-                // That relies on the other cells though, as for me to form the biggest square at index i,j they all have to be nonzeros, and connected to i,j
-                // If any of them is 0, that means that my answer is immediately 1, as there cannot be formed any square
+//                          |
+//             dp[i-1][j-1] | dp[i-1][j]
+//                   _______|_______
+//                          |
+//               dp[i][j-1] | dp[i][j]
+//                          |
+//                          
+//   dp[i][j] essentially forms the biggest square with a bottom right index at i,j
+// That relies on the other cells though, as for me to form the biggest square at index i,j they all have to be nonzeros, and connected to i,j
+// If any of them is 0, that means that my answer is immediately 1, as there cannot be formed any square
 
 
+//optimized no space
+var maximalSquare=A=>{
+    if(!A.length)return 0
+    //A[i][j] means the maximum length of the side of a square whose bottom right corner end is the index i,j
 
+    //deal with the first row and the first column
+    let maxSide=Math.max(A[0].reduce((acc,curr)=>Math.max(acc,curr)))
+    for (let j = 0; j < A.length; j++) {
+        maxSide=Math.max(maxSide,A[j][0])        
+    }
 
+    // deal with the rest of the matrix
+    for (let i = 1; i < A.length; i++) {
+        for (let j = 1; j < A[0].length; j++) {
+           
+           if(A[i][j]=='1') {
+                //same concept
+                A[i][j] =Math.min(        
+                    A[i - 1][j - 1],   
+                    A[i - 1][j],
+                    A[i][j - 1]
+                    ) + 1;
+                    maxSide=Math.max(maxSide,A[i][j])
+            }
+        }        
+
+    }
+    return maxSide*maxSide
+}
+ 
+                
 
 console.log(maximalSquare(
    // [["1","1"],["1","1"]]
