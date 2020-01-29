@@ -31,19 +31,7 @@ var findMaxForm = function(strs, m, n) {
            for (const dora of Object.keys(dp[i])) {
                 let [x,y]=dora.split(',')
            
-                if(x>=mm&&y>=nn){
-                    if(dp[i-1][[x,y]]===Infinity){
-                        dp[i][[x,y]]=1+dp[i-1][[x-mm,y-nn]]
-                        continue
-                    }
-                    if(dp[i-1][[x-mm,y-nn]]===Infinity){
-                        dp[i][[x,y]]=dp[i-1][[x,y]]
-                        continue
-                    }
-                    dp[i][[x,y]]=Math.max(dp[i-1][[x,y]],1+dp[i-1][[x-mm,y-nn]])
-
-                }
-                else dp[i][[x,y]]=dp[i-1][[x,y]]
+               
            }
            console.log(dp[i])
     }   
@@ -54,7 +42,53 @@ var findMaxForm = function(strs, m, n) {
 };
 
 
+//trying sort of a hash, still knapsack
+var findMaxForm = function(strs, m, n) {
+    for (const i in strs) {
+        let container=[0,0]
+        for (const bit of strs[i]) {
+            container[Number(bit)]++
+        }
+        strs[i]=[...container]
+    }
+    
+  
+    let dp=Array(strs.length+1).fill(null).map(d=>Array((m+1)*(n+1)).fill(0))
+    // dp[i][[k,l]] is the max number of items i can take while having used [k,l] 0,1s    
+    for (let i = 1; i < dp.length; i++) {
+           let [mm,nn]=strs[i-1]
+           
+           for (let j = 0,x=0,y=0; j < dp[i].length; j++) {
+               dp[i][j]=dp[i-1][j]
+               //hash j==>x,y
+               //let [x,y]=[Math.floor(j/n)-1, j-(Math.floor(j/n)-1)*n]
+                if(y==n+1){
+                    y=0
+                    x++
+                }
+               // x,y==>j  
+               // j= (1+x)*y
+               let hashback=(x,y)=>(x)*(n+1)+y
+
+               if(x>=mm&&y>=nn){
+                    dp[i][j]=Math.max(dp[i-1][j],1+dp[i-1][hashback(x-mm,y-nn)])
+                }
+                y++
+           }
+
+      
+    }   
+    return Math.max(...dp[dp.length-1])
+};
+
+
+
+
 console.log(findMaxForm(
-    ["10","0001","111001","1","0"],5,3
-  //  ["10", "0", "1"],1,1
+//["10","0001","111001","1","0"],5,3 //4
+  //  ["10", "0", "1"],1,1 //2
+           
+           ["10","0001","111001","1","0"]
+          , 5
+          , 3
 ))
