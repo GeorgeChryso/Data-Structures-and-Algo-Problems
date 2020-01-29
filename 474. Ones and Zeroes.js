@@ -7,13 +7,12 @@
 
 
 var findMaxForm = function(strs, m, n) {
-    let memo={}
-    for (const string of strs) {
+    for (const i in strs) {
         let container=[0,0]
-        for (const bit of string) {
+        for (const bit of strs[i]) {
             container[Number(bit)]++
         }
-        memo[string]=container
+        strs[i]=[...container]
     }
     
     let possibleCases={
@@ -21,18 +20,39 @@ var findMaxForm = function(strs, m, n) {
     }
     for (let i = 0; i <=m; i++) {   
         for (let j = 0; j <=n; j++) {
-            possibleCases[[i,j]]=Array(strs.length+1)            
+            possibleCases[[i,j]]=Infinity           
         }        
     }
-
-    let dp=Array(strs.length+1).fill(null).map(d=>Array(m*n).fill(Infinity))
-    for (let i = 0; i < dp.length; i++) {
-        dp[i][0]=[m,n]        
-    }   
-    strs.map(d=>memo[d])
+    let dp=Array(strs.length+1).fill(null).map(d=>Object.assign({},possibleCases))
+    Object.keys(dp[0]).forEach(d=>dp[0][d]=0)
     for (let i = 1; i < dp.length; i++) {
-        for (let j = 1; j < dp.length; j++) {
-            dp[i][j]=[]
-        }        
-    }
+           let [mm,nn]=strs[i-1]
+           for (const dora of Object.keys(dp[i])) {
+                let [x,y]=dora.split(',')
+           
+            if(x>=mm&&y>=nn){
+                if(dp[i-1][[x,y]]===Infinity){
+                    dp[i][[x,y]]=1+dp[i-1][[x-mm,y-nn]]
+                    continue
+                }
+                if(dp[i-1][[x-mm,y-nn]]===Infinity){
+                    dp[i][[x,y]]=dp[i-1][[x,y]]
+                    continue
+                }
+                dp[i][[x,y]]=Math.max(dp[i-1][[x,y]],1+dp[i-1][[x-mm,y-nn]])
+
+            }
+            else dp[i][[x,y]]=dp[i-1][[x,y]]
+           }
+    }   
+    return Object.values(dp[dp.length-1]).reduce((acc,curr)=>{
+       if(curr===Infinity)return acc
+       return Math.max(curr,acc) 
+    },0)
 };
+
+
+console.log(findMaxForm(
+   // ["10","0001","111001","1","0"],5,3
+    ["10", "0", "1"],1,1
+))
