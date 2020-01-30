@@ -1,9 +1,1 @@
-  // if(dp[i-1][[x,y]]===Infinity){
-            //     dp[i][[x,y]]=1+dp[i-1][[x-mm,y-nn]]
-            //     continue
-            // }
-            // if(dp[i-1][[x-mm,y-nn]]===Infinity){
-            //     dp[i][[x,y]]=dp[i-1][[x,y]]
-            //     continue
-            // }
-            // dp[i][[x,y]]=Math.max(dp[i-1][[x,y]],1+dp[i-1][[x-mm,y-nn]])
+-dp[i][j]
