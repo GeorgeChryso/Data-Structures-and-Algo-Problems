@@ -6,7 +6,7 @@
 
 // In order to reach the princess as quickly as possible, the knight decides to move only rightward or downward in each step.
 
-//classic dp?
+//classic knapsack O(m*n) O(m*n)
 var calculateMinimumHP = function(A) {
     let dp = [...A];
 
@@ -41,7 +41,7 @@ var calculateMinimumHP = function(A) {
     return Math.max(dp[0][0], 0) + 1;
 };
 
-//essentially the previous approach with no extra space
+//essentially the previous approach with no extra space O(m*n) O(1)
 var calculateMinimumHP = function(A) {
     for (let i = A.length - 1; i >= 0; i--) {
         for (let j = A[0].length - 1; j >= 0; j--) {
