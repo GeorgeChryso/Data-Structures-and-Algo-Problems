@@ -17,41 +17,38 @@ var calculateMinimumHP = function(A) {
     let dp=[...A]
 
     //dp[i][j] is the minimum health needed to survive the distance from that square to the end
-    dp.forEach(d=>console.log(d))
-    console.log('\n')
     // my base case is the end square that must contain the min value as HP in order to survive 
    
-    
+    //logic: Choose the minimum Positive element on the right or bottom
+    // if the either of them is negative, that means that I need no 
+    // extra cash to survive,so  dp[i][j]=-dp[i][j] I just need the price the current cell has to offer
 
     for (let i = A.length-1; i >=0; i--) {
         for (let j = A[0].length-1; j >=0; j--) {
-            if(i==A.length-1&&j==A[0].length-1){
-                dp[i][j]=-dp[i][j]
-                
+            if(i==A.length-1&&j==A[0].length-1){ // last element
+                dp[i][j]=-dp[i][j] //base case
             }
             else if(i+1<=A.length-1&&j+1<=A[0].length-1){
                 if(dp[i+1][j]<0||dp[i][j+1]<0) dp[i][j]=0-dp[i][j]
                 else dp[i][j]=Math.min(dp[i+1][j],dp[i][j+1])-dp[i][j]
-                
             }
             else if(i+1<=A.length-1){
                 if(dp[i+1][j]<0) dp[i][j]=0-dp[i][j]
                 else dp[i][j]=Math.min(dp[i+1][j])-dp[i][j]
-                
             }
             else if(j+1<=A[0].length-1){
                 if(dp[i][j+1]<0) dp[i][j]=-dp[i][j]
                 else dp[i][j]=Math.min(dp[i][j+1])-dp[i][j]
-                
             }
         }
     }
-    dp.forEach(d=>console.log(d))
-    
-    return dp[0][0]<0?1:(dp[0][0]+1)
+    // so my A[0][0] can either be positive or negative
+    // If It's positive i need that much cash in the beginning +1 for surviving the last cell (if I dont add 1, I die on the last cell cos of 0)
+    // If it's negative that means that I just need 1, cos I m gonna be // making money throughout the way that will help me survive.  
+    return Math.max(A[0][0],0)+1
 };
 
-
+//essentially the previous approach with no extra space
 var calculateMinimumHP = function(A) {
     for (let i = A.length-1; i >=0; i--) {
         for (let j = A[0].length-1; j >=0; j--) {
@@ -89,6 +86,6 @@ var calculateMinimumHP = function(A) {
     ([a,b])=>
     {
       //  console.log(calculateMinimumHP(a),b,calculateMinimumHP(a)==b)
-        console.log(calculateMinimumHP(a))
+        console.log(calculateMinimumHP(a)==b)
 
     })
