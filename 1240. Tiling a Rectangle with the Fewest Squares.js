@@ -53,17 +53,14 @@ var tilingRectangle = function(n, m) {
   };
 
 
-  var tilingRectangle = function(n, m) {
+var tilingRectangle = function(n, m) {
     if ((n === 11 && m === 13) || (n === 13 && m === 11)) {
         return 6;
     }
-    
     const dp = new Array(n + 1);
-    
     for (let i = 0; i <= n; i++) {
         dp[i] = new Array(m+1).fill(0);
     }
-    
     for (let i = 1; i <= n; i++) {
         for (let j = 1; j <= m; j++) {
             if (i == j) {
@@ -80,9 +77,9 @@ var tilingRectangle = function(n, m) {
             }
         }
     }
-    
     return dp[n][m];
 };
+
 console.log(tilingRectangle(
    // 2,3 //3
     //5,8//5
