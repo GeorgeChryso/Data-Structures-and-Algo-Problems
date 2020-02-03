@@ -84,7 +84,30 @@ var maxProduct = function(root) {
 };
 
 
+var maxProduct=root=>{
+   
+    
 
+    let dfsSum=(node)=>{
+        let leftSum=0,rightSum=0
+        if(node.left)leftSum=dfsSum(node.left)
+        if(node.right)rightSum=dfsSum(node.right)
+        return node.val+rightSum+leftSum
+    }
+    let totalSum=dfsSum(root)
+
+    let result=0
+    let dfsSum2=(node)=>{
+        let leftSum=0,rightSum=0
+        if(node.left)leftSum=dfsSum2(node.left)
+        if(node.right)rightSum=dfsSum2(node.right)
+        result=Math.max(result,(node.val+rightSum+leftSum)*(totalSum-(node.val+rightSum+leftSum)))
+        return node.val+rightSum+leftSum
+    }
+    dfsSum2(root)
+
+    return result%1000000007
+}
 
 
 var ArrayToBinaryTree = A => {
