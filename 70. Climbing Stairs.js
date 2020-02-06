@@ -74,15 +74,15 @@ var climbStairs = function(n) {
 //dp O(n)
 var climbStairs = function(n) {
 
-    //3 because its either 0, 1 or 2 
+    // n+1 because I need the base case of reaching the 0th cell with 1 way. Cos I start from there
     let dp=Array(n+1).fill(null).map(d=>0)
-
     // dp[j] is how many distinct ways Can i reach cell j 
-
+    // which is always the sum of the distinct ways of reaching the previous 2 
+    
     //base case 
     dp[0]=1
         for (let j = 1; j < n+1; j++) {
-            for (let i = 0; i < 3; i++) {
+            for (let i = 1; i < 3; i++) {
                 if(j>=i)dp[j]+=dp[j-i]
             }
         }        
