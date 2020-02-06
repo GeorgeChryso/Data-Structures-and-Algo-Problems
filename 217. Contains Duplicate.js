@@ -10,7 +10,6 @@ var containsDuplicate = function(nums) {
         if(set.has(d))return true
         else{
             set.add(d)
-
              return false
         } 
     })
