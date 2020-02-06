@@ -26,5 +26,12 @@ var uniquePaths = function(m, n) {
     return dp[n-1][m-1]
 };
 
-// backtracking
-
+// backtracking-TLE?
+var uniquePaths=(m,n)=>{
+    if (m==1&&n==1)return 1
+    if (m<1||n<1)return 0
+    let cur=0
+    if(m>=2)cur+=uniquePaths(m-1,n)
+    if(n>=2)cur+=uniquePaths(m,n-1)
+    return cur
+}
