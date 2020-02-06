@@ -56,11 +56,8 @@ var climbStairs = function(n) {
 var climbStairs = function(n) {
     var sq5=Math.sqrt(5)
     var fibn= Math.pow((1+sq5)/2 ,n+1) - Math.pow((1-sq5)/2,n+1)
-
     return Math.round(fibn/(sq5))
 };
-
-
 var climbStairs = function(n) {
 
 
@@ -68,7 +65,32 @@ var climbStairs = function(n) {
 };
 
 
+
+
+
+
+
+
+//dp O(n)
+var climbStairs = function(n) {
+
+    //3 because its either 0, 1 or 2 
+    let dp=Array(n+1).fill(null).map(d=>0)
+
+    // dp[j] is how many distinct ways Can i reach cell j 
+
+    //base case 
+    dp[0]=1
+        for (let j = 1; j < n+1; j++) {
+            for (let i = 0; i < 3; i++) {
+                if(j>=i)dp[j]+=dp[j-i]
+            }
+        }        
+    
+    return dp[n]
+
+};
 console.log(climbStairs(
-    9
+    2
 ))
 
