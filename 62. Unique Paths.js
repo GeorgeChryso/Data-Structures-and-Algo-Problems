@@ -8,7 +8,7 @@
 
 //dp
 
-//Intuition the number of distinct ways to reach dp[m][n] cell is the sum of distinct ways of reaching the cell on its top and left
+//Intuition: The number of distinct ways to reach dp[m][n] cell is the sum of distinct ways of reaching the cell on its top and left
 var uniquePaths = function(m, n) {
     
     let dp=Array(n).fill(null).map(d=>Array(m).fill(0))
@@ -18,10 +18,11 @@ var uniquePaths = function(m, n) {
     for (let i = 0; i < dp.length; i++) {
         for (let j = 0; j < dp[0].length; j++) {
              if(i==0&&j==0)continue //base case
-             if(j-1>=0)dp[i][j]+=dp[i][j-1]
-             if(i-1>=0)dp[i][j]+=dp[i-1][j]
+             if(j-1>=0)dp[i][j]+=dp[i][j-1] //I can only reach a cell from top
+             if(i-1>=0)dp[i][j]+=dp[i-1][j] // or left side
         }        
     }
 
     return dp[n-1][m-1]
 };
+
