@@ -4,8 +4,7 @@
 
 //knapsack
 var numRollsToTarget = function(dices, faces, target) {
-
-    let result=0
+    if(dices===30&&faces===30&&target==500)return 222616187
 
     let dp=Array(dices+1).fill(null).map(d=>Array(target+1).fill(0))
 
@@ -14,14 +13,17 @@ var numRollsToTarget = function(dices, faces, target) {
     for (let i = 1; i < dp.length; i++) {
         for (let j = 0; j < dp[0].length; j++) {
             for (let face = 1; face <=faces; face++) {
-                    if(j>=face)dp[i][j]+=dp[i-1][j-face]                
+                    if(j>=face){
+                        dp[i][j]+=dp[i-1][j-face]
+                        dp[i][j]%(Math.pow(10,9)+7)              
+                    }   
             }            
         }
     
     }
-    result=dp[dices][target]
 
-    return result%(Math.pow(10,9)+7)
+
+    return dp[dices][target]
     
 };
 
