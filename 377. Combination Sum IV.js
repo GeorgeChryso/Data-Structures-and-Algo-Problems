@@ -22,17 +22,20 @@
 
 
 var combinationSum4 = function(nums, target) {
+    nums.sort((a, b) => a - b); 
     let dp=Array(target+1).fill(null).map(d=>0)
     dp[0]=1
-    var maxItems=Math.floor( target/ Math.min(...nums))//maximum times I can use an item
+    var maxItems=Math.floor( target/ nums[0]==0?1:nums[0])//maximum times I can use an item
     nums.unshift(0) // I can choose not to use an item
     let result=0 // Here i will be adding every dp[target] for each different nubmer of items used
 
+    //using 3 fors
     for (let times = 0; times <=maxItems ; times++) {
         for (let i = target; i>=0; i--) {
             dp[i]=0 //ESSENTIAL beware
             for (const value of nums) {
                 if(i>=value)dp[i]+=dp[i-value]
+                else break
             }
             if(i==target)result+=dp[target]
         }
@@ -42,13 +45,13 @@ var combinationSum4 = function(nums, target) {
 };
 
 
-//sorted Need to study
+//sorted Need to study using 2 loops
 var combinationSum4 = function(nums, target) {
-    nums.sort((a, b) => a - b);   
+    nums.sort((a, b) => a - b);   //I sort it so I can have an early termiantion of my inner loop
     let dp = new Array(target+1).fill(0);
     for (let i = 1; i<= target; i++){
         for (let j = 0; j<nums.length;j++){
-            if(nums[j] > i) break;
+            if(nums[j] > i) break;//early termination due to sorting
             if(i == nums[j]){
                 dp[i] += 1; 
             }
@@ -58,6 +61,28 @@ var combinationSum4 = function(nums, target) {
     return dp[dp.length-1];
     
 };
+
+var combinationSum4 = function(nums, target) {
+    nums.sort((a, b) => a - b); 
+    let dp=new Array(target+1).fill(0)//dp[i] is the number of possible combinations that add up to i
+
+    //base case dp[0]=0
+
+    for (let i = 1; i<=target; i++) {
+
+        for (const value of nums) { //essentially trying to end up on sum=i from dp[i-value]
+            if(i>=value){
+                dp[i]+=(dp[i-value]  +(i==value)?1:0)
+            }
+            else break //early termination
+        }
+    }
+    
+        
+    return dp[dp.length-1]
+};
+
+
 
 //solve it recursively too, top down and bottomuup
 
