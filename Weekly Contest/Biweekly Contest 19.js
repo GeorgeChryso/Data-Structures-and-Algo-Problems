@@ -97,7 +97,8 @@ var minJumps = function(arr) {
     }
     arr.forEach(
         (d,i)=>{
-            dictionary[d]=dictionary[d]||Infinity
+            if(i==0)dictionary[d]=0
+            else dictionary[d]=dictionary[d]||Infinity
     })
     //basecase
     previous[0]=0
@@ -105,17 +106,6 @@ var minJumps = function(arr) {
     let minsofar=Infinity
     let result=Infinity
     for (let i = 0; i < arr.length; i++) {
-        // let next=Array(arr.length).fill(null).map(d=>Infinity)
-        // for (let j = 0; j < arr.length; j++) {
-        //     next[j]=Math.min(previous[j],
-        //             j-1>=0?1+previous[j-1]:Infinity,
-        //             j+1<=arr.length-1?1+previous[j+1]:Infinity,
-        //             dictionary[arr[j]]+1
-        //             )
-        //     minsofar=Math.min(next[j],minsofar)
-        //     dictionary[arr[j]]=Math.min(dictionary[arr[j]],next[j])
-        // }
-
         previous=previous.map((d,j)=>{
             let res=Math.min(previous[j],
                 j-1>=0?1+previous[j-1]:Infinity,
@@ -143,20 +133,21 @@ console.log(minJumps(
 
 
 var angleClock = function(hour, minutes) {
-    if(hour==12&&minutes==0)return 0
-    if(hour==12)hour=0
-    let rest=minutes/2
-    if(hour*30<minutes*6)rest*=-1
-    if(hour<6&&minutes<=30)return Math.abs(hour*30-minutes*6) +rest
-    if(hour>6&&minutes>30)return Math.abs( Math.abs(12-hour)*30-Math.abs(60-minutes)*6)+rest
 
-    console.log( Math.abs( Math.abs(12-hour)*30-Math.abs(60-minutes)*6),
-    Math.abs(hour*30-minutes*6),rest)
-    return Math.abs(Math.min(
-    Math.abs( Math.abs(12-hour)*30-Math.abs(60-minutes)*6),
-    Math.abs(hour*30-minutes*6)
-    )+rest)
+
+
+
+    let m = minutes * 6
+    let h = hour * 30
+    if( h == 360)h = 0
+
+    let net_h = h + m / 12
+    let  res = Math.abs(m - net_h)
+    if (res >= 180) return 360 - res
+    else return res
 }
+
+
 
 // 6,5//152.5
 // 3,30 //75
