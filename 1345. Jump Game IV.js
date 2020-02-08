@@ -60,6 +60,8 @@
 var minJumps = function(arr) {
     //Essentially my dictionary of values will hold arrays of  indexes that correspond to the key value
     let dictionary={} // key: arr[i], value:[i,i0,i1,i2,...] where arr[i]==arr[i0]==arr[i1]==...
+
+    //populate my dictionary
     arr.forEach(
         (d,i)=>{
             if(dictionary[d])dictionary[d].push(i)
