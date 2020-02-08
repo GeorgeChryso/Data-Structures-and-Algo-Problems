@@ -27,7 +27,7 @@ var combinationSum4 = function(nums, target) {
     var maxItems=Math.floor( target/ Math.min(...nums))//maximum times I can use an item
     nums.unshift(0) // I can choose not to use an item
     let result=0 // Here i will be adding every dp[target] for each different nubmer of items used
-    
+
     for (let times = 0; times <=maxItems ; times++) {
         for (let i = target; i>=0; i--) {
             dp[i]=0 //ESSENTIAL beware
@@ -40,6 +40,26 @@ var combinationSum4 = function(nums, target) {
         
     return result
 };
+
+
+//sorted Need to study
+var combinationSum4 = function(nums, target) {
+    nums.sort((a, b) => a - b);   
+    let dp = new Array(target+1).fill(0);
+    for (let i = 1; i<= target; i++){
+        for (let j = 0; j<nums.length;j++){
+            if(nums[j] > i) break;
+            if(i == nums[j]){
+                dp[i] += 1; 
+            }
+            dp[i] += dp[i-nums[j]]; 
+        }    
+    }
+    return dp[dp.length-1];
+    
+};
+
+//solve it recursively too, top down and bottomuup
 
 console.log(combinationSum4([3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
     ,10))
