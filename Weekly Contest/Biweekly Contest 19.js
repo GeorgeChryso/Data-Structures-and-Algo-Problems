@@ -27,31 +27,25 @@ var numberOfSteps  = function(num) {
 var numOfSubarrays = function(arr, k, threshold) {
     if(arr.length<k||k===0)return 0
     let result=0
+
     
-    let sums=[]
-    let temp=0
-
-    for (var start = 0; start <= k-1; start++) {
-        temp+=arr[start]
-    }
-    sums.push(temp)
-    while(start<arr.length){
-      let q= sums[sums.length-1]
-      q+=(arr[start]-arr[start-k])
-      sums.push(q)
-      start++
-    }
-    sums.forEach(d=>{
-        if(d/k>=threshold){
-            result++
-        console.log(d,d/k)
-    }
-        
-    })
+    //calculate the sum of the first subarray 
+    let sums=arr.slice(0,k).reduce((a,b)=>a+b)
+    if(sums/k>=threshold)result++
 
 
+    //and every possible next sum
+    for (let i = k; i < arr.length; i++) {
+      //find the next sum
+      sums+=(arr[i]-arr[i-k])
+
+      //increment if of wanted type
+      if(sums/k>=threshold)result++
+    }
+      
     return result
 };
+
 
 
 var angleClock = function(hour, minutes) {
