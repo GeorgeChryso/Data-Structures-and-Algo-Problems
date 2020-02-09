@@ -13,42 +13,50 @@
 
 
 var soupServings = function(N) {
+    if(N>=5551 )return 1 //costraint
     let operations=[[100,0],[75,25],[50,50],[25,75]]
 
-    let dp=Array(N+1).fill(null).map(d=>Array(N+1).fill(1))
+    let dp=Array(N+101).fill(null).map(d=>Array(N+101).fill(0))
 
     //basecase 
-    dp[N][N]=1// the probability of getting Nml A Nml B 
+    dp[N+100][N+100]=1// the probability of getting Nml A Nml B 
     let pA=0
-    for (let i = N; i>=0; i--) {
-        for (let j = N; j >= 0; j--) {
-                // if(operations.some(([a,b])=>{
-                //     if(i+a<=N&&j+b<=N)return dp[i+a][j+b]!==0
-                //     else return false
-                // }))dp[i][j]=1
-                // else continue
+    for (let i = N+100; i>=0; i--) {
+        for (let j = N+100; j >=0; j--) {
+                if(i==N+100&&j==N+100)continue
 
-                // fill 1
+                // if(
+                //     !operations.every(
+                //         ([a,b])=>(i+a<=N+100&&j+b<=N+100)?(i+a>100&&j+a>100):true
+                //     )
+                // ){
+                //     dp[i][j]=0
+                //     continue
+                // }
 
                 operations.forEach(
-                    ([a,b])=>dp[i][j]*= (i+a<=N&&j+b<=N)?dp[i+a][j+b]/4:1
+                    ([a,b])=>{
+
+                        
+                        dp[i][j]+= (i+a<=N+100&&j+b<=N+100)?
+                        (i+a>100&&j+a>100)?dp[i+a][j+b]/4:0:0
+                    }
                 )                
+                if(i<=100&&j<=100)pA+=dp[i][j]/2
+                else if(i<=100)pA+=dp[i][j]
 
-
-                // operations.forEach(
-                //     ([a,b])=>dp[i][j]*= (i+a<=N&&j+b<=N)?(dp[i+a][j+b]!==0?dp[i+a][j+b]/4:1):1
-                // )                
-                if(i==0&&j>0)pA+=dp[i][j]
-
+            
         }            
     }
-    console.log(pA)
-    // probability A gets 0 first
-    console.log(dp[1]+'')
-    return (pA+dp[0][0]/2)
+
+    return pA
 };
 
 //console.log(soupServings(50))
 
 
-console.log(soupServings(50))
+console.log(soupServings(
+   
+   // 50  //.625
+   100 //0.71875
+))

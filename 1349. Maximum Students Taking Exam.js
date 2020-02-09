@@ -7,15 +7,17 @@
 //standard dfs -TLE, 50/55 passed
 var maxStudents = function(S) {
 
-    //this logic prunes the trees i m about to expand by preplacing students in safe places
+    //this logic prunes the trees I'm about to expand by preplacing students in safe places
     let startcheck=(i,j)=>{
         return ways.every(
                 ([a,b])=>(i+a<0||j+b<0||i+a>=S.length||j+b>=S[0].length)?true:
                    S[i+a][j+b]==='#'
             )
     }
-    let standard=0
+    let standard=0 //store the number of preplaced students here 
 
+
+    //checks if it is safe to place a student on position i,j of the matrix k
     let check=(i,j,k)=>{
         return ways.every(
                 ([a,b])=>(i+a<0||j+b<0||i+a>=k.length||j+b>=k[0].length)?true:
@@ -25,13 +27,18 @@ var maxStudents = function(S) {
     let ways=[[-1,-1],[-1,+1],[0,-1],[0,1]]
     let proc=[] //this stores the indices pairs of my candidate placings
 
+
+    
     for (let i = 0; i < S.length; i++) {
         for (let j = 0; j < S[0].length; j++) {
             if(S[i][j]==='.'){
+
+                //preplace && remove from candidates
                 if(startcheck(i,j)){
                     S[i][j]='#'
                     standard++
                 }
+                // save the candidate position
                 else{
                     proc.push([i,j])
                 }
@@ -40,12 +47,16 @@ var maxStudents = function(S) {
         }        
     }
 
+
+    //dfs logic
     let helper=(matrix,left,seated)=>{
  
         if(left.length){
           
 
+            //take the first pair of indices 
             let cand=left.shift()
+            // that isnt a '#" on my matrix
             while(matrix[cand[0]][cand[1]]==='#'&&left.length){
                 cand=left.shift()
             }
@@ -55,9 +66,12 @@ var maxStudents = function(S) {
 
         
             let sum1=0
+            //1st option
+            //if it's still a potential candiate (not 1 (placed) adjacent)
             if(check(i,j,matrix)==true){
-                let m1=JSON.parse(JSON.stringify(matrix))
-                m1[i][j]=1
+                let m1=JSON.parse(JSON.stringify(matrix)) //deep copy the matrix im about to alter
+                m1[i][j]=1 // place a fella
+                //and verify your placement by making all the adjacent unavailable
                 ways.forEach(([a,b])=>{
                     if(i+a<0||j+b<0||(i+a>=S.length)||(j+b>=S[0].length)){
 
@@ -66,12 +80,13 @@ var maxStudents = function(S) {
                         m1[i+a][j+b]='#'
                     }
                 })
-                
+                //and expand your selection
                 sum1=helper(m1,[...left],seated+1)
 
             }
+            //2nd option
             let m2=JSON.parse(JSON.stringify(matrix))
-            m2[i][j]='#'
+            m2[i][j]='#' // Do not place a student 
             
            return Math.max(sum1,helper(m2,[...left],seated)) 
         }
