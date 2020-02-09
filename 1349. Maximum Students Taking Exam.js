@@ -4,7 +4,7 @@
 
 // Students must be placed in seats in good condition.
 
-//standard dfs
+//standard dfs -TLE, 50/55 passed
 var maxStudents = function(S) {
 
     //this logic prunes the trees i m about to expand by preplacing students in safe places
@@ -76,7 +76,6 @@ var maxStudents = function(S) {
            return Math.max(sum1,helper(m2,[...left],seated)) 
         }
         else{
-
             return seated
         }
     }
@@ -86,3 +85,8 @@ var maxStudents = function(S) {
     return helper(S,proc,0)+standard
 
 };
+
+//potential solution? Mask every array into a string for easy processing
+
+
+//solution bitmask:todo
