@@ -85,6 +85,41 @@ var combinationSum4 = function(nums, target) {
 
 
 //solve it recursively too, top down and bottomuup
+// we will have to use a memo for early termination so I dont expand the same trees
+
+//that's top down +memo
+var combinationSum4=(nums,target,memo=new Array(target+1).fill(undefined))=>{
+    if(target==0)return 1 //that's unclear, should be 0
+    if(memo[target]!==undefined)return memo[target]
+
+    memo[target]=0
+    for (let i = 0; i < nums.length; i++) {
+       if(target>=nums[i])memo[target]+=combinationSum4(nums,target-nums[i], memo)     
+    }
+
+    return memo[target]
+}
+
+//that's bottom up +memo
+var combinationSum4=(nums,target)=>{
+    var memo=new Array(target+1).fill(undefined)
+
+    let helper=tar=>{
+
+        if(tar==target)return 1 
+        if(memo[tar]!==undefined)return memo[tar]
+        else{
+            memo[tar]=0
+            for (let i = 0; i < nums.length; i++) {
+                if(tar+nums[i]<=target)memo[tar]+=helper(tar+nums[i])     
+            }
+            return memo[tar]
+        }
+    }
+   
+    return  helper(0)
+}
+
 
 console.log(combinationSum4([3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
     ,10))
