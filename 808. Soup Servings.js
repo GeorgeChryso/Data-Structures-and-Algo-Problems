@@ -11,10 +11,16 @@
 // Return the probability that soup A will be empty first, plus half the probability that A and B become empty at the same time.
 
 
-
+// so that's an O(N^2)time and space dp approach and its the optimal one, however due to the tests being specific I can map the N to increments of 25 and get a better runtime
 var soupServings = function(N) {
     if(N>=5551 )return 1 //costraint
-    if (N==0)return 0.5 //
+
+    // if i choose the first option, A gets to 0 first, so that's .25
+    // if i choose any of the other 3, they both get to 0, so thats .75
+    // but i want the half of the probability of them getting both below 0,so that's .375
+    // so my result is .25+.375=.5
+    if (N==0)return 0.5 
+   
 
     
     let operations=[[100,0],[75,25],[50,50],[25,75]]
@@ -25,31 +31,35 @@ var soupServings = function(N) {
 
     //basecase 
     dp[N+100][N+75]=1// the probability of getting Nml A Nml B 
-    let pA=0
+    let result=0 
     for (let i = N+100; i>=0; i--) {
         for (let j = N+75; j >=0; j--) {
                 if(i==N+100&&j==N+75)continue
+                
+                // essentially sum all the probabilities that can produce 
+                // the state of having i-100 ml A and j-75 Ml B left
+                // and divide them by 4,as I can only pick one at a time
                 operations.forEach(
                     ([a,b])=>{
 
                         
                         dp[i][j]+= 
                             (i+a<=N+100&&j+b<=N+75)? //if a valid element
-                                (i+a>100&&j+b>75)?  //if it can come from any state where anything has ran out
-                                    dp[i+a][j+b]/4
+                                (i+a>100&&j+b>75)?  //if it can come from any state where anything hasn't ran out yet
+                                    dp[i+a][j+b]/4 
                                     :0  //we stop once something runs out
                             :0
                     }
                 )             
 
                 //A<=0 && B<=0 
-                if(i<=100&&j<=75)pA+=dp[i][j]/2
+                if(i<=100&&j<=75)result+=dp[i][j]/2
                 // A<=0 && B>0
-                else if(i<=100&&j>75)pA+=dp[i][j]
+                else if(i<=100&&j>75)result+=dp[i][j]
         }            
     }
 
-    return pA
+    return result
 };
 
 //console.log(soupServings(50))
