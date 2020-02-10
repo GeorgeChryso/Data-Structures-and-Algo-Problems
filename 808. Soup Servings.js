@@ -11,7 +11,9 @@
 // Return the probability that soup A will be empty first, plus half the probability that A and B become empty at the same time.
 
 
-// so that's an O(N^2)time and space dp approach and its the optimal one, however due to the tests being specific I can map the N to increments of 25 and get a better runtime
+// so that's an O(N^2)time and space dp approach and its the optimal one, however due to the tests being specific I can map the N to increments of 25(already implemented update on index incremenets:) and get a better runtime
+
+// The catch on the bottom up approach is line 50: I only want to count the states that come from direct descendants, that would be states above 0
 var soupServings = function(N) {
     if(N>=5551 )return 1 //costraint
 
@@ -70,13 +72,20 @@ var soupServings=(N)=>{
     let dp=Array(N+1).fill(null).map(d=>Array(N+1).fill(undefined))
     let operations=[[100,0],[75,25],[50,50],[25,75]]
  
-    //probability of achieving i ml of A j ml of B //wrong
-    // read up on that todo: 
+    
+    //essentially returns the required sum when starting to count from (i,j)
     let helper=(i,j)=>{
-        if(i<=0&&j<=0)return .5 //we wanna count half of that
-        if(i<=0)return 1 // and full of that
+        //I want Half of the sum of probabilities that get me at or below 0,0
+        if(i<=0&&j<=0)return .5
+
+        // But full of the sum that gets me below 0,+
+        if(i<=0)return 1 
+        
+        //however none of those where b gets emptied first
         if(j<=0)return 0
-        if(dp[i][j]!==undefined) return dp[i][j]
+
+
+        if(dp[i][j]!==undefined) return dp[i][j] //utilizing the memo
 
 
         // the probability of getting i ml of A and j ml of B is
@@ -90,6 +99,55 @@ var soupServings=(N)=>{
 
     return helper(N,N)
 }
+
+
+//bottom up recursion
+var soupServings=(N)=>{
+    if(N>=5551 )return 1 //costraint
+
+    let dp=Array(N+101).fill(null).map(d=>Array(N+76).fill(undefined))
+    //dp[i][j] is the probability of having iml A and Jml B
+
+    dp[N+100][N+75]=1//basecase
+
+    let operations=[[100,0],[75,25],[50,50],[25,75]]
+    
+    
+    //this actually calculates the probability of i,j happening
+    let helper=(i,j)=>{
+        if(i>N+100||j>N+75)return 0
+
+      
+
+        if(dp[i][j]!==undefined) return dp[i][j] //utilizing the memo
+
+
+
+        // the probability of getting i ml of A and j ml of B is
+        // 1/4( of the sum of the probability of each choice)
+        dp[i][j]=operations.reduce((acc,curr)=>
+           //count only the ones that come from operations done on direct descendants
+           (i+curr[0]>100&&j+curr[1]>75)?acc+helper(i+curr[0],j+curr[1])/4:acc
+           ,0
+        )
+        return dp[i][j]
+    }
+
+
+    let result=0
+    for (let i = 0; i < 101; i+=25) {
+        for (let j = 0; j < dp[0].length; j+=25) {
+            helper(i,j)  
+
+                if(i<=100&&j<=75)result+=dp[i][j]/2
+                if(i<=100&&j>75)result+=dp[i][j]
+            
+         
+        }        
+    }
+    return result
+}
+
 
 console.log(soupServings(
    //0//
