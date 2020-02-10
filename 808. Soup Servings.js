@@ -52,7 +52,7 @@ var soupServings = function(N) {
                     }
                 )             
 
-                //A<=0 && B<=0 
+                // A<=0 && B<=0 
                 if(i<=100&&j<=75)result+=dp[i][j]/2
                 // A<=0 && B>0
                 else if(i<=100&&j>75)result+=dp[i][j]
@@ -62,8 +62,29 @@ var soupServings = function(N) {
     return result
 };
 
-//console.log(soupServings(50))
 
+//todo recursive approaches 
+var soupServings=(N)=>{
+    if(N>=5551 )return 1 //costraint
+
+    let dp=Array(N+1).fill(null).map(d=>Array(N+1).fill(undefined))
+    let operations=[[100,0],[75,25],[50,50],[25,75]]
+ 
+    //probability of achieving i ml of A j ml of B
+    let helper=(i,j)=>{
+        if(i<=0&&j<=0)return .5
+        if(i<=0)return 1
+        if(j<=0)return 0
+        if(dp[i][j]!==undefined) return dp[i][j]
+
+        dp[i][j]=operations.reduce((acc,curr)=>
+           acc+helper(i-curr[0],j-curr[1])/4,0
+        )
+
+        return dp[i][j]
+    }
+    return helper(N,N)
+}
 
 console.log(soupServings(
    //0//
