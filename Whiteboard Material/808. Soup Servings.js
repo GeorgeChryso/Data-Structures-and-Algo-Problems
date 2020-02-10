@@ -127,6 +127,8 @@ var soupServings=(N)=>{
         // 1/4( of the sum of the probability of each choice)
         dp[i][j]=operations.reduce((acc,curr)=>
            //count only the ones that come from operations done on direct descendants
+           // cos I cant for example start an operation( make a selection out of four)
+           // on let's say 100,75 (0,0)
            (i+curr[0]>100&&j+curr[1]>75)?acc+helper(i+curr[0],j+curr[1])/4:acc
            ,0
         )
