@@ -11,26 +11,36 @@
 
 var minSwap = function(A, B) {
 
-    let dfs=(i,changed,switched)=>{
-        if(i==A.length)return switched
-        if(changed){
-            if(A[i]<=B[i-1]||B[i]<=A[i-1])return Infinity
+    let dfs=(i,prevchanged,totalswitched)=>{
+        if(i===A.length)return totalswitched
+        if (A[i]===B[i])return dfs(i+1,false,totalswitched)
+
+        if(prevchanged){
+
+            //A=[...,B[i-1],x]
+            //B=[...,A[i-1],x]
+
+            if(A[i]<=B[i-1]||B[i]<=A[i-1])return dfs(i+1,true,totalswitched+1)
+            
+            if(A[i]<=A[i-1]||B[i]<=B[i-1])return dfs(i+1,false,totalswitched)
+            return Math.min(dfs(i+1,false,totalswitched),dfs(i+1,true,totalswitched+1))
         }
         else{
-            if(A[i]<=A[i-1]||B[i]<=B[i-1])return Infinity
+            if(A[i]<=A[i-1]||B[i]<=B[i-1])return dfs(i+1,true,totalswitched+1)
+            if(A[i]<=B[i-1]||B[i]<=A[i-1])return dfs(i+1,false,totalswitched)
+            return Math.min(dfs(i+1,false,totalswitched),dfs(i+1,true,totalswitched+1))
         }
-
-        return Math.min( dfs(i+1,true,switched+1),dfs(i+1,false,switched) )
+       // return Math.min(dfs(i+1,true,totalswitched+1),dfs(i+1,false,totalswitched))
     }
 
-    return Math.min(dfs(0,0,0),dfs(0,1,1))
+    return Math.min(dfs(1,0,0),dfs(1,1,1))
 };
 
 
 console.log(
     minSwap(
       
-[3,3,8,9,10],
-[1,7,4,6,8]
+        [0,4,4,5,9],
+        [0,1,6,8,10]
     )
 )
