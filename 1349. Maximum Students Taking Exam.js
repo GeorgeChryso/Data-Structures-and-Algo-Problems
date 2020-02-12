@@ -127,7 +127,7 @@ var maxStudents = function(S) {
 var maxStudents=(matrix)=>{
     
     //counts the ones within a binary representation of a number
-    let bitCount=(n)=>(n.toString(2).match(/1/g)!==null?n.toString(2).match(/1/g).length:0)
+    let bitCount=(n)=>n!==0?n.toString(2).match(/1/g).length:0
   
     let validity=[] //essentially a binary representation of the available seats of each row,1 if available 0 if not
 
@@ -151,7 +151,7 @@ var maxStudents=(matrix)=>{
     let stateSize=Math.pow(2,matrix[0].length)
 
     let dp=Array(matrix.length).fill(null).map(d=>Array(stateSize).fill(-1))
-    //dp[i][j] is the maximum number of placed students for the first i-1 rows while the i-th row is represented as the binary representation of j 
+    //dp[i][j] is the maximum number of placed students for the first i rows while the i-th row is represented as the binary representation of j 
     //considering the previous row dp[i-1][k]
     // j will be compatible with all the k that follow the rules and are not -1
     // so I will be storing the maximum student of said compatibility 
@@ -162,7 +162,7 @@ var maxStudents=(matrix)=>{
     for (let i = 0; i < dp.length; i++) {
 
         for (let j = 0; j < stateSize; j++) {
-            //to start with, j's binary representation is a potential state
+            //to start with, j's binary representation is a potential state(decision) of a student placement 
 
             // (j & valid) == j: check if j is a subset of valid
             // valid is the actual row, j can be any row where one or more of the ones are inverted
@@ -174,7 +174,10 @@ var maxStudents=(matrix)=>{
 
                 if(i==0)dp[i][j]=bitCount(j)
                 else{
-                   
+
+
+                     //essentially pairs the potential candidates j of the ith row with 
+                     // their previous rows k of i-1
                      for (let k = 0; k < stateSize; k++) {
 
                         // !(j & (k >> 1)): no students in the upper left positions
@@ -184,9 +187,11 @@ var maxStudents=(matrix)=>{
                         // dp[i-1][k] != -1: the previous state is valid
                         let PrevValid=dp[i-1][k] != -1
 
-                        let possible=UpLeft&&UpRight&&PrevValid
+                        let possibleMatch=UpLeft&&UpRight&&PrevValid //A possible match means that there is a valid distribution of seats 
+                        // with their i-1th row as k (base2)
+                        // and i-th row as  j   (base2)
 
-                        if(possible){
+                        if(possibleMatch){
                             dp[i][j] = Math.max(dp[i][j], dp[i-1][k] + bitCount(j));
                         }
 
@@ -204,10 +209,40 @@ var maxStudents=(matrix)=>{
     return result
 };
 
+
+
+
+//cleaned up
+var maxStudents=(matrix)=>{
+    let bitCount=(n)=>n!==0?n.toString(2).match(/1/g).length:0
+    let validity=matrix.map(row=>parseInt(row.map(d=>Number(d==".")).join(''),2))
+    let stateSize=Math.pow(2,matrix[0].length)
+    let dp=Array(matrix.length).fill(null).map(d=>Array(stateSize).fill(-1))  
+    let result=0
+
+    for (let i = 0; i < dp.length; i++) {
+        for (let j = 0; j < stateSize; j++) {
+            if( ((j&validity[i])==j)  && ( (j & (j >> 1)) == 0) ){
+                if(i==0)dp[i][j]=bitCount(j) //basecase
+                else{
+                    dp[i][j]=dp[i-1].reduce(
+                        (acc,value,k)=>{
+                            let possibleMatch=((j&(k >> 1))==0)&&(((j >> 1) & k)==0)&&(dp[i-1][k] != -1)
+
+                            if(possibleMatch)return Math.max(value+bitCount(j),acc)
+                            else return acc
+                        },-1
+                    )
+                }
+                result=Math.max(result,dp[i][j])
+            }
+        }
+    }
+
+    return result
+};
 console.log(
     maxStudents(
-        [["#",".","#","#",".","#"],
-        [".","#","#","#","#","."],
-        ["#",".","#","#",".","#"]]
+        [["#",".",".",".","#"],[".","#",".","#","."],[".",".","#",".","."],[".","#",".","#","."],["#",".",".",".","#"]]
     )
 )
