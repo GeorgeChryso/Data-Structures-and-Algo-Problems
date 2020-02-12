@@ -111,7 +111,7 @@ var minSwap = function(A, B) {
     return Math.min(nochange,change)
 };
 
-//top down recursion
+//top down recursion +memo
 var minSwap = function(A, B) {
 
     let dp=Array(2).fill(null).map(d=>Array(A.length).fill(Infinity))
