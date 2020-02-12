@@ -111,11 +111,31 @@ var minSwap = function(A, B) {
     return Math.min(nochange,change)
 };
 
-
+//top down recursion
 var minSwap = function(A, B) {
 
     let dp=Array(2).fill(null).map(d=>Array(A.length).fill(Infinity))
+    let n=A.length-1
 
+    //basecases
+    dp[0][0]=0
+    dp[1][0]=1
+
+    let recursion=(index,changed)=>{
+        if(dp[changed][index]!==Infinity)return dp[changed][index]
+        if(A[index]===B[index])return dp[changed][index]=recursion(index-1,changed)
+        let prev0=recursion(index-1,0),prev1=recursion(index-1,1)
+
+        if(A[index]<=A[index-1]||B[index]<=B[index-1])dp[changed][index]=changed?prev0+1:prev1
+        else if(B[index]<=A[index-1]||A[index]<=B[index-1])dp[changed][index]=changed?prev1+1:prev0
+        else dp[changed][index]=changed?Math.min(prev0,prev1)+1:Math.min(prev0,prev1)
+
+        return dp[changed][index]
+    }
+    
+  
+  
+    return Math.min( recursion(n,0), recursion(n,1))
 };
 
 
