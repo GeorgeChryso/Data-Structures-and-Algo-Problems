@@ -151,6 +151,12 @@ var maxStudents=(matrix)=>{
     let stateSize=Math.pow(2,matrix[0].length)
 
     let dp=Array(matrix.length).fill(null).map(d=>Array(stateSize).fill(-1))
+    //dp[i][j] is the maximum number of placed students for the first i-1 rows while the i-th row is represented as the binary representation of j 
+    //considering the previous row dp[i-1][k]
+    // j will be compatible with all the k that follow the rules and are not -1
+    // so I will be storing the maximum student of said compatibility 
+    // dp[i][j]=Math.max(dp[i][j],dp[i-1][k]+bitCount(j))
+    
     let result=0
 
     for (let i = 0; i < dp.length; i++) {
@@ -183,6 +189,7 @@ var maxStudents=(matrix)=>{
                         if(possible){
                             dp[i][j] = Math.max(dp[i][j], dp[i-1][k] + bitCount(j));
                         }
+
                      }
                      
                 }
