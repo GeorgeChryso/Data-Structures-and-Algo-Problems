@@ -8,7 +8,7 @@
 
 
 
-
+//brute force dfs TLE
 var minSwap = function(A, B) {
 
     let result=Infinity // early termination mechanism +20tests not TLE
@@ -37,10 +37,14 @@ var minSwap = function(A, B) {
 };
 
 
-// O(n),O(n)
+// dp knapsack jfirst O(n),O(n)
 var minSwap = function(A, B) {
 
     
+    //dp[0][j] holds the minimum switches required to make both A and B increasing
+    //while not switching the j-th index
+    //dp[1][j] holds the minimum switches required to make both A and B increasing
+    //while switching the j-th index
     let dp=Array(2).fill(null).map(d=>Array(A.length).fill(Infinity))
     dp[0][0]=0
     dp[1][0]=1
@@ -48,23 +52,32 @@ var minSwap = function(A, B) {
 
     for (let j = 1; j < A.length; j++) {
 
+
+            //if B[j] must go after A[j-1]
+            //and A[j] must go after B[j-1]
             if(A[j]<=A[j-1]||B[j]<=B[j-1]){
-                dp[0][j]=dp[1][j-1]
-                dp[1][j]=dp[0][j-1]+1
+                dp[0][j]=dp[1][j-1] //if I do not change the j-th items i must change the previous ones so the order remains without making a change
+                dp[1][j]=dp[0][j-1]+1 // If i do change the j-th items I must keep the previous ones unchanged , so I add +1 for the change that happened
                 continue
             }
+
+            
+            //if B[j] must go after B[j-1]
+            //and A[j] must go after A[j-1]
             if(B[j]<=A[j-1]||A[j]<=B[j-1]){
                 dp[0][j]=dp[0][j-1]
                 dp[1][j]=dp[1][j-1]+1
                 continue
             }
 
+            // if jth items are equals the result does not change
             if(A[j]===B[j]){
                 dp[0][j]=dp[0][j-1]
                 dp[1][j]=dp[1][j-1]
                 continue
             }
 
+            //if every option is available choose the minimum one and change/keep
             dp[0][j]=Math.min(dp[0][j-1],dp[1][j-1])
             dp[1][j]=Math.min(dp[0][j-1],dp[1][j-1])+1
         
@@ -73,34 +86,38 @@ var minSwap = function(A, B) {
     return Math.min(dp[0][A.length-1],dp[1][A.length-1])
 };
 
-//O(n) O(1)
+//O(n) O(1) dp optimized
 var minSwap = function(A, B) {
 
+    //reducing space as I only need 2 variables
+    let nochange=0,change=1
     
-    let nochange=0
-    let change=1
-    
-
     for (let j = 1; j < A.length; j++) {
+
             if(A[j]===B[j])continue
 
             if(A[j]<=A[j-1]||B[j]<=B[j-1]){
-              [nochange,change]=[change,nochange+1]
-                continue
+                [nochange,change]=[change,nochange+1]
             }
-            if(B[j]<=A[j-1]||A[j]<=B[j-1]){
-                [nochange,change]=[nochange,change+1]
-                continue
+            else if(B[j]<=A[j-1]||A[j]<=B[j-1]){
+                change++
             }
-
-            let min=Math.min(change,nochange)
-            nochange=min
-            change=min+1
-        
+            else{
+                nochange=Math.min(change,nochange)
+                change=nochange+1
+            }
     }
 
     return Math.min(nochange,change)
 };
+
+
+var minSwap = function(A, B) {
+
+    let dp=Array(2).fill(null).map(d=>Array(A.length).fill(Infinity))
+
+};
+
 
 console.log(
     minSwap(
