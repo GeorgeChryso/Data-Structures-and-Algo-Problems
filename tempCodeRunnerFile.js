@@ -1,1 +1,1 @@
-
+j&validity[i]
