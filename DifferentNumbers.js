@@ -57,22 +57,81 @@ let knap1=(A,W)=>{
    }
    return Boolean(previous&1)
 }
+// console.log(
+//     knap(
+//         [2,4,7,8],14
+//     )
+//     ,knap1(
+//         [2,4,7,8],14
+
+//     )
+// )
 
 //P3 triangles in a graph
 // given a graph with N vertices(nodes), count triangles
-let examples=[
-    [1,2,3,3,4,5,3,2,1,6,7,9],
-    [1,2,7,5,7,8,9,9,9,9,0,1],
-    [1,2,3,5,6,7,8,9],
-    [2,1,5,7,7,7,7,8,3,2,1,2]
-]
 
-console.log(
-    knap(
-        [2,4,7,8],14
-    )
-    ,knap1(
-        [2,4,7,8],14
+var Triangles=C=>{
 
+    // Input
+    // Node : Set of its connections
+     C={
+        1:new Set([2,4,5]),
+        2:new Set([1,3,4,6]),
+        3:new Set([2]),
+        4:new Set([1,2,5,6]),
+        5:new Set([1,4,6]),
+        6:new Set([2,4,5])
+    }
+
+
+
+    //bitmask representation of the connections of a node
+    // 1-> 010110
+    // 2-> 101101
+    //1&2=>000100 (intersection of 1 and 2 at node 4)
+    // So i can find the intersection of each node by a Bitwise and operation
+    // but to form a triangle I need an additional edge between the two nodes I m examining
+
+
+    //first i ll create the bitmasks
+    let g=[0]
+    let start=1<<Object.keys(C).length
+    Object.keys(C).forEach(d=>
+        {
+            let result=0
+            C[d].forEach(d=>{
+                result|=start>>d
+            })
+            g[d]=result
+
+        }
     )
-)
+    g.forEach(d=>console.log(d.toString(2)))
+
+    let bitCount=(n)=>n!==0?n.toString(2).match(/1/g).length:0
+
+
+    console.log(bitCount(g[1]&g[2]))
+
+
+    let result=0
+    for (let node of Object.keys(C)) {
+        for (let node2 of Object.keys(C)) {
+
+
+            //if there is an edge between them
+            if(C[node].has(Number(node2))){
+                // add all the triangles that are being created by that edge and the number of
+                // intersections there are between the two nodes
+                result+=bitCount(g[node]&g[node2]) 
+            }
+        }
+    }
+
+    return result/3 // cos every triangle is computed 3 times
+}
+
+console.log(Triangles('d'))
+
+
+
