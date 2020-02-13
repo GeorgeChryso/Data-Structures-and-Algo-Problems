@@ -115,8 +115,6 @@ var Triangles=C=>{
     let result=0 //this counts the number of triangles
     for (let node of Object.keys(C)) {
         for (let node2 of Object.keys(C)) {
-
-
             //if there is an edge between the two nodes
             if(C[node].has(Number(node2))){
                 // add all the triangles that are being created by that edge and the number of
