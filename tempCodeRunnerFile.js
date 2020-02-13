@@ -1,1 +1,1 @@
-dp[i-1][j]||dp[i-1][j-A[i-1]] 
+(negativetotal^A[i])===0
