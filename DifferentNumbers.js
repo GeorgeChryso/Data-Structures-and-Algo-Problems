@@ -94,8 +94,9 @@ var Triangles=C=>{
 
 
     //first i ll create the bitmasks
-    let g=[0]
-    let start=1<<Object.keys(C).length
+    let g=[0] // this array will hold key:node, val:the bit mask of its connections
+    let start=1<<Object.keys(C).length // this I will use to create the bitmask
+    //filling the array
     Object.keys(C).forEach(d=>
         {
             let result=0
@@ -106,20 +107,17 @@ var Triangles=C=>{
 
         }
     )
-    g.forEach(d=>console.log(d.toString(2)))
 
+    //returns the count of ones of a binary representation of a number
     let bitCount=(n)=>n!==0?n.toString(2).match(/1/g).length:0
 
 
-    console.log(bitCount(g[1]&g[2]))
-
-
-    let result=0
+    let result=0 //this counts the number of triangles
     for (let node of Object.keys(C)) {
         for (let node2 of Object.keys(C)) {
 
 
-            //if there is an edge between them
+            //if there is an edge between the two nodes
             if(C[node].has(Number(node2))){
                 // add all the triangles that are being created by that edge and the number of
                 // intersections there are between the two nodes
