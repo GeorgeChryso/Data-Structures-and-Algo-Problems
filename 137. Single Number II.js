@@ -67,7 +67,7 @@ var singleNumber = function(A) {
 
 // bitsolution
 let singleNumber=A=>{
-    let result=0
+    let result=''
     let x,sum
     for (let i = 0; i < 32; i++) {
         // Find sum of set bits at ith position in all
@@ -75,17 +75,22 @@ let singleNumber=A=>{
         sum=0
 
         x=1<<i//doing this to test for the i-th bit
+
         for (let j=0; j< A.length; j++ ){
             //if the i-th bit is set, 
             if (A[j]&x)sum++;
         }   
 
         // The bits with sum not multiple of 3, are the
-        // bits of element with single occurrence.
-        if(sum%3)result=result|x
+        // bits of the element with single occurrence.
+        //if(sum%3)result=result|x
+        //essentially says 
+         if(sum%3==1)result='1'+result
+         else result='0'+result
+         // but doesnt work for negatives, whereas  result=result|x does
     }
 
-    return result
+    return parseInt(result,2)
 
 }
 
