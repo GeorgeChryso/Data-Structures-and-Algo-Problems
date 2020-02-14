@@ -74,8 +74,9 @@ let singleNumber=A=>{
         // array elements
         sum=0
 
-        x=1<<i
+        x=1<<i//doing this to test for the i-th bit
         for (let j=0; j< A.length; j++ ){
+            //if the i-th bit is set, 
             if (A[j]&x)sum++;
         }   
 
