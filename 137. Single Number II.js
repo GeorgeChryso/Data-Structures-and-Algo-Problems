@@ -65,6 +65,30 @@ var singleNumber = function(A) {
 };
 
 
+// bitsolution
+let singleNumber=A=>{
+    let result=0
+    let x,sum
+    for (let i = 0; i < 32; i++) {
+        // Find sum of set bits at ith position in all
+        // array elements
+        sum=0
+
+        x=1<<i
+        for (let j=0; j< A.length; j++ ){
+            if (A[j]&x)sum++;
+        }   
+
+        // The bits with sum not multiple of 3, are the
+        // bits of element with single occurrence.
+        if(sum%3)result=result|x
+    }
+
+    return result
+
+}
+
+
 
 //Generalization:
 // Given an array of integers everye lement appears k>1 times.
@@ -74,6 +98,9 @@ var singleNumber = function(A) {
 // First time number appear -> save it in "ones"
 // Second time -> clear "ones" but save it in "twos" for later check
 // Third time -> try to save in "ones" but value saved in "twos" clear it.
+
+// k-map solution
+// 00->10->01->00
 var singleNumber = function(A) {
 
     // these are the XOR (^) sets of items seen once and twice respectively
@@ -84,22 +111,27 @@ var singleNumber = function(A) {
 
         //IF(seenonce doesnt have A[i]){ //
             // if its not in the set  seenTwice 
-            // add it to seenonce (seenOnce^A[i]) adds it to the set when seenOnce  doesnt have A[i]
+                // add it to seenonce (seenOnce^A[i])
         // else {
             // remove it from seenonce (seenOnce^A[i]) removes it  when seenOnce contains A[i]
 
-        seenOnce = ~seenTwice & (seenOnce ^ A[i]);
-
+        seenOnce =  (seenOnce ^ A[i]) & ~seenTwice; //represents the first bit
+        // means, clear every value seen in seenTwice from (seenOnce^A[i])
 
         // if seenTwice doesnt have A[i]{
-        // Add it to seenTwice if and oly if 'seenOnce' does not have it
+        //      Add it to seenTwice if and oly if 'seenOnce' does not have it
         // }
         // else{
-        //  Remove it from seenTwice
+        //       Remove it from seenTwice
         // }
-        seenTwice = ~seenOnce & (seenTwice ^ A[i]);
+        seenTwice =  (seenTwice ^ A[i])& ~seenOnce;// represents the second bit
     }
     
+    //when I m done, every element will have passed from seenTwice 3 times, 
+    // firstly it will be ignored, because seenOnce has it,
+    // the next time it will be added because seenOnce will have removed it
+    // the next time it will be removed
+    // so when the loop is finished seenTwice will be 0
     return seenOnce;
 };
 
