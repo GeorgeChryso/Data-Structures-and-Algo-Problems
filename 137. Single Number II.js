@@ -66,7 +66,7 @@ var singleNumber = function(A) {
 
 
 // bitsolution
-let singleNumber=A=>{
+var singleNumber=A=>{
     let result=''
     let x,sum
     for (let i = 0; i < 32; i++) {
@@ -85,13 +85,37 @@ let singleNumber=A=>{
         // bits of the element with single occurrence.
         //if(sum%3)result=result|x
         //essentially says 
-         if(sum%3==1)result='1'+result
-         else result='0'+result
+         if(sum%3==1)result='1'+result  // the bit appeared only once, so it must be on, on my target
+         else result='0'+result // the bit appeared 3 times already, therefore i dont want it
          // but doesnt work for negatives, whereas  result=result|x does
     }
 
     return parseInt(result,2)
 
+}
+
+
+
+//truthtable- circuit design - boolean algebra
+var singleNumber=A=>{
+
+          //we need to implement a tree-time counter(base 3) that if a bit appears three time ,it will be zero.
+        //#curent  income  ouput
+        //# ab      c/c       ab/ab
+        //# 00      1/0       01/00
+        //# 01      1/0       10/01
+        //# 10      1/0       00/10
+        // a=~abc+a~b~c;
+        // b=~a~bc+~ab~c;
+        let a=0;
+        let b=0;
+        for(c of A){
+            let ta=(~a&b&c)|(a&~b&~c);
+            b=(~a&~b&c)|(~a&b&~c);
+            a=ta;
+        }
+        //we need find the number that is 01,10 => 1, 00 => 0.
+        return a|b;
 }
 
 
@@ -149,5 +173,21 @@ console.log(
      [-19,-46,-19,-46,-9,-9,-19,17,17,17,-13,-13,-9,-13,-46,-28]
     )
 )
+
+
+
+
+//demorgan's  first law the i fjkdfpd ;dldsp
+let dm=(a,b)=>~(a|b)==((~a)|(~b))
+
+[
+    [1,2],
+    [2,3],
+    [1,0],
+    [1,5],
+    [21,55],
+    [12,34],
+    [55,0]
+].forEach(([a,b])=>console.log(dm(a,b)))
 
 
