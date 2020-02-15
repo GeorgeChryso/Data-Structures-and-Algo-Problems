@@ -19,11 +19,11 @@ var titleToNumber = function(s) {
         result+=(26**(s.length-1-i))*(Math.abs(65-s.charCodeAt(i))+1)
     }
   
-
     return result
-
 };    
 
+
+var titleToNumber=s=>s.split('').reduce((acc,curr,i)=>acc+(26**(s.length-1-i))*(Math.abs(65-s.charCodeAt(i))+1),0)
 
 
 console.log(titleToNumber(
