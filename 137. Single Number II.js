@@ -177,17 +177,4 @@ console.log(
 
 
 
-//demorgan's  first law the i fjkdfpd ;dldsp
-let dm=(a,b)=>~(a|b)==((~a)|(~b))
-
-[
-    [1,2],
-    [2,3],
-    [1,0],
-    [1,5],
-    [21,55],
-    [12,34],
-    [55,0]
-].forEach(([a,b])=>console.log(dm(a,b)))
-
 
