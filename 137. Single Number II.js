@@ -78,7 +78,7 @@ var singleNumber=A=>{
 
         for (let j=0; j< A.length; j++ ){
             //if the i-th bit is set, 
-            if (A[j]&x)sum++;
+            if (A[j]&x!=0)sum++;
         }   
 
         // The bits with sum not multiple of 3, are the

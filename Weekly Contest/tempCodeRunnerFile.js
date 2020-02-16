@@ -1,2 +1,14 @@
+ let A=B.sort((a,b)=>{
+        let [s,e]=a
+        let [d,k]=b
 
-                matrix.forEach(d=>console.log(d+''))
+        if(s<d){
+            if(e<=d)return -1
+            else return 1
+        }
+        else {
+            if(k<s)return -1
+            else return 1
+        }
+
+    })
