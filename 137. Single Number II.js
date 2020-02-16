@@ -28,6 +28,43 @@ var singleNumber=A=>{
     }
 }
 
+
+// essentially mimicking the finite automaton behaviour with a set
+var singleNumber=A=>{
+  
+    let handler=function(){
+        this.ones=new Set()
+        this.twos=new Set()
+        this.result=0
+
+        this.newVal=(val)=>{
+            if(this.ones.has(val)){
+                if(this.twos.has(val)){
+                    this.result=val
+                    return true
+                }
+                else{
+                    this.ones.delete(val)
+                    this.twos.add(val)
+                }
+            }
+            else if(!this.twos.has(val)) this.ones.add(val)     
+            
+
+            return false
+        }
+
+    }
+    let handle=new handler()
+
+    for (const item of A) {
+       if( handle.newVal(item))return handle.result
+       
+    }
+    return handle.ones.keys().next().value
+}
+
+
 // bitsolution
 var singleNumber=A=>{
     let result=''
@@ -91,11 +128,40 @@ var singleNumber=A=>{
 
     for (const item of A) {
         if(ones.has(item)){
-
+            if(twos.has(item)){
+                return item
+            }
+            else{
+                ones.delete(item)
+                twos.add(item)
+            }
         }
+        else{
+            if(twos.has(item)){
+            }
+            else{
+                return item
+
+            }
+        }
+
+
+        if(!twos.has(item)){
+            if(ones.has(item)){
+
+            }
+            else{
+                twos.add(item)
+            }
+        }
+       
     }
+    console.log(`sad`,ones,twos)
 }
 
+console.log(singleNumber(
+    [2,2,3,2]
+))
 
 //Generalization:
 // Given an array of integers everye lement appears k>1 times.

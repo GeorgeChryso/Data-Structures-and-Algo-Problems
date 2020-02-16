@@ -169,4 +169,52 @@ z.forEach(([a,b])=>console.log(Boolean(  ((a^5)&~b)===(a^(5&~b)))))
 // let distrib=(a,b)=>Boolean((a&(b|5))===((a&b) | (a&5)))
 // z.forEach(([a,b])=>console.log(distrib(a,b)))
 
+// essentially mimicking the 
+var singleNumber=A=>{
+  
+    let handler=function(){
+        this.ones=new Set()
+        this.twos=new Set()
+        this.result=0
 
+        this.newVal=(val)=>{
+            if(this.ones.has(val)){
+                if(this.twos.has(val)){
+                    this.result=val
+                    return true
+                }
+                else{
+                    this.ones.delete(val)
+                    this.twos.add(val)
+                }
+            }
+            else{
+                if(this.twos.has(val)){
+                    // this.result=val
+                    // return true
+                }
+                else{
+                    this.ones.add(val)
+                }
+
+            }
+
+            return false
+        }
+
+    }
+    let handle=new handler()
+
+    for (const item of A) {
+       if( handle.newVal(item))return handle.result
+       
+    }
+    return handle.ones.keys().next().value
+}
+
+console.log(singleNumber(
+ //   [2,2,3,2]
+     // [0,1,0,1,0,1,99]
+     [-2,-2,1,1,-3,1,-3,-3,-4,-2]
+
+))
