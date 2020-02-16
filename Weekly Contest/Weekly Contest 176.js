@@ -3,9 +3,9 @@
 var countNegatives = function(A) {
     let result=0
     for (let i = 0; i < A.length; i++) {
-    for (let j = 0; j < A[0].length; j++) {
-        if(A[i][j]<0)result++        
-    }        
+        for (let j = 0; j < A[0].length; j++) {
+            if(A[i][j]<0)result++        
+        }        
     }
     return result
 };

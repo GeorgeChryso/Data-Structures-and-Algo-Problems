@@ -95,7 +95,9 @@ var singleNumber=A=>{
 }
 
 
-
+// AIM: USE A 2 BIT STORE, TO LOOP EVERY 3D INPUT
+// essentially using SoP Karnaugh Map to create  2 formulas for the 2 outputs( a,b)
+// using 3 inputs( a,b, A[i])
 //truthtable- circuit design - boolean algebra
 var singleNumber=A=>{
 
