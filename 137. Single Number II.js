@@ -112,7 +112,8 @@ var singleNumber=A=>{
         let a=0;
         let b=0;
         for(c of A){
-            let ta=(~a&b&c)|(a&~b&~c);
+           // let ta=(~a&b&c)|(a&~b&~c);// careful, i need to create this temporary
+            //let ta=(c&b)^(~a)
             b=(~a&~b&c)|(~a&b&~c);
             a=ta;
         }
