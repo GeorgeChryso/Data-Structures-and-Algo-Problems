@@ -16,19 +16,6 @@ var singleNumber=A=>{
     }
 }
 
-var singleNumber=A=>{
-
-    let start=0n
-
-    A.forEach(d=>start^=(1n>>BigInt(d)))
-    console.log(start.toString(2))
-
-    for (let i = 0; i < start.toString(2).length; i++,start>>=1n) {
-        if(start&1n)return i
-    }
-}
-
-
 // essentially mimicking the finite automaton behaviour with a set
 var singleNumber=A=>{
   
@@ -50,7 +37,6 @@ var singleNumber=A=>{
             }
             else if(!this.twos.has(val)) this.ones.add(val)     
             
-
             return false
         }
 
@@ -58,7 +44,7 @@ var singleNumber=A=>{
     let handle=new handler()
 
     for (const item of A) {
-       if( handle.newVal(item))return handle.result
+       if(handle.newVal(item))return handle.result
        
     }
     return handle.ones.keys().next().value
@@ -66,6 +52,8 @@ var singleNumber=A=>{
 
 
 // bitsolution
+// essentially I construct my result bit by bit, knowing that
+// its ones must appear x times such that x&3!=0
 var singleNumber=A=>{
     let result=''
     let x,sum
@@ -76,15 +64,21 @@ var singleNumber=A=>{
 
         x=1<<i//doing this to test for the i-th bit
 
-        for (let j=0; j< A.length; j++ ){
-            //if the i-th bit is set, 
-            if ((A[j]&x)!=0)sum++;
-        }   
+        // sum essentially counts how many 
+        // of my items' i-th bits are 1 
+        for (const item of A) {
+            if( (item&x)!==0 )sum++
+        }
 
         // The bits with sum not multiple of 3, are the
         // bits of the element with single occurrence.
         //if(sum%3)result=result|x //set result's i-th bit to one
-        if(sum%3)result=result|(1<<i)//set result's i-th bit to one
+
+        //if the sum of the i-th ones is divisible by 3, that means that 
+        //the i-th bit of the single number is not amongst them,therefore is 0
+        //otherwise
+        if(sum%3!=0)result=result|(1<<i)//set result's i-th bit to one
+
         //essentially says 
          //if(sum%3==1)result='1'+result  // the bit appeared only once, so it must be on, on my target
          //else result='0'+result // the bit appeared 3 times already, therefore i dont want it
