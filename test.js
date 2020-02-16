@@ -163,7 +163,7 @@ var z=[
     [55,0]
 ]
 
-z.forEach(([a,b])=>console.log(xor(a,b)))
+z.forEach(([a,b])=>console.log(Boolean(  ((a^5)&~b)===(a^(5&~b)))))
 // z.forEach(([a,b])=>console.log(dm2(a,b)))
 
 // let distrib=(a,b)=>Boolean((a&(b|5))===((a&b) | (a&5)))

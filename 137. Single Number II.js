@@ -28,43 +28,6 @@ var singleNumber=A=>{
     }
 }
 
-var singleNumber = function(A) {
-
-    let negativebucket=0
-    let negativetotal=0
-
-    let bucket=0 //only the XOR repeated numbers appear here
-    let total=0  //all the XOR appears here
-
-    for (let i = 0; i < A.length; i++) {
-        if(A[i]<0){
-
-            if(((negativebucket^A[i])!==negativebucket) && ((negativebucket^A[i])!==0)){
-                negativebucket=negativebucket^A[i]
-                console.log(A[i])
-            }
-            
-
-            negativetotal=negativetotal^A[i]
-
-          //  console.log(negativebucket,negativetotal)
-
-        }   
-        else{
-            if(((total^A[i])===total)||((total^A[i])===0)){
-                if((bucket^A[i])!==bucket&&(bucket^A[i])!==0)bucket=bucket^A[i]
-            }        
-            total=total^A[i]
-
-        }
-
-      
-    }
-    console.log(bucket^total)
-    return negativebucket^negativetotal^bucket^total
-};
-
-
 // bitsolution
 var singleNumber=A=>{
     let result=''
@@ -78,19 +41,20 @@ var singleNumber=A=>{
 
         for (let j=0; j< A.length; j++ ){
             //if the i-th bit is set, 
-            if (A[j]&x!=0)sum++;
+            if ((A[j]&x)!=0)sum++;
         }   
 
         // The bits with sum not multiple of 3, are the
         // bits of the element with single occurrence.
-        //if(sum%3)result=result|x
+        //if(sum%3)result=result|x //set result's i-th bit to one
+        if(sum%3)result=result|(1<<i)//set result's i-th bit to one
         //essentially says 
-         if(sum%3==1)result='1'+result  // the bit appeared only once, so it must be on, on my target
-         else result='0'+result // the bit appeared 3 times already, therefore i dont want it
+         //if(sum%3==1)result='1'+result  // the bit appeared only once, so it must be on, on my target
+         //else result='0'+result // the bit appeared 3 times already, therefore i dont want it
          // but doesnt work for negatives, whereas  result=result|x does
     }
-
-    return parseInt(result,2)
+    return result
+    //return parseInt(result,2)
 
 }
 
@@ -107,12 +71,13 @@ var singleNumber=A=>{
         //# 00      1/0       01/00
         //# 01      1/0       10/01
         //# 10      1/0       00/10
+
         // a=~abc+a~b~c;
         // b=~a~bc+~ab~c;
         let a=0;
         let b=0;
         for(c of A){
-           // let ta=(~a&b&c)|(a&~b&~c);// careful, i need to create this temporary
+           let ta=(~a&b&c)|(a&~b&~c);// careful, i need to create this temporary
             //let ta=(c&b)^(~a)
             b=(~a&~b&c)|(~a&b&~c);
             a=ta;
@@ -120,7 +85,16 @@ var singleNumber=A=>{
         //we need find the number that is 01,10 => 1, 00 => 0.
         return a|b;
 }
+var singleNumber=A=>{
+    let ones=new Set()
+    let twos=new Set()
 
+    for (const item of A) {
+        if(ones.has(item)){
+
+        }
+    }
+}
 
 
 //Generalization:
