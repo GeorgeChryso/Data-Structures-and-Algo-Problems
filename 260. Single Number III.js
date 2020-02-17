@@ -55,10 +55,10 @@ var singleNumber = function(nums) {
 
 //elegant
 var singleNumber = function(nums) {
-    var s = nums.reduce((n1, n2) => n1 ^ n2);
-    let offset=s&~(s-1)
-    let a=nums.reduce((acc,curr)=>((curr&offset)!==0)?acc^curr:acc,0)
-    return [a, a^s];
+    var s = nums.reduce((n1, n2) => n1 ^ n2); //still thats 'the a^b left
+    let offset=s&~(s-1) //that gives me the number with the first 1 bit of s set...and everything else 0
+    let a=nums.reduce((acc,curr)=>((curr&offset)!==0)?acc^curr:acc,0)//same logic
+    return [a, a^s]; // [a,a^a^b]=[a,b]
 };
 
 
