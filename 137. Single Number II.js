@@ -5,7 +5,6 @@
 
 // Your algorithm should have a linear runtime complexity. Could you implement it without using extra memo
 
-
 var singleNumber=A=>{
     let dict={}
 
@@ -15,41 +14,6 @@ var singleNumber=A=>{
         if(dict[d]==1)return d
     }
 }
-
-// essentially mimicking the finite automaton behaviour with a set
-var singleNumber=A=>{
-  
-    let handler=function(){
-        this.ones=new Set()
-        this.twos=new Set()
-        this.result=0
-
-        this.newVal=(val)=>{
-            if(this.ones.has(val)){
-                if(this.twos.has(val)){
-                    this.result=val
-                    return true
-                }
-                else{
-                    this.ones.delete(val)
-                    this.twos.add(val)
-                }
-            }
-            else if(!this.twos.has(val)) this.ones.add(val)     
-            
-            return false
-        }
-
-    }
-    let handle=new handler()
-
-    for (const item of A) {
-       if(handle.newVal(item))return handle.result
-       
-    }
-    return handle.ones.keys().next().value
-}
-
 
 // bitsolution
 // essentially I construct my result bit by bit, knowing that
@@ -89,6 +53,42 @@ var singleNumber=A=>{
 
 }
 
+// essentially mimicking the finite automaton behaviour with a set
+var singleNumber=A=>{
+  
+    let handler=function(){
+        this.ones=new Set()
+        this.twos=new Set()
+        this.result=0
+
+        this.newVal=(val)=>{
+            if(this.ones.has(val)){
+                if(this.twos.has(val)){
+                    this.result=val
+                    return true
+                }
+                else{
+                    this.ones.delete(val)
+                    this.twos.add(val)
+                }
+            }
+            else if(!this.twos.has(val)) this.ones.add(val)     
+            
+            return false
+        }
+
+    }
+    let handle=new handler()
+
+    for (const item of A) {
+       if(handle.newVal(item))return handle.result
+       
+    }
+    return handle.ones.keys().next().value
+}
+
+
+
 
 // AIM: USE A 2 BIT STORE, TO LOOP EVERY 3D INPUT
 // essentially using SoP Karnaugh Map to create  2 formulas for the 2 outputs( a,b)
@@ -112,46 +112,21 @@ var singleNumber=A=>{
             //let ta=(c&b)^(~a)
             b=(~a&~b&c)|(~a&b&~c);
             a=ta;
+
+            //or, you can make it automatically
+            // so no third variable is needed
+           // [a,b]=[(~a&b&c)|(a&~b&~c),(~a&~b&c)|(~a&b&~c)]
         }
         //we need find the number that is 01,10 => 1, 00 => 0.
-        return a|b;
-}
-var singleNumber=A=>{
-    let ones=new Set()
-    let twos=new Set()
-
-    for (const item of A) {
-        if(ones.has(item)){
-            if(twos.has(item)){
-                return item
-            }
-            else{
-                ones.delete(item)
-                twos.add(item)
-            }
-        }
-        else{
-            if(twos.has(item)){
-            }
-            else{
-                return item
-
-            }
-        }
 
 
-        if(!twos.has(item)){
-            if(ones.has(item)){
+// You need the temporary variable because you need to calculate both a and b on their old values.
 
-            }
-            else{
-                twos.add(item)
-            }
-        }
+// You return a | b since that will give you the number that isn't a part of a triplet: it either occurs twice (10) or once (01), but you don't know if it's stored in a (for twice) or b (for once). However, you do know that one of them is the number you're looking for, and the other is just 0 - thus you can just OR them together to make sure you return the right number.
        
-    }
-    console.log(`sad`,ones,twos)
+    return a|b;
 }
+
 
 console.log(singleNumber(
     [2,2,3,2]
@@ -168,6 +143,16 @@ console.log(singleNumber(
 
 // k-map solution
 // 00->10->01->00
+
+/* 3-state counter */
+// 'A'  'twos'  'ones'    'twos'  'ones'
+//  0      0       0    |    0       0
+//  0      0       1    |    0       1
+//  0      1       0    |    1       0
+//  1      0       0    |    0       1
+//  1      0       1    |    1       0
+//  1      1       0    |    0       0
+
 var singleNumber = function(A) {
 
     // these are the XOR (^) sets of items seen once and twice respectively

@@ -12,57 +12,46 @@
 var singleNumber = function(nums) {
         let objy={}
         nums.forEach((d)=>{
-            console.log(objy)
-        if(!objy[d]){
-            objy[d]=' '
-        }else{
-            delete objy[d]
-        }}
-        )
-        return Object.keys(objy)
-    };  
-
-
-var singleNumber = function(N) {
-        for (let i = 0; i < N.length; i++) {
-           for (let j = i+1 ; j < N.length; j++) {
-               if( N[i]==N[j]){
-                   N.splice(i,1)
-                   N.splice(j-1,1)
-                   j--
-                   i--
-               }
-           }
-            
-        } 
-
-return N
-    };  
-
-
-    var singleNumber = function(nums) {
-        var s = nums.reduce((n1, n2) => n1 ^ n2);
-        var offset = 0;
-        while (true) {
-            if (s & 1 == 1) {
-                break;
-            }
-    
-            offset++;
-            s >>= 1;
+            objy[d]=(objy[d]||0) +1
         }
-    
-        var a = 0, b = 0;
-        nums.forEach(num => {
-            if ((num >> offset) & 1 == 1) {
-                a ^= num;
-            } else {
-                b ^= num;
-            }
-        });
-    
-        return [a, b];
-    };
+        )
+        return Object.keys(objy).filter(d=>objy[d]===1)
+    };  
+
+
+
+var singleNumber = function(nums) {
+    var s = nums.reduce((n1, n2) => n1 ^ n2);
+    // s is now equal to a^b, where a,b are my results
+
+
+    //offset is the first different bit of my two results
+    // which is equal to the first set bit of my s
+
+    //var offset=s.toString(2).split('').reduce((acc,curr,i)=>curr?acc?i:acc:acc,0)
+    var offset = 0;
+    while (true) {
+        if (s & 1 == 1) {
+            break;
+        }
+
+        offset++;
+        s >>= 1;
+    }
+
+    var a = 0, b = 0;
+    nums.forEach(num => {
+        // if the number has the offset-th bit inverted,store it on a
+        if ((num >> offset) & 1 == 1) {
+            a ^= num; //the duplicates will kill eachother leaving me with a
+        } else {
+            b ^= num; // and b
+        }
+    });
+
+    return [a, b];
+};
+
 
 
 console.log(singleNumber(
