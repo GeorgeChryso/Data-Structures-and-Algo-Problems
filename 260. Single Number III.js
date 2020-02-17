@@ -53,6 +53,14 @@ var singleNumber = function(nums) {
 };
 
 
+//elegant
+var singleNumber = function(nums) {
+    var s = nums.reduce((n1, n2) => n1 ^ n2);
+    let offset=s&~(s-1)
+    let a=nums.reduce((acc,curr)=>((curr&offset)!==0)?acc^curr:acc,0)
+    return [a, a^s];
+};
+
 
 console.log(singleNumber(
     [1,2,1,3,2,5]
