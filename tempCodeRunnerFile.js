@@ -1,2 +1,1 @@
-     // this.result=val
-                    // return true
+x&1
