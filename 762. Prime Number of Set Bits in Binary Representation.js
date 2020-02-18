@@ -9,12 +9,12 @@ var countPrimeSetBits = function(L, R) {
 
     // the sieve of Eratosthenes to find all the primes from 2 to R
     // let isPrimeDict={}
-    // for (let i = 2; i <=R; i++) {
+    // for (let i = 2; i <=Math.floor(Math.sqrt(R))+1; i++) {
     //    isPrimeDict[i]=true    
     // }
     // for (let i = 2; i < Math.floor(Math.sqrt(R))+1; i++) {
     //     if(isPrimeDict[i]===true){
-    //         for (let j = i**2; j <=R; j+=i) {
+    //         for (let j = i**2; j <=Math.floor(Math.sqrt(R))+1; j+=i) {
     //             isPrimeDict[j]=false            
     //         }
     //     }
@@ -34,7 +34,7 @@ var countPrimeSetBits = function(L, R) {
             x&=(x-1) //unset the last set bit
         }
         return primes.has(counter) //faster way
-        return isPrimeDict[counter] //slower way
+       // return isPrimeDict[counter] //slower way
     }
     let result=0
 
