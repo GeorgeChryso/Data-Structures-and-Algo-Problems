@@ -3,17 +3,29 @@
 
 
 var reverseBits = function(n) {
-    let result=0
-    console.log(parseInt(n))
-    while(n!=0){
-        result=(result<<1)|(n&1)
-        n=(n>>>1)
+    var result = 0;
+    var count = 32;
+  
+    while (count--) {
+      result <<=1
+      result += n & 1;
+      n = n >> 1;
     }
-    console.log(result)
-    return result
+    return result>>>0; //needs that to pass the tests
 };
 
+var reverseBits = function(n) {
+    var result = 0;
+    var count = 32;
+  
+    while (count--) {
+      result*=2
+      result += n & 1;
+      n = n >> 1;
+    }
+    return result;
+  };
 
 console.log(reverseBits(
-    00000010100101000001111010011100
+    11111111111111111111111111111101
 ))
