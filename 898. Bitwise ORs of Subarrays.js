@@ -6,7 +6,7 @@
 
  
 // TLE 80/83
-// update: this doesnt get tled anymore, fixed line 13 from 1 to reduce
+// update: this doesnt get tled anymore, fixed line 13 from ~0 to reduce
 var subarrayBitwiseORs = function(A) {
     let bucket=new Set()
     let result=0
@@ -20,13 +20,50 @@ var subarrayBitwiseORs = function(A) {
                 result++
                 bucket.add(total)
             }            
-            if(total===earlytermination)break
+            if(total===earlytermination)break //important step, prevents tle
         }        
     }
     return result
 };
 
+var subarrayBitwiseORs = function(A) {
+    const s = [];
+    
+    for (let i = 0, counter = 0; i < A.length; i++) {
+         let tempLength = s.length;
+         s.push(A[i]);
 
+        while (counter < tempLength) {
+
+            let v = s[counter] | A[i];
+
+            if (v !== s[s.length - 1]) s.push(v);
+            counter++
+        }
+
+    }
+    
+    return new Set(s).size;
+  };
+
+// O(30 N) allegedly because a|b>=a,b
+var subarrayBitwiseORs=A=>{
+    let total=new Set()
+    let previous=new Set()
+
+    for (const item of A) {
+        let next= new Set([item])
+        for (const j of previous) {
+            next.add(item|j)
+        }
+        previous=next
+
+        for (const j of previous) {
+            total.add(j)
+        }
+    }
+    return total.size
+}
 
 console.log(
     subarrayBitwiseORs([1,1,2]
