@@ -5,31 +5,40 @@
 // Return the number of possible results.  (Results that occur more than once are only counted once in the final answer.)
 
  
-
+// TLE
 var subarrayBitwiseORs = function(A) {
-  //prefix sum
-    let start=0
-    let PrefixSum=Array(A.length).fill(0)
     let bucket=new Set()
     let result=0
+    let earlytermination=1
 
-    for (let i = 0; i < A.length; i++) {
-        start^=A[i]
-        PrefixSum[i]=start
-        if(!bucket.has(PrefixSum[i])){
-            result++
-            bucket.add(PrefixSum[i])
-        }       
+    for (let i = 0; i < 31; i++) {
+        earlytermination=(earlytermination<<1)&1
     }
-    
+
+    console.log(earlytermination)
     for (let i = 0; i < A.length; i++) {
-        for (let j = i ; j < A.length; j++) {
-            if(!bucket.has(PrefixSum[i]^PrefixSum[j])){
+        let total=A[i]
+        for (let j = i; j < A.length; j++) {
+            total|=A[j]
+            if(!bucket.has(total)){
                 result++
-                bucket.add(PrefixSum[i]^PrefixSum[j])
+                bucket.add(total)
             }            
+            if(total===earlytermination)break
         }        
     }
-
     return result
 };
+
+
+
+console.log(
+    subarrayBitwiseORs([1,1,2]
+))
+
+
+
+
+console.log(
+   ( 5|3)&(~5)
+)
