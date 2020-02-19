@@ -5,17 +5,13 @@
 // Return the number of possible results.  (Results that occur more than once are only counted once in the final answer.)
 
  
-// TLE
+// TLE 80/83
+// update: this doesnt get tled anymore, fixed line 13 from 1 to reduce
 var subarrayBitwiseORs = function(A) {
     let bucket=new Set()
     let result=0
-    let earlytermination=1
+    let earlytermination=A.reduce((a,b)=>a|b) // if this was ~0 instead it wouldnt terminate early, because the highest OR accumulation i can get is the OR of all the items in the array. gets TLED if this was ~0
 
-    for (let i = 0; i < 31; i++) {
-        earlytermination=(earlytermination<<1)&1
-    }
-
-    console.log(earlytermination)
     for (let i = 0; i < A.length; i++) {
         let total=A[i]
         for (let j = i; j < A.length; j++) {
@@ -38,7 +34,3 @@ console.log(
 
 
 
-
-console.log(
-   ( 5|3)&(~5)
-)
