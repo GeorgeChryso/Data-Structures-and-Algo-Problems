@@ -15,9 +15,9 @@ var rangeBitwiseAnd = function(m, n) {
 };
 
 
-// 
+// the xand of m through n, retains the same part between m and n, whereas making anything else 0
 var rangeBitwiseAnd = function(m, n) {
-    let a = 0;
+    let a = 0; // counts how much zeroes there are ( how many )
     while(m != n) {
         m >>= 1;
         n >>= 1;
@@ -27,6 +27,25 @@ var rangeBitwiseAnd = function(m, n) {
 //or return n<<a
 };
 
+var rangeBitwiseAnd = function(m, n) {
+    if(m==n)return m
+    if(m==0||n==0)return 0
+
+    let a = 0; // counts how much zeroes there are ( how many )
+    let xor= ~(m^n)
+
+    //counts the number of consecutive ones at the start( the same )
+    while(xor!=0){
+        xor>>>=1
+        a++
+    }
+    a++
+    a=Math.min(Math.abs(31-a),a)
+    return (n>>>a)<<a; 
+//or return n<<a
+};
 
 
-console.log(~0)
+console.log(
+    rangeBitwiseAnd(0,4)
+)
