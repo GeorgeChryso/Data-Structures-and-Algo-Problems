@@ -27,25 +27,28 @@ var rangeBitwiseAnd = function(m, n) {
 //or return n<<a
 };
 
+//same thinking,the & of all the numbers in range will retain the intersection of bits from the start and unset all the rest
+// for example 
+// 5=101
+// 7=111
+//   ---
+//   100=5&6&7
+// so essentially  i take the xor of 5^7=010 and i count how many right shifts i need to make that number equal to zero, then i left shift one of my numbers and right shift it back on to fill the length with 0. 
 var rangeBitwiseAnd = function(m, n) {
-    if(m==n)return m
-    if(m==0||n==0)return 0
+    
+    let xor=m^n
+    let a = 0; // counts how many zeroes are needed to make the xor ==0
+    // and by extension the zeroes of my result
 
-    let a = 0; // counts how much zeroes there are ( how many )
-    let xor= ~(m^n)
-
-    //counts the number of consecutive ones at the start( the same )
     while(xor!=0){
-        xor>>>=1
+        xor>>=1
         a++
     }
-    a++
-    a=Math.min(Math.abs(31-a),a)
+   
     return (n>>>a)<<a; 
-//or return n<<a
 };
 
 
 console.log(
-    rangeBitwiseAnd(0,4)
+    rangeBitwiseAnd(5,7)
 )
