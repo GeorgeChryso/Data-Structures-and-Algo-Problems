@@ -46,18 +46,22 @@ var subarrayBitwiseORs = function(A) {
     return new Set(s).size;
   };
 
-// O(30 N) allegedly because a|b>=a,b
+// O(30 N) allegedly because a|b >= a,b
 var subarrayBitwiseORs=A=>{
     let total=new Set()
     let previous=new Set()
 
     for (const item of A) {
         let next= new Set([item])
+
+
+        //transfer the or of the previous to next
         for (const j of previous) {
             next.add(item|j)
         }
         previous=next
 
+        //transfer previous to total
         for (const j of previous) {
             total.add(j)
         }
