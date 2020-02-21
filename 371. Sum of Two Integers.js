@@ -2,16 +2,22 @@
 
 //bit manipulation 
 var getSum = function(a, b) {
-    return b==0?a:getSum(a^b,(a&b)<<1)
+    // the a^b gives me the sum of the two integers without the carry
+    // whereas a&b<<1 gives me the carry
+    let sumWithoutCarry=a^b
+    let Carry=(a&b)<<1
+
+    if(Carry==0)return sumWithoutCarry
+    return getSum(sumWithoutCarry,Carry)
 };
 
 
-//clear
 
-var getSum=(a,b)=>{
-    if(b===0)return a
-    return getSum(a^b,(a&b)<<1)
-}
+
+
+//short
+var getSum=(a,b)=>!b?a:getSum(a^b,(a&b)<<1)
+
 
 
 //sums two positive integers
@@ -24,7 +30,7 @@ var getSum=(a,b)=>{
         result|= ((a&1)^(b&1)^carry)?i:0
 
 
-        //there are two cases where carry needs to be one,
+        // there are two cases where carry needs to be one,
         // the first is both of the first bits of a and b being one
         // and the second is having 1 of them (or two) as one but carrying one bit from the previous loop
         if((carry&&((a&1)||(b&1)) )||((a&1)&(b&1)) ){
@@ -43,5 +49,30 @@ var getSum=(a,b)=>{
     return result
 }
 
-console.log(getSum(20
-    ,30))
+
+//halfadder
+var getSum = function(a, b) {
+    if(a==0)return b // we must reach this condition for a conclusion
+    let sum=0,carry=0
+    let i=31
+    //essentially traversing each bit and applying the halfadder truth table
+    while(i){
+        let bitA=a&1
+        let bitB=b&1
+        let switcher=1<<(31-i)
+        sum|=(bitA^bitB?switcher:0)
+        carry|=(bitA&bitB?switcher:0)
+        a>>>=1
+        b>>>=1
+        i--
+    }
+
+    // the result of addition is always 2*carry+sum
+    return getSum(carry<<1,sum)
+ };
+ 
+console.log(getSum(
+    20,
+    30
+   
+    ))
