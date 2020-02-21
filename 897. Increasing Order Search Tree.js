@@ -25,3 +25,15 @@ var increasingBST = function(root) {
     dfs(root)
     return result.right
 };
+
+
+// O(n)
+var increasingBST=(root,tail=null)=>{
+
+    if(!root)return tail
+    let res=increasingBST(root.left,root)
+    root.left=null
+    root.right=increasingBST(root.right,tail)
+    return res
+
+}
