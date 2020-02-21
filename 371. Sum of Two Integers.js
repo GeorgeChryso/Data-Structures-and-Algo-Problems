@@ -72,10 +72,15 @@ var getSum = function(a, b) {
  };
 
 
- //iterative
+ //iterative, with the usual half adder
  var getSum = function(a, b) {
+     // ifeither of them is 0, return the other one
     if(a==0||b==0)return a^b 
+
+    //the condition of my return is that the carry must be 0, so I consider b the carry,multiplied by 2 so as for the carry bits to be placed correctly
     while(b)[a,b]=[a^b,(a&b)<<1]
+
+    // then I return my result
     return a
  };
 
