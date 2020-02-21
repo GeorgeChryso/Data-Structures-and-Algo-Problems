@@ -16,9 +16,10 @@ var increasingBST = function(root) {
     let dfs=(node)=>{
 
         if(node.left) dfs(node.left)
-        if(node.right) dfs(node.right)
         rootz.right=new TreeNode(node.val)
         rootz=rootz.right
+        if(node.right) dfs(node.right)
+      
     }
 
     dfs(root)
