@@ -10,17 +10,6 @@ var difNum1=(A)=>{
 }
 
 
-var difNum=A=>{
-
-    let previous=A[0]
-    count=1
-
-    for (let i = 1; i < A.length; i++) {
-        if(previous!=(previous&A[i]))count++
-        previous=previous&A[i]        
-    }
-    return count
-}
 console.log(
     difNum(1,2,3,4,4,4,5)
 )
