@@ -10,7 +10,7 @@
 var subarrayBitwiseORs = function(A) {
     let bucket=new Set()
     let result=0
-    let earlytermination=A.reduce((a,b)=>a|b) // if this was ~0 instead it wouldnt terminate early, because the highest OR accumulation i can get is the OR of all the items in the array. gets TLED if this was ~0
+    let earlytermination=A.reduce((a,b)=>a|b) // if this was ~0 instead it wouldnt terminate early, because the highest OR accumulation I can get is the OR of all the items in the array. gets TLED if this was ~0
 
     for (let i = 0; i < A.length; i++) {
         let total=A[i]
@@ -47,6 +47,8 @@ var subarrayBitwiseORs = function(A) {
   };
 
 // O(30 N) allegedly because a|b >= a,b
+// essentially https://leetcode.com/problems/bitwise-ors-of-subarrays/discuss/165933/Python-Dynamic-programming-solution-with-indepth-explanation-of-intuition.
+// this is done to avoid repetitive work, as there is a lot of repetitive work considered when considering every possible window
 var subarrayBitwiseORs=A=>{
     let total=new Set()
     let previous=new Set()

@@ -21,7 +21,9 @@ var difNum=A=>{
     }
     return count
 }
-
+console.log(
+    difNum(1,2,3,4,4,4,5)
+)
 
 //P2 knapsack
 // given an array w[i] of  N weights, 
