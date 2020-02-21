@@ -67,12 +67,12 @@ var getSum = function(a, b) {
         i--
     }
 
-    // the result of addition is always 2*carry+sum
+    // the result of addition is always 2*carry+sum,given the 
     return getSum(carry<<1,sum)
  };
  
 console.log(getSum(
-    20,
-    30
+    1,
+    -1
    
     ))
