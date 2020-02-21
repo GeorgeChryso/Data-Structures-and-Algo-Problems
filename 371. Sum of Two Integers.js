@@ -70,6 +70,15 @@ var getSum = function(a, b) {
     // the result of addition is always 2*carry+sum,given the 
     return getSum(carry<<1,sum)
  };
+
+
+ //iterative
+ var getSum = function(a, b) {
+    if(a==0||b==0)return a^b 
+    while(b)[a,b]=[a^b,(a&b)<<1]
+    return a
+ };
+
  
 console.log(getSum(
     1,
