@@ -1,6 +1,6 @@
 // Calculate the sum of two integers a and b, but you are not allowed to use the operator + and -.
 
-//bit manipulation 
+//bit manipulation (half adder)
 var getSum = function(a, b) {
     // the a^b gives me the sum of the two integers without the carry
     // whereas a&b<<1 gives me the carry
@@ -10,13 +10,6 @@ var getSum = function(a, b) {
     if(Carry==0)return sumWithoutCarry
     return getSum(sumWithoutCarry,Carry)
 };
-
-
-
-
-
-//short
-var getSum=(a,b)=>!b?a:getSum(a^b,(a&b)<<1)
 
 
 
@@ -84,7 +77,10 @@ var getSum = function(a, b) {
     return a
  };
 
- 
+ //short
+var getSum=(a,b)=>!b?a:getSum(a^b,(a&b)<<1)
+
+
 console.log(getSum(
     1,
     -1
