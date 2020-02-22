@@ -15,20 +15,34 @@ var integerReplacement = function(n) {
 
 //bfs
 var integerReplacement = function(n) {
-    
+    if(n==1)return 0
+    //avoid repetitive work
+    let dict=new Set() // so I dont expand trees I've expanded in the past
+
     let q=[n]
+    dict.add(n)
     let level=0
     while(q.length){
         temp=[]
         
         for (const d of q) {
             if(d%2){
-                if(d-1==1||d+1==1)return level
-                temp.push(d-1,d+1)
+                if(d-1==1||d+1==1)return level+1
+                if(!dict.has(d-1)){
+                    dict.add(d-1)
+                    temp.push(d-1)
+                }
+                if(!dict.has(d+1)){
+                    dict.add(d+1)
+                    temp.push(d+1)
+                }
             }
             else{
-                if(d/2===1)return level
-                temp.push(d/2)
+                if(d/2===1)return level+1
+                if(!dict.has(d/2)){
+                    dict.add(d/2)
+                    temp.push(d/2)
+                }
             }
         }
            
