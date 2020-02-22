@@ -16,18 +16,24 @@
 // S will be a string with length between 1 and 12.
 // S will consist only of letters or digits.
 
-
+//dfs sortof
 var letterCasePermutation = function(S) {
     
     let result={}
     let recursion=(index,str)=>{
-        if(index>=S.length)return
         result[str]=result[str]||true
-        if(str[index]<65)recursion(index+1,str)
-        let typeA=str.slice(0,index)+str[index].toUpperCase()+str.slice(index+1)
-        let typeB=str.slice(0,index)+str[index].toLowerCase()+str.slice(index+1)
 
+        //not a letter
+        while(str.charCodeAt(index)<65)index++
+
+        if(index>=S.length)return
+
+        //the string with the indexed letter Capital
+        let typeA=str.slice(0,index)+str[index].toUpperCase()+str.slice(index+1)
         recursion(index+1,typeA)
+
+        //the string with the indexed letter Lowercase
+        let typeB=str.slice(0,index)+str[index].toLowerCase()+str.slice(index+1)
         recursion(index+1,typeB)
 
     }
@@ -36,6 +42,46 @@ var letterCasePermutation = function(S) {
     return Object.keys(result)
 }
 
+
+
+//REALIZATION: S will be a string with length between 1 and 12.
+// intuition: Length low enough to store state on bits
+var letterCasePermutation = function(S) {
+    let letterIndexes=new Set()
+  
+
+    for (let i = 0; i < S.length; i++) {
+        if(!(S.charCodeAt(i)<65)){
+            letterIndexes.add(S.length-1-i)
+        }
+    }
+    if(letterIndexes.size==0)return [S]
+
+    let result=Array(2**letterIndexes.size).fill(null).map((d,i)=>i)
+
+    S=S.split('')
+    return result.map((bin,index)=>{
+        let final=''
+        let k=S.length-1
+        while(k>=0){
+            let letter=String(S[S.length-1-k])
+            if(letterIndexes.has(k)){
+              final+=((bin&1)?letter.toUpperCase(): letter.toLowerCase())
+              bin>>=1
+            }
+            else{
+              final+=letter
+            }
+            k--
+        }
+        return final
+    })
+}
+
+
 console.log(
-    
+    letterCasePermutation(
+        '3z4'
+        
+    )
 )
