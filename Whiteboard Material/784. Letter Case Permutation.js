@@ -47,9 +47,7 @@ var letterCasePermutation = function(S) {
 //REALIZATION: S will be a string with length between 1 and 12.
 // intuition: Length low enough to store state on bits
 var letterCasePermutation = function(S) {
-    let letterIndexes=new Set()
-  
-
+    let letterIndexes=new Set()  
     for (let i = 0; i < S.length; i++) {
         if(!(S.charCodeAt(i)<65)){
             letterIndexes.add(S.length-1-i)
@@ -59,26 +57,42 @@ var letterCasePermutation = function(S) {
 
     let result=Array(2**letterIndexes.size).fill(null).map((d,i)=>i)
 
-    S=S.split('')
-    return result.map((bin,index)=>{
+    return result.map((bin)=>{
         let final=''
-        let k=S.length-1
-        while(k>=0){
+        for (let k = S.length-1; k>=0; k--) {
             let letter=String(S[S.length-1-k])
             if(letterIndexes.has(k)){
-              final+=((bin&1)?letter.toUpperCase(): letter.toLowerCase())
+              final+=((bin&1)?letter.toUpperCase():letter.toLowerCase())
               bin>>=1
             }
             else{
               final+=letter
             }
-            k--
+            
         }
         return final
     })
 }
 
-
+const letterCasePermutation = s => {
+    const result = []
+    let stringLength = s.length;
+    helper('', s.length-1)
+    return result;
+    
+    function helper(currString, index) {
+        if(index < 0) {
+            result.push(currString)
+            return;
+        }
+        let char = s[index];
+        if(char <= '9') helper(char + currString , index-1);
+        else {
+            helper(char.toLowerCase() + currString , index-1);
+            helper(char.toUpperCase() + currString , index-1);
+        }
+    }
+}
 console.log(
     letterCasePermutation(
         '3z4'
