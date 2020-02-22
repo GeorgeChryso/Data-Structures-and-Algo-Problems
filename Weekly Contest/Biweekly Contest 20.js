@@ -85,3 +85,36 @@
 // mitso.getBill([77],[990])
 // mitso.getBill([77],[101])
 // mitso.getBill([77],[577])
+
+console.log(302*101)
+var numberOfSubstrings = function(s) {
+    let result=0
+    for (let start = 0; start <= s.length-3; start++) {
+        let changed=false
+        for (let end = start+2; end < s.length; end++) {
+
+            let set=new Set()
+            let count=0
+            for (let i = start; i <=end; i++) {
+                if(!set.has(s[i])){
+                    count++
+                    set.add(s[i])
+                }
+                if(count===3){
+                    changed=true
+                    result+=(s.length-end)
+                    break
+                }                
+            }
+            if(changed){
+                break
+            }
+            
+        }
+        
+    }
+    return result
+};
+
+
+console.log(numberOfSubstrings("abcabc"))

@@ -54,24 +54,56 @@ var integerReplacement = function(n) {
 //bitwise solution
 
 var integerReplacement = function(n) {
-    
-    let q=[n]
-    let level=0
-    while(q.length){
-        temp=[]
-        
-        for (const d of q) {
-            if(d%2){
-                if(d-1==1||d+1==1)return level
-                temp.push(d-1,d+1)
-            }
-            else{
-                if(d/2===1)return level
-                temp.push(d/2)
+    if(n<1)return Infinity
+    if ( n===1)return 0
+
+    let distfrom1=n=>{
+        let result=n
+        let counter=0
+        while(result!=1){
+            result>>>=1
+            counter++
+        }
+        return counter
+    }
+
+    let distFromclosestPowerOfTwo=n=>{
+        let result=Infinity
+        let dist=Infinity
+        for (let i = 0; i < 31; i++) {
+            if(Math.abs(n-2**i)<dist){
+                dist=Math.abs(n-2**i)
+                result=2**i
             }
         }
-           
-        level++
-        q=temp
+        return [dist,result]
+    }
+
+    if((n%2)===0){
+        if((n&(n-1))===0) return distfrom1(n)
+        else{
+            return integerReplacement(n/2)
+            // let [dist1,result1]=distFromclosestPowerOfTwo(n)
+            // let [dist2,result2]=distFromclosestPowerOfTwo(n/2)
+
+            // if(dist1<dist2){
+
+            // }
+            
+        }
+    }
+    else{
+         
+       
+        let [dist,result]=distFromclosestPowerOfTwo(n)
+        console.log(result)
+        return dist+integerReplacement(result)
+        return 1+integerReplacement(n-1)
+        
     }
 };
+
+
+console.log(
+    integerReplacement(1234)
+)
