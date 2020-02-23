@@ -14,7 +14,7 @@ var largestMultipleOfThree = function(digits) {
 
     digits.sort((a,b)=>a-b)
 
-    
+
     let digits2string=arr=>arr[arr.length-1]===0?'0':arr.reduce((acc,curr,i)=>curr+''+acc,'')
 
     let total=digits.reduce((acc,curr)=>acc+curr)
@@ -77,9 +77,11 @@ var largestMultipleOfThree = function(digits) {
     const sum = digits.reduce((a,c) => a + c);
     if (sum === 0) return '0'
     const remainder = sum % 3;
-    digits.sort((a,b) => b - a);
+    digits.sort((a,b) => b - a); //sorting them in reverse so i can just join afterwards
     if (remainder === 0) return digits.join('');
-    const doubleRemainder = remainder === 1 ? 2 : 1;
+    
+    const doubleRemainder = (remainder === 1)? 2 : 1;
+    
     const idxs = []
     for (let i = digits.length - 1; i >= 0; i--) {
         const numRemainder = digits[i] % 3;
