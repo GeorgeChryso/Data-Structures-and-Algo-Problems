@@ -9,16 +9,16 @@
 
 // Intuition: 3 divisibility rules says that if the sum of digis%3===0 then n%3==0
 var largestMultipleOfThree = function(digits) {
-    digits.sort((a,b)=>a-b)
-    console.log(digits)
-    let total=digits.reduce((acc,curr)=>acc+curr)
-    
-    console.log(total,total%3)
-    //if total is divisible by 3 then my biggest number is already formed
-    console.log(digits.reduce((acc,curr,i)=>acc+curr*(10**i)))
-    
-    if(total%3==0)return digits[digits.length-1]==0?'0':digits.reduce((acc,curr,i)=>curr+''+acc,'')
 
+
+    let digits2string=arr=>arr[arr.length-1]==0?'0':arr.reduce((acc,curr,i)=>curr+''+acc,'')
+    digits.sort((a,b)=>a-b)
+    let total=digits.reduce((acc,curr)=>acc+curr)
+   
+    //if total is divisible by 3 then my biggest number is already formed
+    if(total%3==0)return digits2string(digits)
+
+    
     
 
     //if the  remainder of total is 1, i can perform two operations
@@ -39,35 +39,19 @@ var largestMultipleOfThree = function(digits) {
                 if(second.length<2)second.push(i)
             }  
         }
-        
-        console.log(first,second)
-        //calculate the max number after the operations
-        let result1=-1
-        let result2=-1
+    
         if(first!=-1&&digits.length>1){
             result1=0
-            for (let i = 0,j=0; i < digits.length; i++) {
-                    if(i!==first){
-                        result1+=digits[i]*10**j
-                        j++
-                    }                
-            }
-
+            return digits2string(digits.slice(0,first).concat(digits.slice(first+1)))
         }
 
         if(second.length==2&&digits.length>2){
-            result2=0
-            for (let i = 0,j=0; i < digits.length; i++) {
-                    if(i!==second[0]&&i!==second[1]){
-                        result2+=digits[i]*10**j
-                        j++
-                    }                
-            }
-
+            return digits2string(digits.slice(0,second[0]).concat(
+                digits.slice(second[0]+1,second[1]).concat(digits.slice(second[1]+1))
+            ))
         }
-        let final=Math.max(result1,result2)
-
-        return final==-1?'':final.toString()
+        
+        return ''
 
 
     }
@@ -92,31 +76,18 @@ var largestMultipleOfThree = function(digits) {
         
         
         //calculate the max number after the operations
-        let result1=-1
-        let result2=-1
         if(first!=-1&&digits.length>1){
             result1=0
-            for (let i = 0,j=0; i < digits.length; i++) {
-                    if(i!==first){
-                        result1+=digits[i]*10**j
-                        j++
-                    }                
-            }
-
+            return digits2string(digits.slice(0,first).concat(digits.slice(first+1)))
         }
 
         if(second.length==2&&digits.length>2){
-            result2=0
-            for (let i = 0,j=0; i < digits.length; i++) {
-                    if(i!==second[0]&&i!==second[1]){
-                        result2+=digits[i]*10**j
-                        j++
-                    }                
-            }
-
+            return digits2string(digits.slice(0,second[0]).concat(
+                digits.slice(second[0]+1,second[1]).concat(digits.slice(second[1]+1))
+            ))
         }
-        let final=Math.max(result1,result2)
-        return final==-1?'':final.toString()
+        
+        return ''
     }
 };
 
