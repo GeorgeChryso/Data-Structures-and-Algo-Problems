@@ -44,18 +44,10 @@ var validateBinaryTreeNodes = function(n, leftChild, rightChild) {
 
 var closestDivisors = function(num) {
    // if(num==1)return [1,2]
-    let tar1=num+1
-    let tar2=num+2
-
-    let diff1=Infinity
-    let result1=[]
-    let set1=new Set()
-    let set2=new Set()
-    let flag1=false,flag2=false
-
-    
-    let diff2=Infinity
-    let result2=[]
+    let tar1=num+1, tar2=num+2
+    let diff1=Infinity,diff2=Infinity
+    let result1=[],result2=[]
+     
     for (let i = 1; i*i <= tar2; i++) {
 
         if((tar1%i)===0&&i<tar1){
@@ -90,7 +82,7 @@ var closestDivisors = function(num) {
 
     }
     if(diff1<diff2)return result1
-    return result2
+    return result2 
 };
 
 console.log(
@@ -98,3 +90,6 @@ console.log(
         855077252
     )
 )
+
+
+console.log(4**.5)
