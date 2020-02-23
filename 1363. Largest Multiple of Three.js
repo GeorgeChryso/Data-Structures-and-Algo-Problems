@@ -11,22 +11,28 @@
 var largestMultipleOfThree = function(digits) {
 
 
-    let digits2string=arr=>arr[arr.length-1]==0?'0':arr.reduce((acc,curr,i)=>curr+''+acc,'')
+
     digits.sort((a,b)=>a-b)
+
+    
+    let digits2string=arr=>arr[arr.length-1]===0?'0':arr.reduce((acc,curr,i)=>curr+''+acc,'')
+
     let total=digits.reduce((acc,curr)=>acc+curr)
    
     //if total is divisible by 3 then my biggest number is already formed
     if(total%3==0)return digits2string(digits)
 
-    //if the  remainder of total is 1, i can perform two operations
+
+    let first=-1 //holds the index of the first operation (remove 1 element)
+    let second=[] // holds the 2 indices of the second operation (remove 2)
+    let setA=new Set([1,7,4])
+    let setB=new Set([2,5,8])
+
+
+     //if the  remainder of total is 1, i can perform two operations
     // either remove a 1,4,7 to amke the remainder ==0
     // or (if there are no 1,4,7  )remove two of 2,5,8 to make the remainder ==0
     // that would be 2,2 , 2,5 , 5,5 ,2,8, 5,8  8,8
-    
-    let first=-1
-    let second=[]
-    let setA=new Set([1,7,4])
-    let setB=new Set([2,5,8])
     if(total%3==1){
         for (let i = 0; i < digits.length; i++) {
             if(setA.has(digits[i])&&first==-1)first=i
@@ -46,23 +52,50 @@ var largestMultipleOfThree = function(digits) {
 
     //Note: it's always better to remove 1 rather than two elements cos thats 1 decimal instead of 2, making the first choice prefferable and bigger
     
-    //if there is one of 2,5,8, and it's not the only element
+    //if the first operation can be performed without deleting the whole digits array
     if(first!=-1&&digits.length>1){
-        console.log('hi')
-
         //return the string of the array with the item removed
-        return digits2string(digits.slice(0,first).concat(digits.slice(first+1)))
+        digits[first]=''
+        return digits2string(digits)
     }
 
-    //if there is a pair of 1,4,7 and they re not the only ones
+    //if the second operation can be performed without deleting the whole array
     if(second.length==2&&digits.length>2){
         //return the string of the array with the items removed
-        return digits2string(digits.slice(0,second[0]).concat(
-            digits.slice(second[0]+1,second[1]).concat(digits.slice(second[1]+1))
-        ))
+        digits[second[0]]=''
+        digits[second[1]]=''
+        return digits2string(digits)
     }
     
     return ''
+};
+
+
+
+//shorter solution, essentially the same
+var largestMultipleOfThree = function(digits) {
+    const sum = digits.reduce((a,c) => a + c);
+    if (sum === 0) return '0'
+    const remainder = sum % 3;
+    digits.sort((a,b) => b - a);
+    if (remainder === 0) return digits.join('');
+    const doubleRemainder = remainder === 1 ? 2 : 1;
+    const idxs = []
+    for (let i = digits.length - 1; i >= 0; i--) {
+        const numRemainder = digits[i] % 3;
+        if (numRemainder === remainder) {
+            digits[i] = '';
+            return digits.join('')
+        } else if (numRemainder === doubleRemainder) {
+            idxs.push(i);
+        }
+    }
+    const [idx1, idx2] = idxs;
+    if (idx2 === undefined) return '';
+    
+    digits[idx1] = ''
+    digits[idx2] = ''
+    return digits.join('');
 };
 
 
