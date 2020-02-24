@@ -80,25 +80,37 @@ var largestMultipleOfThree = function(digits) {
     digits.sort((a,b) => b - a); //sorting them in reverse so i can just join afterwards
     if (remainder === 0) return digits.join('');
     
+    // handles the cases
     const doubleRemainder = (remainder === 1)? 2 : 1;
     
     const idxs = []
     for (let i = digits.length - 1; i >= 0; i--) {
+        //the remainder of digit[i]
         const numRemainder = digits[i] % 3;
+        
+        // handles the cases, if there is a number with the same remainder, 
+        // immediately the result is found
         if (numRemainder === remainder) {
             digits[i] = '';
             return digits.join('')
-        } else if (numRemainder === doubleRemainder) {
+        } 
+        //else you need to attempt the two elements
+        else if (numRemainder === doubleRemainder) {
             idxs.push(i);
         }
     }
-    const [idx1, idx2] = idxs;
-    if (idx2 === undefined) return '';
     
-    digits[idx1] = ''
-    digits[idx2] = ''
+    //if there are no two elements taht can be removed 
+    if (idx.length!==2) return '';
+
+
+    //if it got herre it means the 2 elements were found.
+    digits[idx[0]] = ''
+    digits[idx2[1]] = ''
     return digits.join('');
 };
+
+//bucket sort todo: 
 
 
 console.log(
