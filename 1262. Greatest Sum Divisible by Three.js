@@ -81,32 +81,26 @@ var maxSumDivThree = function(nums) {
 };
 
 var maxSumDivThree = function(nums) {
-    //nums.sort((a,b)=>a-b)
-
-
     let total=nums.reduce((a,b)=>a+b)
     if(total%3==0)return total
-
     let remainder=total%3
 
     let target=Infinity
-    let count=0
     for (let i = 0; i < nums.length; i++) {
         if((nums[i]%3)==remainder &&nums[i]<target){
             target=nums[i]
         }
         
     }
-    console.log(target)
 
-    //knapsack
+    //bitwise truth knapsack
     let dp=1n<<BigInt(target)
     for (let i = 0; i < nums.length; i++) {
         dp|=(dp>>BigInt(nums[i]))
     }
 
 
-    //find the first possible sum with the same remainder
+    //find the first (nonzero) possible sum with the same remainder
     let l=1
     while(l<target){
        
@@ -126,7 +120,36 @@ var maxSumDivThree = function(nums) {
     
 };
 
+var maxSumDivThree = (A) => {
+    //cur[i] is the highest sum i can achieve such that sum%3=i
+    let cur = [0,0,0];
 
+
+    for (let num of A) {
+        let pre = [...cur]; // implicitly set current bucket to max of itself and previous bucket
+        for (let j=0; j < 3; ++j) {
+            let sum = num + pre[j];// max sum i can achieve using the curr element
+            let k = sum % 3; 
+            cur[k] = Math.max(cur[k], sum);
+        }
+        console.log(cur)
+    }
+    return cur[0];
+};
+
+// var maxSumDivThree = (A) => {
+//     //cur[i] is the highest sum i can achieve such that sum%3=i
+//     let item=0
+
+
+//     for (let num of A) {
+//         let pre =item // implicitly set current bucket to max of itself and previous bucket
+//         let sum = num + pre;// max sum i can achieve using the curr element
+//         let k = sum % 3; 
+//         if(k==0)item = Math.max(item, sum);
+//     }
+//     return item
+// };
 console.log(
     maxSumDivThree(
       [3,6,5,1,8]//18
