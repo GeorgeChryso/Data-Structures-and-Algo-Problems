@@ -9,11 +9,7 @@
 
 // Intuition: 3 divisibility rules says that if the sum of digis%3===0 then n%3==0
 var largestMultipleOfThree = function(digits) {
-
-
-
     digits.sort((a,b)=>a-b)
-
 
     let digits2string=arr=>arr[arr.length-1]===0?'0':arr.reduce((acc,curr,i)=>curr+''+acc,'')
 
@@ -71,7 +67,7 @@ var largestMultipleOfThree = function(digits) {
 };
 
 
-
+//O(nlogn) due to sort
 //shorter solution, essentially the same
 var largestMultipleOfThree = function(digits) {
     const sum = digits.reduce((a,c) => a + c);
@@ -110,9 +106,53 @@ var largestMultipleOfThree = function(digits) {
     return digits.join('');
 };
 
-//bucket sort todo: 
+// It would make sense to use bucket sort as all my input is uniformly distributed over a range
+// [0,10]
+// O(n)- O(1) cos no further sorting is necessary
+var largestMultipleOfThree=digits=>{
+    function stringify(values) {
+        return values.reduce((result, nums) =>  nums.join('') + result, '');
+    }
+    let bucket=[...Array(10)].map(d=>[])//buckets'buckets, each item on its corresponding bucket
+    
+    for (const digit of digits) {
+        bucket[digit].push(digit)
+    }
+    //btw no sorting is required for bucket sort as the buckets only hold 1 type of item each,1 digit
+    let totalSum=bucket.reduce((acc,curr,i)=>acc+curr.length*i,0) //total sum of all the buckets
+    if(totalSum==0)return '0'
+    if(totalSum%3==0)return stringify(bucket)
 
+    let remainder=totalSum%3
 
+    //handle the removal of 1 element
+    for (let i = remainder; i < bucket.length; i+=3) {
+        if(bucket[i].length){
+            bucket[i].pop()
+            return stringify(bucket)
+        }
+    }
+    
+    //handle the removal of 2 element
+    let start=0
+    if(remainder==1){
+         start=2 //cos i need to remove 2 elements from categories 2,5,8
+    }
+    else  start=1 // cos i need to remove 2 elements from categoreis 1,4,7
+
+    let countOfRemoved=0
+    for ( start; start < bucket.length; start+=3) {
+            while(bucket[start].length&&countOfRemoved<2){
+                bucket[start].pop()
+                countOfRemoved++
+            }
+            if(countOfRemoved==2){
+                return stringify(bucket)
+            }
+    }
+
+    return ''
+}
 console.log(
     largestMultipleOfThree(
         [5,8]
