@@ -107,7 +107,7 @@ var largestMultipleOfThree = function(digits) {
 };
 
 // It would make sense to use bucket sort as all my input is uniformly distributed over a range
-// [0,10]
+// [0,9]
 // O(n)- O(1) cos no further sorting is necessary
 var largestMultipleOfThree=digits=>{
     function stringify(values) {
@@ -135,10 +135,8 @@ var largestMultipleOfThree=digits=>{
     
     //handle the removal of 2 element
     let start=0
-    if(remainder==1){
-         start=2 //cos i need to remove 2 elements from categories 2,5,8
-    }
-    else  start=1 // cos i need to remove 2 elements from categoreis 1,4,7
+    if(remainder==1)start=2 //cos i need to remove 2 elements from categories 2,5,8
+    if(remainder==2)start=1 //cos i need to remove 2 elements from categoreis 1,4,7
 
     let countOfRemoved=0
     for ( start; start < bucket.length; start+=3) {
@@ -153,8 +151,59 @@ var largestMultipleOfThree=digits=>{
 
     return ''
 }
+
+
+//counting sort, Still O(n) cos I noticed the range [0,9] that could be utilized
+var largestMultipleOfThree=A=>{
+    let frequency=[...Array(10)].map(d=>0)
+    for (let i = 0; i < A.length; i++) {
+        frequency[A[i]]++
+    }
+    let totalSum=frequency.reduce((acc,curr,i)=>acc+curr*i,0)
+    
+    if(totalSum==0)return '0'
+
+    let stringify=(freq)=>{
+        return freq.reduce((acc,curr,i)=>{
+            if(curr==0)return acc
+
+            let final=''
+            for (let k = 0; k <curr; k++) {
+                final=String(i)+final
+                
+            }
+            return final+acc
+        },'')
+    }
+
+    if(totalSum%3==0)return stringify(frequency)
+    
+    let remainder=totalSum%3
+
+    //handle the case of 1 removal
+    for (let start = remainder; start < frequency.length; start+=3) {
+        if(frequency[start]!=0){
+            frequency[start]--
+            return stringify(frequency)
+        }        
+    }
+
+    //handle the case of 2 removals
+    let start=0
+    if(remainder==1)start=2
+    if(remainder==2)start=1
+    let totalRemoved=0
+    for ( start; start < frequency.length; start+=3) {
+        while (frequency[start]!=0) {
+            frequency[start]--
+            totalRemoved++
+        }
+        if(totalRemoved==2)return stringify(frequency)
+    }
+    return ''
+}
 console.log(
     largestMultipleOfThree(
-        [5,8]
+        [1,1,1,2]
     )
 )
