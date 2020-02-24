@@ -1,1 +1,1 @@
-abcabc
+nums[i]%3
