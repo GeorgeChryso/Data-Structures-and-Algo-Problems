@@ -123,8 +123,6 @@ var maxSumDivThree = function(nums) {
 var maxSumDivThree = (A) => {
     //cur[i] is the highest sum i can achieve such that sum%3=i
     let cur = [0,0,0];
-
-
     for (let num of A) {
         let pre = [...cur]; // implicitly set current bucket to max of itself and previous bucket
         for (let j=0; j < 3; ++j) {
@@ -133,14 +131,13 @@ var maxSumDivThree = (A) => {
             pre[k] = Math.max(pre[k], sum);
         }
         cur=pre
-        console.log(cur)
-
     }
     return cur[0];
 };
 console.log(maxSumDivThree(
     [3,1,5]
 ))
+
 //generalization to Greatest sum divisible by K
 var maxSumDivK = (A,K) => {
     //cur[i] is the highest sum i can achieve such that sum%K=i
@@ -158,12 +155,14 @@ var maxSumDivK = (A,K) => {
     // because cur[0] was increased to 9=4+5, a sum which came from adding 5 to sum[1]
     
     //!!! So the second max comes from the current element I'm examining+one other element preexisting in the array. Why preexisting? Because If it's possible it'll be there as it must have %3 between 0,1 and 2
-    
+
     for (let num of A) {
         let pre = [...cur]; // implicitly set current bucket to max of itself and previous bucket
         for (let j=0; j < K; ++j) {
-            let sum = num + cur[j];// max sum i can achieve using the curr element and curr bucket
+            let sum = num + cur[j];// max sum i can achieve using the curr element and curr bucket sum
             let k = sum % K; 
+
+            // consider increasing the respective bucket
             pre[k] = Math.max(pre[k], sum);
         }
         cur=pre
