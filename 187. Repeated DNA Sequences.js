@@ -21,16 +21,19 @@ var findRepeatedDnaSequences = function(s) {
     let start=1
     let memyy={
         'A':0,'C':1,'G':2,'T':3}
+        
     for (let i = 0; i <10; i++) {
         start=(start<<2)|(memyy[s[i]])      
     }
     start&=mask
     seen.add(start)
-    console.log(start.toString(2))
+    console.log(mask.toString(2).length)
+    console.log(tostr(start),start.toString(2))
 
     for (let end = 10; end < s.length; end++) {
-        start=((start<<2)&mask)
-        start|=(s.charCodeAt(end)-65)
+        start=((start<<2)&mask)|(memyy[s[end]])
+        console.log(tostr(start),start.toString(2))
+
         if(seen.has(start))result[start]=true
         else seen.add(start)
     }
