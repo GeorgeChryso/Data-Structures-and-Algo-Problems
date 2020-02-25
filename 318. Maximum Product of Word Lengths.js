@@ -2,6 +2,7 @@
 // Given a string array words, find the maximum value of length(word[i]) * length(word[j]) where the two words do not share common letters. You may assume that each word will contain only lower case letters. If no such two words exist, return 0.
 
 //'a'=97
+//bitmask solution
 var maxProduct = function(words) {
     //bitwise memo of a word having a letter represented by a set bit
     // also keeping the length for later use
