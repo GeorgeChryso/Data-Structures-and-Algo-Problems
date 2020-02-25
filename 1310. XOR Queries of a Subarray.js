@@ -26,7 +26,24 @@ var xorQueries = function(arr, queries) {
     })
 };
 
-
+// Intuition,XOR applies to Prefix sum for contiguous subarrays 
+// [a,b,c,d]
+//  b^c^d= (a^b^c^d ) ^ (a)
+// so [a^..^b]=[0^...^b]^[0^...^a-1]
 var xorQueries = function(arr, queries) {
-    
+    let prefixSumXor=[]
+    let start=0
+    for (let i = 0; i < arr.length; i++) {
+        start^=arr[i]
+        prefixSumXor.push(start)
+    }
+    return queries.map(([r,l])=>{
+        if(r==l||l==0)return arr[l]
+        if(r==0)return prefixSumXor[l]
+        return prefixSumXor[l]^prefixSumXor[r-1]
+    })
 };
+
+console.log(xorQueries(
+    [1,3,4,8],  [[0,1],[1,2],[0,3],[3,3]]
+))
