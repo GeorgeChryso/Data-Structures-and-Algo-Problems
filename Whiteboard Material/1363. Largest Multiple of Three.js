@@ -159,10 +159,12 @@ var largestMultipleOfThree=A=>{
     for (let i = 0; i < A.length; i++) {
         frequency[A[i]]++
     }
+    //finding the total sum through frequency, can do it throug hthe array doesnt matter
     let totalSum=frequency.reduce((acc,curr,i)=>acc+curr*i,0)
     
     if(totalSum==0)return '0'
 
+    //this takes in the frequency array and concatenates everything into the result
     let stringify=(freq)=>{
         return freq.reduce((acc,curr,i)=>{
             if(curr==0)return acc
@@ -190,6 +192,7 @@ var largestMultipleOfThree=A=>{
 
     //handle the case of 2 removals
     let start=0
+    //same as above
     if(remainder==1)start=2
     if(remainder==2)start=1
     let totalRemoved=0
