@@ -17,6 +17,9 @@
 
 //standard bit state compression solution, works but is slow
 var findNumOfValidWords = function(words, puzzles) {
+    //dictionaries for repeated words
+    let dict={}
+    let puzzledict={}
     let letters2bit=word=>{
         let final=0
         for (const letter of word) {
@@ -25,10 +28,23 @@ var findNumOfValidWords = function(words, puzzles) {
         return final
     }
 
-    words=words.map(d=>letters2bit(d))
-    puzzles=puzzles.map(d=>[letters2bit(d),1<<(d.charCodeAt(0)-97)])
-
-    return puzzles.map(([puzzle,firstlettermask])=>words.reduce((acc,word)=>acc+Number((puzzle&word)==word && ((firstlettermask&word)!==0)),0))
+    words=words.map(d=>{
+        if(dict[d]!==undefined)return dict[d]
+        dict[d]=letters2bit(d)
+        return dict[d]
+    })
+    puzzles=puzzles.map(d=>{
+        if(puzzledict[d]!==undefined)return puzzledict[d]
+        puzzledict[d]=[d,letters2bit(d),1<<(d.charCodeAt(0)-97)]
+        return puzzledict[d]
+    })
+    let resultdict={}
+    return puzzles.map(([original,puzzle,firstlettermask])=>{
+        if(resultdict[original]!==undefined)return resultdict[original]
+        resultdict[original]= words.reduce((acc,word)=>acc+Number((puzzle&word)==word && ((firstlettermask&word)!==0)),0)
+        return resultdict[original]
+     }
+    )
 };
 
 //intuition i dont need to scan the whole word's length, and can instead do It as I go
@@ -62,4 +78,49 @@ var findNumOfValidWords = function(words, puzzles) {
                             })()
                         ,0)
             )
+};
+
+
+
+var findNumOfValidWords = function(words, puzzles) {
+   
+    //dictionaries for repeated words
+    let dict={}
+    let puzzledict={}
+    let letters2bit=word=>{
+        let final=0
+        for (const letter of word) {
+            final|=(1<<(letter.charCodeAt(0)-97))
+        }
+        return final
+    }
+
+    words=words.map(d=>{
+        if(dict[d]!==undefined)return dict[d]
+        dict[d]=letters2bit(d)
+        return dict[d]
+    })
+    //different bit representations of each word
+    let diffwords=[...Object.values(dict)]
+
+
+    let count=0
+    for (let i = 0; i < puzzles.length &&count<=128; i++) {
+        if(puzzledict[puzzles[i]]!==undefined){
+            puzzledict[puzzles[i]]=[puzzles[i],letters2bit(puzzles[i]),1<<(puzzles[i].charCodeAt(0)-97)]
+            count++
+        }     
+    }
+
+
+    let resultdict={}
+
+ 
+    return puzzles.map((paz)=>{
+        if(resultdict[paz]!==undefined)return resultdict[paz]
+        let [original,puzzle,firstlettermask]=puzzledict[paz]
+        resultdict[paz]=diffwords.reduce((acc,word)=>acc+Number(((puzzle&word)==word )&& ((firstlettermask&word)!==0)),0)
+        return resultdict[paz]
+     }
+    )
 };
