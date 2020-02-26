@@ -142,13 +142,16 @@ var maxStudents=(matrix)=>{
            cur=cur*2+(matrix[i][j]==".") 
            //or
            //same thing with bitwise operators
-           // cur=(cur<<1)^(matrix[i][j]==".")      
+           // cur=(cur<<1)^(matrix[i][j]==".")     
+           // or cur=(cur<<1) | (matrix[i][j]=='.') 
         }
         validity.push(cur)
     }
+    //validity is an array of numbers each being the bit representation of one row
 
-   // let stateSize=1<<matrix[0].length //2^n states for n columns    
-    let stateSize=Math.pow(2,matrix[0].length)
+    //let stateSize=1<<matrix[0].length //2^n states for n columns    
+
+    let stateSize=Math.pow(2,matrix[0].length) // permutations of 2 items with the group size being matrix[0].length (a row) with repetition allowed
 
     let dp=Array(matrix.length).fill(null).map(d=>Array(stateSize).fill(-1))
     //dp[i][j] is the maximum number of placed students for the first i rows while the i-th row is represented as the binary representation of j 
