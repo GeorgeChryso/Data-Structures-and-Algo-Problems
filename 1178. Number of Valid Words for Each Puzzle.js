@@ -47,40 +47,6 @@ var findNumOfValidWords = function(words, puzzles) {
     )
 };
 
-//intuition i dont need to scan the whole word's length, and can instead do It as I go
-var findNumOfValidWords = function(words, puzzles) {
-    let letters2bit=word=>{
-        let final=0
-        for (const letter of word) {
-            final|=(1<<(letter.charCodeAt(0)-97))
-        }
-        return final
-    }
-
-   // words=words.map(d=>letters2bit(d))
-    puzzles=puzzles.map(d=>[letters2bit(d),1<<(d.charCodeAt(0)-97)])
-
-    return puzzles.map(([puzzle,firstlettermask])=>
-                            words.reduce((acc,word)=>acc+(
-                                ()=>{
-                                    let flag1=true,flag2=false
-
-                                    for (const letter of word) {
-                                        let bitrepresentation=1<<(letter.charCodeAt(0)-97)
-                                        if((bitrepresentation&puzzle)==0){
-                                            flag1=false
-                                            break}//thought this would make a difference,but tle
-                                        if((bitrepresentation&firstlettermask)!=0)flag2=true
-                                    }
-
-                                    if(flag1&&flag2)return 1
-                                    return 0
-                            })()
-                        ,0)
-            )
-};
-
-
 
 var findNumOfValidWords = function(words, puzzles) {
    
@@ -97,7 +63,7 @@ var findNumOfValidWords = function(words, puzzles) {
         let bitrep=letters2bit(d)
         dict[bitrep]=(dict[bitrep]||0)+1
     })
-    
+
     puzzles.forEach((paz,i)=>{
         let firstlettermask=1<<(paz.charCodeAt(0)-97)
         let puzzle=letters2bit(paz)
