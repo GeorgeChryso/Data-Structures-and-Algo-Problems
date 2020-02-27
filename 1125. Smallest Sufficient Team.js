@@ -43,6 +43,8 @@ var smallestSufficientTeam = function(req_skills, people) {
         }
     ))
 
+    //pruning the candidates?
+    // people=people.map((d,j)=>people.some((q,i)=>((d&q)==d)&&j!==i)?0:d )
 
     //knapsack
     //dp[i][j]= [will be the minimum nubmer of people that need to be used to reach state j of skills using i people, their 30firstmask, their 30lastmask]
@@ -76,7 +78,6 @@ var smallestSufficientTeam = function(req_skills, people) {
          
         }
     }
-    
     //all that's left is to extract the result from the first30 and last30 masks
     // given that the max length of my peoples array is 60, I compress the choices on 2 32 bit integers 1 for chosen and 0 for not chosen, and now I unmap it into my result array
     let result=[]
