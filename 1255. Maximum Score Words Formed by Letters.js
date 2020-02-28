@@ -17,7 +17,6 @@
 
 // Hint: given a smal lwords.length u can iterate for every possible set of words
 // (2^n)
-
 var maxScoreWords = function(words, letters, score) {
     
     // map each word to a 26 element array 
@@ -31,10 +30,15 @@ var maxScoreWords = function(words, letters, score) {
         }
     )
 
+    // the score of each word
+    let wordsScore=words.map(d=>d.reduce((acc,curr,i)=>acc+curr*score[i],0))
+
     let available=[...Array(26)].fill(0)
     // map the letters array to a 26 element array
     // with the number of available elements from a-z
     letters.forEach(d=>available[d.charCodeAt(0)-97]++)
+    // the maximum score i can get from using every available word
+    let maxScore=letters.reduce((acc,a,i)=>acc+a*score[i],0)
 
     let max=-1
     // I consider every possible combination of 1s and zeroes of length 
@@ -45,8 +49,24 @@ var maxScoreWords = function(words, letters, score) {
         let mask=i//set selection mask
         let remaining =[...available]
         let tempScore=0
-        let index=0
-        let flag=true
+        let index=0 // the index of the word being chosen or not 
+        let flag=true //this flag will terminate when an invalid selection is being mada, aka when a word has more letters than the remaining
+        
+        // ok I do this on order to consider whether I can avoid 
+        // examining the valididy of a set choice, If it yields me 
+        // a sum less than my current max,  I dont have to examine 
+        // every word of the set
+        let attempt=i
+        let index2=0
+        let tempu=0 //the total score of my set's choice
+        while(attempt){
+            if(attempt&1)tempu+=wordsScore[index2]
+            attempt>>>=1
+            index2++
+        }
+        if(tempu<=max||tempu>maxScore)continue
+
+
         // count the score of the elements in the mask
         while(mask!=0){
             if(mask&1){
@@ -62,8 +82,8 @@ var maxScoreWords = function(words, letters, score) {
             mask>>>=1
         }
         if(flag){
-            validCount.add(i)
             max=Math.max(max,tempScore)
+            if(max==maxScore)return max
         }
     }
 
