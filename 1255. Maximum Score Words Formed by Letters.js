@@ -20,49 +20,54 @@
 
 var maxScoreWords = function(words, letters, score) {
     
- 
+    // map each word to a 26 element array 
+    // that contains the frequency of each letter from a-z
     words=words.map(word=>{
         let dict=[...Array(26)].fill(0)
         for (let i = 0; i < word.length; i++) {
            dict[word[i].charCodeAt(0)-97]++
-            
         }
         return dict
-         }
+        }
     )
+
     let available=[...Array(26)].fill(0)
+    // map the letters array to a 26 element array
+    // with the number of available elements from a-z
     letters.forEach(d=>available[d.charCodeAt(0)-97]++)
 
-    
     let max=-1
+    // I consider every possible combination of 1s and zeroes of length 
+    // words.length, that would be 2**words.length
+    // a mask of 14(or words.length) bits,1 for choice and 0 for not choice that would be [0,2**14-1]
+    // So I consider every possible combination which is 2**n things
     for (let i = 0; i <=(2**words.length)-1; i++) {
-        let mask=i//set 
+        let mask=i//set selection mask
         let remaining =[...available]
         let tempScore=0
         let index=0
         let flag=true
-
+        // count the score of the elements in the mask
         while(mask!=0){
             if(mask&1){
-
-
+                //check the validity of a choice,
                 for (let j = 0; j < words[index].length&&flag; j++) {
                     remaining[j]-=words[index][j]     
-                    if(remaining[j]<0)flag=false      
+                    if(remaining[j]<0)flag=false //the flag is false when an invalid choice is made
                     tempScore+=(score[j]*words[index][j])
                 }
                 if(flag==false)break
             }
-            index++
+            index++ // the index of the word being chosen or not 
             mask>>>=1
         }
-        if(flag)max=Math.max(max,tempScore)
+        if(flag){
+            validCount.add(i)
+            max=Math.max(max,tempScore)
+        }
     }
 
     return max
-
-    // a mask of 14(or words.length) bits,1 for choice and 0 for not choice that would be [0,2**14-1]
-    // 
 
 };
 
