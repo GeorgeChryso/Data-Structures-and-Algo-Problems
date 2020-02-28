@@ -99,6 +99,7 @@ console.log(findNumOfValidWords(
     ["aaaa","asas","able","ability","actt","actor","access"],
 ["aboveyz","abrodyz","abslute","absoryz","actresz","gaswxyz"]
 ))
+
 var findNumOfValidWords = function(words, puzzles) {
     const toMask = function(str) {
         let res = 0;
