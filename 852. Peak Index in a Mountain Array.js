@@ -17,7 +17,8 @@
 // 0 <= A[i] <= 10^6
 // A is a mountain, as defined above.
 
-
+// intuition: Using binary search to find the element with the single qualification:
+// is bigger than both the previous and next elements
 var peakIndexInMountainArray = function(A) {
     let L=0
     let R=A.length-1
