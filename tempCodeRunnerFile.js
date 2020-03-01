@@ -1,1 +1,1 @@
-A[mid-1]<=A[mid]
+            console.log(this.parsez(attempt),attempt)
