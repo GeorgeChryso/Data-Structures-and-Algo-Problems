@@ -23,13 +23,18 @@ var moveZeroes = function(A) {
     }
     return A
 };
-var moveZeroes = function(nums) {       
-    for(var i = nums.length;i--;){
-        if(nums[i]===0){
-            nums.splice(i,1)
-            nums.push(0);
+
+var moveZeroes = function(A) {       
+    let Nonzeroes=A.reduce((acc,curr)=>curr?acc+1:acc,0)
+    for (let i = 0,k=0; i < A.length; i++) {
+        if(A[i]&&k<=Nonzeroes){
+            A[k++]=A[i]
         }
     }
+    for (let i = Nonzeroes; i < A.length; i++) {
+        A[i]=0
+    }
+    return A
 };
 console.log(moveZeroes(
 
