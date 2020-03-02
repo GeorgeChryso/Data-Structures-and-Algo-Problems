@@ -86,6 +86,7 @@ var KthLargest = function(k, nums) {
     this.hp=new BinaryHeap()
     nums.forEach(d=>this.hp.push(d))
 
+    //maintain k-1 elements
     while(this.hp.heap.length>k)this.hp.poll()
 };
 
@@ -95,14 +96,25 @@ var KthLargest = function(k, nums) {
  */
 KthLargest.prototype.add = function(val) {
     
+    // the only way this happens is if the heap's length is k-1
+    // that will mean that adding a val will make that lenght ==k
+    // so i just return the peek
     if(this.hp.heap.length<this.k){
         this.hp.push(val)
         return this.hp.peek()
     }
+
+    //length k
     else{
+        // no need to push, cos my target element is my peek
         if(val<this.hp.peek())return this.hp.peek()
+
+        // val>=this.hp.peek()
+        // that means that ineed to insert my new element,
+        // but poll so my length gets to k
         this.hp.push(val)
         this.hp.poll()
+        // and then just peek
         return this.hp.peek()
     }
 
