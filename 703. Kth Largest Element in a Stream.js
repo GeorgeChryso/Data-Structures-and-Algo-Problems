@@ -107,7 +107,3 @@ KthLargest.prototype.add = function(val) {
     }
 
 };
-
-// TLE because after Each add I have to create a shallow copy of the array
-let ex=new KthLargest(3,[4,5,8,2])
-ex.add(3); 
