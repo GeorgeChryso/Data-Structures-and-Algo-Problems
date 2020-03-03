@@ -129,7 +129,69 @@ var topKFrequent = function(nums, k) {
     }
     return result
 };
+
 console.log(topKFrequent(
     [6,0,1,4,9,7,-3,1,-4,-8,4,-7,-3,3,2,-3,9,5,-4,0],
 6
 ))
+
+
+
+//heapsort
+function swap(data, i, j){
+    let temp = data[i]
+    data[i] = data[j]
+    data[j] = temp
+    
+}
+
+function heapAjust(data, i, end) {
+    var child = 2*i + 1;
+    while(child <= end) {
+        if(child + 1 <= end && data[child][1] < data[child + 1][1]) {
+            child = child + 1;
+        }
+        if(data[i][1] < data[child][1]) {
+            swap(data, i, child)
+            i = child
+            child = 2*i + 1
+        }else {
+            break
+        }
+    }
+}
+
+function heapSort(data, k) {
+
+    var len = data.length;
+
+    for(var i=Math.floor(len/2); i>=0; i--) {
+        heapAjust(data, i, len-1);
+    }
+    
+    swap(data, len-1, 0);
+    var i=len-2;
+    for(; i>=0; i--) {
+        heapAjust(data, 0, i);
+        swap(data, i, 0);
+    }
+    return data;
+}
+
+function topKFrequent (nums, k) {
+    var map = new Map()
+    nums.forEach(i => {
+        if (map.get(i)) {
+            map.set(i, map.get(i)+1)
+        } else {
+            map.set(i, 1)
+        }
+    })
+
+
+   if (k >= nums.length) {
+         k = nums.length
+    }
+   let res = heapSort([...map], k)
+   return res.splice(res.length-k).map(i => i[0]).reverse()
+}
