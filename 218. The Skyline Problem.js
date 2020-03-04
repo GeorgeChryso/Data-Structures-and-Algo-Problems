@@ -211,11 +211,10 @@ var getSkyline = function(buildings) {
 
 
 
-//Tushar Roy
+//Tushar Roy theoretically O(nlogn) ,but O(n^2 due to splice)
 var getSkyline = function(buildings) {
     //determine the start point and end point of a building, also mark it as start or end. It is sorted by rule 
     var buildingPoints = getBuildingPoints(buildings); 
-    console.log(buildingPoints);
     var res = [];
     var queue = [0];
     var max = 0;
@@ -224,12 +223,38 @@ var getSkyline = function(buildings) {
         // pick each point: if start => push height to queue, end => remove height from queue. the queue is increasing
         if (point.isStart) {
             // start => push height to queue, find the index by binarySearch
-            var index = binarySearch(queue, point.height);
+            var index = binarySearch(queue, point.height); //O(logn)
+            let index=0
+            let target=point.height
+            for (var i = 0; i < queue.length; i++) {
+                if(queue[i]<=target&&(i==queue.length-1||queue[i+1]>=target)){
+                    index=i
+                    break
+                }                
+            }
             queue.splice(index, 0, point.height);
         }
         else {
             // remove height from queue
             var index = queue.indexOf(point.height);
+
+            let binarySr=(target)=>{
+                let left=0
+                let right=queue.length-1
+
+                while(left<right){
+                    let mid = Math.floor(left + (right - left) / 2); 
+                    //console.log(left,right,mid,queue)
+                    if(queue[mid]===target&&(queue[mid-1]<target||mid===0))return mid
+                    if(queue[mid]<target)left=mid+1
+                    if(queue[mid]>=target)right=mid-1
+                }
+                return left
+            }
+
+            let index2=binarySr(point.height)
+
+            console.log(index,index2,queue)
             queue.splice(index, 1);
         }
         
@@ -297,6 +322,6 @@ function compPareBuildingPoint(a, b) {
 
 console.log(
     getSkyline(
-        [[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]
+        [[0,3,3],[1,5,3],[2,4,3],[3,7,3]]
             )
 )

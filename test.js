@@ -212,6 +212,14 @@ var singleNumber=A=>{
     return handle.ones.keys().next().value
 }
 
+
+let dora={
+    'a':2
+    ,
+    'b':this.a
+}
+
+console.log(dora)
 console.log(singleNumber(
  //   [2,2,3,2]
      // [0,1,0,1,0,1,99]
