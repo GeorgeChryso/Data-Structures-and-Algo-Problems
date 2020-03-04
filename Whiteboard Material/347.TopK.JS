@@ -137,7 +137,7 @@ console.log(topKFrequent(
 
 
 
-//heapsort
+//heapsort todo Commenting
 function swap(data, i, j){
     let temp = data[i]
     data[i] = data[j]
@@ -168,7 +168,7 @@ function heapSort(data, k) {
     for(var i=Math.floor(len/2); i>=0; i--) {
         heapAjust(data, i, len-1);
     }
-    
+
     swap(data, len-1, 0);
     var i=len-2;
     for(; i>=0; i--) {
