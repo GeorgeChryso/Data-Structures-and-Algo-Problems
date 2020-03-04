@@ -53,131 +53,7 @@ var getSkyline = function(B) {
     return mapped.filter(([x,y],i)=>i>=1?y!==mapped[i-1][1]:true)
 };
 
-//heap Solutiion todo
-var getSkyline = function(B) {
-    let points=[]
 
-    //seperate its block to its top left corner and bottom right corner coordinates
-    B.forEach(
-        ([L,R,H])=>{
-            points.push([L,-H],[R,H])
-        }
-    )
-    points.sort((a,b)=>a[0]==b[0]?a[1]-b[1]:a[0]-b[0])
-    
-    let heap=new maxBinaryHeap()
-    heap.comparator=([x1,y1],[x2,y2])=>x2-x1
-
-    let result=[]
-    let pre=0
-    let cur=0
-    for (const i in points) {
-        let [x,y]=points[i]
-        if(y<0)heap.push([-y,i])//nlogn
-        else heap.remove(i)
-
-        cur=heap.peek()[0]
-        if(cur!=pre){
-            result.push([x,cur])
-            pre=cur
-        }
-    }
-    return result
-};
-
-class maxBinaryHeap{
-    constructor(){
-        this.heap=[]
-        this.comparator=(a,b)=>b-a
-
-    }
-
-    hasParent=index=>index>=1
-    getParent=(index)=>this.heap[Math.floor((index-1)/2)]
-    hasLeft=(index)=>2*index+1<=this.heap.length-1
-    getLeftChild=(index)=>this.heap[2*index+1]
-    hasRight=index=>2*index+2<=this.heap.length-1
-    getRightChild=(index)=> this.heap[2*index+2]
-    
-    length=()=>this.heap.length
-    peek=()=>this.heap[0]
-    push(element){
-        this.heap.push(element)
-        //this element is pushed on the rightmost node of the lowest level
-        // and needs  to be bubbled up accordingly
-        this.bubbleUp(this.heap.length-1)
-    }
-
-    bubbleUp(index){
-        //if there is a parent with a bigger priority, switch places with my index
-        while(
-            this.hasParent(index)&&
-            (this.comparator(this.heap[index],this.getParent(index))>0)
-            ){
-            //swap the two elements until the Invariant is reached
-            [this.heap[index],this.heap[Math.floor((index-1)/2)]]= [this.heap[Math.floor((index-1)/2)],this.heap[index]]
-            // and update the new index to be its parent's index, since u switched the items
-            index=Math.floor((index-1)/2)
-        }
-        
-    }
-
-    //get the highest(lowest) priority element
-    poll(){
-        if(this.length()==1)return this.heap.pop()
-
-        let result=this.heap[0]
-        this.heap[0]=this.heap.pop()
-        this.bubbleDown(0)
-        return result
-    }
-    
-    //after every poll, the new item on place 0 needs to be bubbled down to its correct position
-    bubbleDown(index){
-        if(this.length()<=1)return
-       
-        while(this.hasLeft(index)&&( this.comparator(this.heap[index],this.getLeftChild(index))<0||(this.hasRight(index)&&this.comparator(this.heap[index],this.getRightChild(index))<0) )){
-
-            //if there is no right child, swap with the left
-            if(!this.hasRight(index)){
-                [this.heap[index],this.heap[index*2+1]]=[this.getLeftChild(index),this.heap[index]]
-                index=index*2+1
-            }
-            else{
-                // if the left child is less than or equal to the right child, choos the left
-   
-                if(this.comparator(this.getLeftChild(index),this.getRightChild(index))>=0){
-                    //and swap
-                  [this.heap[index],this.heap[index*2+1]]=[this.getLeftChild(index),this.heap[index]]
-                  index=index*2+1
-                }
-                // else choose the right child
-                else {
-                    //and swap
-                  [this.heap[index],this.heap[index*2+2]]=[this.getRightChild(index),this.heap[index]]
-                  index=index*2+2  
-                }
-                
-            }
-        }
-    }
-
-    heapify() {
-        if (this.length() < 2) return;
-        for (let i = 1; i < this.length(); i++) {
-          this.bubbleUp(i);
-        }
-      }
-
-
-      // I have to create a remove function that works in O(logn time)
-    remove=(index)=>{
-        this.heap[index]=this.heap[this.heap.length-1]
-        this.heap.pop()
-        this.bubbleDown(index)
-        this.bubbleUp(index)
-    }
-}
 
 
 //Math.max solution
@@ -226,7 +102,7 @@ var getSkyline = function(buildings) {
         if (point.isStart) {
             // start => push height to queue, find the index by binarySearch
             var index = binarySearch(queue, point.height); //O(logn)
-            let index=0
+            //let index=0
             let target=point.height
             for (var i = 0; i < queue.length; i++) {
                 if(queue[i]<=target&&(i==queue.length-1||queue[i+1]>=target)){
@@ -322,8 +198,155 @@ function compPareBuildingPoint(a, b) {
 
 
 
+
+
+
+//heap Solutiion todo
+var zgetSkyline = function(B) {
+    let points=[]
+
+    //seperate its block to its top left corner and bottom right corner coordinates
+    B.forEach(
+        ([L,R,H])=>{
+            points.push([L,-H],[R,H])
+        }
+    )
+    points.sort((a,b)=>a[0]==b[0]?a[1]-b[1]:a[0]-b[0])
+    
+    let heap=new maxBinaryHeap()
+    heap.comparator=([x1,y1],[x2,y2])=>y2-y1
+    heap.valComparison=([x,h])=>h
+
+    let result=[]
+    let pre=0
+    let cur=0
+    for (const i in points) {
+        let [x,h]=points[i]
+        if(h<0)heap.push([x,-h])//nlogn
+        else heap.remove(i)
+
+        cur=heap.peek()[0][1]
+        if(cur!=pre){
+            result.push([x,cur])
+            pre=cur
+        }
+    }
+    return result
+};
+
+class maxBinaryHeap{
+    constructor(){
+        this.heap=[]
+        this.comparator=(a,b)=>b-a
+        this.valComparison=()=>null
+        this.store={}
+    }
+
+    hasParent=index=>index>=1
+    getParent=(index)=>this.heap[Math.floor((index-1)/2)]
+    hasLeft=(index)=>2*index+1<=this.heap.length-1
+    getLeftChild=(index)=>this.heap[2*index+1]
+    hasRight=index=>2*index+2<=this.heap.length-1
+    getRightChild=(index)=> this.heap[2*index+2]
+    
+    length=()=>this.heap.length
+    peek=()=>this.heap[0]
+    push(element){
+        this.heap.push(element)
+        //this element is pushed on the rightmost node of the lowest level
+        // and needs  to be bubbled up accordingly
+        this.store[this.valComparison(element)]=this.heap.length-1
+        this.bubbleUp(this.heap.length-1)
+    }
+
+    bubbleUp(index){
+        //if there is a parent with a bigger priority, switch places with my index
+        while(
+            this.hasParent(index)&&
+            (this.comparator(this.heap[index],this.getParent(index))>0)
+            ){
+            //swap the two elements until the Invariant is reached
+            this.swap(index,Math.floor((index-1)/2))
+            // and update the new index to be its parent's index, since u switched the items
+            index=Math.floor((index-1)/2)
+        }
+        
+    }
+
+    //get the highest(lowest) priority element
+    poll(){
+        if(this.length()==1){
+            this.store[this.valComparison(this.heap[this.heap.length-1])]=null
+            return this.heap.pop()
+        }
+
+        let result=this.heap[0]
+        this.swap(0,this.heap.length-1)
+        this.store[this.valComparison(this.heap[this.heap.length-1])]=null
+        this.heap.pop()
+        this.bubbleDown(0)
+        return result
+    }
+    
+    //after every poll, the new item on place 0 needs to be bubbled down to its correct position
+    bubbleDown(index){
+        if(this.length()<=1)return
+       
+        while(this.hasLeft(index)&&( this.comparator(this.heap[index],this.getLeftChild(index))<0||(this.hasRight(index)&&this.comparator(this.heap[index],this.getRightChild(index))<0) )){
+
+            //if there is no right child, swap with the left
+            if(!this.hasRight(index)){
+                this.swap(index,index*2+2)
+                index=index*2+1
+            }
+            else{
+                // if the left child is less than or equal to the right child, choos the left
+   
+                if(this.comparator(this.getLeftChild(index),this.getRightChild(index))>=0){
+                    //and swap
+                  this.swap(index,index*2+2)
+                  index=index*2+1
+                }
+                // else choose the right child
+                else {
+                    //and swap
+                  this.swap(index,index*2+2)  
+                  index=index*2+2  
+                }
+                
+            }
+        }
+    }
+
+    heapify() {
+        if (this.length() < 2) return;
+        for (let i = 1; i < this.length(); i++) {
+          this.bubbleUp(i);
+        }
+      }
+
+
+      // I have to create a remove function that works in O(logn time)
+    remove=(index)=>{
+        
+        this.swap(index,this.heap.length-1)
+        this.store[this.valComparison(this.heap[this.heap.length-1])]=null
+        this.heap.pop()
+        this.bubbleDown(index)
+        this.bubbleUp(index)
+    }
+
+
+    swap=(a,b)=>{
+        [this.heap[a],this.heap[b]]=[this.heap[b],this.heap[a]]
+        [this.store[this.heap[a]],this.store[this.heap[b]]] =[b,a]
+
+    }
+}
+
+
 console.log(
-    getSkyline(
+    zgetSkyline(
         [[0,3,3],[1,5,3],[2,4,3],[3,7,3]]
             )
 )
