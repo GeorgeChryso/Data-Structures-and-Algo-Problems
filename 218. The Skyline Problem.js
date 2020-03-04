@@ -73,7 +73,7 @@ var getSkyline = function(B) {
     let cur=0
     for (const i in points) {
         let [x,y]=points[i]
-        if(y<0)heap.push([-y,i])
+        if(y<0)heap.push([-y,i])//nlogn
         else heap.remove(i)
 
         cur=heap.peek()[0]
@@ -169,6 +169,8 @@ class maxBinaryHeap{
         }
       }
 
+
+      // I have to create a remove function that works in O(logn time)
     remove=(index)=>{
         this.heap[index]=this.heap[this.heap.length-1]
         this.heap.pop()
