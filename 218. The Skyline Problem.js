@@ -33,7 +33,7 @@ var getSkyline = function(B) {
                if(L<=x&&x<R){
                     newy=Math.max(H,newy)
                }
-               if(L>x)break
+               if(L>x)break //this would be wrong if my input wasnt sorted in ascending L values
            }
            
            return [x,newy]
@@ -49,9 +49,251 @@ var getSkyline = function(B) {
         }
         return a[0]-b[0]
     })
-    //remove the reduntant elements which are the ones with equal height with their previous element
+    //remove the reduntant elements which are the ones with equal height with their previous element, as they are not needed to describe the skyline, and therefore 
     return mapped.filter(([x,y],i)=>i>=1?y!==mapped[i-1][1]:true)
 };
+
+//heap Solutiion todo
+var getSkyline = function(B) {
+    let points=[]
+
+    //seperate its block to its top left corner and bottom right corner coordinates
+    B.forEach(
+        ([L,R,H])=>{
+            points.push([L,-H],[R,H])
+        }
+    )
+    points.sort((a,b)=>a[0]==b[0]?a[1]-b[1]:a[0]-b[0])
+    
+    let heap=new maxBinaryHeap()
+    heap.comparator=([x1,y1],[x2,y2])=>x2-x1
+
+    let result=[]
+    let pre=0
+    let cur=0
+    for (const i in points) {
+        let [x,y]=points[i]
+        if(y<0)heap.push([-y,i])
+        else heap.remove(i)
+
+        cur=heap.peek()[0]
+        if(cur!=pre){
+            result.push([x,cur])
+            pre=cur
+        }
+    }
+    return result
+};
+
+class maxBinaryHeap{
+    constructor(){
+        this.heap=[]
+        this.comparator=(a,b)=>b-a
+
+    }
+
+    hasParent=index=>index>=1
+    getParent=(index)=>this.heap[Math.floor((index-1)/2)]
+    hasLeft=(index)=>2*index+1<=this.heap.length-1
+    getLeftChild=(index)=>this.heap[2*index+1]
+    hasRight=index=>2*index+2<=this.heap.length-1
+    getRightChild=(index)=> this.heap[2*index+2]
+    
+    length=()=>this.heap.length
+    peek=()=>this.heap[0]
+    push(element){
+        this.heap.push(element)
+        //this element is pushed on the rightmost node of the lowest level
+        // and needs  to be bubbled up accordingly
+        this.bubbleUp(this.heap.length-1)
+    }
+
+    bubbleUp(index){
+        //if there is a parent with a bigger priority, switch places with my index
+        while(
+            this.hasParent(index)&&
+            (this.comparator(this.heap[index],this.getParent(index))>0)
+            ){
+            //swap the two elements until the Invariant is reached
+            [this.heap[index],this.heap[Math.floor((index-1)/2)]]= [this.heap[Math.floor((index-1)/2)],this.heap[index]]
+            // and update the new index to be its parent's index, since u switched the items
+            index=Math.floor((index-1)/2)
+        }
+        
+    }
+
+    //get the highest(lowest) priority element
+    poll(){
+        if(this.length()==1)return this.heap.pop()
+
+        let result=this.heap[0]
+        this.heap[0]=this.heap.pop()
+        this.bubbleDown(0)
+        return result
+    }
+    
+    //after every poll, the new item on place 0 needs to be bubbled down to its correct position
+    bubbleDown(index){
+        if(this.length()<=1)return
+       
+        while(this.hasLeft(index)&&( this.comparator(this.heap[index],this.getLeftChild(index))<0||(this.hasRight(index)&&this.comparator(this.heap[index],this.getRightChild(index))<0) )){
+
+            //if there is no right child, swap with the left
+            if(!this.hasRight(index)){
+                [this.heap[index],this.heap[index*2+1]]=[this.getLeftChild(index),this.heap[index]]
+                index=index*2+1
+            }
+            else{
+                // if the left child is less than or equal to the right child, choos the left
+   
+                if(this.comparator(this.getLeftChild(index),this.getRightChild(index))>=0){
+                    //and swap
+                  [this.heap[index],this.heap[index*2+1]]=[this.getLeftChild(index),this.heap[index]]
+                  index=index*2+1
+                }
+                // else choose the right child
+                else {
+                    //and swap
+                  [this.heap[index],this.heap[index*2+2]]=[this.getRightChild(index),this.heap[index]]
+                  index=index*2+2  
+                }
+                
+            }
+        }
+    }
+
+    heapify() {
+        if (this.length() < 2) return;
+        for (let i = 1; i < this.length(); i++) {
+          this.bubbleUp(i);
+        }
+      }
+
+    remove=(index)=>{
+        this.heap[index]=this.heap[this.heap.length-1]
+        this.heap.pop()
+        this.bubbleDown(index)
+        this.bubbleUp(index)
+    }
+}
+
+
+//Math.max solution
+var getSkyline = function(buildings) {
+    if (buildings.length === 0) return [];
+
+    let startEndHeightList = [];
+    for (let building of buildings){
+        let [start, end, height] = building;
+        startEndHeightList.push([start, 0-height]);
+        startEndHeightList.push([end, height]);
+    }
+    startEndHeightList.sort((a,b)=> a[0]===b[0] ? a[1]-b[1] : a[0]-b[0]) // ascending sort by x, y
+    let result = [];
+    let currHeights = [0]; // init with ground height 0
+    let prevMaxHeight = 0;
+    for (let i = 0; i < startEndHeightList.length; i++){
+        let [pos, height] = startEndHeightList[i];
+        if (height < 0){ // new building, add to currHeights
+            currHeights.push(0-height);
+        }else{ // end of building, add to map as 0
+            let removeIdx = currHeights.indexOf(height);
+            currHeights.splice(removeIdx,1);
+        }
+
+        let currMaxHeight = Math.max(...currHeights)
+        if (currMaxHeight != prevMaxHeight) result.push([pos, currMaxHeight])
+        prevMaxHeight = currMaxHeight;
+    }
+    return result;
+}
+
+
+
+
+//Tushar Roy
+var getSkyline = function(buildings) {
+    //determine the start point and end point of a building, also mark it as start or end. It is sorted by rule 
+    var buildingPoints = getBuildingPoints(buildings); 
+    console.log(buildingPoints);
+    var res = [];
+    var queue = [0];
+    var max = 0;
+    
+    for (var point of buildingPoints) {
+        // pick each point: if start => push height to queue, end => remove height from queue. the queue is increasing
+        if (point.isStart) {
+            // start => push height to queue, find the index by binarySearch
+            var index = binarySearch(queue, point.height);
+            queue.splice(index, 0, point.height);
+        }
+        else {
+            // remove height from queue
+            var index = queue.indexOf(point.height);
+            queue.splice(index, 1);
+        }
+        
+        // if the push or remove changes the maxHeight, mean it moves to another block, push that point (x, maxCurrentHeight) to res
+        var currentMax = queue[queue.length - 1];
+        if (max != currentMax) {
+            max = currentMax;
+            res.push([point.x, max]);
+        }
+    }
+    
+    return res;
+};
+
+function binarySearch(arr, target) {
+    var left = 0;
+    var right = arr.length - 1;
+    var mid = 0;
+    
+    while(left < right) {
+        mid = Math.floor(left + (right - left) / 2);
+        
+        if (arr[mid] < target) left = mid + 1;
+        else right = mid;
+    }
+    
+    if (arr[left] < target) return ++left;
+    return left;
+}
+
+function getBuildingPoints(buildings) {
+    var buildingPoints = [];
+    for (var building of buildings) {
+        var start = {};
+        start.x = building[0];
+        start.height = building[2];
+        start.isStart = true;
+        buildingPoints.push(start);
+        
+        var end = {};
+        end.x = building[1];
+        end.height = building[2];
+        buildingPoints.push(end);
+        end.isStart = false;
+    }
+    
+    buildingPoints.sort(compPareBuildingPoint);
+    
+    return buildingPoints;
+}
+
+function compPareBuildingPoint(a, b) {
+    //first compare by x.
+    if (a.x != b.x) return a.x - b.x;
+    else {
+        //If they are same then use this logic
+        //if two starts are compared then higher height building should be picked first
+        //if two ends are compared then lower height building should be picked first
+        //if one start and end is compared then start should appear before end
+        return (a.isStart ? -a.height : a.height) - (b.isStart ? -b.height : b.height);
+    }
+}
+
+
 
 console.log(
     getSkyline(
