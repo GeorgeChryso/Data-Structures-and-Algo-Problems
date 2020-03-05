@@ -202,7 +202,7 @@ function compPareBuildingPoint(a, b) {
 
 
 //heap Solutiion todo
-var zgetSkyline = function(B) {
+var getSkyline = function(B) {
     let points=[]
 
     //seperate its block to its top left corner and bottom right corner coordinates
@@ -211,21 +211,21 @@ var zgetSkyline = function(B) {
             points.push([L,-H],[R,H])
         }
     )
-    points.sort((a,b)=>a[0]==b[0]?a[1]-b[1]:a[0]-b[0])
-    
+    points.sort((a,b)=>a[0]==b[0]?a[1]-b[1]:a[0]-b[0]) //nlogn
+    console.log(points)
     let heap=new maxBinaryHeap()
-    heap.comparator=([x1,y1],[x2,y2])=>y2-y1
-    heap.valComparison=([x,h])=>h
-
+    heap.comparator=([x1,y1],[x2,y2])=>y1-y2
+    heap.valComparison=(a)=>a[1]
     let result=[]
     let pre=0
     let cur=0
-    for (const i in points) {
+    heap.push([0,0])
+    for (const i in points) { //n*logn
         let [x,h]=points[i]
-        if(h<0)heap.push([x,-h])//nlogn
-        else heap.remove(i)
+        if(h<0)heap.push([x,-h]) //logn
+        else heap.remove(h)     //logn
 
-        cur=heap.peek()[0][1]
+        cur=heap.peek()[1]
         if(cur!=pre){
             result.push([x,cur])
             pre=cur
@@ -255,7 +255,12 @@ class maxBinaryHeap{
         this.heap.push(element)
         //this element is pushed on the rightmost node of the lowest level
         // and needs  to be bubbled up accordingly
-        this.store[this.valComparison(element)]=this.heap.length-1
+        if(this.store[this.valComparison(element)]!==undefined)
+            this.store[this.valComparison(element)].add(this.heap.length-1)
+        else{
+            this.store[this.valComparison(element)]=new Set()
+            this.store[this.valComparison(element)].add(this.heap.length-1)
+        }
         this.bubbleUp(this.heap.length-1)
     }
 
@@ -263,7 +268,7 @@ class maxBinaryHeap{
         //if there is a parent with a bigger priority, switch places with my index
         while(
             this.hasParent(index)&&
-            (this.comparator(this.heap[index],this.getParent(index))>0)
+            (this.comparator(this.heap[index],this.getParent(index))>=0)
             ){
             //swap the two elements until the Invariant is reached
             this.swap(index,Math.floor((index-1)/2))
@@ -276,13 +281,14 @@ class maxBinaryHeap{
     //get the highest(lowest) priority element
     poll(){
         if(this.length()==1){
-            this.store[this.valComparison(this.heap[this.heap.length-1])]=null
+            this.store[this.valComparison(this.heap[this.heap.length-1])].delete(this.heap.length-1)
             return this.heap.pop()
         }
 
         let result=this.heap[0]
+
         this.swap(0,this.heap.length-1)
-        this.store[this.valComparison(this.heap[this.heap.length-1])]=null
+        this.store[this.valComparison(this.heap[this.heap.length-1])].delete(this.heap.length-1)
         this.heap.pop()
         this.bubbleDown(0)
         return result
@@ -291,12 +297,12 @@ class maxBinaryHeap{
     //after every poll, the new item on place 0 needs to be bubbled down to its correct position
     bubbleDown(index){
         if(this.length()<=1)return
-       
+
         while(this.hasLeft(index)&&( this.comparator(this.heap[index],this.getLeftChild(index))<0||(this.hasRight(index)&&this.comparator(this.heap[index],this.getRightChild(index))<0) )){
 
             //if there is no right child, swap with the left
             if(!this.hasRight(index)){
-                this.swap(index,index*2+2)
+                this.swap(index,index*2+1)
                 index=index*2+1
             }
             else{
@@ -304,7 +310,7 @@ class maxBinaryHeap{
    
                 if(this.comparator(this.getLeftChild(index),this.getRightChild(index))>=0){
                     //and swap
-                  this.swap(index,index*2+2)
+                  this.swap(index,index*2+1)
                   index=index*2+1
                 }
                 // else choose the right child
@@ -327,26 +333,86 @@ class maxBinaryHeap{
 
 
       // I have to create a remove function that works in O(logn time)
-    remove=(index)=>{
-        
-        this.swap(index,this.heap.length-1)
-        this.store[this.valComparison(this.heap[this.heap.length-1])]=null
-        this.heap.pop()
-        this.bubbleDown(index)
-        this.bubbleUp(index)
+    remove=(height)=>{
+
+        if(!this.store[height].size){
+            return
+        }
+        else{
+            let index=-1
+          
+            for (const value of this.store[height].values()) {
+                index=value
+                break;
+            }
+            this.swap(index,this.heap.length-1) 
+            this.store[this.valComparison(this.heap[this.heap.length-1])].delete(this.heap.length-1)
+            this.heap.pop() //O(1)
+            this.bubbleDown(index) //logn
+        }
+
     }
 
 
     swap=(a,b)=>{
-        [this.heap[a],this.heap[b]]=[this.heap[b],this.heap[a]]
-        [this.store[this.heap[a]],this.store[this.heap[b]]] =[b,a]
-
+        if(a===b)return
+        if(this.valComparison(this.heap[a])!=this.valComparison(this.heap[b])){
+            this.store[this.valComparison(this.heap[a])].delete(a)
+            this.store[this.valComparison(this.heap[a])].add(b)
+            this.store[this.valComparison(this.heap[b])].add(a)
+            this.store[this.valComparison(this.heap[b])].delete(b)
+        }
+        let temp=this.heap[b]
+        this.heap[b]=this.heap[a]
+        this.heap[a]=temp
     }
 }
 
 
+// mergeSort
+var getSkyline = function(buildings) {
+    const mergeSort = (start, end) => {
+        if (end <= start) {
+            if (end < start) return [];
+            const building = buildings[end];
+            return [[building[0],building[2]],[building[1],0]];
+        }
+        const mid = Math.floor((start + end) / 2);
+        return merge(mergeSort(start, mid), mergeSort(mid + 1, end));
+    }
+    return mergeSort(0, buildings.length - 1);
+};
+
+function merge(leftBuildings, rightBuildings) {
+    let leftY = 0;
+    let rightY = 0;
+    let left = 0;
+    let right = 0;
+    let x;
+    let y;
+    const res = [];
+    while (left < leftBuildings.length || right < rightBuildings.length) {
+        const leftX = left < leftBuildings.length ? leftBuildings[left][0] : Infinity;
+        const rightX = right < rightBuildings.length ? rightBuildings[right][0] : Infinity;
+        if (leftX < rightX) {
+            [x,leftY] = leftBuildings[left++];
+        } else if (leftX > rightX) {
+            [x, rightY] = rightBuildings[right++];
+        } else {
+            [x, leftY] = leftBuildings[left++];
+            [_, rightY] = rightBuildings[right++];
+        }
+        y = Math.max(leftY, rightY);
+        if (res.length === 0 || y !== res[res.length - 1][1]) {
+            res.push([x,y]);
+        }
+    }
+    return res;
+}
 console.log(
-    zgetSkyline(
-        [[0,3,3],[1,5,3],[2,4,3],[3,7,3]]
+    getSkyline(
+        [[2,13,10],[10,17,25],[12,20,14]]
+       // [[0,3,3],[1,5,3],[2,4,3],[3,7,3]]
+        //[[2,9,10],[3,7,15],[5,12,12],[15,20,10],[19,24,8]]
             )
 )

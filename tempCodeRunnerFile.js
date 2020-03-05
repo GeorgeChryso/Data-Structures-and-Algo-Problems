@@ -1,1 +1,1 @@
-    console.log(points[i])
+2*index+1
