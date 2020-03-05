@@ -8,13 +8,19 @@ let dijkstras=(src,Target,distances,maxStops)=>{
     let connections={}
     //key:node name, val: its dist from source node
     let finalizedDist={}
+
+    let previousParents={}
+
     let sptSet=new Set() //all the nodes,whose minimum distance from source
     // is finalized.
 
-    console.log(src,Target,distances)
     for (const [source,tar,cost] of distances) {
-         connections[source]==undefined?connections[source]=[[source,tar,cost]]:connections[source].push([source,tar,cost])
+         connections[source]===undefined?connections[source]=[[source,tar,cost]]:connections[source].push([source,tar,cost])
+         connections[tar]===undefined?connections[tar]=[]:null
          finalizedDist[source]=Infinity    //populate distance for n nodes
+         finalizedDist[tar]=Infinity    //populate distance for n nodes
+         previousParents[source]=0
+         previousParents[tar]=0
 
     }
  
@@ -23,12 +29,13 @@ let dijkstras=(src,Target,distances,maxStops)=>{
 
     priorityQueue.push([src,src,0])
     finalizedDist[src]=0
-
+    previousParents[src]=0
   
     let totalNodes=Object.keys(connections).length
 
     while(sptSet.size!==totalNodes){
         let currentElement=priorityQueue.poll()
+        console.log(currentElement)
         while(sptSet.has(currentElement[1])&&priorityQueue.heap.length!==0){
             currentElement=priorityQueue.poll()
         }
@@ -36,8 +43,9 @@ let dijkstras=(src,Target,distances,maxStops)=>{
 
         for (const [cur,to,cost] of connections[currentElement[1]]) {
             priorityQueue.push([cur,to,cost])
-            if(finalizedDist[cur]+cost<finalizedDist[to]){
+            if(finalizedDist[cur]+cost<finalizedDist[to]&&previousParents[cur]+1<=maxStops+1){
                 finalizedDist[to]=finalizedDist[cur]+cost
+                previousParents[to]=previousParents[cur]+1
             }
         }
         console.log(finalizedDist,currentElement,sptSet)
@@ -151,3 +159,12 @@ var findCheapestPrice = function(n, flights, src, dst, K) {
     return dijkstras(src,dst,flights,K)
 
 };
+
+
+console.log(findCheapestPrice(
+    5,
+[[4,1,1],[1,2,3],[0,3,2],[0,4,10],[3,1,1],[1,4,3]],
+2,
+1,
+1,
+))
