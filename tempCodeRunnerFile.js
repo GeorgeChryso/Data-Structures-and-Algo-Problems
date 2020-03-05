@@ -1,1 +1,1 @@
-2*index+1
+class maxBinaryHeap{

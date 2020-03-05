@@ -368,8 +368,8 @@ class maxBinaryHeap{
     }
 }
 
-
-// mergeSort
+ 
+// mergeSort commenting todo
 var getSkyline = function(buildings) {
     const mergeSort = (start, end) => {
         if (end <= start) {
@@ -409,6 +409,10 @@ function merge(leftBuildings, rightBuildings) {
     }
     return res;
 }
+
+
+
+
 console.log(
     getSkyline(
         [[2,13,10],[10,17,25],[12,20,14]]
