@@ -2,59 +2,67 @@
 
 // Now given all the cities and flights, together with starting city src and the destination dst, your task is to find the cheapest price from src to dst with up to k stops. If there is no such route, output -1.
 
-let dijkstras=(src,Target,distances,maxStops)=>{
 
-    //source: [distances[i]]
-    let connections={}
-    //key:node name, val: its dist from source node
-    let finalizedDist={}
 
-    let previousParents={}
 
-    let sptSet=new Set() //all the nodes,whose minimum distance from source
-    // is finalized.
 
-    for (const [source,tar,cost] of distances) {
-         connections[source]===undefined?connections[source]=[[source,tar,cost]]:connections[source].push([source,tar,cost])
-         connections[tar]===undefined?connections[tar]=[]:null
-         finalizedDist[source]=Infinity    //populate distance for n nodes
-         finalizedDist[tar]=Infinity    //populate distance for n nodes
-         previousParents[source]=0
-         previousParents[tar]=0
 
-    }
+
+// //failed dijkstras because it's the classic implementationm where only the best local option is considered
+// let dijkstras=(src,Target,distances,maxStops)=>{
+
+//     //source: [distances[i]]
+//     let connections={}
+//     //key:node name, val: its dist from source node
+//     let finalizedDist={}
+
+//     let previousParents={}
+
+//     let sptSet=new Set() //all the nodes,whose minimum distance from source
+//     // is finalized.
+
+//     for (const [source,tar,cost] of distances) {
+//          connections[source]===undefined?connections[source]=[[source,tar,cost]]:connections[source].push([source,tar,cost])
+//          connections[tar]===undefined?connections[tar]=[]:null
+//          finalizedDist[source]=Infinity    //populate distance for n nodes
+//          finalizedDist[tar]=Infinity    //populate distance for n nodes
+//          previousParents[source]=[ [0,0]]// [previousfinalized,previousscore]
+//          previousParents[tar]=[[0,0]]//
+
+//     }
  
-    let priorityQueue=new minBinaryHeap()
-    priorityQueue.comparator=(a,b)=>a[2]-b[2]
+//     let priorityQueue=new minBinaryHeap()
+//     priorityQueue.comparator=(a,b)=>a[2]-b[2]
 
-    priorityQueue.push([src,src,0])
-    finalizedDist[src]=0
-    previousParents[src]=0
+//     priorityQueue.push([src,src,0])
+//     finalizedDist[src]=0
+//     previousParents[src]=0
   
-    let totalNodes=Object.keys(connections).length
+//     let totalNodes=Object.keys(connections).length
 
-    while(sptSet.size!==totalNodes){
-        let currentElement=priorityQueue.poll()
-        console.log(currentElement)
-        while(sptSet.has(currentElement[1])&&priorityQueue.heap.length!==0){
-            currentElement=priorityQueue.poll()
-        }
-        sptSet.add(currentElement[1])
+//     while(sptSet.size!==totalNodes&&priorityQueue.length){
+//         let currentElement=priorityQueue.poll()
+//         console.log(currentElement)
+//         if(currentElement===undefined)return -1
+//         while(sptSet.has(currentElement[1])&&priorityQueue.heap.length!==0){
+//             currentElement=priorityQueue.poll()
+//         }
+//         if(currentElement===undefined||sptSet.has(currentElement[1]))return finalizedDist[Target]!==Infinity?finalizedDist[Target]:-1
 
-        for (const [cur,to,cost] of connections[currentElement[1]]) {
-            priorityQueue.push([cur,to,cost])
-            if(finalizedDist[cur]+cost<finalizedDist[to]&&previousParents[cur]+1<=maxStops+1){
-                finalizedDist[to]=finalizedDist[cur]+cost
-                previousParents[to]=previousParents[cur]+1
-            }
-        }
-        console.log(finalizedDist,currentElement,sptSet)
+//         sptSet.add(currentElement[1])
+//         for (const [cur,to,cost] of connections[currentElement[1]]) {
+//             priorityQueue.push([cur,to,cost])
+//             if(finalizedDist[cur]+cost<finalizedDist[to]&&(previousParents[cur]+1<=maxStops+1)){
+//                 finalizedDist[to]=finalizedDist[cur]+cost
+//                 previousParents[to]=previousParents[cur]+1
+//             }
+//         }
+//         console.log(finalizedDist,currentElement,sptSet)
 
-    }
+//     }
 
-    return finalizedDist[Target]
-}
-
+//     return finalizedDist[Target]
+// }
 
 
 
@@ -147,6 +155,36 @@ class minBinaryHeap{
         this.heap[a]=temp
     }
 }
+let dijkstras=(src,Target,distances,maxStops,n)=>{
+
+    //source: [distances[i]]
+    //let connections={}
+    let conMatrix=[...Array(n)].map(d=>Array(n).fill(Infinity))
+    for (const [source,tar,cost] of distances) {
+        conMatrix[source][tar]=cost
+    }
+
+
+    let priorityQueue=new minBinaryHeap()
+    priorityQueue.comparator=(a,b)=>a[0]-b[0]
+    //nodes are like [costTillDestination,destination,previousStops]
+    priorityQueue.push([0,src,maxStops+1])
+  
+
+    while(priorityQueue.heap.length){
+        let [price,city,stops]=priorityQueue.poll()
+        if(Number(city)==Target)return price
+        if(stops>0){
+            for (const next in conMatrix[city]) {
+                if(conMatrix[Number(city)][next]===Infinity)continue
+                let cost=conMatrix[Number(city)][next]
+                priorityQueue.push([price+cost,next,stops-1])
+            }
+        }
+    }
+
+    return -1
+}
 
 
 
@@ -154,17 +192,21 @@ class minBinaryHeap{
 
 
 
+
+
+//Intuition, normal dijkstra will not cut it here, because There may be path with lesser cost, but with more previous stops. Instead of getting the most optimal local solution, i will push every possible path's cost  to a priority queue considering the previous stops. 
 var findCheapestPrice = function(n, flights, src, dst, K) {
     
-    return dijkstras(src,dst,flights,K)
+    return dijkstras(src,dst,flights,K,n)
 
 };
 
 
 console.log(findCheapestPrice(
-    5,
-[[4,1,1],[1,2,3],[0,3,2],[0,4,10],[3,1,1],[1,4,3]],
-2,
-1,
-1,
+    18,
+    [[16,1,81],[15,13,47],[1,0,24],[5,10,21],[7,1,72],[0,4,88],[16,4,39],[9,3,25],[10,11,28],[13,8,93],[10,3,62],[14,0,38],[3,10,58],[3,12,46],[3,8,2],[10,16,27],[6,9,90],[14,8,6],[0,13,31],[6,4,65],[14,17,29],[13,17,64],[12,5,26],[12,1,9],[12,15,79],[16,11,79],[16,15,17],[4,0,21],[15,10,75],[3,17,23],[8,5,55],[9,4,19],[0,10,83],[3,7,17],[0,12,31],[11,5,34],[17,14,98],[11,14,85],[16,7,48],[12,6,86],[5,17,72],[4,12,5],[12,10,23],[3,2,31],[12,7,5],[6,13,30],[6,7,88],[2,17,88],[6,8,98],[0,7,69],[10,15,13],[16,14,24],[1,17,24],[13,9,82],[13,6,67],[15,11,72],[12,0,83],[1,4,37],[12,9,36],[9,17,81],[9,15,62],[8,15,71],[10,12,25],[7,6,23],[16,5,76],[7,17,4],[3,11,82],[2,11,71],[8,4,11],[14,10,51],[8,10,51],[4,1,57],[6,16,68],[3,9,100],[1,14,26],[10,7,14],[8,17,24],[1,11,10],[2,9,85],[9,6,49],[11,4,95]],
+    7,
+    2,
+    6
 ))
+

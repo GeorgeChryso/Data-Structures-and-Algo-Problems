@@ -1,1 +1,1 @@
-class maxBinaryHeap{
+previousParents[cur]+1<=maxStops+1
