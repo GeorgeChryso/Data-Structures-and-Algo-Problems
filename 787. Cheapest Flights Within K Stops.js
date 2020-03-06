@@ -9,60 +9,7 @@
 
 
 // //failed dijkstras because it's the classic implementationm where only the best local option is considered
-// let dijkstras=(src,Target,distances,maxStops)=>{
 
-//     //source: [distances[i]]
-//     let connections={}
-//     //key:node name, val: its dist from source node
-//     let finalizedDist={}
-
-//     let previousParents={}
-
-//     let sptSet=new Set() //all the nodes,whose minimum distance from source
-//     // is finalized.
-
-//     for (const [source,tar,cost] of distances) {
-//          connections[source]===undefined?connections[source]=[[source,tar,cost]]:connections[source].push([source,tar,cost])
-//          connections[tar]===undefined?connections[tar]=[]:null
-//          finalizedDist[source]=Infinity    //populate distance for n nodes
-//          finalizedDist[tar]=Infinity    //populate distance for n nodes
-//          previousParents[source]=[ [0,0]]// [previousfinalized,previousscore]
-//          previousParents[tar]=[[0,0]]//
-
-//     }
- 
-//     let priorityQueue=new minBinaryHeap()
-//     priorityQueue.comparator=(a,b)=>a[2]-b[2]
-
-//     priorityQueue.push([src,src,0])
-//     finalizedDist[src]=0
-//     previousParents[src]=0
-  
-//     let totalNodes=Object.keys(connections).length
-
-//     while(sptSet.size!==totalNodes&&priorityQueue.length){
-//         let currentElement=priorityQueue.poll()
-//         console.log(currentElement)
-//         if(currentElement===undefined)return -1
-//         while(sptSet.has(currentElement[1])&&priorityQueue.heap.length!==0){
-//             currentElement=priorityQueue.poll()
-//         }
-//         if(currentElement===undefined||sptSet.has(currentElement[1]))return finalizedDist[Target]!==Infinity?finalizedDist[Target]:-1
-
-//         sptSet.add(currentElement[1])
-//         for (const [cur,to,cost] of connections[currentElement[1]]) {
-//             priorityQueue.push([cur,to,cost])
-//             if(finalizedDist[cur]+cost<finalizedDist[to]&&(previousParents[cur]+1<=maxStops+1)){
-//                 finalizedDist[to]=finalizedDist[cur]+cost
-//                 previousParents[to]=previousParents[cur]+1
-//             }
-//         }
-//         console.log(finalizedDist,currentElement,sptSet)
-
-//     }
-
-//     return finalizedDist[Target]
-// }
 
 
 
@@ -141,7 +88,7 @@ class minBinaryHeap{
                 else {
                     //and swap
                   this.swap(index,index*2+2)
-                  index=index*2+1
+                  index=index*2+2
 
                 }
                 
@@ -153,6 +100,7 @@ class minBinaryHeap{
         let temp=this.heap[b]
         this.heap[b]=this.heap[a]
         this.heap[a]=temp
+        console.log(this.heap[a],this.heap[b])
     }
 }
 
@@ -161,32 +109,32 @@ class minBinaryHeap{
 
 //Intuition, normal dijkstra will not cut it here, because There may be path with lesser cost, but with more previous stops. Instead of getting the most optimal local solution, i will push every possible path's cost  to a priority queue considering the previous stops. 
 var findCheapestPrice = function(n, flights, src, Target, maxStops) {
-        if(flights[flights.length-3][1]==11)return 169
-
       //source: [distances[i]]
       let conMatrix=[...Array(n)].map(d=>Array(n).fill(Infinity))
       for (const [source,tar,cost] of flights) {
           conMatrix[source][tar]=cost
       }
   
-  
+      let settled=new Set()//this will prevent me from expanding previously expanded nodes
+
       let priorityQueue=new minBinaryHeap()
       priorityQueue.comparator=(a,b)=>a[0]-b[0]
       //nodes are like [costTillDestination,destination,previousStops]
-      priorityQueue.push([0,src,maxStops+1])
+      priorityQueue.push([0,src,-1]) // previousStops==-1 cos every node connected with my src is considered previousStops==0
     
   
       while(priorityQueue.heap.length){
           let [price,city,stops]=priorityQueue.poll()
           //you are guaranteed a correct result here because it will be the highest cost with a valid stops nubmer
           if(Number(city)==Target)return price
-  
+          settled.add(city)
           //this guarantees that the elements i will push to my pQ will be within the given previousstops range
-          if(stops>0){
+          if(stops<maxStops){
               for (const next in conMatrix[city]) {
-                  if(conMatrix[Number(city)][next]===Infinity)continue
+
+                  if(conMatrix[Number(city)][next]===Infinity||settled.has(next))continue
                   let cost=conMatrix[Number(city)][next]
-                  priorityQueue.push([price+cost,next,stops-1])
+                  priorityQueue.push([price+cost,next,stops+1])
               }
           }
       }
@@ -197,7 +145,7 @@ var findCheapestPrice = function(n, flights, src, Target, maxStops) {
 
 
 
-//simple BFS TLE
+// //simple BFS TLE
 var findCheapestPrice = function(n, flights, src, Target, maxStops) {
 
   //source: [distances[i]]
@@ -215,7 +163,7 @@ var findCheapestPrice = function(n, flights, src, Target, maxStops) {
   
   while(q.length){
       let [price,city,stops]=q.shift()
-      //you are guaranteed a correct result here because it will be the highest cost with a valid stops nubmer
+      //you are guaranteed a correct result here because it will be the lowest cost with a valid stops nubmer
       if(Number(city)==Target){
           result=Math.min(result,price)
           continue
