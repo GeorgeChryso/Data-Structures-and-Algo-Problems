@@ -145,7 +145,7 @@ var findCheapestPrice = function(n, flights, src, Target, maxStops) {
 
 
 
-// //simple BFS TLE
+ //simple BFS TLE
 var findCheapestPrice = function(n, flights, src, Target, maxStops) {
 
   //source: [distances[i]]
@@ -183,11 +183,49 @@ var findCheapestPrice = function(n, flights, src, Target, maxStops) {
 
 };
 
+// Bellman Ford
+// Intuition: well Bellman Ford works in steps, having a MaxStops constraint 
+// essentially tells me to use BellmanFord where K=MaxStops instead of NumberoFNodes-1
+var findCheapestPrice=(n, flights, src, target, maxStops)=>{
+    let distanceFromSource=Array(n).fill(null).map(d=>Infinity)
+
+    //initialize the distance of every node with Infinity
+    for (const [start,end,cost] of flights) {
+        distanceFromSource[start]=Infinity
+        distanceFromSource[end]=Infinity
+ 
+    }
+
+    distanceFromSource[src]=0
+
+
+    // main
+    for (let i = 0; i <=maxStops; i++) {
+        let temp=[...distanceFromSource] //in order to keep my nodes updating once at each iteration. and by once I mean not consecutively , 
+        // example. if my edges has two elements [1,2,1],[2,3,1]
+        // if I hadnt implemented a temp, then the distanceFromSource of 3  would be updated even though there wasnt any immediate connection. 
+        // When i=0 I process all the children of my source
+        // when i=1 I process all the children of the children of my source 
+        // etc. 
+        // If there was no temp array, I would have processed unreachable nodes.
+        for (const [start,end,cost] of flights) {
+
+            if(distanceFromSource[start]===Infinity)continue
+            temp[end]=Math.min(temp[end],distanceFromSource[start]+cost)
+            
+        }
+        distanceFromSource=temp
+    }
+
+
+    return distanceFromSource[target]===Infinity?-1:distanceFromSource[target]
+}
+
 console.log(findCheapestPrice(
     3,
     [[0,1,100],[1,2,100],[0,2,500]],
     0,
     2,
-    1
+    0
 ))
 
