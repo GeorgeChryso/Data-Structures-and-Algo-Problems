@@ -180,7 +180,6 @@ var findCheapestPrice = function(n, flights, src, Target, maxStops) {
   }
 
   return result===Infinity?-1:result
-
 };
 
 // Bellman Ford
@@ -201,6 +200,8 @@ var findCheapestPrice=(n, flights, src, target, maxStops)=>{
 
     // main
     for (let i = 0; i <=maxStops; i++) {
+
+        // AVOID PROCESSING UNREACHABLE NODES SO YOU CAN GET THE CORRECT RESULT
         let temp=[...distanceFromSource] //in order to keep my nodes updating once at each iteration. and by once I mean not consecutively , 
         // example. if my edges has two elements [1,2,1],[2,3,1]
         // if I hadnt implemented a temp, then the distanceFromSource of 3  would be updated even though there wasnt any immediate connection. 
@@ -221,11 +222,37 @@ var findCheapestPrice=(n, flights, src, target, maxStops)=>{
     return distanceFromSource[target]===Infinity?-1:distanceFromSource[target]
 }
 
+// Floyd Warshall - Not possible
+var findCheapestPrice=(n, flights, src, target, maxStops)=>{
+    let dp=Array(n).fill(null).map(d=>[...Array(n)].map(q=>Array(n).fill(Infinity)))
+
+    //initialize the distance of every node with Infinity
+    //basecase
+    for (const [start,end,cost] of flights) {
+        dp[0][start][end]=cost 
+    }
+
+
+
+    // main
+    for (let k = 1; k <=maxStops; k++) {
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j <n; j++) {
+                dp[k][i][j]=Math.min(dp[k-1][i][j],dp[k-1][i][k]+dp[k-1][k][j])
+            }            
+        }        
+    }
+
+
+    return dp[maxStops][src][target]===Infinity?-1:dp[maxStops][src][target]
+}
+
+
 console.log(findCheapestPrice(
-    3,
-    [[0,1,100],[1,2,100],[0,2,500]],
+    5,
+    [[1,2,10],[2,0,7],[1,3,8],[4,0,10],[3,4,2],[4,2,10],[0,3,3],[3,1,6],[2,4,5]],
     0,
-    2,
-    0
+    4,
+    1
 ))
 
