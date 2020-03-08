@@ -42,8 +42,6 @@ var numTimesAllBlue = function(L) {
 
         }
 
-      
-       
         if(left.size===extra.size && extra.size===0)result++
     }
     
@@ -51,11 +49,10 @@ var numTimesAllBlue = function(L) {
 };
 
 
-
+//BFS
 var numOfMinutes = function(n, headID, manager, informTime) {
 
-    let manages={}
-
+    let manages={} // key: boss, val:[i1,i2...] where i subordinates of boss
     for (let i = 0; i < manager.length; i++) {
         if(manager[i]===-1)continue
         if(manages[manager[i]]===undefined)manages[manager[i]]=[i]
@@ -63,12 +60,13 @@ var numOfMinutes = function(n, headID, manager, informTime) {
     }
 
     let result=0
+
+    // pairs of [currentNode,timesoFar]
     let q=[[headID,0]]
     while(q.length){
         let tempu=[]
 
-        while(q.length){
-            let [curr,it]=q.shift()
+        for (const [curr,it] of q) {
             if(manages[curr]===undefined){
                 result=Math.max(result,it)
                 continue
@@ -77,6 +75,7 @@ var numOfMinutes = function(n, headID, manager, informTime) {
             for (let i = 0; i < manages[curr].length; i++) {
                tempu.push([manages[curr][i],it+informTime[curr]])           
             }
+            
         }
        
         q=tempu
@@ -88,28 +87,28 @@ var numOfMinutes = function(n, headID, manager, informTime) {
 // BFS
 var frogPosition = function(n, conns, t, target) {
     
+    //adjacency Matrix
     let edges=[...Array(n+1)].map(d=>Array(n+1).fill(Infinity))
-
     for (const [source,to] of conns) {
         edges[source][to]=true
         edges[to][source]=true
     }
 
-    let magic=edges[target].reduce((acc,curr)=>acc+Number(curr!==Infinity),0)
-    console.log(`magic`,magic)
+
+    let start=new Set()
+    start.add(1)
+
+    let q=[ [start,1,1] ] // [Set of visited nodes,currnode,currProbability]
 
 
     let time=0
-    let start=new Set()
-    start.add(1)
-    let q=[[start,1,1]]
     while(time<t){
-        console.log(q)
         let temp=[]
         
         for (const [set,currnode,probability] of q) {
 
 
+            //count how many available children my currnode has
             let prob=0
             for (let i = 0; i < edges[currnode].length; i++) {
                 if(edges[currnode][i]!==Infinity && !set.has(i)){
@@ -117,11 +116,13 @@ var frogPosition = function(n, conns, t, target) {
                 }                
             }
 
-            
+            //I want to maintain the triplet of my target if no other children are available
             if(currnode==target&&prob==0){
                 temp.push([set,currnode,probability])
                 continue
             }
+
+            //push the children nodes to my q
             for (let i = 0; i < edges[currnode].length; i++) {
                 if(edges[currnode][i]!==Infinity && !set.has(i)){
                     let cloned=new Set(set)
@@ -135,6 +136,7 @@ var frogPosition = function(n, conns, t, target) {
         time++
     }
 
+    //check my end queue for all the potential target nodes
     let result=0
     for (const [set,currnode,probability] of q) {
         if(currnode==target){
