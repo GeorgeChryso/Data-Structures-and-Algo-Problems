@@ -15,11 +15,10 @@
 
 // Input: n = 7, headID = 6, manager = [1,2,3,4,5,6,-1], informTime = [0,6,5,4,3,2,1]Output: 21
 
-
+//BFS
 var numOfMinutes = function(n, headID, manager, informTime) {
 
-    let manages={}
-
+    let manages={} // key: boss, val:[i1,i2...] where i subordinates of boss
     for (let i = 0; i < manager.length; i++) {
         if(manager[i]===-1)continue
         if(manages[manager[i]]===undefined)manages[manager[i]]=[i]
@@ -27,6 +26,8 @@ var numOfMinutes = function(n, headID, manager, informTime) {
     }
 
     let result=0
+
+    // pairs of [currentNode,timesoFar]
     let q=[[headID,0]]
     while(q.length){
         let tempu=[]
