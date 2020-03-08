@@ -24,6 +24,22 @@ var findMaxLength = function(A) {
     return result
 };
 
+
+//Optimization 1 A hashtable will help me decide 
+var findMaxLength = function(A) {
+    let memo={}
+    let result=0
+    let sum=0 
+    for (let i = 0; i < A.length; i++) {
+        sum+=A[i]
+        if(memo[0]===undefined&&sum==(i+1)/2&&i>0)memo[0]=i
+        else result=Math.max(i-memo[0],result)
+    }
+
+    return result
+};
+
+
 console.log(findMaxLength(
     [0,1,0]
 ))
