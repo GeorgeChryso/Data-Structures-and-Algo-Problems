@@ -13,7 +13,7 @@ var findTheLongestSubstring = function(s) {
             'u':0
         }
 
-        check=()=>Object.values(freq).every(d=>d%2===0)
+        check=()=>Object.values(freq).every(d=>d%2===0) 
 
         for (let i = 0; i < length; i++) {
             if(freq[s[i]]!==undefined)freq[s[i]]++
@@ -44,7 +44,7 @@ var findTheLongestSubstring=s=>{
     for (let i = 0; i < s.length; i++) {
         cur^=1<<('aeiou'.indexOf(s[i])+1)>>1
         if(seen[cur]===undefined)seen[cur]=i
-        //the length of the string, between the first index at which my cur occured and the last
+        // the length of the string, between the first index at which my cur occured and the last
         // needs to be considered as a result, because that means that the inbetween string has a XOR of 0
         // which makes it of the required type
         res=Math.max(res,i-seen[cur]) 
