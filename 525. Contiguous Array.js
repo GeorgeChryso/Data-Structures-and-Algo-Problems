@@ -25,21 +25,20 @@ var findMaxLength = function(A) {
 };
 
 
-//Optimization 1 A hashtable will help me decide 
+//Optimization 1 A hashtable with a Prefix Sum index memo
 var findMaxLength = function(A) {
-    let memo={}
+    let memo={0:-1}
     let result=0
     let sum=0 
     for (let i = 0; i < A.length; i++) {
-        sum+=A[i]
-        if(memo[0]===undefined&&sum==(i+1)/2&&i>0)memo[0]=i
-        else result=Math.max(i-memo[0],result)
+        sum+=A[i]?1:-1
+        if(memo[sum]===undefined)memo[sum]=i
+        else result=Math.max(result,(i-memo[sum])||0)
     }
-
     return result
 };
 
 
 console.log(findMaxLength(
-    [0,1,0]
+    [0,1,0,1,1,1,0,0]
 ))
