@@ -113,7 +113,7 @@ var findCheapestPrice = function(n, flights, src, Target, maxStops) {
       let conMatrix=[...Array(n)].map(d=>Array(n).fill(Infinity))
       for (const [source,tar,cost] of flights) {
           conMatrix[source][tar]=cost
-      }
+      } 
   
       let settled=new Set()//this will prevent me from expanding previously expanded nodes
 
@@ -220,31 +220,6 @@ var findCheapestPrice=(n, flights, src, target, maxStops)=>{
 
 
     return distanceFromSource[target]===Infinity?-1:distanceFromSource[target]
-}
-
-// Floyd Warshall - Not possible
-var findCheapestPrice=(n, flights, src, target, maxStops)=>{
-    let dp=Array(n).fill(null).map(d=>[...Array(n)].map(q=>Array(n).fill(Infinity)))
-
-    //initialize the distance of every node with Infinity
-    //basecase
-    for (const [start,end,cost] of flights) {
-        dp[0][start][end]=cost 
-    }
-
-
-
-    // main
-    for (let k = 1; k <=maxStops; k++) {
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j <n; j++) {
-                dp[k][i][j]=Math.min(dp[k-1][i][j],dp[k-1][i][k]+dp[k-1][k][j])
-            }            
-        }        
-    }
-
-
-    return dp[maxStops][src][target]===Infinity?-1:dp[maxStops][src][target]
 }
 
 
