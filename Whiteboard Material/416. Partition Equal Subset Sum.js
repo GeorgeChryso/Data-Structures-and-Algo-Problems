@@ -425,6 +425,11 @@ var canPartition = function(A) {
 
     return row[sumA/2];
 };
+
+
+
+
+
 console.log(
     DDcanPartition(
         [23,13,11,7,6,5,5]
@@ -432,3 +437,67 @@ console.log(
         //[1, 2, 5]
     )
 );
+
+
+
+
+
+/// QUESTION, OPTIMIZE THE FAIL FAST 
+var canPartition=candidates=>{
+
+    let target=candidates.reduce((acc, curr) => acc + curr)
+    if (target%2) return false;
+    target/=2
+
+    let freq={}
+    candidates.forEach((d,i)=>{
+        freq[d]=(freq[d]||0)+1
+    })
+    
+    candidates=[]
+    for (const key in freq) {
+        if(freq[key]===1)candidates.push(Number(key))
+        else{
+            for (let i = 0, value=Number(key); i < freq[key]; i++,value+=Number(key)) {
+                candidates.push(value)
+            }
+        }
+    }
+
+    candidates.sort((a, b) =>b-a); //key for TLE :Essentially means: If you fail,do it fast
+    console.log(candidates)
+   
+
+    
+ 
+
+    
+    const backtracking = (remaining, index) => {
+        if ( index>=candidates.length)return false
+        if (remaining <0)return false
+        if (remaining===candidates[index])return true
+
+        return backtracking(remaining-candidates[index],index+1)||backtracking(remaining,index+1)
+
+    }
+  
+    return backtracking(target,0)
+}
+
+// console.log(
+//     canPartition(
+//         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,100]    )
+// )
+
+
+// console.log(
+//     canPartition(
+//         [6,4,4,3,1,]
+//     )
+// )
+
+console.log(
+    canPartition(
+        [2,2,3,5]
+    )
+)
