@@ -22,10 +22,64 @@
 // 0 represents the cost of distance travelled by the human
 // 1 represents the cost  of pushes the human has to perform to the box
 var minPushBox = function(G) {
-    
-    //find T target S start and B box 
+    let areValid=(i,j)=>i<G.length&&i>=0&&j<G[0].length&&j>=0
 
+    //find T target S start and B box 
+    let T,S,B
+    for (let i = 0; i < G.length; i++) {
+        for (let j = 0; j < G[i].length; j++) {
+            if(G[i][j]==='T')T=[i,j]
+            if(G[i][j]==='B')B=[i,j]
+            if(G[i][j]==='S')S=[i,j]
+        }        
+    }
+
+
+    let seen=[...Array(G.length)].map(d=>[...Array(G[0].length)].map(d=>new Set()))
+    let distances=[ [0,1],[0,-1],[1,0],[-1,0] ]
+
+    let q=[ [S,B,0] ]
+    while(q.length){
+
+        let [[ci,cj],[bi,bj],steps]=q.shift()
+
+        if(seen[ci][cj].has(bi+','+bj+','+steps))continue
+        seen[ci][cj].add(bi+','+bj+','+steps)
+
+        if(bi===T[0]&&bj===T[1])return steps
+        
+
+        for (const [x,y] of distances) {
+           
+            if( areValid(ci+x,cj+y) &&(G[ci+x][cj+y]==='.'||G[ci+x][cj+y]==='T')){
+                q.push([[ci+x,cj+y],[bi,bj],steps])
+            }
+            
+            if(ci+x==bi&&cj+y==bj){
+                if(areValid(bi+x,bj+y) && G[bi+x][bj+y]!=='#'){
+                    q.push([[bi,bj],[bi+x,bj+y],steps+1])
+                }
+            }
+        }
+
+    }
+    return -1
 
 };
+
+console.log(
+    minPushBox(
+        
+        [
+         ["#",".",".","#","#","#","#","#"],
+         ["#",".",".","T","#",".",".","#"],
+         ["#",".",".",".","#","B",".","#"],
+         ["#",".",".",".",".",".",".","#"],
+         ["#",".",".",".","#",".","S","#"],
+         ["#",".",".","#","#","#","#","#"]
+        ]
+        
+    )
+)
 
 
