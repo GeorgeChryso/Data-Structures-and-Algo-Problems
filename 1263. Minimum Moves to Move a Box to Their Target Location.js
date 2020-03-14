@@ -22,7 +22,6 @@
 // 0 represents the cost of distance travelled by the human
 // 1 represents the cost  of pushes the human has to perform to the box
 var minPushBox = function(G) {
-    let areValid=(i,j)=>i<G.length&&i>=0&&j<G[0].length&&j>=0
 
     //find T target S start and B box 
     let T,S,B
@@ -41,27 +40,34 @@ var minPushBox = function(G) {
     let q=[ [S,B,0] ]
     while(q.length){
 
-        let [[ci,cj],[bi,bj],steps]=q.shift()
+        let temp=[]
 
-        if(seen[ci][cj].has(bi+','+bj+','+steps))continue
-        seen[ci][cj].add(bi+','+bj+','+steps)
+        while(q.length){
 
-        if(bi===T[0]&&bj===T[1])return steps
         
+            let [[ci,cj],[bi,bj],steps]=q.shift()
 
-        for (const [x,y] of distances) {
-           
-            if( areValid(ci+x,cj+y) &&(G[ci+x][cj+y]==='.'||G[ci+x][cj+y]==='T')){
-                q.push([[ci+x,cj+y],[bi,bj],steps])
-            }
+            let areValid=(i,j)=>i<G.length&&i>=0&&j<G[0].length&&j>=0&&G[i][j]!=='#'&&(i!==bi||j!==bj)
+
+
+            if(seen[ci][cj].has(''+bi+','+bj+','+steps+''))continue
+
+            seen[ci][cj].add(''+bi+','+bj+','+steps+'')
+
+            if(bi===T[0]&&bj===T[1])return steps
             
-            if(ci+x==bi&&cj+y==bj){
-                if(areValid(bi+x,bj+y) && G[bi+x][bj+y]!=='#'){
-                    q.push([[bi,bj],[bi+x,bj+y],steps+1])
-                }
-            }
-        }
 
+            for (const [x,y] of distances) {
+            
+                if( areValid(ci+x,cj+y) ){
+                    temp.push([[ci+x,cj+y],[bi,bj],steps])
+                }
+                if(ci+x===bi && cj+y===bj && areValid(bi+x,bj+y))temp.push([[bi,bj],[bi+x,bj+y],steps+1])
+
+            }
+        
+        }
+        q=temp
     }
     return -1
 
@@ -70,15 +76,29 @@ var minPushBox = function(G) {
 console.log(
     minPushBox(
         
-        [
-         ["#",".",".","#","#","#","#","#"],
-         ["#",".",".","T","#",".",".","#"],
-         ["#",".",".",".","#","B",".","#"],
-         ["#",".",".",".",".",".",".","#"],
-         ["#",".",".",".","#",".","S","#"],
-         ["#",".",".","#","#","#","#","#"]
-        ]
+        // [
+        //     ["#",".",".","#","#","#","#","#"],
+        //     ["#",".",".","T","#",".",".","#"],
+        //     ["#",".",".",".","#","B",".","#"],
+        //     ["#",".",".",".",".",".",".","#"],
+        //     ["#",".",".",".","#",".","S","#"],
+        //     ["#",".",".","#","#","#","#","#"]
+
+
+        // ]
         
+
+        [
+            [".",".","#",".",".",".",".","#"],
+            [".","B",".",".",".",".",".","#"],
+            [".",".","S",".",".",".",".","."],
+            [".","#",".",".",".",".",".","."],
+            [".",".",".",".",".",".",".","."],
+            [".",".",".","T",".",".",".","."],
+            [".",".",".",".",".",".",".","#"],
+            [".","#",".",".",".",".",".","."]
+        ]
+
     )
 )
 
