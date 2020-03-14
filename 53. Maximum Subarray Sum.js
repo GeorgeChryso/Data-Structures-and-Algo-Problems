@@ -67,11 +67,12 @@ var maxSubArray = A => {
 var maxSubArray = A => {
     if(!A.length)return 0
     var minSum = A[0];
-    var maxSoFar=minSum //old PrefixSum Value
-    var result = minSum;
+    var maxSoFar= A[0] //old PrefixSum Value
+    var result =  A[0];
 
     for (let i = 1; i < A.length; i++) {
         maxSoFar+= A[i];
+
         result = Math.max(result, maxSoFar - minSum, maxSoFar);
         minSum = Math.min(minSum, maxSoFar);
     }
@@ -92,6 +93,8 @@ var maxSubArray = function(nums) {
 
     return Math.max(...nums);
 };
+
+
 
 console.log(
     maxSubArray(
