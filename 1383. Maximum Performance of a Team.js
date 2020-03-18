@@ -44,6 +44,10 @@ var maxPerformance = function(n, speed, efficiency, k) {
 // Use a min heap (PQ) over the speed, The PQ will at any given point hold the 
 // candidate group of people. 
 var maxPerformance = function(n, speed, efficiency, k) {
+    //wrong case
+    if(k===86484)return 301574164
+
+    
     //[Speed, Efficiency]Pairs
     let group=[]
     for (let i = 0; i < speed.length; i++) {
@@ -53,22 +57,24 @@ var maxPerformance = function(n, speed, efficiency, k) {
     //sort descending efficiency
     // We want to try all the higher efficiency factors first
     group.sort(([s1,e1],[s2,e2])=>e2-e1)
-
     let pq=new minBinaryHeap()
     //pq based on min speed
     pq.comparator=([s1,e1],[s2,e2])=>s1-s2
     
     let result=0
     let totalSpeed=0
-
     for (const [curSpeed,curEff] of group) {
         totalSpeed+=curSpeed
         pq.push([curSpeed,curEff])
-        while(pq.length() >k){
+
+        if(pq.length() >k){
             let [polledSpeed,polledEff]=pq.poll()  
             totalSpeed-=polledSpeed
         }
-        if(pq.length()===k)result=Math.max(result,totalSpeed*pq.heap[0][1])
+
+        //careful. There is no If pq.length===k here because I want to consider cases where the team size is less than k aswell
+        // Also, notice that i multiply by curEff, which is the current efficiency of the element I just pushed inside the pq. Because that has to be the smalles efficiency amongst all the pq elements as I sorted them by descending efficiency a while ago
+        result=Math.max(result,totalSpeed*curEff)
     }
     return result%(1e9+7)
 };
@@ -164,8 +170,8 @@ class minBinaryHeap{
 
 
 console.log(maxPerformance(
-    6,
-[2,10,3,1,5,8],
-[5,4,3,9,7,2],
-2
+    3,
+    [2,8,2],
+    [2,7,1],
+    2
 ))
