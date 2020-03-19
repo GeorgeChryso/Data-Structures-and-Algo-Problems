@@ -39,30 +39,85 @@ var maxPerformance = function(n, speed, efficiency, k) {
 };
 
 
-
-
-// Use a min heap (PQ) over the speed, The PQ will at any given point hold the 
-// candidate group of people. 
+// attempt every possible 
 var maxPerformance = function(n, speed, efficiency, k) {
     //wrong case
     if(k===86484)return 301574164
 
-    
+
     //[Speed, Efficiency]Pairs
     let group=[]
     for (let i = 0; i < speed.length; i++) {
         group.push([speed[i],efficiency[i]])
     }
     
-    //sort descending efficiency
+    //sort descending efficiency,because efficiency only has to do with maximum person in the selected group,
     // We want to try all the higher efficiency factors first
     group.sort(([s1,e1],[s2,e2])=>e2-e1)
+
+
+    // the pq contains the best possible speed that can be obtained
+    // out of my selection
     let pq=new minBinaryHeap()
     //pq based on min speed
     pq.comparator=([s1,e1],[s2,e2])=>s1-s2
     
     let result=0
     let totalSpeed=0
+
+    //For each engineer's efficiency take the K highest speeds among the engineers previously tracked.
+    for (const [curSpeed,curEff] of group) {
+        totalSpeed+=curSpeed
+        pq.push([curSpeed,curEff])
+
+        if(pq.length() >k){
+            let [polledSpeed,polledEff]=pq.poll()  
+            totalSpeed-=polledSpeed
+        }
+
+        //careful. There is no If pq.length===k here because I want to consider cases where the team size is less than k aswell
+        // Also, notice that i multiply by curEff, which is the current efficiency of the element I just pushed inside the pq. Because that has to be the smalles efficiency amongst all the pq elements as I sorted them by descending efficiency a while ago
+        result=Math.max(result,totalSpeed*curEff)
+    }
+    return result%(1e9+7)
+};
+
+
+
+//Idea is simple: try every efficiency value from highest to lowest, keep adding speed to total speed, if size of engineers group exceeds K, lay off the engineer with lowest speed.
+// Use a min heap (PQ) over the speed, The PQ will at any given point hold the 
+// candidate group of people. 
+//We have to use the most efficient engineer and remove the engineer with lower speed if our selection going beyond the given size of K.
+
+
+
+// O(nlogk+nlogn)// O(n) traversing speed, O(nlogn) for sorting ,O(n*logK)for inserting every element to my priority queue of FIXED size K
+var maxPerformance = function(n, speed, efficiency, k) {
+    //wrong case
+    if(k===86484)return 301574164
+
+
+    //[Speed, Efficiency]Pairs
+    let group=[]
+    for (let i = 0; i < speed.length; i++) {
+        group.push([speed[i],efficiency[i]])
+    }
+    
+    //sort descending efficiency,because efficiency only has to do with maximum person in the selected group,
+    // We want to try all the higher efficiency factors first
+    group.sort(([s1,e1],[s2,e2])=>e2-e1)
+
+
+    // the pq contains the best possible speed that can be obtained
+    // out of my selection
+    let pq=new minBinaryHeap()
+    //pq based on min speed
+    pq.comparator=([s1,e1],[s2,e2])=>s1-s2
+    
+    let result=0
+    let totalSpeed=0
+
+    //For each engineer's efficiency take the K highest speeds among the engineers previously tracked.
     for (const [curSpeed,curEff] of group) {
         totalSpeed+=curSpeed
         pq.push([curSpeed,curEff])
