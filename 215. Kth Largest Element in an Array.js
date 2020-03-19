@@ -1,25 +1,27 @@
 // Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
 
+//sort solution O(NlogN)
+var findKthLargest=(A,K)=>A.sort((a,b)=>b-a)[k-1]
 
-//minheap solution O(nlogK)
+
+//minheap solution O(NlogK)
 var findKthLargest = function(nums, k) {
     
     let pq=new minBinaryHeap()
 
+    //maintain length k 
     for (const x of nums) {
         pq.push(x)    
         if(pq.length()>k)pq.poll()
     }
 
+    //poll the excess
     while(pq.length>1){
         pq.poll()
     }
     
     return pq.poll()
 };
-
-
-
 class minBinaryHeap{
     constructor(){
         this.heap=[]
