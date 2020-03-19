@@ -24,7 +24,7 @@ var mincostToHireWorkers = function(quality, wage, K) {
     let ratios=[]
 
     for (let i = 0; i < quality.length; i++) {
-        ratios.push( [quality[i],wage[i],wage[i]/quality[i]] )        
+        ratios.push( [quality[i], wage[i], wage[i]/quality[i]] )        
     }
     //sort ascending ratios 
     // I will keep feeding entries to my pq

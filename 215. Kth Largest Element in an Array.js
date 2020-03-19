@@ -112,7 +112,109 @@ class minBinaryHeap{
 }
 
 
+// Trivial QUICKSELCT O(N)
+
+// Intuition: Quicksort results in a sorted array from lowest to highest
+// This is the code for quicksort
+let main=(arr)=>{
+
+    let QuickSort=(low,high)=>{
+        if(low<high){
+          let indexOfPivot=partition(low,high) 
+          QuickSort( low, indexOfPivot-1)
+          QuickSort( indexOfPivot+1,high)
+        }
+    }
+
+    let partition=(l,h)=>{
+        let pivot=arr[h] 
+
+        let i=l 
+        for (let j = l; j < h; j++) {
+            if(arr[j]<pivot){
+              [arr[i],arr[j]]=[arr[j],arr[i]] 
+              i++
+            }        
+        }
+        [arr[i],arr[h]]=[arr[h],arr[i]]
+        return i
+    } 
+    QuickSort(0,arr.length-1)
+    return arr
+}
+
+// Each time I call partition(low,high) I get an index of my NEW PIVOT point as the result,That index is the  index
+// of the element considered as a pivot at the time after the rearrangement occurs. This index, is the FINAL INDEX that element will have when the array is sorted. 
+// So, if this function, ever returns K, that will be the K-TH smallest element. MIC DROP. 
+// Now, I can Either return the nums.length-k-th smallest element, ( the k-th largest)
+// or follow a same logic only  SELECTIVELY executing the  part of the D&C  approach that suits me
+var findKthLargest = function(arr, k) {
+    let partition=(l,h)=>{
+        let pivot=arr[h]  // notice that i consider the pivot as the last element
+        let i=l 
+        for (let j = l; j < h; j++) {
+            if(arr[j]<pivot){
+              [arr[i],arr[j]]=[arr[j],arr[i]] 
+              i++
+            }        
+        }
+        [arr[i],arr[h]]=[arr[h],arr[i]]
+        return i
+    } 
+
+    k=arr.length-k // Im instead trying to find th arr.length-k smallest
+    let low=0
+    let high=arr.length-1
+    while(low<high){
+        let indexOfPivot=partition(low,high) 
+        if(indexOfPivot<k)low=indexOfPivot+1
+        else if(indexOfPivot>k)high=indexOfPivot-1
+        else break //case k
+    }
+    return arr[k]
+};
+
+
+// The previus has a worst case of O(n**2)
+//So how can we improve the above solution and make it O(N) guaranteed? The answer is quite simple, we can randomize the input, so that even when the worst case input would be provided the algorithm wouldn't be affected. So all what it is needed to be done is to shuffle the input.
+
+var findKthLargest = function(arr, k) {
+    let shuffle=(arr)=>{
+        for (let i = 0; i < arr.length; i++) {
+            var r=Math.floor(Math.random() * (i+1)); //this boi here does the trick, randomizes the input
+            // and therefore betters my chances of running at O(N)
+            [arr[i],arr[r]]=[arr[r],arr[i]]        
+        }
+        return arr
+    }
+    arr=shuffle(arr)
+
+    let partition=(l,h)=>{
+        let pivot=arr[h]  // notice that i consider the pivot as the last element
+        let i=l 
+        for (let j = l; j < h; j++) {
+            if(arr[j]<pivot){
+              [arr[i],arr[j]]=[arr[j],arr[i]] 
+              i++
+            }        
+        }
+        [arr[i],arr[h]]=[arr[h],arr[i]]
+        return i
+    } 
+
+    k=arr.length-k  // Im instead trying to find th arr.length-k smallest
+    let low=0
+    let high=arr.length-1
+    while(low<high){
+        let indexOfPivot=partition(low,high) 
+        if(indexOfPivot<k)low=indexOfPivot+1
+        else if(indexOfPivot>k)high=indexOfPivot-1
+        else break //case k
+    }
+    return arr[k]
+};
 
 
 
-  console.log(findKthLargest([3,2,3,1,2,4,5,5,6],4))
+
+console.log(findKthLargest([3,2,3,1,2,4,5,5,6],4))
