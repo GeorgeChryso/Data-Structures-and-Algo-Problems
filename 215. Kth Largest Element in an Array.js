@@ -234,46 +234,43 @@ var findKthLargest = function(arr, k) {
 
 
     let select=(A,k)=>{
-        if(A.length<=10){
+
+
+        if(A.length<10){
             A.sort((a,b)=>a-b)
             return A[k]
         }
 
         let subsets=[]
-
         let group=[]
-        for (var i = 0; i < A.length-remainder-5; i++) {
+        for (var i = 0; i < A.length; i++) {
             if(group.length==5){ 
                 subsets.push(group)
                 group=[]
             }
             group.push(A[i])
         }
-        for (i;i < A.length;  i++) {
-            group.push(A[i])            
-        }
-        subsets.push(group)
-
-        console.log(subsets)
-
+        subsets[subsets.length-1]=subsets[subsets.length-1].concat(group)
+        
         let mediansOfSubsets=[]
         for (const subset of subsets) {
             mediansOfSubsets.push(select(subset,3)) //guaranteed to hit the first if Clause
         }
 
-        let M=select(mediansOfSubsets,A.length/10)
-
+        let M=select(mediansOfSubsets,Math.ceil(mediansOfSubsets.length/2))
+    
+        
         //partition around Pivot M
         let L1=[],L2=[],L3=[]
-        let pivot=M // notice that i consider the pivot as the last element
-        for (let j = l; j < A.length; j++) {
+        let pivot=M 
+        for (let j = 0; j < A.length; j++) {
             if(A[j]<pivot) L1.push(A[j])
             else if( A[j]==pivot)L2.push(pivot)
             else L3.push(A[j])
         }
 
         if (k <=L1.length)return select(L1,k)
-        else if (k > L1.length+L2.length)return select(L3,k-length(L1)-length(L2))
+        else if (k > L1.length+L2.length)return select(L3,k-L1.length-L2.length)
         else return M //k===L1.length+1
     }
 
@@ -282,4 +279,8 @@ var findKthLargest = function(arr, k) {
 };
 
 
-console.log(findKthLargest([3,2,3,1,2,4,5,5,6],4))
+console.log(findKthLargest(
+    [3,2,3,1,2,4,5,5,6,7,7,8,2,3,1,1,1,10,11,5,6,2,4,7,8,5,6],20
+    //[3,2,3,1,2,4,5,5,6],4
+    //[3,2,3,1,2,4,5,5,6,7,7,8,2,3,1,1,1,10,11,5,6,2,4,7,8,5,6],2
+    ))
