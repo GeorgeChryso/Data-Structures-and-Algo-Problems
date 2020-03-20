@@ -226,8 +226,6 @@ var findKthLargest = function(arr, k) {
 // 2. Recursively find the true median of the medians, call it p
 // 3. Use p as a pivot to split the array into 2 subarrays, Less and Greater
 // 4. recurse on the wanted subarray
-
-
 var findKthLargest = function(arr, k) {
    
     k=arr.length-k  // Im instead trying to find th arr.length-k-th smallest element
@@ -271,7 +269,7 @@ var findKthLargest = function(arr, k) {
 
         if (k <=L1.length)return select(L1,k)
         else if (k > L1.length+L2.length)return select(L3,k-L1.length-L2.length)
-        else return M //k===L1.length+1
+        else return L2[0] //k===L1.length+1
     }
 
 
