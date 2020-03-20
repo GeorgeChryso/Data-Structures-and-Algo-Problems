@@ -177,6 +177,7 @@ var findKthLargest = function(arr, k) {
 
 // The previus has a worst case of O(n**2)
 //So how can we improve the above solution and make it O(N) guaranteed? The answer is quite simple, we can randomize the input, so that even when the worst case input would be provided the algorithm wouldn't be affected. So all what it is needed to be done is to shuffle the input.
+// RSELECT
 
 var findKthLargest = function(arr, k) {
     let shuffle=(arr)=>{
@@ -214,7 +215,71 @@ var findKthLargest = function(arr, k) {
     return arr[k]
 };
 
-//BLUN-FLOYED-PRATT-RIVEST-TARJAN ref 
+//BLUN-FLOYED-PRATT-RIVEST-TARJAN -GUARANTEED O(N)
+// DETERMINISTIC SELECT
+
+// Normally the algorithm finds the kth smallest element of an array,
+// but it can be modified to find the median if k=|_n/2_|
+// Essentially like Quick Select but always selecting the median as the pivot
+
+// 1. Group the array into  groups of 5 elements and find the median of each group through sorting. Takes O(n) cos the groups are too small
+// 2. Recursively find the true median of the medians, call it p
+// 3. Use p as a pivot to split the array into 2 subarrays, Less and Greater
+// 4. recurse on the wanted subarray
+
+
+var findKthLargest = function(arr, k) {
+   
+    k=arr.length-k  // Im instead trying to find th arr.length-k-th smallest element
+
+
+    let select=(A,k)=>{
+        if(A.length<=10){
+            A.sort((a,b)=>a-b)
+            return A[k]
+        }
+
+        let subsets=[]
+
+        let group=[]
+        for (var i = 0; i < A.length-remainder-5; i++) {
+            if(group.length==5){ 
+                subsets.push(group)
+                group=[]
+            }
+            group.push(A[i])
+        }
+        for (i;i < A.length;  i++) {
+            group.push(A[i])            
+        }
+        subsets.push(group)
+
+        console.log(subsets)
+
+        let mediansOfSubsets=[]
+        for (const subset of subsets) {
+            mediansOfSubsets.push(select(subset,3)) //guaranteed to hit the first if Clause
+        }
+
+        let M=select(mediansOfSubsets,A.length/10)
+
+        //partition around Pivot M
+        let L1=[],L2=[],L3=[]
+        let pivot=M // notice that i consider the pivot as the last element
+        for (let j = l; j < A.length; j++) {
+            if(A[j]<pivot) L1.push(A[j])
+            else if( A[j]==pivot)L2.push(pivot)
+            else L3.push(A[j])
+        }
+
+        if (k <=L1.length)return select(L1,k)
+        else if (k > L1.length+L2.length)return select(L3,k-length(L1)-length(L2))
+        else return M //k===L1.length+1
+    }
+
+
+    return select(arr,k)
+};
 
 
 console.log(findKthLargest([3,2,3,1,2,4,5,5,6],4))
