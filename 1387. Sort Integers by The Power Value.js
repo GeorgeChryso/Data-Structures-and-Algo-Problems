@@ -139,9 +139,62 @@ class MaxHeap {
   }
   
 
+//QUICK SELECT 
+var getKth = function(lo, hi, k) {
+    if(lo===hi)return lo
 
-  // Deterministic Select
-  var getKth = function(lo, hi, k) {
+    let steps=(x)=>{
+        let result=0
+        while(x!=1){
+            x=x%2?3*x+1:x/2
+            result++
+        }
+        return result
+    }
+
+    let pq= []
+
+    for (let i = lo; i < hi+1; i++) {
+        pq.push([i,steps(i)])        
+    }
+
+    let comparator=(a,b)=>{
+        return a[1]===b[1]?a[0]-b[0]:a[1]-b[1]
+    }
+
+    var Qselect=(Arr,k)=>{
+    
+        let partition=(l,h)=>{
+            let pivot=Arr[h]  // notice that i consider the pivot as the last element
+            let i=l 
+            for (let j = l; j < h; j++) {
+                if( comparator(Arr[j],pivot)<0){
+                  [Arr[i],Arr[j]]=[Arr[j],Arr[i]] 
+                  i++
+                }        
+            }
+            [Arr[i],Arr[h]]=[Arr[h],Arr[i]]
+            return i
+        } 
+    
+        let low=0
+        let high=pq.length-1
+        while(low<high){
+            let indexOfPivot=partition(low,high) 
+            if(indexOfPivot<k)low=indexOfPivot+1
+            else if(indexOfPivot>k)high=indexOfPivot-1
+            else break //case k
+        }
+        return Arr[k]
+    
+    }
+
+    return Qselect(pq,k-1)[0]
+};
+
+
+// Deterministic Select
+var getKth = function(lo, hi, k) {
     if(lo===hi)return lo
 
     
@@ -159,61 +212,73 @@ class MaxHeap {
     for (let i = lo; i < hi+1; i++) {
         pq.push([i,steps(i)])        
     }
-    console.log(pq)
-    let comparator=(a,b)=>a[1]==b[1]?a[0]-b[0]:a[1]-b[1]
-
     console.log(pq.sort(comparator))
-
-    return Dselect(pq,pq.length-k)[0]
+    return Dselect(pq,k-1)[0]
 };
+let comparator=(a,b)=>{
+    return a[1]===b[1]?a[0]-b[0]:a[1]-b[1]
+}
 
 let Dselect=(A,k)=>{
-    let comparator=(a,b)=>a[1]==b[1]?a[0]-b[0]:a[1]-b[1]
 
 
-    if(A.length<10){
+    if(A.length<=10){
+        console.log(A,A[k],A.length,k)
+
+        if(A.length==1)return [...A[0]]
         A.sort(comparator)
-        return A[k]
+        return [...A[k]]
     }
   
     let subsets=[]
     let group=[]
-    for (var i = 0; i < A.length; i++) {
+ 
+    for (const ele of A) {
         if(group.length==5){ 
             subsets.push(group)
             group=[]
         }
-        group.push(A[i])
+        group.push(ele)
     }
-    subsets[subsets.length-1]=subsets[subsets.length-1].concat(group)
+        
+
+    subsets[subsets.length-1]=subsets[subsets.length-1].concat(group)   
+
     
     let mediansOfSubsets=[]
     for (const subset of subsets) {
-        mediansOfSubsets.push(Dselect(subset,3)) //guaranteed to hit the first if Clause
+        mediansOfSubsets.push(Dselect(subset,Math.ceil(subset.length/2))) 
     }
-  
     let M= Dselect(mediansOfSubsets,Math.ceil(mediansOfSubsets.length/2))
-  
     
     //partition around Pivot M
     let L1=[],L2=[],L3=[]
     let pivot=M 
-    for (let j = 0; j < A.length; j++) {
-        if(comparator(A[j],pivot)<0) L1.push(A[j])
-        else if( comparator(A[j],pivot)===0)L2.push(A[j])
-        else L3.push(A[j])
+    while(A.length){
+        let ele=A.shift()
+        if(comparator(ele,pivot)<0) L1.push(ele)
+        else if( comparator(ele,pivot)==0)L2.push(ele)
+        else L3.push(ele)
     }
   
     if (k <=L1.length)return Dselect(L1,k)
     else if (k> L1.length+L2.length)return Dselect(L3,k-L1.length-L2.length)
-    else return L2[0] //k===L1.length+1
+    else return [...L2[0]] //k===L1.length+1
   }
   
+
+
+
+
+
+
+
   
 console.log(
     getKth(
-      //  12,15,2
+       // 1,43,40
+        1,1000, 777
        // 7,11,4
-      7,11,4
+     //7,11,4
     )
 )
