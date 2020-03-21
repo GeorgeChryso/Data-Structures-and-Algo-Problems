@@ -6,55 +6,27 @@
 
 
 
-//Bitwise O(n) SLE / space limit exceeded
+//Bitwise O(n)  48/53 SLE / space limit exceeded
 var maxNumberOfFamilies = function(n, reservedSeats) {
     
     var seats=[...Array(n)].map(d=>(1<<10)-1)
-    for (let q = 0; q < reservedSeats.length; q++) {
-        
-        let i=reservedSeats[q][0]
-        let j= reservedSeats[q][1]
+  
+    for (const [i,j] of reservedSeats) {
         seats[i-1]^=(1<<j-1)
-
     }
-
 
     let freq={}
     for (const num of seats) {
         freq[num]=(freq[num]||0) +1
     }
 
-
-    let result=0
-
     let m1=parseInt('0111100000',2)
     let m2=parseInt('0000011110',2)
     let m3=parseInt('0001111000',2)
-
-    for (let [k,v] of Object.entries(freq)) {
-       
-        let row=k
-
-        let flag=false
-
-        if( (m1&row)==m1){
-            result+=v
-            flag=true
-        }
-       
-        if((m2&row)==m2){
-            result+=v
-            flag=true
-        }
-    
-        if(flag) continue
-
-        if((m3&row)==m3){
-            result+=v
-        } 
+    let result=0
+    for (let [mask,v] of Object.entries(freq)) {
+        result+=Math.max(Number((m3&mask)===m3),Number((m2&mask)===m2)+Number((m1&mask)===m1))*v
     }
-
-
 
     return result
 };
@@ -100,7 +72,6 @@ var maxNumberOfFamilies = function(n, reservedSeats) {
             m=1
         }
         
-        
         if(j==2||j==3)l=0
 
         if(j==4||j==5){
@@ -117,4 +88,33 @@ var maxNumberOfFamilies = function(n, reservedSeats) {
     }
 
     return result+Math.max(m,r+l)+(n-currRow)*2
+};
+
+//bitwise sort
+// O(nlogn) runtime O(1) space PASSES
+var maxNumberOfFamilies = function(n, reservedSeats) {
+    
+    reservedSeats.sort((a,b)=>a[0]-b[0])
+
+    let mask=(1<<10)-1
+    let m1=parseInt('0111100000',2), m2=parseInt('0000011110',2), m3=parseInt('0001111000',2)
+
+    let UpdateResult=mask=>Math.max(Number((m3&mask)===m3),Number((m2&mask)===m2)+Number((m1&mask)===m1))
+  
+    let currRow=0,result=-2
+
+    for (let [i,j] of reservedSeats) {
+        
+        if(currRow!==i){
+            if(i!=currRow+1) result+=(i-currRow-1)*2 //a missing row gives me 2 seats 
+            result+=UpdateResult(mask)
+            currRow=i
+            mask=(1<<10)-1
+        }
+        
+        mask^=(1<<j-1)
+
+    }
+    //resultsofar + last iteration's contribution + the number of seats MISSING rows give me 
+    return result+UpdateResult(mask)+(n-currRow)*2
 };
