@@ -332,7 +332,7 @@ class maxBinaryHeap{
       }
 
 
-      // I have to create a remove function that works in O(logn time)
+    // I have to create a remove function that works in O(logn time)
     remove=(height)=>{
 
         if(!this.store[height].size){
@@ -371,44 +371,63 @@ class maxBinaryHeap{
  
 // mergeSort commenting todo
 var getSkyline = function(buildings) {
+    
     const mergeSort = (start, end) => {
-        if (end <= start) {
-            if (end < start) return [];
-            const building = buildings[end];
-            return [[building[0],building[2]],[building[1],0]];
+        if(start<end){
+            const mid = Math.floor((start + end) / 2);
+            return merge(mergeSort(start, mid), mergeSort(mid + 1, end));
         }
-        const mid = Math.floor((start + end) / 2);
-        return merge(mergeSort(start, mid), mergeSort(mid + 1, end));
+        //just return the element itself
+        if(start==end){
+            const building = buildings[end];
+            //  [ [x1,h],[x2,0] ]
+            return [ [building[0],building[2]],[building[1],0] ];
+        }
+        return []
     }
+
+
+    function merge(leftBuildings, rightBuildings) {
+        let memoL = 0 , memoR=0 //memos of L and R heights
+        let lX,lY,rX,rY
+        const res = [];
+    
+        for (let i = 0,j=0 ; i <leftBuildings.length||j<rightBuildings.length;) {
+                if(i<leftBuildings.length){
+                     [lX,lY]=leftBuildings[i]
+                }
+                else [lX,lY]=[Infinity,Infinity]
+                
+                if(j<rightBuildings.length){
+                     [rX,rY]=rightBuildings[j]
+                }
+                else  [rX,rY]=[Infinity,Infinity]
+    
+                if(lX<rX){
+                    [possX,memoL]=[lX,lY]
+                    i++
+                }
+                if(lX>rX){
+                    [possX,memoR]=[rX,rY]
+                    j++
+                }
+                if(lX===rX){
+                    [possX,memoL,memoR]=[rX,lY,rY]
+                    i++;j++;
+                }
+    
+                let possHeight=Math.max(memoL,memoR)
+                //I dont need two consecutive entries with the same height
+                if(res.length&&possHeight===res[res.length-1][1])continue
+                res.push([possX,possHeight])
+        }
+    
+        return res;
+    }
+    
+    
     return mergeSort(0, buildings.length - 1);
 };
-
-function merge(leftBuildings, rightBuildings) {
-    let leftY = 0;
-    let rightY = 0;
-    let left = 0;
-    let right = 0;
-    let x;
-    let y;
-    const res = [];
-    while (left < leftBuildings.length || right < rightBuildings.length) {
-        const leftX = left < leftBuildings.length ? leftBuildings[left][0] : Infinity;
-        const rightX = right < rightBuildings.length ? rightBuildings[right][0] : Infinity;
-        if (leftX < rightX) {
-            [x,leftY] = leftBuildings[left++];
-        } else if (leftX > rightX) {
-            [x, rightY] = rightBuildings[right++];
-        } else {
-            [x, leftY] = leftBuildings[left++];
-            [_, rightY] = rightBuildings[right++];
-        }
-        y = Math.max(leftY, rightY);
-        if (res.length === 0 || y !== res[res.length - 1][1]) {
-            res.push([x,y]);
-        }
-    }
-    return res;
-}
 
 
 
