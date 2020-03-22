@@ -160,18 +160,7 @@ var longestPrefix = function(s) {
 
 
 
-//passes. .DSDS.DASDSADSADAZDAS
-var longestPrefix = function(s) {
-    if (s.length === 1) return '';
-    for (let i = s.length - 1; i >= 1; i--) {
-      const pre = s.slice(0, i);
-      const suf = s.slice(s.length - i);
-      if (pre === suf) {
-        return pre;
-      }
-    }
-    return '';
-  };
+
 console.log(
     longestPrefix(
         "aaaaa"
