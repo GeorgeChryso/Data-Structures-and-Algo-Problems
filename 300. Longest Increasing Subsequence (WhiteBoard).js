@@ -173,9 +173,47 @@ var lengthOfLIS = function(A) {
     return tails.length;// meaning the length of the longest possible subarray
 };
 
+
+var lengthOfLIS=A=>{
+    let q=new Monoq()
+
+    let result=0
+    for (const element of A) {
+        q.pushMax(element)
+        console.log(q.q)
+        result=Math.max(result,q.size())
+    }
+
+    return result
+}
+class Monoq{
+
+    constructor(){
+        this.q=[]
+    }
+    
+    getMax=()=>this.size?this.q[this.size()-1]:null
+    getMin=()=>this.size()?this.q[0]:null
+    size=()=>this.q.length
+
+    pollMax=()=>this.q.pop()
+
+    pollMin=()=>this.q.shift()
+
+    pushMax(element){
+        while(this.size&&this.getMax()>=element)this.pollMax()
+        this.q.push(element)
+    }
+
+    pushMin(element){
+        while(this.size&&this.getMin()<element)this.pollMin()
+        this.q.push1(element)
+    }
+
+}
 console.log(
     lengthOfLIS(
-      [1,3,5,4,7]
-       // [2,2,2,2,2]
+        [1,3,6,7,9,4,10,5,6]
+                       // [2,2,2,2,2]
     )
 )
