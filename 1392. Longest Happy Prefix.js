@@ -64,11 +64,9 @@ var longestPrefix = function(s) {
 // so when I come across a same hash Value, i check if its an identical match.
 var longestPrefix = function(s) {
     //apparently these do not work
-    // let base=26 //lowercase english characters
-    // let prime= 1e5+3 // a prime number bigger than s.length==1e5, is  100003
-    // and these are used
-    let prime = 1e9 + 7;
-    let base = 26;
+     let base=26 //lowercase english characters
+     let prime= 1e5+3 // a prime number bigger than s.length==1e5, is  100003
+    //let prime = 1e9 + 7;
 
     let prehash = x => x.charCodeAt(0) - 'a'.charCodeAt(0) + 1; //maps letters to 0 ,1 ,2, 3.. .
 
@@ -77,11 +75,13 @@ var longestPrefix = function(s) {
 
     let maxLength = 0;
 
-    let mul=1
+    let mul=1 //mul is essenetially helping me construct Math.pow(base**i), which overflows If i do it immediatelly, producing wrong results 
     for (let i = 0; i < s.length - 1; i++) {
-        curP=(curP * base%prime + prehash(s[i])) % prime;
-        curS=(curS+mul*prehash(s[s.length - 1 - i]))%prime
-        mul = mul * 26 % prime;
+        curP=((curP * base)%prime + prehash(s[i])) % prime;//essentially append right to rolling hash 
+        curS=(curS%prime +mul*prehash(s[s.length - 1 - i]))%prime //essentially append left to rolling hash
+
+        //this helps to calculate Math.pow(base,i)%prime which overflows 
+        mul = mul * base % prime;  //important, you need to increment mul manually to avoid overflow.
         if (curS == curP) maxLength = i + 1;
     }
 
