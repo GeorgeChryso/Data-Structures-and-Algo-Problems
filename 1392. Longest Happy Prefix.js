@@ -88,9 +88,23 @@ var longestPrefix = function(s) {
     return s.slice(0, maxLength);
 };
 
+//deterministic finite automaton
+var longestPrefix=s=>{
+    let n= s.length,d=0
+    let dfa=[...Array(n)].map(d=>0) 
+
+    for (let i = 1; i <n; i++) {
+        while(d&&s[d]!=s[i])d=dfa[d-1]
+        d+=Number(s[i]===s[d])
+        dfa[i]=d
+    }
+    return s.slice(0,dfa[n-1])
+}
+
 console.log(
     longestPrefix(
-        'ddjefgfiagebcgbgchgchhabdcadbbbjaibabgacidjhdhidfbfefbigigiaibjbdaijififhabaajihicchdeffabjbegieedjebgdbfbbbdcfbcfhiejjihbddibhffejcehfggabbhidhbdaebehjbeiggdchjejjfejjbgcheehahfaccicffgfiiagdgfiijghceihbfjdabchcfedigicehiaadijbedfcdhajbifjjgcaaggbadidacbhieijjddifffbfaegghjifcchdbdjgghiedddagacdfjbbbcjjfgbghibigchagfjaacgihdiggbcbeijjcgaihccgdgcccjcddgabajedjibbajhjeehbgcjefhajbdbebbfiaiabhijbefcjeaceffcbiehafaghgdjdeedjhfgajjbjaffafeeffbeghhgijjffehdaejgigihcbabeahdbghfgfbhgageajafgehhdbjddcghgeaicaccjhdiejjagjciegeiihjedhigifaahcfhdigbcacfabgcdbbceagddeejiidiigfaafbhiejahgfaccggdedgiichjgdhbhfcdgceecjhfjifieecjacfcfgajaichjdbhcibgffhajihggchjebbacccfciegjhhdjhfadacaiifgijeijegbeeijjccfhgeiccbjjafiabgjfjhccchefdegceahbadcjadhgdgbfijihbeajjhfejfijffbdiaicdjacgjcdiaefjdeeijegciggiahgdagafcaeibhdicaejgaficfdfgaefajiebgaihjjfacchhfdieajfihecdejgbeicjficcgafafajcfbgjafcdcgffcgjjbdicagaedeeggbgebijdggigaabcihdccbehfagijbejhhcjcefgdbijjfbajbdaiaifdegdgfgfejihbedbhiaagbdjhajgbfjachjjcccdifciigfdijhjdadehdebehhjihfjbjggcfeefgejgdiifdhghggfhadedjfjabhfdechghiahibaijfefjhcbffhieejedjabddhdfjageajcfchcjfadacfhabgfbhdhiffjjhahjdhjibideabhfgeiajccigcfjgfjeggchdhicdiciadgbfiaegcgdeggichdcjjegbiggcjjbhdedhjhgededjedgaaffhcjjihbfdegigefagjbjdidddjefgfiagebcgbgchgchhabdcadbbbjaibabgacidjhdhidfbfefbigigiaibjbdaijififhabaajihicchdeffabjbegieedjebgdbfbbbdcfbcfhiejjihbddibhffejcehfggabbhidhbdaebehjbeiggdchjejjfejjbgcheehahfacci'
-        // "bcdaacccddacbcdccdbcbcdbadbdcadcdcbcccdccddbbcdaacccddacbcd"
+        
+        "bcdaacccddacbcdccdbcbcdbadbdcadcdcbcccdccddbbcdaacccddacbcd"
     )
 );
+
