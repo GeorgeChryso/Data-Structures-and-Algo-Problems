@@ -20,10 +20,10 @@ var zigzagLevelOrder = function(root) {
             if(node.right){
                 temp.push(node.right)
             }
-            tempres.push(node.val)
+            if(flag)tempres.push(node.val)
+            else tempres.unshift(node.val)
         }
-        if(flag)result.push(tempres)
-        else result.push(tempres.reverse())
+        result.push(tempres)
         q=temp
         flag=!flag
     }
