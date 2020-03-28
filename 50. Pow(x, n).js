@@ -10,18 +10,14 @@
 var myPow = function(x, n) {
     if(n===0)return 1
     let result=1
-    let flag=true
     // if n is negative i m gonna compute the positive power
     // and return 1/result
-    if(n<0){
-        flag=false
-        n=-n
-    }
-    while(n){
-        if(n&1)result*=x
-        n>>>=1
+    let q=Math.max(n,-n)
+    while(q){
+        if(q&1)result*=x
+        q>>>=1
         x*=x
     }
     
-    return flag?result:1/result
+    return n<0?result:1/result
 };
