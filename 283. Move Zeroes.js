@@ -30,12 +30,16 @@ var moveZeroes = function(A) {
         if(A[i]&&k<=Nonzeroes){
             A[k++]=A[i]
         }
+     
     }
     for (let i = Nonzeroes; i < A.length; i++) {
         A[i]=0
     }
     return A
 };
+
+
+
 console.log(moveZeroes(
 
   [0,0,1]  ))
