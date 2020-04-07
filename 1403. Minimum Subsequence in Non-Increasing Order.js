@@ -9,7 +9,6 @@ var minSubsequence = function(nums) {
     nums.sort((a,b)=>b-a)
     let totalSum=nums.reduce((a,b)=>a+b)
     let result=[]
-    let prefix=[0]
     let sum=0
     
 
