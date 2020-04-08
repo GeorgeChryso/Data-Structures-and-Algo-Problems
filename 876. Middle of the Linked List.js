@@ -7,7 +7,7 @@
 
 
 
-
+// manually
 var middleNode = function(head) {
     if(head==null||head.next==null)return head
 
@@ -27,3 +27,16 @@ var middleNode = function(head) {
     }
     return start
 };
+
+//2 pointers
+var middleNode=head=>{
+    let slow=head
+    let fast=head
+    while(fast!==null){
+        fast=fast.next
+        if(fast==null)return slow
+        slow=slow.next
+        fast=fast.next
+    }
+    return slow.next
+}
