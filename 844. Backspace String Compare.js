@@ -74,6 +74,33 @@ var backspaceCompare = function(S, T) {
 
 };
 
+//compare 2 fifo queues O(m+n) runtime space
+var backspaceCompare = function(S, T) {
+    
+    let sq=[]
+    let tq=[]
+
+    for (const letter of S) {
+        if(letter=="#"){
+            if(sq.length)sq.pop()
+        }
+        else{
+            sq.push(letter)
+        }
+    }
+    for (const letter of T) {
+        if(letter=="#"){
+            if(tq.length)tq.pop()
+        }
+        else{
+            tq.push(letter)
+        }
+    }
+    
+    return sq.every((d,i)=>d===tq[i])
+    
+};
+
 
 
 console.log(backspaceCompare(
