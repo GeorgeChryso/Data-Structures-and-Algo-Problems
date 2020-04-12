@@ -74,7 +74,7 @@ var backspaceCompare = function(S, T) {
 
 };
 
-//compare 2 fifo queues O(m+n) runtime space
+//compare 2 lifo queues O(m+n) runtime space
 var backspaceCompare = function(S, T) {
     
     let sq=[]
