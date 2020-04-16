@@ -80,7 +80,24 @@ var isValid=function(s){
     return open.length === 0                // an den mou exoun meinei anoixta true
 }
 
-
+//stack
+var isValid = function(string) {
+    if(string.length==1)return false
+    let stack=[]
+    string=string.split("")
+    for(let s of string){
+        if(s=="("||s=="{"||s=="[")stack.push(s)
+        else{
+            if(stack.length==0)return false
+            let p=stack.pop()
+            
+            if(s==")"&&p!="(")return false
+            if(s=="]"&&p!="[")return false
+            if(s=="}"&&p!="{")return false
+        }
+    }
+    return stack.length==0
+};
 console.log(isValid(
     '()([)'
     ))
