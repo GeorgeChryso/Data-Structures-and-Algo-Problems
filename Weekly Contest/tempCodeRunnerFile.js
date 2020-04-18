@@ -1,77 +1,36 @@
+var numberOfArrays = function(s, k) {
+    let mod = 1e9 + 7;
+    let res = 0;
+    if (s.length == 0) return 0;
+    if (s.length == 1) return s <= k ? 1 : 0;
 
+    for (var cutpoints = 0; cutpoints < 1 << (s.length - 1); cutpoints++) {
+        var result = [];
+        var lastcut = 0;
+        let flag = true;
+        for (var i = 0; i < s.length - 1; i++) {
+            if (((1 << i) & cutpoints) !== 0) {
+                let pot = s.slice(lastcut, i + 1);
+                if (pot <= k && pot >= 1 &&( pot.length>1? pot[0] !== 0:true)) null;
+                else {
+                    flag = false;
+                }
+                result.push(pot);
+                lastcut = i + 1;
+            }
+        }
+        let got = s.slice(lastcut, i + 1);
+        if (got <= k && got >= 1 && ( got.length>1? got[0] !== 0:true)) null;
+        else {
+            flag = false;
+        }
+        result.push(s.slice(lastcut));
 
+        if (flag) {
 
-// var stringMatching = function(words) {
+            res = (res + 1) % mod;
+        }
+    }
 
-//     let result=new Set()
-//     for (const a of words) {
-//         for (const word of words) {
-            
-//             if(word.search(a)!=-1&&a!=word){
-//                 result.add(a)
-//                 break
-//             }
-//         }
-//     }
-    
-//     let end=[]
-//     result.forEach(d=>end.push(d))
-
-//     return end
-// };
-
-
-
-// var processQueries = function(queries, m) {
-//     let memo={
-
-//     }
-//     let P=[...Array(m)].map((d,i)=>{
-//          memo[i+1]=i
-//          return i+1
-//     })
-//     let result=[]
-//     console.log(P)
-//     for (const val of queries) {
-        
-//         let i=P.indexOf(val)
-//         result.push(i)
-//         for (let j =i; j>=1; j--) {
-//             P[j]=P[j-1]            
-//         }
-
-//         P[0]=val
-
-//     }
-    
-//     return result
-// };  
-
-
-
-
-// console.log(
-//     processQueries(
-//         [3,1,2,1],5
-//     )
-// )
-
-
-// var entityParser = function(text) {
-//     text=text.replace(new RegExp('&quot;','g'),'\\"')
-//     text=text.replace(new RegExp('&apos;','g'),'\'')
-//     text=text.replace(new RegExp('&amp;','g'),'&')
-//     text=text.replace(new RegExp('&gt;','g'),'>')
-//     text=text.replace(new RegExp('&lt;','g'),'<')
-//     text=text.replace(new RegExp('&frasl;','g'),'/')
-
-// return text
-// };
-
-// console.log(
-//     entityParser(
-//         "and I quote: &quot;...&quot;"
-
-//     )
-// )
-
+    return res % mod;
+};
