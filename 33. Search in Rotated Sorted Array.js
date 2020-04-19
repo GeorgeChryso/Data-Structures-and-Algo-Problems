@@ -10,25 +10,20 @@
 
 var search = function(A, target) {
     
-
-    //search for the smallest element
-    let lo=0,hi=A.length-1
-    while(lo<hi){
-        let mid=Math.floor((lo+hi)/2)
-        if(A[mid]>A[hi]) lo=mid+1;
-        else hi=mid;
-    }
-
-    //lo==hi is the pivot
-    let rot=lo 
-    lo=0
-    hi=A.length-1
-    while(lo<=hi){
-         mid=(lo+hi)/2;
-        let realmid=(mid+rot)%A.length;
-        if(A[realmid]==target)return realmid;
-        if(A[realmid]<target)lo=mid+1;
-        else hi=mid-1;
+    let lo = 0, hi = A.length;
+    while (lo < hi) {
+        let mid = Math.floor((lo + hi) / 2);
+        
+        let num = (A[mid] < A[0]) == (target < A[0])
+                   ? A[mid]
+                   : target < A[0] ? -Infinity : Infinity;
+                   
+        if (num < target)
+            lo = mid + 1;
+        else if (num > target)
+            hi = mid;
+        else
+            return mid;
     }
     return -1;
 };
