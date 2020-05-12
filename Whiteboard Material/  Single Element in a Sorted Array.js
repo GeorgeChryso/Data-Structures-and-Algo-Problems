@@ -11,6 +11,9 @@ var singleNonDuplicate = function(nums) {
 
 // O(logn) time O(1) space
 // Binary search. 
+// Concept: Well, when the mid is calculated, you know whats happening with the remaining items on the right and on the left
+// Consider the number of the elements on the left and on the right of the middle element
+// combined with whether the middle element is equal to its previous on each case!
 var singleNonDuplicate = function(nums) {
     let lo =0,hi=nums.length-1
     while(lo<=hi){
