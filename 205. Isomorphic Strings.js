@@ -8,10 +8,10 @@
 
 
 var isIsomorphic = function(s, t) {
-    let memo={}
-    let set=new Set()
+    let memo={} //stores the transformed elements 
+    let set=new Set() // stores the destination elements
     for (let i = 0; i < s.length; i++) {
-        if(memo[s[i]]!==undefined){
+        if(memo[s[i]]!==undefined){ 
             if(memo[s[i]]!==t[i])return false
         }
         else{
