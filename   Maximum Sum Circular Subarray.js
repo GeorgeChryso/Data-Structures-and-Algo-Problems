@@ -5,7 +5,7 @@
 // Also, a subarray may only include each element of the fixed buffer A at most once.  (Formally, for a subarray C[i], C[i+1], ..., C[j], there does not exist i <= k1, k2 <= j with k1 % A.length = k2 % A.length.)
 
 
-// O(n^2) prefix sum  BF TLE
+// O(n^2) prefix sum  BF TLE 103/109
 var maxSubarraySumCircular = function(A) {
     if(A.every(d=>d<=0))return Math.max(...A) 
     let prefix=[0]
@@ -26,6 +26,53 @@ var maxSubarraySumCircular = function(A) {
     return result
 };
 
+//2 cases O(n)
+var maxSubarraySumCircular = function(A) {
+    //1st case, maximum array is within array A (Kadane's algorithm)
+    if(A.every(d=>d<=0))return Math.max(...A) 
+    let maxSoFar=0
+    let maxEndingHere=0
+    for (let i = 0; i <A.length; i++) {
+        maxEndingHere=Math.max(0,maxEndingHere+A[i%A.length])
+        maxSoFar=Math.max(maxSoFar,maxEndingHere)
+    }
+    //2nd case( maximum subarray contains the last element of A )
+    let sum1=0,sum2=0
+    let prefix=[0], suffix=[0]
+    for (let i = 0; i < A.length; i++) {
+        sum1+=A[i]
+        prefix.push(Math.max(sum1,prefix[prefix.length-1]))
+        sum2+=A[A.length-1-i]
+        suffix.unshift(Math.max(sum2,suffix[0]))
+    }
+
+    for (let i = 0; i < prefix.length; i++) {
+        maxSoFar=Math.max(maxSoFar,prefix[i]+suffix[i])        
+    }
+
+    return maxSoFar
+};
+
+//cleaner code
+var maxSubarraySumCircular = function(A) {
+    //1st case, maximum array is within array A (Kadane's algorithm)
+    if(A.every(d=>d<=0))return Math.max(...A) 
+    let maxSoFar=0, maxEndingHere=0, sum1=0,sum2=0,prefix=[0], suffix=[0]
+    for (let i = 0; i <A.length; i++) {
+        maxEndingHere=Math.max(0,maxEndingHere+A[i%A.length])
+        maxSoFar=Math.max(maxSoFar,maxEndingHere)
+        sum1+=A[i]
+        prefix.push(Math.max(sum1,prefix[prefix.length-1]))
+        sum2+=A[A.length-1-i]
+        suffix.unshift(Math.max(sum2,suffix[0]))
+    }
+
+    for (let i = 0; i < prefix.length; i++) {
+        maxSoFar=Math.max(maxSoFar,prefix[i]+suffix[i])        
+    }
+
+    return maxSoFar
+};
 console.log(maxSubarraySumCircular(
     [5,-3,5]
 ))
