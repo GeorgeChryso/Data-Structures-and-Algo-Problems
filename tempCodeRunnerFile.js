@@ -1,1 +1,1 @@
-11
+        console.log(i,memo2)
