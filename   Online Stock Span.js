@@ -36,3 +36,24 @@ StockSpanner.prototype.next = function(price) {
  * var obj = new StockSpanner()
  * var param_1 = obj.next(price)
  */
+
+
+// stack implementation 
+
+var StockSpanner = function() {
+    this.q=[]
+};
+
+/** 
+ * @param {number} price
+ * @return {number}
+ */
+// essentially cutting time by SAVING THE NUMBER OF SMALLEST ELEMENTS PREVIOUSLY EXISTANT ON THE STACK
+StockSpanner.prototype.next = function(price) {
+        let k=1
+        while(this.q.length&&this.q[this.q.length-1][0]<=price){
+            k+= this.q.pop()[1]
+        }
+        this.q.push([price,k])
+        return k
+};
