@@ -120,3 +120,18 @@ var kthSmallest = function(root, k) {
     return pq.poll()
 };
 
+// Just dfs ( the ranking already exists through the binary tree) 
+var kthSmallest = function(root, k) {
+    let kth=0
+    let result=root.val
+
+    let dfs=node=>{
+        if(node===null)return
+        dfs(node.left)
+        kth++
+        if(kth==k)result=node.val
+        dfs(node.right)
+    }
+    dfs(root)
+    return result
+};
