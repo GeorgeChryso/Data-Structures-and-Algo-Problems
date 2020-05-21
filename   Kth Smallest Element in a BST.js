@@ -120,7 +120,7 @@ var kthSmallest = function(root, k) {
     return pq.poll()
 };
 
-// Just dfs ( the ranking already exists through the binary tree) 
+// Just dfs ( the ranking already exists through the binary tree) O(n)
 var kthSmallest = function(root, k) {
     let kth=0
     let result=root.val
@@ -129,7 +129,10 @@ var kthSmallest = function(root, k) {
         if(node===null)return
         dfs(node.left)
         kth++
-        if(kth==k)result=node.val
+        if(kth==k){
+            result=node.val
+            return
+        }
         dfs(node.right)
     }
     dfs(root)
