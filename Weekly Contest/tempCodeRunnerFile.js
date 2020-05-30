@@ -1,27 +1,30 @@
-        }        
-        memo.push([...temp])
-    }
-    let result=-Infinity
-    let choices=[...Array(memo.length)].map(d=>[...Array(memo[0].length)].fill(-Infinity))
-    for (let j = memo[0].length-1; j >=1; j--) {
-        for (let i = memo.length-1; i >=0; i--) {
-            if(i===memo.length-1){
-                choices[i][j]=memo[i][j]
-            }
-            else choices[i][j]=Math.max(choices[i+1][j],memo[i][j])
-        }
-    }
-    for (let j = 0; j < choices.length; j++) {
-        choices[j][0]=memo[j][0]        
-    }
-    
-    for (let i = 1; i < choices.length; i++) {
-        let sum=Math.max(choices[i-1][0],0)
-        for (let j = 1; j < array.length; j++) {
-            sum+=Math.max(0,choices[i][j])            
-        }
-        result=Math.max(result,sum)
-    }
+var canBeEqual = function(target, arr) {
+//     let memo={}
+//     arr.forEach(d=>memo[d]=(memo[d]||0)+1)
+//     for (let i = 0; i < target.length; i++) {
+//         if(memo[target[i]]===undefined)return false
+//         else memo[target[i]]--        
+//     }
+//     return Object.values(memo).every(d=>d===0)
+// };
 
-    return result
-};
+
+
+// var hasAllCodes = function(s, k) {
+//     let memo=new Set()
+
+//     for (let i = 0; i < s.length; i++) {
+//         if(i+k<=s.length)memo.add(Number.parseInt(s.slice(i,i+k),2))
+//     }  
+
+//     for (let i = 0; i < 2**(k); i++) {
+//         console.log(i)
+//         if(!memo.has(i))return false        
+//     }
+//     return true
+// };
+
+// console.log(hasAllCodes(
+//  //   "00110110",  2+
+//     "00110",2
+// ))
