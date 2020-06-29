@@ -25,7 +25,21 @@ var uniquePaths = function(m, n) {
 
     return dp[n-1][m-1]
 };
+//1 row space dp optimization
+var uniquePaths = function(m, n) {
+    
+    let dp=Array(n).fill(null).map(d=>0)
 
+    dp[0]=1// Im already at the start
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 1; j < n; j++) {
+             dp[j]+=dp[j-1]
+        }        
+    }
+
+    return dp[n-1]
+};
 // backtracking-TLE?
 var uniquePaths=(m,n)=>{
     if (m==1&&n==1)return 1
