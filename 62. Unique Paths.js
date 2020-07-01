@@ -5,6 +5,15 @@
 // How many possible unique paths are there?
 
 
+// backtracking-TLE? cos there s no memoization
+var uniquePaths=(m,n)=>{
+    if (m==1&&n==1)return 1
+    if (m<1||n<1)return 0
+    let cur=0
+    if(m>=2)cur+=uniquePaths(m-1,n)
+    if(n>=2)cur+=uniquePaths(m,n-1)
+    return cur
+}
 
 //dp
 
@@ -40,12 +49,28 @@ var uniquePaths = function(m, n) {
 
     return dp[n-1]
 };
-// backtracking-TLE?
-var uniquePaths=(m,n)=>{
-    if (m==1&&n==1)return 1
-    if (m<1||n<1)return 0
-    let cur=0
-    if(m>=2)cur+=uniquePaths(m-1,n)
-    if(n>=2)cur+=uniquePaths(m,n-1)
-    return cur
-}
+
+
+// Combinatorics problem.
+// To get to the target, the robot needs to move exactly m-1+ n-1 steps. 
+// wE NEED THE TOTAL NUMBER OF PERMUTATIONS 
+// (m-1+n-1)! /(m-1)!(n-1)!
+
+var uniquePaths = function(m, n) {
+    let result=1
+    let running=1
+    let down=1
+    for (let i = 1; i <=m+n-2; i++) {
+        running*=i
+        if(i===m+n-2)result=running     
+        if(i==m-1||i==n-1)down*=running
+        if(m==n&&i==m-1)down*=running //case of m===n
+
+    }
+
+    return result/down
+};
+
+console.log(uniquePaths(
+    3,2
+))
