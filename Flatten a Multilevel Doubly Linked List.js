@@ -8,12 +8,9 @@
 
 
 var flatten = function(head) {
-    if(!head)return head
-    let result=head
-    let stack=[]
-    let node=head
-
+    let stack=[], node=head
     while(node&&(node.next||stack.length||node.child)){
+        //has child?
         if(node.child){
             if(node.next)stack.push(node.next)
             node.child.prev=node
@@ -22,10 +19,12 @@ var flatten = function(head) {
             node=node.next
         }
         else{
+            //no child, has next?
             if(node.next){
                 node=node.next
             }
             else{
+                //no child no next. has stack?
                 if(stack.length){
                     node.next=stack.pop()
                     node.next.prev=node
@@ -35,5 +34,5 @@ var flatten = function(head) {
         }
     }
  
-    return result
+    return head
 };
