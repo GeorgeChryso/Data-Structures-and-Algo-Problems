@@ -30,7 +30,7 @@ let optPar=p=>{
     }
     
     console.log(reconstruction(s,1,n))
-    console.log(matrixChainMultiply(A,s,1,A.length))
+    //console.log(matrixChainMultiply(A,s,1,A.length))
     return m[1][n]
 
 }
@@ -85,7 +85,8 @@ let A=[
 
 console.log(optPar(
     // [30,35,15,5,10,20,25]
-    // [5,10,3,12,5,50,6]
-    [2,3,5,4]
+     [5,10,3,12,5,50,6]
+    //[2,3,5,4]
+    //[1,6,6,5,6,2]
  ))
  
