@@ -84,13 +84,13 @@ var lengthOfLISB = function(nums) {
                 right = mid - 1;
             }
         }
-
         lis[left] = n;
       }
 
 
     for (let n = 0; n < nums.length; n++) {
       insertLIS(lis, nums[n]);
+      console.log(lis)
     }
 
 
@@ -132,83 +132,10 @@ var lengthOfLIS = function(nums) {
 };
 
 
-// PATIENCE SORTING
-// O(NlogN) no secondary function approach
-var lengthOfLIS = function(A) {
-    if(!A.length) return 0;
-    let tails = []; // the possible ends of arrays of length i+1, if tails[0]=3, then i have 1 subarray of length 0+1=1, [3]
-    tails[0] = A[0]; // the subarray ending at itself of length 1
-
-    for(let i=1; i<A.length; i++){
-        
-        // If my curr element is bigger than all possible tails, i just need to create a new subarray, which of course will be of length tails.length-1 +1
-        if(A[i]>tails[tails.length-1]){
-            tails.push(A[i]);
-        }
-
-        // If my element is less than every possible end, hence the first element, I need to consider starting a new array, this will not hinder my current longest array as I already have saved it
-        else if(A[i] < tails[0]){
-            tails[0] = A[i];
-        }
-
-        // if my element is inbetween every other element , i just need to find somewhere to place it, inface i need to find the first greater element so i can have better chances of creating a longest array. for example
-        // If tails=[,....3, 5,9] and I come across an element A[i]= 4, then by replacing 5 with 4 I have a better chance of coming across an element bigger than 4 in the future, let's say another 5, therefore extending my current array.
-        else{
-            let lo=0, hi = tails.length-1;
-            //binary search to find where to place my current element so i have more chances of creating a bigger subarray
-            while(lo<hi){
-                let mid = Math.floor((lo+hi)/2);
-                if(tails[mid] < A[i]){
-                    lo = mid+1;
-                }else{
-                    hi = mid;
-                }
-            }
-            tails[lo] = A[i];
-        }
-    }
-    
-    return tails.length;// meaning the length of the longest possible subarray
-};
 
 
-var lengthOfLIS=A=>{
-    let q=new Monoq()
 
-    let result=0
-    for (const element of A) {
-        q.pushMax(element)
-        console.log(q.q)
-        result=Math.max(result,q.size())
-    }
 
-    return result
-}
-class Monoq{
-
-    constructor(){
-        this.q=[]
-    }
-    
-    getMax=()=>this.size?this.q[this.size()-1]:null
-    getMin=()=>this.size()?this.q[0]:null
-    size=()=>this.q.length
-
-    pollMax=()=>this.q.pop()
-
-    pollMin=()=>this.q.shift()
-
-    pushMax(element){
-        while(this.size&&this.getMax()>=element)this.pollMax()
-        this.q.push(element)
-    }
-
-    pushMin(element){
-        while(this.size&&this.getMin()<element)this.pollMin()
-        this.q.push1(element)
-    }
-
-}
 
 //how about a dp[i]=Length of the LIS ENDING at index i
 var LIS=A=>{
@@ -241,9 +168,40 @@ var LIS=A=>{
 }
 
 
+
+// PATIENCE SORTING (CARDS GAME PATIENCE)
+// O(NlogN) no secondary function approach
+// TLDR: Greedy place through Binary Search, any smaller than current tail element
+// https://www.cs.princeton.edu/courses/archive/spring13/cos423/lectures/LongestIncreasingSubsequence.pdf
+var lengthOfLIS = function(A) {
+    if(!A.length) return 0;
+    let tails = [-Infinity];  //here -Infinity acts as a Sentinel, for cleaner code (or else I would ahve to place A[0] here)
+
+    for(let i=0; i<A.length; i++){
+        // If my curr element is bigger than all possible tails, i just need to create a new subarray, which of course will be of length tails.length-1 +1
+        if(A[i]>tails[tails.length-1]){
+            tails.push(A[i]);
+        }
+        else{
+            let lo=0, hi = tails.length-1;
+            //binary search to find where to place my current element so i have more chances of creating a bigger subarray
+            while(lo<hi){
+                let mid = (lo+hi)>>1
+                if(tails[mid] < A[i])
+                    lo = mid+1;
+                else
+                    hi = mid;
+            }
+            tails[lo] = A[i];
+        }
+    }
+    
+    return tails.length-1;// is the length of the longest possible subarray (-1 because of the -Infinity I added)
+};
+
 console.log(
-    LIS(
-        [1,3,6,7,9,4,10,5,23]
+    lengthOfLIS(
+        [1,3,6,7,9,4,10,5,23,2,3]
                        // [2,2,2,2,2]
     )
 )
