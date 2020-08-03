@@ -19,8 +19,6 @@ var lengthOfLISz = function(A) {
     // the LENGTH of the LONGEST subarray STARTING FROM i, its index.
     // if m[3]=8, that means that the LONGEST subarray starting from A[3] is of length 8
 
-
-
     for (let start = A.length-2; start >= 0; start--) {
         for (let potentialNext = start+1; potentialNext < A.length; potentialNext++) {
              if( A[start]<A[potentialNext]) {
@@ -61,7 +59,7 @@ var lengthOfLISz = function(A) {
 
 
 // O(Nlogn) Binary Search
-var lengthOfLIS = function(nums) {
+var lengthOfLISB = function(nums) {
     const lis = [];
 
     function insertLIS(lis, n) {
@@ -211,9 +209,41 @@ class Monoq{
     }
 
 }
+
+//how about a dp[i]=Length of the LIS ENDING at index i
+var LIS=A=>{
+    let n=A.length
+    let dp=[...Array(n+1)].map(d=>1)
+    let recon=[...Array(n+1)].map(d=>-1)
+    let max=1
+    for (let i = 1; i < dp.length; i++) {
+        dp[i]=1
+        for (let j = 0; j < i; j++) {
+            if(A[i-1]>A[j]){ //A[i-1] for correct indexing
+                if(dp[j+1]+1>dp[i]){
+                    recon[i]=j+1
+                }
+                dp[i]=Math.max(dp[i],dp[j+1]+1)
+            }
+            max=Math.max(max,dp[i])
+        }
+    }
+
+
+    let reconstruction=idx=>{
+        if(idx==-1)return
+        reconstruction(recon[idx])
+        console.log(A[idx-1])
+    }
+
+    reconstruction(dp.indexOf(max))
+    return max
+}
+
+
 console.log(
-    lengthOfLIS(
-        [1,3,6,7,9,4,10,5,6]
+    LIS(
+        [1,3,6,7,9,4,10,5,23]
                        // [2,2,2,2,2]
     )
 )
