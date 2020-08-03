@@ -179,9 +179,8 @@ var lengthOfLIS = function(A) {
 
     for(let i=0; i<A.length; i++){
         // If my curr element is bigger than all possible tails, i just need to create a new subarray, which of course will be of length tails.length-1 +1
-        if(A[i]>tails[tails.length-1]){
+        if(A[i]>tails[tails.length-1])
             tails.push(A[i]);
-        }
         else{
             let lo=0, hi = tails.length-1;
             //binary search to find where to place my current element so i have more chances of creating a bigger subarray
