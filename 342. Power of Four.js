@@ -34,6 +34,16 @@ var isPowerOfFour = function(x) {
     return ((x).toString(2).length+1)%2==0
 };
 
+
+
+var isPowerOfFour = function(x) {
+    //first check if its only got 1 set bit
+    if(x<=0|| !((x&(x-1))==0))return false
+    // It's got 1 set bit, but this 1 set bit has to be on an odd position 
+    // so i just & it with 01010101010101010101010101010101=(1431655765)
+    return (1431655765&x)!=0
+};
+
 console.log(
     isPowerOfFour(16)
 )

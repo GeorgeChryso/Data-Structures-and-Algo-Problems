@@ -1,1 +1,1 @@
-        checked.add(node)
+letter
