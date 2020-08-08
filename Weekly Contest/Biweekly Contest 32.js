@@ -60,72 +60,27 @@
 
 
     var longestAwesome = function(s) {
-        let freq={}
-        let odd=0
+        let freq={0:0}, result=-1, curr=0
         for (let i = 0; i < s.length; i++) {
-            if(freq[s[i]]===undefined){
-                freq[s[i]]=1
-                odd++
-            }
-            else{
-                freq[s[i]]++
-                if(freq[s[i]]%2){
-                    odd++
-                }
-                else odd--
-            }       
+           curr^=(1<<(Number(s[i])))
+           if(freq[curr]!==undefined)
+                result=Math.max(result,i-freq[curr]+1)
+           for (let j = 0; j <10; j++) {
+                let ele=1<<j
+                if(freq[curr^ele]!==undefined)
+                    result=Math.max(result,i-freq[curr^ele]+1)
+           }
+           if(freq[curr]===undefined)freq[curr]=i+1
         }
-        if(odd<=1)return s.length
-        let result=1
-        for (let l = s.length-1; l>=0; l--) {
-            let o=odd
-            for (let i = l; i <s.length; i++) {
-                freq[s[i]]--
-
-                if(freq[s[i]]%2){
-                    o++
-                }   
-                else{
-                    o--
-                }             
-            }
-            if(o<=1){
-                result=Math.max(result,l)
-                return result
-            }
-
-            let start=0
-
-            for (let e = l; e <s.length; e++) {
-
-                freq[s[start]]--
-                  
-                if(freq[s[start]]%2)
-                    o++
-                else 
-                    o--
-
-                freq[s[e]]++
      
-                if(freq[s[e]]%2)
-                    o++
-                else
-                    o--
-                if(o<=1)return l
-                start++
-            }
-
-            for (let i = 0; i <start; i++) {
-                freq[s[i]]++
-            }
-        }
         return result
     };
-    // console.log(
-    //     longestAwesome(
-    //         "234121442"
-    //     )
-    // )
+
+    console.log(
+        longestAwesome(
+            "3242415"
+        )
+    )
 
     var minInsertions = function(s) {
         let l=0,running=0
@@ -149,8 +104,8 @@
         return ((l%2)?(l-1)/2+2:l/2)+running
     };
 
-    console.log(minInsertions(
-        "((())"
-    ))
+    // console.log(minInsertions(
+    //     "((())"
+    // ))
 
 
