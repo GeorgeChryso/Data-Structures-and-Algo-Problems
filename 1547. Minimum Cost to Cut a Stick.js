@@ -1,14 +1,17 @@
 
 
 
-//known dp with fixed lengths
 //Let dp[i][j] be the minimum cost if we cut on the stick from cuts[i] to cuts[j].
 //                                                             -------------------
 
-// Optimal Substructure: dp[i][j]=Min(dp[i][k]+dp[k][j]+cost[j]-cost[i]) I need to calculate every potential cut
+// So here's the thing, the ONLY cuts you're allowed to make are any of the cuts[i]. 
+
+// Optimal Substructure: dp[i][j]=Min(dp[i][k]+dp[k][j]+cost[j]-cost[i]) => dp[i][j] depends on the minimum value of subcuts
 // Overlapping Subproblems: Consider the recursion tree of dp[0][2] and dp[1][3] => They both consider case dp[1][2]
+
+// dp with fixed lengths
 var minCost = function(n, cuts) {
-    cuts.push(0, n); //Sentinels
+    cuts.push(0, n); // SENTINELS because I can choose the min and max as is 
     cuts.sort((a, b) => a - b);
     console.log(cuts)
     let N=cuts.length
@@ -43,7 +46,7 @@ var minCost = function(n, cuts) {
 
 //recursion + memoization ( Sentinels DP )
 var minCost = function(n, cuts) {
-    cuts.push(0, n); // SENTINELS
+    cuts.push(0, n); 
     cuts.sort((a, b) => a - b);
     let N=cuts.length
     let dp = [...Array(N)].map(d => [...Array(N)]);
