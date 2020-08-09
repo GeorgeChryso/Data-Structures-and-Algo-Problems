@@ -126,67 +126,7 @@ var maxNonOverlapping = function(nums, target) {
 //     return min
 // };
 
-var minCost = function(n, cuts) {
-    let dp = [...Array(n+1)].map(d => [...Array(n+1)]);
-    cuts.push(0, n);
-    cuts.sort((a, b) => a - b);
-
-    let rec = (i, j) => {
-        if (i > n || j > n || j < 0 || i < 0) return Infinity;
-        let min = Infinity;
-        if (Math.abs(j - i) <= 1) return 0;
-        if (dp[i][j] !== undefined) return dp[i][j];
-
-        // for (let k = 0; k < cuts.length; k++) {
-        //     if (cuts[k] <= i || cuts[k] >= j) continue;
-        //     min = Math.min(min, rec(i, cuts[k]) + rec(cuts[k], j) + j - i);
-        // }
-        for (let k = i + 1; k < j; k++) {
-            min = Math.min(min, rec(i, k) + rec(k, j) + cuts[j] - cuts[i]);
-        }
-        dp[i][j] = min === Infinity ? 0 : min;
-        return min;
-    };
-    rec(0, n);
-    dp.forEach(d => console.log(d + ''));
-    return dp[0][n];
-};
 
 
 
-//known dp with fixed lengths
-//Let dp[i][j] be the minimum cost if we cut on the stick from cuts[i] to cuts[j].
-//                                                             -------------------
-
-var minCost = function(n, cuts) {
-    cuts.push(0, n);
-    cuts.sort((a, b) => a - b);
-    console.log(cuts)
-    let N=cuts.length
-    let dp = [...Array(N)].map(d => [...Array(N)].map(d=>Infinity));
-
-    // length of my window is 1 
-    //adjacent cuts on my starting array
-    for (let i = 0; i <N; i++) {
-        dp[i][i+1]=0  // cant cut it. As in I m never given the option to perform that cut No matter what the numbers are. 
-    }
-    // length of my window is 2
-    for (let i = 0; i <N-1; i++) {
-        dp[i][i+2]=cuts[i+2]-cuts[i] // Obviously, for every triplet a,b,c in cuts, dp[idx(a)][idx(c)]=c-a because I can only perform the cut at b (the middle element)
-    }
-
-    //for every length
-    for (let len = 3; len < N; len++) {
-        //consider each window i,j of my CUTS ARRAY representing the acutual window [cuts[i],cuts[j]]
-        for (let i = 0; i <=N-len; i++) {
-            let j=i+len
-            //consider each possible MIDDLE CUT k 
-            for (let k = i+1; k < j; k++) {
-                dp[i][j]=Math.min(dp[i][j],cuts[j]-cuts[i]+dp[i][k]+dp[k][j])                
-            }            
-        }
-    }
-    
-    return dp[0][N-1];
-};
 console.log(minCost(7, [1, 3, 4, 5]));
