@@ -8,7 +8,7 @@
 // last interval you picked (always pick the first of course)
 // O(nlgn), O(1)
 var eraseOverlapIntervals = function(intervals) {
-    intervals.sort((a,b)=>a[1]-b[1])
+    intervals.sort((a,b)=>a[1]-b[1]) //important step !!!
     let result=0,hi=-Infinity
     for(let i=0;i<intervals.length;i++){
         let [l,h]=intervals[i]
