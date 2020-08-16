@@ -48,4 +48,6 @@ var minimumDistance = function(W) {
     return result
 };
 
+
+
 console.log(minimumDistance('CAKE'));
