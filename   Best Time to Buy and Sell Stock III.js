@@ -8,7 +8,7 @@
 
 
 //Strategy: find an optimal cut index i
-// such that i take maximum profit from 0:i + maximum profit from i+1 to end
+// such that I take maximum profit from 0:i + maximum profit from i+1 to end
 // within each one of these two intervals, I try to find the maximum profit through a buy and sell operation
 var maxProfit = function(prices) {
     let n=prices.length
@@ -86,42 +86,48 @@ var maxProfit = function(prices) {
 };
 
 
-//O(n) time O(1) space: dp
+//O(n*n*k) time O(n*n) space: dp
+// dp[i][k] Maximum Profit until index i, with AT MOST k transactions
+// dp[i][k]=Math.max( dp[i-1][k],dp[j][k-1]+ A[i]-A[j] ) for j<i
+var maxProfit = function(A) {
+    let n=A.length,k=2
+    let dp=[...Array(n+1)].map(d=>[...Array(k+1)].map(q=>0))
 
-var maxProfit = function(prices) {
-    let n=prices.length
-    let upto=[0] //sentinel 0
-    let from=[0] //sentinel 0
-    let result=0
-    let min1=Infinity, min2=Infinity,max1=0,max2=-Infinity
-    for (let i = 0,j=n-1; i <n; i++,j--) {
-        if(prices[i]<min1){
-            min1=prices[i]
-            max1=prices[i]
-        }
-        else{
-            if(prices[i]>max1){
-                max1=prices[i]
+    //base cases
+    //dp[i][0]=0 maximum profix with 0 transactions
+    //dp[0][k]=0 maximum profit with with the first 0 elements at most k transactions
+    for (let kk = 1; kk <=k; kk++) {
+        for (let i = 1; i <=n; i++) {
+            let secondpart=-1
+            for (let j = 1; j < i; j++) {
+                secondpart=Math.max(secondpart,dp[j-1][kk-1]+A[i-1]-A[j-1])
             }
-        }
-        upto.push(Math.max(upto[i],max1-min1))
-        if(-prices[j]<min2){
-            min2=-prices[j]
-            max2=-prices[j]
-        }
-        else{
-            if(-prices[j]>max2){
-                max2=-prices[j]
-            }
-        }
-        from.unshift(Math.max(from[0],max2-min2))
+            dp[i][kk]=Math.max(dp[i-1][kk],secondpart)
+        }        
     }
-    
-    //compute the result through the sum of upto and from
-    for (let i = 0; i <=n; i++) {
-        result=Math.max(from[i]+upto[i],result)        
+    dp.forEach(d=>console.log(d+''))
+    return dp[n][k]
+};
+
+
+// O(k*n) time O(k*n) space
+// Optimization: Trying to maximize the value 
+// dp[j-1][kk-1]-A[j-1] can happen in O(n), instead of repeating the search of the maximized dp[j-1][kk-1]-A[j-1] as I m looking at the same elements
+var maxProfit = function(A) {
+    let n=A.length,k=2
+    let dp=[...Array(n+1)].map(d=>[...Array(k+1)].map(q=>0))
+    //base cases
+    //dp[i][0]=0 maximum profix with 0 transactions
+    //dp[0][k]=0 maximum profit with with the first 0 elements at most k transactions
+    for (let kk = 1; kk <=k; kk++) {
+        let startsecond=dp[0][k-1]-A[0] //heres the value i need to maximize
+        for (let i = 1; i <=n; i++) {
+            startsecond=Math.max(startsecond,dp[i-1][kk-1]-A[i-1]) //so i do it incrementally as on each i iteration I only need to consider
+            // dp[i-1][kk-1]-A[i-1]
+            dp[i][kk]=Math.max(dp[i-1][kk],A[i-1]+startsecond)
+        }        
     }
-    return result
+    return dp[n][k]
 };
 console.log(
     maxProfit([3,3,5,0,0,3,1,4]        )
