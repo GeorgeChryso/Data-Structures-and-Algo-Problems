@@ -54,7 +54,24 @@ var maxProfit = function(A, fee) {
     return dp2
 };
 
+
+//finite state machine
+
+// Relatively easy fsm 2 states: s0=>sold on the last step OR rested, s1=>bought on the last step OR rested
+var maxProfit=function(A,fee){
+    let s0=0,s1=-A[0]-fee
+    let n0=-Infinity,n1=-Infinity
+
+    for (let i = 1; i < A.length; i++) {
+        n0=Math.max(s0,s1+A[i])
+        n1=Math.max(s1,s0-A[i]-fee)
+        s0=n0
+        s1=n1
+    }
+    return s0
+}
+
 console.log(maxProfit(
-    [1,3,7,5,10,3],3
+    [1,2,3,0,2],3
     )
 )
