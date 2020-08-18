@@ -120,7 +120,7 @@ var maxProfit = function(A) {
     //dp[i][0]=0 maximum profix with 0 transactions
     //dp[0][k]=0 maximum profit with with the first 0 elements at most k transactions
     for (let kk = 1; kk <=k; kk++) {
-        let startsecond=dp[0][k-1]-A[0] //heres the value i need to maximize
+        let startsecond=dp[0][kk-1]-A[0] //heres the value i need to maximize
         for (let i = 1; i <=n; i++) {
             startsecond=Math.max(startsecond,dp[i-1][kk-1]-A[i-1]) //so i do it incrementally as on each i iteration I only need to consider
             // dp[i-1][kk-1]-A[i-1]
@@ -128,6 +128,63 @@ var maxProfit = function(A) {
         }        
     }
     return dp[n][k]
+};
+
+//turn it upside down
+var maxProfit = function(A) {
+    let n=A.length,k=2
+    let dp=[...Array(k+1)].map(d=>[...Array(n+1)].map(q=>0))
+    //base cases
+    //dp[i][0]=0 maximum profix with 0 transactions
+    //dp[0][k]=0 maximum profit with with the first 0 elements at most k transactions
+    for (let kk = 1; kk <=k; kk++) {
+        let startsecond=dp[kk-1][0]-A[0] //heres the value i need to maximize
+        for (let i = 1; i <=n; i++) {
+            startsecond=Math.max(startsecond,dp[kk-1][i-1]-A[i-1]) //so i do it incrementally as on each i iteration I only need to consider
+            // dp[i-1][kk-1]-A[i-1]
+
+            dp[kk][i]=Math.max(dp[kk][i-1],A[i-1]+startsecond)
+        }        
+    }
+    dp.forEach(d=>console.log(d+''))
+    return dp[k][n]
+};
+console.log(
+    maxProfit([3,3,5,0,0,3,1,4]        )
+)
+// Usual space optimization of dp => 2 row dp
+// O(k*n) time O(n) space
+var maxProfit = function(A) {
+    let n=A.length,k=2
+    let previous=[...Array(n+1)].map(q=>0)
+    let next=[...Array(n+1)].map(q=>0)
+
+    for (let kk = 1; kk <=k; kk++) {
+        let startsecond=previous[0]-A[0] //heres the value i need to maximize
+        for (let i = 1; i <=n; i++) {
+            startsecond=Math.max(startsecond,previous[i-1]-A[i-1]) 
+            next[i]=Math.max(next[i-1],A[i-1]+startsecond)
+        }      
+        previous=[...next]  
+
+    }
+    return next[n]
+};
+// Notice how they re fucking calculated omfg... 
+// Consider dp[k][i]. In order for it to be calculated it essentially needs just its PREVIOUS COLUMNS... so since i want dp[k][n] I just need dp[k-1][n] which needs dp[k-2][n] .... and so on
+
+//O(kn) time O(k) space (constant?)
+var maxProfit = function(A) {
+    let n=A.length,k=2
+    let dp=[...Array(k+1)].map(q=>0)
+    let min= [...Array(k+1)].map(q=>A[0])
+    for (let i = 1; i <n; i++) {
+        for (let kk = 1; kk <=k; kk++) {
+            min[kk] = Math.min(min[kk], A[i] - dp[kk-1]);
+            dp[kk] = Math.max(dp[kk], A[i] - min[kk]);
+        }
+    }      
+    return dp[k]
 };
 console.log(
     maxProfit([3,3,5,0,0,3,1,4]        )

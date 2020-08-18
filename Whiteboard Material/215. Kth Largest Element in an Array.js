@@ -238,7 +238,7 @@ var findKthLargest = function(arr, k) {
             A.sort((a,b)=>a-b)
             return A[k]
         }
-
+ 
         let subsets=[]
         let group=[]
         for (var i = 0; i < A.length; i++) {
