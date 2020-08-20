@@ -43,6 +43,7 @@ console.log(maxProfit(
     ))
 
 
+//is it the fsm?
 var maxProfit = function(prices) {
     let n = prices.length;
     let dpi0 = -Infinity, dpi1 = 0, dpi2 = 0;
@@ -61,4 +62,58 @@ var maxProfit = function(prices) {
   // s1: maximum profit if the last day i bought 
   // s3: maximum profit if the last day i sold
 
-  // s0=Max(s0,)
+  var maxProfit = function(A) {
+    let n = A.length;
+    let r = 0, b = -A[0], s = 0;
+    let rr,bb,ss
+    for (let i = 1; i < n; i++) {
+        rr=Math.max(r,s) //i can come to rest either by resting the last day or by selling the last day
+        ss=b+A[i]// i can sell only if i bought
+        bb=Math.max(b,r-A[i]) // i can come to bought only if i bought or rested (after i bought)
+        //advance the machine
+        r=rr
+        b=bb
+        s=ss
+    }
+    
+    return Math.max(r,s);
+  };
+
+
+
+
+let helper=(x,k)=>{
+    if(x<10)return true
+    let start=x%10
+    x=(x/10)>>0
+    while(true){
+        if(x==0)return Math.abs(x-start)==k
+        let z=x%10
+        if(Math.abs(start-z)!==k)return false
+        start=z
+        x=(x/10)>>0
+    }
+}
+
+var numsSameConsecDiff = function(N, K) {
+    let resut=[]
+    for (let i = 10**(N-1); i < 10**N-1; i++) {
+        if(helper(i,k))
+            resut.push(i)
+    }
+    return resut
+};
+var numsSameConsecDiff = function(N, K) {
+    let q=[0,1,2,3,4,5,6,7,8,9]
+    for (let i = 0; i < N; i++) {
+        let temp=[]
+        for (let j = 0; j < q.length; j++) {
+            let ele=q[j],last=ele%10
+            if(last+K<10)temp.push(ele*10+last+K)      
+            if(last-K>=0)temp.push(ele*10+last-K)      
+        }
+        q=temp
+    }
+    return q
+};
+
