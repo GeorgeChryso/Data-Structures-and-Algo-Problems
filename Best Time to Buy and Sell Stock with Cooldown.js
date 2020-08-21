@@ -11,51 +11,63 @@
 // Explanation: transactions = [buy, sell, cooldown, buy, sell]
 
 
-// one of the problems which needs 2 dp tables instead of one. 
-// 
+
+
+//it can actually be solved by dp in O(n**2)
 var maxProfit = function(A) {
     let n = A.length;
     if(n<=1)return 0
     //dp[i]= Max profit till day i (i can sell on this day)
-    //dp[i]=Max( dp[i-2](cd),dp[i-1](do nothing),Max(dp[i-k]+A[i]-A[k]))
-    let dp=[...Array(n+1)].map(d=>0)
+    //dp[i]=Max( dp[i-1](do nothing),Max(dp[j-2]+A[i]-A[j]) (sell a stock that u bought on a previous day in order to a chieve maximum profit)),j=0,...i-1
+    //so the thing is that dp[i]  can only refer to a cd day or a sell day
+    //because max profit cannot be achieved if i buy on day i
+    //dp[j-2] because a buy move of the item A[j] can only be achieved after 2 days of my max profit on day j
+
+    // but why can I only buy an item A[j] on a day dp[j-2]?
+    // as we ve said, u cant achieve dp[j] with a buy move that's why dp[j] is crossed out
+    // what if dp[j-1] was achieved with a sell move? then dp[j] would have to refer to a cd day and not sell day
+    // so it has to be dp[j-2]
+
+    //How come im not considering something like dp[j-4]-A[j]? because dp[j-2] already holds the maximum profit 
+    // out of the previous dp[..] values, so u dont need to consider anything prior to dp[j-2]
+    let dp=[...Array(n)].map(d=>0)
     dp[2]=Math.max(0,A[1]-A[0])
-    for (let i = 3; i <= n; i++) {
-        let toadd=-Infinity
-        //cooldown
-        for (let end = -2; end < i-2; end++) {
-            let min=Infinity
-            for (let j = end+1; j < i-2; j++) {
-                min=Math.min(min,A[j+1])
-            }
-            toadd=Math.max(dp[end]||0-min,toadd)
+    for( i = 0; i < n; i++){
+        if(i == 0) dp[0] = 0;
+        else if(i == 1) dp[1] = Math.max(A[1] - A[0], 0);
+        else{
+            //dp[i]=dp[i-1] //cooldown
+
+            // linear scan to maximize my value
+            // essentially wanting to maximize dp[j-2]-A[j]
+            let val=-Infinity
+            for(let j = 0; j < i; j++)
+                val = Math.max(val, (dp[j-2]||0) - A[j]);
+            
+            dp[i]=Math.max(dp[i-1],A[i]+val)
         }
-        dp[i]=Math.max(dp[i-1]||0,A[i-1]+toadd)
     }
-    console.log(dp)
-    return dp[n];
+    return dp[n-1];
 };
 
-console.log(maxProfit(
-    [1,2,3,6,0,4,10]
-   //[1,2,4]
-    //[6,1,3,2,4,7]
-    ))
-
-
-//is it the fsm?
-var maxProfit = function(prices) {
-    let n = prices.length;
-    let dpi0 = -Infinity, dpi1 = 0, dpi2 = 0;
-    for (let i = 0; i < n; i++) {
-        let tmp = dpi0;
-        dpi0 = Math.max(dpi0, dpi2 - prices[i]);
-        dpi2 = dpi1;
-        dpi1 = Math.max(dpi1, tmp + prices[i]);
+//optimization: I dont actually need to recompute my dp[j-2]-A[j] each time. I can already store the maximum
+var maxProfit = function(A) {
+    let n = A.length;
+    if(n<=1)return 0
+    let maxVal=-Infinity
+    let dp=[...Array(n)].map(d=>0)
+    dp[2]=Math.max(0,A[1]-A[0])
+    for( i = 0; i < n; i++){
+        if(i < 2) maxVal = Math.max(maxVal, -A[i]); //NEW
+        if(i == 0) dp[0] = 0;
+        else if(i == 1) dp[1] = Math.max(A[1] - A[0], 0);
+        else{
+            dp[i]=Math.max(dp[i-1],A[i]+maxVal)   // THE ORDER OF THESE TWO MATTERS
+            maxVal=Math.max(maxVal,dp[i-2]-A[i]) //THE ORDER OF THESE TWO MATTERS
+        }
     }
-    
-    return dpi1;
-  };
+    return dp[n-1];
+};
 
   //finite state Machine
   // s0: maximum profit if the last day i did nothing
@@ -79,41 +91,4 @@ var maxProfit = function(prices) {
     return Math.max(r,s);
   };
 
-
-
-
-let helper=(x,k)=>{
-    if(x<10)return true
-    let start=x%10
-    x=(x/10)>>0
-    while(true){
-        if(x==0)return Math.abs(x-start)==k
-        let z=x%10
-        if(Math.abs(start-z)!==k)return false
-        start=z
-        x=(x/10)>>0
-    }
-}
-
-var numsSameConsecDiff = function(N, K) {
-    let resut=[]
-    for (let i = 10**(N-1); i < 10**N-1; i++) {
-        if(helper(i,k))
-            resut.push(i)
-    }
-    return resut
-};
-var numsSameConsecDiff = function(N, K) {
-    let q=[0,1,2,3,4,5,6,7,8,9]
-    for (let i = 0; i < N; i++) {
-        let temp=[]
-        for (let j = 0; j < q.length; j++) {
-            let ele=q[j],last=ele%10
-            if(last+K<10)temp.push(ele*10+last+K)      
-            if(last-K>=0)temp.push(ele*10+last-K)      
-        }
-        q=temp
-    }
-    return q
-};
 
