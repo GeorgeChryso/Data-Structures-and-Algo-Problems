@@ -92,3 +92,12 @@ var maxProfit = function(A) {
   };
 
 
+var sortArrayByParity = function(A) {
+    for (let i = 0,j=0; i < A.length; i++) {
+        if(!(A[i]%2)){
+            [A[j],A[i]]=[A[i],A[j]]
+            j++
+        }       
+    }
+    return A
+};
