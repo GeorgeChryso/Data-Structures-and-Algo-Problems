@@ -35,7 +35,7 @@ var numWays=(Arr)=>{
     //basecase 
     dp[0][0]=1
     for (let i = 1; i <= Arr.length; i++) {
-        for (let k =maxSum; k>=0; k--) {
+        for (let k =maxSum; k>=0; k--) {//this doesnt really need to start from the end. but ok
             if(k>=Arr[i-1])dp[i][k]+=dp[i-1][k-Arr[i-1]]
             dp[i][k]+=dp[i-1][k]            
         }        
@@ -51,7 +51,7 @@ var numWays=(Arr)=>{
     //basecase 
     dp[0]=1
     for (let i = 1; i <= Arr.length; i++) {
-        for (let k =maxSum; k>=0; k--) {
+        for (let k =maxSum; k>=0; k--) { //this starts from the end in order to correctly consider the previous line
             if(k>=Arr[i-1])dp[k]+=dp[k-Arr[i-1]]
         }        
     }
@@ -59,16 +59,90 @@ var numWays=(Arr)=>{
 }
 console.log(numWays([1,2,5,3,4,5]))
 
-let howMany=J=>{
+
+// ATTENTION
+// $$$$$$ DP[i][S-A[i]] $$$$$ means: the number of ways to construct S by always choosing A[i] and some other elements before that. DP[i][S] means: the number of ways to construct S by choosing or NOT choosing A[i].  
+ 
+
+// THAT MEANS:
+// Dp[i][S-A[i]] can give me JUST the subsets that add up to S, but they ALSO include A[i]
+// #MENACING
+
+// This will help me with the problem of repeated combinations: 
+// Example: A=[ 1, 2 ,3 ,4 ,5 ]
+
+//dp[2][5]=1 because i can reach five with {2,3}
+//dp[3][5]=2 because i can reach five with {2,3} and {1,4}
+
+//Notice that in both cases {2,3} is repeated?
+
+//to remedy that, I can use DP[i][S-A[i]] instead, to always include the last element in my selection,meaning:
+// dp[2][5-3]=dp[2][2]=1 I can get sum=2 by taking  {2}, but that means that i can reach sum five by 1 combination,. {2,3} (always including the last element  3)
+// whereas
+// dp[3][5-4]=dp[3][1]=1 I can get sum=1 by taking the first element{1},that means though that i can reach sum five by 1 combination, {1,4} =>always getting the last element 4
+
+//See, by doing that, no combination is repeated. Both {2,3} and {1,4} were taken only once, as they should have.
+
+//BUT WHYYY?
+// Because dp[i][S-A[i]] does not count any previous combination of any dp[k][S], as in, S is not even reachable with the items dp[i][S-A[i]] considers.
+
+//boilerplate for combinations
+
+
+
+
+let howMany=A=>{
+    let n=A.length,MaxSum=A.reduce((acc,curr)=>acc+curr),
+
+    //boilerplate for combinations
+    combmemo=[...Array(n+1)].map(d=>[...Array(n+1)]) //combinations n choose k 
+    var combinations=(n,k)=>{
+        //base cases
+        if(n===k||k===0)return 1
+        if(combmemo[n][k]!==undefined)return combmemo[n][k]
+        combmemo[n][k]=combinations(n-1,k-1)+combinations(n-1,k)//known formula
+        return combmemo[n][k]
+    }
+
+    A=A.sort((a,b)=>a-b)//we want to find a split point on the sorted list to satisfy Policy 1
+
+    //I will create 2 matrices
+    // WaysBelow is an n x Sum(..A[i]) matrix
+    // where WaysBelow[s][i]= the number of ways to reach sum s using(some of)the first i elements
+    // WaysAbove isa  nx Sum(..A[i])matrix 
+    // where WaysAbove[s][i]= the number of ways to reach sum s using(some of)the last i items
+
+
+    //then
     let result=0
-    J=J.sort((a,b)=>a-b)//we want to find a split point on the sorted list to satisfy Policy 1
 
+    //for every cut point
+    for (let i = 0; i <n; ) {
 
-    return result
+        let count=1 //count of consecutive A[i] s (duplicates)
+        while(i+count<n&&A[i+count]==A[i]){
+            count++
+        }        
+        
+        //how many A[i]'s am I (BOB)gonna use?
+        // so essentially i m making the cut 
+        for (let j = i; j < i+count; j++) {
+            let startSum=A[i]*(j-i+1)// I m using at least (j-i+1) A[i]'s
+            // so i m gonna update the sums from this point onwards
+            for (let sum = startSum; sum <=MaxSum; sum++) 
+                result+=combinations(count,j-i+1) * WaysBelow[sum-A[i]*(j-i+1)][i]* WaysAbove[sum][n-1-j]
+            
+        }
+
+        //noticethat i m incrementing my i by the count
+        i+=count
+    }
+
+    return result  
 }
+//https://stackoverflow.com/questions/48059479/need-help-understanding-the-solution-for-the-jewelry-topcoder-solution/48061551#48061551
 
-
-
+// What I cannot understand: Why do duplicates mess up the result?
 
 
 

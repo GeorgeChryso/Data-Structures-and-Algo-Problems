@@ -1,1 +1,3 @@
-result
+
+    return result+max
+};
