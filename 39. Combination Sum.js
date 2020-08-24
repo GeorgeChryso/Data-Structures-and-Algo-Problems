@@ -114,7 +114,7 @@
 //   };
 
 
-
+// No duplicates=>but repetion is allowed=> unbounded knapsack
 function combinationSum(candidates, target) {
     let dp=[...Array(candidates.length+1)].map(d=>[...Array(target+1)].map(d=>0))
     // dp[sum][i]= #ways to reach sum with the first i items
@@ -124,7 +124,8 @@ function combinationSum(candidates, target) {
         let ele=candidates[i-1]
         for (let s = 0; s <=target; s++) {
           if(ele<=s){
-            dp[i][s]+=dp[i][s-ele]
+            dp[i][s]+=dp[i][s-ele] //this line allows repetition,
+            // if it was +=dp[i-1][s-ele], it would mean that i m only picking an element once
           }
           dp[i][s]+=dp[i-1][s]
           
@@ -153,6 +154,6 @@ function combinationSum(candidates, target) {
 
 
 console.log(combinationSum(
-  [2,3,5], 8,
+  [2,3,4,5], 8,
     //[1],2
 ))
