@@ -107,9 +107,9 @@ let howMany=A=>{
     A=A.sort((a,b)=>a-b)//we want to find a split point on the sorted list to satisfy Policy 1
 
     //I will create 2 matrices
-    // WaysBelow is an n x Sum(..A[i]) matrix
+    // WaysBelow is an n x Sum(MaxSum) matrix
     // where WaysBelow[s][i]= the number of ways to reach sum s using(some of)the first i elements
-    // WaysAbove isa  nx Sum(..A[i])matrix 
+    // WaysAbove isa  nx Sum(MaxSum)matrix 
     // where WaysAbove[s][i]= the number of ways to reach sum s using(some of)the last i items
 
 
@@ -130,7 +130,7 @@ let howMany=A=>{
             let startSum=A[i]*(j-i+1)// I m using at least (j-i+1) A[i]'s
             // so i m gonna update the sums from this point onwards
             for (let sum = startSum; sum <=MaxSum; sum++) 
-                result+=combinations(count,j-i+1) * WaysBelow[sum-A[i]*(j-i+1)][i]* WaysAbove[sum][n-1-j]
+                result+=combinations(count,j-i+1) * WaysBelow[sum-A[i]*(j-i+1)][i]* WaysAbove[sum][n-i-j]
             
         }
 
