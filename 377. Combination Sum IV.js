@@ -78,12 +78,10 @@ function combinationSum4(candidates, target) {
 
     for (let s = 1; s <=target; s++) {
         for (let i = 0; i < candidates.length; i++) {
-            if(candidates[i]<=s){
+            if(candidates[i]<=s)
                 dp[s]+=dp[s-candidates[i]]
-            }
         }      
     }
-    //reconstruction ezpz only through dp table
     return dp[target]
 };
 
