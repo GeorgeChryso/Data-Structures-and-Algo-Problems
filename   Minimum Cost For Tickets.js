@@ -27,20 +27,17 @@ var mincostTickets = function(days, costs) {
     let n=days.length
     let dp=[...Array(days[n-1]+1)].map(d=>Infinity)
     dp[0]=0//already at day 0
-
     for (let i = 1; i<dp.length; i++) {
         for (let j = 0; j < costs.length; j++) {
             //if it's a day when I have to travel, u need to cover it
             if(memo.has(i))
-        //========================THIS LINE IS MAGIC===========================
+        //========================THIS LINE IS MAGIC===========================\\
                 dp[i]=Math.min(dp[i],(dp[i-traveldays[j]]||0)+costs[j]) //this line means:
                 // Pick any of the 3 costs even at day 1, even if i-traveldays[j]<0 I still have 
                 // the option to buy ticket for 7 or 30 days, That's the logic here
             else //else if it's a day when I dont have to travel, just take the already minimum cost to travel to my required days I that precede this 
                 dp[i]=dp[i-1]    
         }
-        console.log(dp+'')
-
     }
     return dp[dp.length-1]
 };

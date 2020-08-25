@@ -64,14 +64,12 @@ function combinationSum4(candidates, target) {
    
 };
 
-
-
 //there is a simpler dp solution
+// WORKS LIKE MAGIC: But can u come up with it during an interview? Why not?
 // draw the recursion tree to understand it better
 // dp[sum][i]= #ways to reach sum with the first i items
 // dp[0]=1
-// dp[sum-A[i-1]][i]+dp[sum-A[i-2]][i]+...+dp[0][A[0]], dp[A[i]]<=sum
-
+// dp[sum]=dp[sum-A[i-1]][i]+dp[sum-A[i-2]][i]+...+dp[0][A[0]], dp[A[i]]<=sum
 
 function combinationSum4(candidates, target) {
     let dp=[...Array(target+1)].map(d=>0)
@@ -84,11 +82,10 @@ function combinationSum4(candidates, target) {
                 dp[s]+=dp[s-candidates[i]]
             }
         }      
-        console.log(dp)
     }
     //reconstruction ezpz only through dp table
     return dp[target]
 };
 
 
-console.log(combinationSum4([1,5],200))
+console.log(combinationSum4([1,2,3],4))
