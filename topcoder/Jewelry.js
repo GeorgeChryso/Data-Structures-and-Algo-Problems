@@ -91,21 +91,12 @@ var numWaysShort=(Arr)=>{
 
 
 
-let howMany=A=>{
+var howMany=A=>{
     let n=A.length,MaxSum=A.reduce((acc,curr)=>acc+curr),
 
     //boilerplate for combinations
     combmemo=[...Array(n+1)].map(d=>[...Array(n+1)]) //combinations n choose k 
-    for (let i = 1; i <=n; i++) {
-        combmemo[i][0]=1 //combinations n take 0 is 1 
-        combmemo[i][i]=1 //combinations n take n is  1 
-    }
-    for (let i = 1; i <=n; i++) {
-        for (let k = 1; k <i; k++) {
-            combmemo[i][k]=combmemo[i-1][k-1]+combmemo[i-1][k]            
-        }        
-    }
- 
+
     var combinations=(n,k)=>{
         //base cases
         if(n===k||k===0)return 1
@@ -119,7 +110,7 @@ let howMany=A=>{
 
     //          I will create 2 matrices
 
-    
+
     // WaysBelow is an n x Sum(MaxSum) matrix
     let WaysBelow=numWays(A)
     // where WaysBelow[i][s]= the number of ways to reach sum s using(some of)the first i elements
@@ -128,7 +119,7 @@ let howMany=A=>{
 
 
 
-    let B=[...A]
+    let B=[...A] // i reverse this because i m gonna be cutting 
     B.reverse()
     let WaysAbove=numWays(B)
     // where WaysAbove[i][s]= the number of ways to reach sum s using(some of)the last i items
@@ -150,7 +141,7 @@ let howMany=A=>{
             let startSum=A[i]*j // I m using  j  A[i]'s
             // so i m gonna update the sums from this point onwards
             for (let sum = startSum; sum <=MaxSum; sum++){
-                result+=combmemo[count][j] * WaysBelow[i][sum-(A[i]*j)] * WaysAbove[n-i-j][sum]
+                result+=combinations(count,j) * WaysBelow[i][sum-(A[i]*j)] * WaysAbove[n-i-j][sum]
             }
             //in how many ways can I Pick these A[i]'s //include the A[i] //# of ways onwards
         }
@@ -183,6 +174,43 @@ let howMany=A=>{
 // Let's say that Bob and Patrick want to both pick elements that add up to 2. 
 // Now that would have to be 
 // [{2},{2}] but with all the combinations of two's  possible. 
+
+
+
+
+
+
+
+
+
+//short no commenting
+var numWays=(Arr)=>{
+    let maxSum=Arr.reduce((acc,curr)=>acc+curr),dp=[...Array(Arr.length+1)].map(d=>[...Array(maxSum+1)].map(dd=>0))
+    dp[0][0]=1
+    for (let i = 1; i <= Arr.length; i++) 
+        for (let k =maxSum; k>=Arr[i-1]; k--) 
+            dp[i][k]=dp[i-1][k-Arr[i-1]]+dp[i-1][k] 
+    return dp 
+}
+var howMany=A=>{
+    let n=A.length,MaxSum=A.reduce((a,c)=>a+c),combmemo=[...Array(n+1)].map(d=>[...Array(n+1)]) 
+    var combinations=(n,k)=>{
+        if(n===k||k===0)return 1
+        if(combmemo[n][k]===undefined)
+            combmemo[n][k]=combinations(n-1,k-1)+combinations(n-1,k)
+        return combmemo[n][k]
+    }
+    A.sort((a,b)=>a-b)
+    let WaysBelow=numWays(A),B=[...A].reverse(),WaysAbove=numWays(B),result=0,count=1
+    for (let i = 0; i <n; i+=count ) {
+        count=1
+        while(i+count<n&&A[i+count]==A[i])count++
+        for (let j = 1; j <=count; j++) 
+            for (let sum = A[i]*j; sum <=MaxSum; sum++)
+                result+=combinations(count,j) * WaysBelow[i][sum-A[i]*j] * WaysAbove[n-i-j][sum]
+    }
+    return result  
+}
 
 
 let cases=[
