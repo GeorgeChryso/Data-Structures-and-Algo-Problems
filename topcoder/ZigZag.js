@@ -8,9 +8,57 @@
 
 
 
-
-let LZZS=A=>{
-
-
+// DP O(n**2)
+var LZZS=A=>{
     
+    let n=A.length,dp=[...Array(n)].map(d=>[1,1]),result=1
+
+    //dp[i]=[LOW,HI] 
+        // LOW=Longest ZZ that ends on i, with the previous item being Bigger than A[i]
+        // HI=Longest ZZ that ends on i, with the previous item being Smaller than A[i]
+
+    for (let i = 1; i <n; i++) {
+        for (let j = 0; j <i; j++) {
+            let [l,h]=dp[j], [k,m]=dp[i]
+            if(A[i]===A[j])
+                dp[i]=[Math.max(l,k),Math.max(h,m)]
+            else if (A[i]-A[j]>0)
+                dp[i]=[k,Math.max(m,l+1)]
+            else
+                dp[i]=[Math.max(k,1+h),m]
+            result=Math.max(result,dp[i][0],dp[i][1])
+        }        
+    }
+    return result
 }
+
+// O(n) greedy
+var LZZS=A=>{
+    let sig=d=>d==0?0:(d>0?1:-1)
+    let lastsig=0,result=1
+    for (let i = 1; i < A.length; i++) {
+        let sign=sig(A[i]-A[i-1])
+        if(sign==lastsig||sign==0)
+            continue
+        lastsig=sign
+        result++
+    }
+    return result
+}
+
+let tests=[
+    [ 1, 7, 4, 9, 2, 5],//6
+    [1, 17, 5, 10, 13, 15, 10, 5, 16, 8 ],//7
+    [44],//1
+    [ 1, 2, 3, 4, 5, 6, 7, 8, 9],//2
+    [70, 55, 13, 2, 99, 2, 80, 80, 80, 80, 100, 19, 7, 5, 5, 5, 1000, 32, 32],//8
+    [374, 40, 854, 203, 203, 156, 362, 279, 812, 955, 
+        600, 947, 978, 46, 100, 953, 670, 862, 568, 188, 
+        67, 669, 810, 704, 52, 861, 49, 640, 370, 908, 
+        477, 245, 413, 109, 659, 401, 483, 308, 609, 120, 
+        249, 22, 176, 279, 23, 22, 617, 462, 459, 244 ],//36
+]
+
+tests.forEach(
+    d=>console.log(LZZS(d))
+)
