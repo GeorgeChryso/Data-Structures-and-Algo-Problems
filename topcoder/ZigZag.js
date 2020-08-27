@@ -33,14 +33,24 @@ var LZZS=A=>{
 }
 
 // O(n) greedy
+// Essentially looking for the longest sequence of different signs
+// signs= -1 for negative difference A[i]-A[i-1] and 1 for positive
 var LZZS=A=>{
-    let sig=d=>d==0?0:(d>0?1:-1)
+    let signs=[...Array(A.length-1)]
+    for (let i = 1; i < A.length; i++) 
+        if(A[i]-A[i-1]==0)
+            signs[i-1]=0
+        else if(A[i]-A[i-1]>0)
+            signs[i-1]=1
+        else
+            signs[i-1]=-1
+    
+
     let lastsig=0,result=1
-    for (let i = 1; i < A.length; i++) {
-        let sign=sig(A[i]-A[i-1])
-        if(sign==lastsig||sign==0)
+    for (let i = 0; i < A.length-1; i++) {
+        if(signs[i]==lastsig||signs[i]==0)
             continue
-        lastsig=sign
+        lastsig=signs[i]
         result++
     }
     return result
