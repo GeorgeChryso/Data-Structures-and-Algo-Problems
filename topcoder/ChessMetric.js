@@ -29,8 +29,8 @@ let SuperKing=(N,start,finish,numMoves)=>{
     let [sx,sy]=start,[ex,ey]=finish
     let moves=[[-2,-1],[-2,1],[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-1],[0,1],[1,-2],[1,-1],[1,0],[1,2],[2,-1],[2,1]]
 
-    let dp1=[...Array(N)].map(d=>[...Array(N)].map(d=>0))
-    let dp2=[...Array(N)].map(d=>[...Array(N)].map(d=>0))
+    let dp1=[...Array(N)].map(d=>[...Array(N)].map(d=>0)) //prev
+    let dp2=[...Array(N)].map(d=>[...Array(N)].map(d=>0)) //next
 
     //basecase
     dp1[sx][sy]=1//already at this poosition
@@ -50,7 +50,7 @@ let SuperKing=(N,start,finish,numMoves)=>{
 
     return dp2[ex][ey]
 }
-
+//there is supposedly a better solution through "Convolution"? 
 
 let tests=[
     [3,[0,0],[1,0],1],//1
