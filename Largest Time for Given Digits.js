@@ -35,6 +35,27 @@ var largestTimeFromDigits = function(A) {
 
 };
 
+//faster less space
+var largestTimeFromDigits = function(A) {
+    let freq=[...Array(10)].map(d=>0)
+    for (let i = 0; i < A.length; i++)
+        freq[A[i]]++
+    
+    for (let i = 23; i >=0; i--)
+        for (let j =59; j>=0; j--) {
+            let arr=[...Array(10)].map(d=>0),
+                hours=(i>=10?'':'0')+i,mins=(j>=10?'':'0')+j
+            for (const el of hours) 
+                arr[Number(el)]++
+            for (const el of mins) 
+                arr[Number(el)]++
+            if(arr.every((d,i)=>d>=freq[i]))
+                return hours+':'+mins
+        }        
+    
+    return ''
+};
+
 console.log(largestTimeFromDigits(
 
 ))
