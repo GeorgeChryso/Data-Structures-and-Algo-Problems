@@ -45,8 +45,39 @@ var partitionLabels = function(S) {
     return result.map(([a,b])=>b-a+1)
 };
 
+
+// the sorting is reduntant, i can just refer to my own array
+// to iterate according to the relative order
+// O(n), O(1)
+var partitionLabels = function(S) {
+    let n=S.length,memo=[...Array(27)].map(d=>[]),result=[]
+    for (let i = 0; i <n; i++) {
+        let ele=S.charCodeAt(i)-97
+        if(memo[ele].length===2)
+            memo[ele][1]=i
+        else
+            memo[ele].push(i)    
+    }
+    memo=memo.map(d=>d.length==1?[d[0],d[0]]:d)
+    for (let i = 0; i <n; i++) {
+        let ele=S.charCodeAt(i)-97
+        if(result.length===0){
+            result.push(memo[ele])
+            continue
+        }
+        if(memo[ele].length==0)
+            continue
+        let [s,e]=memo[ele],[la,lb]=result[result.length-1]
+        if(s<=lb)
+            result[result.length-1][1]=Math.max(lb,e)
+        else
+            result.push([s,e])
+    }
+    return result.map(([a,b])=>b-a+1)
+};
+
 console.log(
     partitionLabels(
-        "ababcbacadefegdehijhklij"
-    )
+        "eccbbbbdec"
+            )
 )
