@@ -59,19 +59,15 @@ var partitionLabels = function(S) {
             memo[ele].push(i)    
     }
     memo=memo.map(d=>d.length==1?[d[0],d[0]]:d)
+    result.length=0
     for (let i = 0; i <n; i++) {
-        let ele=S.charCodeAt(i)-97
-        if(result.length===0){
-            result.push(memo[ele])
-            continue
-        }
+        let ele=S.charCodeAt(i)-97,[s,e]=memo[ele],[la,lb]=result[result.length-1]||[0,0]
         if(memo[ele].length==0)
-            continue
-        let [s,e]=memo[ele],[la,lb]=result[result.length-1]
-        if(s<=lb)
+            continue  
+        if(result.length===0||s>lb)
+            result.push(memo[ele])
+        else 
             result[result.length-1][1]=Math.max(lb,e)
-        else
-            result.push([s,e])
     }
     return result.map(([a,b])=>b-a+1)
 };
