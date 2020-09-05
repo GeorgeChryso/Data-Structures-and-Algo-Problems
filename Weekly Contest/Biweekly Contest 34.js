@@ -71,32 +71,33 @@ var findLengthOfShortestSubarray = function(arr) {
 };
 
 var countRoutes = function(loc, start, finish, fuel) {
-    let mod=1e9+7,result=0,n=loc.length
-    let dp=[...Array(n)].map(d=>[...Array(fuel+1)].map(d=>0))
+    let mod=1e9+7,n=loc.length
+        ,dp=[...Array(n)].map(d=>[...Array(fuel+1)].map(d=>0))
     //dp[i][k] number of ways to get to city i with available fuel k 
 
     //basecases
+    dp[start][0]=1
 
-    for (let cost = 0; cost <=fuel; cost++) {
+    //for every cost
+    for (let cost = 1; cost <=fuel; cost++) {
         // for every possible destination
         for (let i = 0; i < n; i++) {
-            if(start===i){
-                dp[i][cost]=1
-                continue
-            }
             let acc=0
             //for every inbetween location
             for (let j = 0; j <n; j++) {
                 if(i==j)
                     continue;
-                else{
-                    acc+=dp[j][cost-Math.abs(loc[j]-loc[i])]
-                }
+                if(cost>=Math.abs(loc[j]-loc[i]))    
+                    acc=(acc+dp[j][cost-Math.abs(loc[j]-loc[i])])%mod
             }    
-            dp[i][cost]=acc        
+            dp[i][cost]+=acc
         }        
     }
-    return dp[finish][fuel]%mod
+    let result=0
+    for (let cost = 0; cost<=fuel; cost++) {
+        result=(result+dp[finish][cost])%mod
+    }
+    return result%mod
 };
 console.log(numWays(
     "100100010100110"
