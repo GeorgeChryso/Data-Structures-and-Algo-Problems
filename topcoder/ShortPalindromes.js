@@ -74,33 +74,42 @@ var minInsertions = function(s) {
     minIns = n - lps[0][n - 1]; //resulting in bounded amount of insertions
 
     // essentially i need to reconstruct all the possible solutions and then sort them to find the lexico smaller, KEEP IN MIND THAT MY RESULT has to have n+minIns letters and no more
-    let results = [];
-
+    let result=Array(n+minIns).fill('Z').join('') //highest lexico, i want smallest of length n+minIns
     let reconstruct1 = (i, j, word) => {
-        if (j < i){
+        if (i<0||j<0||i>=n||j>=n){
             return
-        } 
-        else if (i == j) {
-            word =word.split('').reverse().join('')+s[i]+word;
-            results.push(word);
-        } 
-        else if (lps[i][j] == lps[i + 1][j] || lps[i][j] == lps[i][j - 1]) {
+        }
+
+        if(i>=j){
+             //took me 5 days to realise that i also need to place +s[i] here. Big mistake
+             let addition=(i==j)?s[i]:''
+             //if (i==j)the second half is created and s[i] is in the middle
+             //if (i>j) the second half is created 
+             let res=word.split('').reverse().join('')+addition+word 
+             if(res.length==minIns+n&&res<result)
+                result=res
+         }
+         else if (i < j) {
+            //notice that all of these are possible even at the same iteration
             if (lps[i][j] == lps[i + 1][j]) 
                 reconstruct1(i + 1, j, s[i] + word);
             if (lps[i][j] == lps[i][j-1]) 
                 reconstruct1(i, j - 1, s[j] + word);
+            if(lps[i][j] == lps[i + 1][j-1]+2&&s[j]==s[i])  
+                reconstruct1(i + 1, j - 1, s[j] + word);
         } 
-        else {
-            reconstruct1(i + 1, j - 1, s[j] + word);
-        }
+
     };
     reconstruct1(0, n - 1, '');
-    results = results.filter(d => d.length == (minIns +n));
-    results.sort();
 
-    return results[0];
+    return result
 };
 
-console.log(minInsertions('ALRCAGOEUAOEURGCOEUOOIGFA'));
+console.log(minInsertions(
+    //'RACE'
+    //'ALRCAGOEUAOEURGCOEUOOIGFA'
+    //'TOPCODER'
+    //'GOOGLE'
+    ));
 // ALRCAFGIOOEUAEOCEGRURGECOEAUEOOIGFACRLA
 // AFLRCAGIOEOUAEOCEGRURGECOEAUOEOIGACRLFA
