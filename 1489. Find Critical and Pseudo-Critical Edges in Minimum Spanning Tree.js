@@ -99,18 +99,20 @@ class UnionFind {
     sizeOfGroup=(A)=>this.groupSize[this.find(A)]
 
 }
-let kruskals=(n,e,wannaleaveout=-1,wannabeparent=-1)=>{
+//modified kruskal's that accepts an index that may be removed/ considered
+// for the mst to be calculated
+let kruskals=(n,e,wannaleaveout=-1,wannainclude=-1)=>{
     let nonC,critical,UF=new UnionFind(n),result=0
     //so essentially i place my wannabe first
     // so it gets picked by Kruskal's algo
     //for non criticals
     let edges=[...e]
-    if(wannabeparent!=-1)
-        nonC=[...edges[wannabeparent]]
+    if(wannainclude!=-1)
+        nonC=[...edges[wannainclude]]
     if(wannaleaveout!=-1)
         critical=[...edges[wannaleaveout]]
     edges.sort((a,b)=>{
-        if(wannabeparent!=-1){
+        if(wannainclude!=-1){
             if(a.every((d,i)=>d==nonC[i]))return -1
             if(b.every((d,i)=>d==nonC[i]))return 1
         }
