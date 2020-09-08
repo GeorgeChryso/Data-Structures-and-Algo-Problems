@@ -66,50 +66,68 @@ var minInsertions = function(s) {
 
     lps[0][n - 1]; //is the longest palindromic subsequence's length
 
+    //representation
+    console.log('  '+s.split('').join(','))
+    lps.forEach((d,i)=>console.log(s[i]+' '+d+''))
     // so, what i can simply do, is insert the elements that dont belong to the LPS to symmetric indexes
     // for example abbda
     // lps=abba
     // insert d to its symmetric
     // a d b b d a
     minIns = n - lps[0][n - 1]; //resulting in bounded amount of insertions
+    console.log(n+minIns)
+    
+    // Ok, so consider your result ''
+    // if lps[i][j]==lps[i+1][j-1]+2 and s[i]==s[j]='K' then your result becomes K...K 
+    // else if lps[i][j]==lps[i][j-1] then the result becomes K+lps[i][j-1]+(K)<=my insertion
+    // else if lps[i][j]==lps[i+1][j] then the result becomes (K)+lps[i+1][j]+K
 
-    // essentially i need to reconstruct all the possible solutions and then sort them to find the lexico smaller, KEEP IN MIND THAT MY RESULT has to have n+minIns letters and no more
-    let result=Array(n+minIns).fill('Z').join('') //highest lexico, i want smallest of length n+minIns
+
+    //SOSOSOSOSOSOSOOSOSO <========== !!!!!!
+    //this one just follows one path for the reconstruction
+    // and the path is prioritising s[i]===s[j] over everything
+    // and then choosing the lexicographically smaller among s[i], s[j] 
+
+    // Essentially I m creating the left half and then concatenating it with its reverse
+    // to produce the final outcome in O(n) time, cos I m always making the choice 
+    // to add the lexicographically smaller letter earlier that needs the minimum amount of insertions to be a palindrome
     let reconstruct1 = (i, j, word) => {
-        if (i<0||j<0||i>=n||j>=n){
-            return
-        }
+        if (i<0||j<0||i>=n||j>=n)return
 
         if(i>=j){
              //took me 5 days to realise that i also need to place +s[i] here. Big mistake
              let addition=(i==j)?s[i]:''
              //if (i==j)the second half is created and s[i] is in the middle
              //if (i>j) the second half is created 
-             let res=word.split('').reverse().join('')+addition+word 
-             if(res.length==minIns+n&&res<result)
-                result=res
+              return word+addition+word.split('').reverse().join('') 
          }
          else if (i < j) {
-            //notice that all of these are possible even at the same iteration
-            if (lps[i][j] == lps[i + 1][j]) 
-                reconstruct1(i + 1, j, s[i] + word);
-            if (lps[i][j] == lps[i][j-1]) 
-                reconstruct1(i, j - 1, s[j] + word);
-            if(lps[i][j] == lps[i + 1][j-1]+2&&s[j]==s[i])  
-                reconstruct1(i + 1, j - 1, s[j] + word);
+            if(lps[i][j] == lps[i + 1][j-1]+2&&s[j]==s[i]) //always choose this if poss
+                return reconstruct1(i + 1, j - 1,  word+ s[j]);
+            else{
+                // CHOOSE THE LEXICOGRAPHICALLY SMALLER FIRST
+                if(lps[i+1][j] == lps[i][j-1]){
+                    if(s[i]<s[j])
+                        return  reconstruct1(i + 1, j,  word+s[i]);
+                    else 
+                        return  reconstruct1(i, j - 1, word+ s[j]);
+                }
+                else if (lps[i][j] == lps[i + 1][j]) 
+                    return  reconstruct1(i + 1, j,  word+s[i]);
+                else if (lps[i][j] == lps[i][j-1]) 
+                    return  reconstruct1(i, j - 1, word+ s[j]);
+            }
         } 
 
     };
-    reconstruct1(0, n - 1, '');
-
-    return result
+    //reconstruction now happens in O(n)
+    return reconstruct1(0, n - 1, '');
 };
 
 console.log(minInsertions(
     //'RACE'
     //'ALRCAGOEUAOEURGCOEUOOIGFA'
-    //'TOPCODER'
-    //'GOOGLE'
+    'TOPCODER'
+    //'MADAMIMADAM'
     ));
-// ALRCAFGIOOEUAEOCEGRURGECOEAUEOOIGFACRLA
 // AFLRCAGIOEOUAEOCEGRURGECOEAUOEOIGACRLFA
