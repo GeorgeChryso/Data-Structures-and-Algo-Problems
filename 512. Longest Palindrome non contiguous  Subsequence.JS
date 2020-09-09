@@ -72,19 +72,18 @@ var longestPalindromeSubseq=str=>{
     let n=str.length,result=1,
         dp=[...Array(n)].map(d=>[...Array(n)].map(q=>0))
 
-    for (let i = 0; i < dp.length; i++) dp[i][i]=1 //1 element 
+    for (let i = 0; i < dp.length; i++) dp[i][i]=1 //1 element
 
     for (let r = 1; r <n; r++) { //r is the length of the window
         for (let i=0; i <n-r; i++) { // [i,...j]
             let j=i+r
-            if(str[i]===str[j]) 
+            if(str[i]===str[j])
                 dp[i][j]=dp[i+1][j-1]+2
             else
                 dp[i][j]=Math.max(dp[i+1][j],dp[i][j-1])
-            result=Math.max(result,dp[i][j])
         }                 
     }
-    return result
+    return dp[0][n-1]
 }
 //the O(n) space optimization applies to this dp problem aswell
 

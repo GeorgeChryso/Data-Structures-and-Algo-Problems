@@ -90,14 +90,3 @@ var maxProfit = function(A) {
     
     return Math.max(r,s);
   };
-
-
-var sortArrayByParity = function(A) {
-    for (let i = 0,j=0; i < A.length; i++) {
-        if(!(A[i]%2)){
-            [A[j],A[i]]=[A[i],A[j]]
-            j++
-        }       
-    }
-    return A
-};

@@ -33,7 +33,7 @@ const kSum = function (A, k, target) {
 
 console.log(
     kSum(
-        //[1,2,3,4],2,5
+        [1,2,3,4],2,5
         //[1,2,3,4,5],3,6
     )
 )
