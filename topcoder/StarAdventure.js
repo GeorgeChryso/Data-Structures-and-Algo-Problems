@@ -97,6 +97,10 @@ var stars=(A)=>{
     return result
 }
 
+
+//ok so this is the firest dp Problem, whose solution is 3D while the input is 2d. 
+
+
 //Here's the mistake. In order to get the best sum, my paths must not intersect.
 // If they intersect,that means I'm revisiting a cell which now has value 0. 
 
@@ -137,15 +141,21 @@ let twoPaths=A=>{
                 )+  
                     A[y1][x1]
                  +
+                    //if (x1==x2) then we re talkin about the same cell
+                    // so it should only be added once to the result 
                     (( x1==x2||x1+y1<x2)?0:A[x1+y1-x2][x2] )
 
-               // console.log(x1,x2,')',y1,x1+x2-y1,')','=>',max[x1][x2][y1])
                    
             }            
         }        
     }
     return max[m-1][m-1][n-1]
 }
+
+// a similar problem would be the following from GEEKS4GEEKS
+// Collect maximum points in a grid using two traversals
+// with a minor tweak. 
+
 
 [   
     
@@ -211,17 +221,11 @@ var stars=(A)=>{
                     x2>=1&&y1>=1?max[x1][x2-1][x3][y1-1]:0,
                     x2>=1&&y1>=1&&x3>=1?max[x1][x2-1][x3-1][y1-1]:0
                 )+  
-                    //A[x1][y1]
                     A[y1][x1]
                  +
-                    //(( x1==x2||x1+y1<x2)?0:A[x2][x1+y1-x2] )
                     (( x1==x2||x1+y1<x2)?0:A[x1+y1-x2][x2] )
                  +
-                    //((x1==x3||x2==x3||x1+y1<x3)?0:A[x3][x1+y1-x3])
                     ((x1==x3||x2==x3||x1+y1<x3)?0:A[x1+y1-x3][x3])
-
-
-               // console.log(x1,x2,')',y1,x1+x2-y1,')','=>',max[x1][x2][y1])
                 } 
             }            
         }        
