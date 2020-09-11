@@ -12,11 +12,11 @@
 // Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
 
 
-//prefix product, reduced to O(n) for the best case, similar to Kadane's for Product. 
+//prefix product, reduced to O(n) for the best case, similar to Kadane's but for Product. 
 var maxProduct = function(nums) {
     let minpos=Infinity,maxneg=-Infinity,curr=0,result=-Infinity
     for (let i = 0; i < nums.length; i++) {
-        if(nums[i]==0)
+        if(nums[i]==0) //reset them all
             minpos=Infinity,maxneg=-Infinity,curr=0
         else if(curr==0)
             curr=nums[i]
