@@ -31,13 +31,9 @@ var getHint = function(secret, guess) {
             C++
             freq[guess[i]]--
         }        
-     
     }
     for (let i = 0; i < guess.length; i++) {
-        if(guess[i]==secret[i]){
-
-        }        
-        else if(freq[guess[i]]>0){
+        if(freq[guess[i]]>0){
             B++
             freq[guess[i]]--
         }
