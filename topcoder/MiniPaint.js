@@ -188,7 +188,6 @@ let testcases=[
 ]
 let r=0
 testcases.forEach(([t,k],i)=>{
-    if(i>0)return
     let res=minipaint(t,k)
     if(res==results[i])
         console.log(res,'\t==\t', results[i], '\tMCCOOL')||r++

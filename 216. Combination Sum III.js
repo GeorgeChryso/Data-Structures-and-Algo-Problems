@@ -13,8 +13,30 @@
 // Input: k = 3, n = 9
 // Output: [[1,2,6], [1,3,5], [2,3,4]]
 
+// we also have a 2**n solution where we generate each subset and then we filter the length 3 which add up to target
+var combinationSum3=(k, target)=> {
+  let n=2**9-1, result=[]
+  for (let i = 0; i <= n; i++) {
+    let r=[],sum=0
+    for (let j = 0; j < 9; j++) 
+      if(((1<<j)&i)!==0){
+        sum+=(j+1)
+        r.push(j+1)
+      }
+        
+    if(sum==target&&r.length==k)
+      result.push(r)
+  }
+  return result
+};
+
+console.log(combinationSum3(
+  9,
+45
+))
+
 //typical knapsack no duplicates with fixed choices
-let combinationSum3=(k, target)=> {
+var combinationSum3=(k, target)=> {
     let candidates=[1,2,3,4,5,6,7,8,9]
 
     let dp=[...Array(candidates.length+1)].map(d=>[...Array(target+1)].map(d=>0))
