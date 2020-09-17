@@ -12,43 +12,48 @@
 
 // Explanation: The maximum result is 5 ^ 25 = 28.
 
-console.log(
-3^10 , 3^5, 10^5, 10^25
-    )
-var findMaximumXOR = function(A) {
-    let z=[A[0],0]
-    
-    A.forEach(d => {
-        console.log(z,d,z[0],d^z[0])
 
-    if ( (d^z[0])<Math.max(d,z[0])){z[0]=Math.max(d,z[0])}
-    else{z[0]=Math.min(d,z[0]) }
-     
-     console.log(z,d,z[0],d^z[0],'\n')
-    })
-    
-return z
-};
+
+// So,what I'm gonna do instead, is incrementally build up the result, from the leftmost bit
+// For each possible prefix, I can check whether it is obtainable in Linear Time
+// Similar to checking if a Sum of two elements is available in linear time with memoizing the difference
+// and then going over one more time for each element to check if ITS difference with the result exists on my memo.
+
+// Similarly A^B=C <=> A=C^B
 var findMaximumXOR = function(nums) {
-    var max = 0;
+    var result = 0;
     var mask = 0;
     
-    for (let i = 31; i >= 0; i--) {
-        mask = mask | ( 1 << i);
-        const set = new Set();
-        for (let n of nums) {
-            set.add(n & mask);
-        }
-        let temp = max | (1 << i);
+    for (let i = 31; i >= 0; i--) {//for each bit from the end
+
+        //essentially 11...0000
+        mask = mask | ( 1 << i); //helps me get the leftmost bits of my eles
+
+
+        // create a set where u will store the prefixes
+        // of your elements up to this bit
+        const set = new Set(); 
+        for (let ele of nums) 
+            set.add(ele & mask);
+
+        //bestcase is the result SO FAR with this bit on
+        let bestcase = result | (1 << i); //aka the PREFIX which I need to determine whether It is possible
+
+
+        // Bestcase^prefix=PRE2
+        // Bestcase^prefix^prefix=PRE2^prefix
+        // Bestcase=PRE2^prefix
+        // which means that if i Already have PRE2,
+        // then Bestcase XOR is attainable,
         for (let prefix of set) {
-            if (set.has(temp ^ prefix)) {
-                max = temp;
+            if (set.has(bestcase ^ prefix)) {
+                result = bestcase;
                 break;
             }
         }
     }
     
-    return max;
+    return result; 
 };
 
 console.log(findMaximumXOR(
