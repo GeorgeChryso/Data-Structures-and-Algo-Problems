@@ -32,7 +32,7 @@
 // Because I can always just add B as an extra dominating subset, and create the partition 
 // ( partition of (A\B) , B ) which adds 1 extra domianting subset to the picture ( B) and therefore
 // increases the domatic number of A\B  by 1 ( 1 extra dominating subset (B) )
-let FactthemUp=A=>{
+var FactthemUp=A=>{
     let N=A.length,
         dominating=[...Array(1<<N)].map(d=>false)// subset with binary rep i is Dominating
     // N<15, so I  can traverse each possible subset to determine whether it is DOMINATING
@@ -71,23 +71,44 @@ let FactthemUp=A=>{
                 // A\B=A^B
             subsubset=(subsubset-1)&subset //generating the next subset of subset
         }
-        result=Math.max(dp[subset],result)
     }
 
     //easier to come up with, but takes considerably more time because I have to generate ALL the subsets of subset
     // for (let subset = 0; subset < (1<<N); subset++) {
     //     //Instead I could just geenerate all the subsets OF my subset
     //     for(subsubset=0;subsubset<=subset;subsubset++ )
-    //      // and ensure they re actually subsets if their union
-    //         // equals the original subset
-    //         if((subsubset|subset)==subset&&dominating[subsubset])// and take the similar formula for their diff
+    //      // and ensure they re actually subsets if their union  equals the original subset
+    //         if((subsubset|subset)==subset&&dominating[subsubset])
     //             dp[subset]=Math.max(dp[subsubset^subset]+1,dp[subset])
     //     result=Math.max(dp[subset],result)
     // }
-    return result
+    return dp[(1<<N)-1] //return the domatic number of the whole graph (1111..1)
 
 }
 
+// TLDR
+var FactthemUp=A=>{
+    let N=A.length,dominating=[...Array(1<<N)].map(d=>false),dp=[...Array(1<<N)].map(d=>0)
+    //find all dominating subsets
+    for (let subset = 0; subset <(1<<N); subset++) {
+        let covers=subset 
+        for (let i = 0; i < N; i++) 
+            for (let j = 0; j < N; j++) 
+                if((subset&(1<<i))&&A[i][j]=='Y')
+                    covers|=(1<<j)           
+        if(covers==((1<<N)-1)) 
+            dominating[subset]=true
+    }
+
+    //calculate the domatic number based on the subsets of every subset
+    for (let subset = 0; subset < (1<<N); subset++) 
+        for(subsubset=subset;subsubset>0;subsubset=(subsubset-1)&subset )
+            if(dominating[subsubset]) 
+                dp[subset]=Math.max(dp[subsubset^subset]+1,dp[subset])        
+
+    return dp[(1<<N)-1]
+
+}
 
 
 let results=[14,15,5,7,1,6,3,1,3,2]
