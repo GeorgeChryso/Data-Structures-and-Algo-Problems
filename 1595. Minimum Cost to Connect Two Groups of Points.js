@@ -52,10 +52,7 @@ var connectTwoGroups = function(cost) {
 };
 
 
-//top down dp Votrubac
-// Try each possible way to send out ONLY ONE EDGE from group one to group two
-// FILL THE REMAINING NON CONNECTED EDGES FROM GROUP TWO, WITH THE CHEAPEST EDGES POSSIBLE
-
+// dfs TLE, better
 var connectTwoGroups = function(cost) {
     let n=cost.length,m=cost[0].length
     //cheapest way to connect elements of group two to group one
@@ -64,13 +61,73 @@ var connectTwoGroups = function(cost) {
         for (let i = 0; i < n; i++)
             cheapSkate[j]=Math.min(cheapSkate[j],cost[i][j])            
 
+    let res=Infinity
+    // Here i try to connect every element of the first group
+    // But I do it naively, checking each possible combination
     let dfs=(i,mask,totcost)=>{
-
+        if(i==n){ //when the end is reached, any non connected nodes from group 2
+            // are connnected with the minimum edge to the first group
+            for (let i = 0; i < m; i++) {
+                if((mask&(1<<i))==0)
+                    totcost+=cheapSkate[i]
+            }
+            res=Math.min(res,totcost)
+            return
+        }
         for (let j = 0; j < m; j++) {
             let newm=mask|(1<<j)
             dfs(i+1,newm,totcost+cost[i][j])
         }
     }
     dfs(0,0,0)
-    return result
+    return res
 };
+
+
+// dfs memo top down dp
+// Try each possible way to send out ONLY ONE EDGE from group one to group two
+// FILL THE REMAINING NON CONNECTED EDGES FROM GROUP TWO, WITH THE CHEAPEST EDGES POSSIBLE
+
+
+var connectTwoGroups = function (cost) {
+    let n=cost.length,m=cost[0].length
+    //cheapest way to connect elements of group two to group one
+    let cheapSkate=[...Array(m)].fill(Infinity)
+    for (let j = 0; j < m; j++) 
+        for (let i = 0; i < n; i++)
+            cheapSkate[j]=Math.min(cheapSkate[j],cost[i][j])            
+
+    //the MINIMIMUM cost to connect the first i elements of the FIRST group with a mask m
+    //dp[i][m|(1<<j)]= Min(...dp[i-1][m]+cost[i][j]) for every j
+    let dp=[...Array(n)].map(d=>[...Array(2**m)].fill(-1))
+
+    let dfs=( i, mask)=> {
+        
+        if (i == n) {
+            let remaining=0
+            for (let j = 0; j < m; j++) 
+                if ((mask & (1 << j)) === 0) 
+                remaining += cheapSkate[j]
+            return remaining
+        } 
+
+        if (dp[i][mask] !== -1) 
+            return dp[i][mask]
+
+        let res = Infinity
+        for (let j = 0; j < m; j++) 
+            res = Math.min(
+                res,
+                cost[i][j] + dfs( i + 1, mask | (1 << j) )
+            )
+        
+        dp[i][mask] = res
+        return res
+    }
+    
+    return dfs( 0, 0 )
+  }
+
+  console.log(connectTwoGroups(
+    [[2,5,1],[3,4,7],[8,1,2],[6,2,4],[3,8,8]]
+  ))
