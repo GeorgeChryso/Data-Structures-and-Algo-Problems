@@ -84,11 +84,9 @@ var connectTwoGroups = function(cost) {
 };
 
 
-// dfs memo top down dp
+// dfs memo bottom up dp
 // Try each possible way to send out ONLY ONE EDGE from group one to group two
 // FILL THE REMAINING NON CONNECTED EDGES FROM GROUP TWO, WITH THE CHEAPEST EDGES POSSIBLE
-
-
 var connectTwoGroups = function (cost) {
     let n=cost.length,m=cost[0].length
     //cheapest way to connect elements of group two to group one
@@ -97,18 +95,18 @@ var connectTwoGroups = function (cost) {
         for (let i = 0; i < n; i++)
             cheapSkate[j]=Math.min(cheapSkate[j],cost[i][j])            
 
-    //the MINIMIMUM cost to connect the first i elements of the FIRST group with a mask m
-    //dp[i][m|(1<<j)]= Min(...dp[i-1][m]+cost[i][j]) for every j
+    //the MINIMIMUM cost to connect the remaining n-i elements of the FIRST group with a mask m
+    //dp[i][m]= Min(...dp[i+1][m|(1<<j)]+cost[i][j]) for every j
     let dp=[...Array(n)].map(d=>[...Array(2**m)].fill(-1))
 
-    let dfs=( i, mask)=> {
+    let dfs=( i, mask)=> { //dfs(i,j) is the MINIMUM cost to connect the REMAINING n-i elements of group 1, with a mask of already used elements from group 2 mask
         
-        if (i == n) {
-            let remaining=0
-            for (let j = 0; j < m; j++) 
+        if (i == n) { // all the items from the first group are connected. 
+            let remaining=0 //now u need to connect the non connected items from group 2
+            for (let j = 0; j < m; j++)  // which I will do so, with the minimum cost already computed
                 if ((mask & (1 << j)) === 0) 
                 remaining += cheapSkate[j]
-            return remaining
+            return remaining 
         } 
 
         if (dp[i][mask] !== -1) 
@@ -118,7 +116,7 @@ var connectTwoGroups = function (cost) {
         for (let j = 0; j < m; j++) 
             res = Math.min(
                 res,
-                cost[i][j] + dfs( i + 1, mask | (1 << j) )
+                cost[i][j] + dfs( i + 1, mask | (1 << j) )//connect i with j and take the minimum of the remaining elements
             )
         
         dp[i][mask] = res
