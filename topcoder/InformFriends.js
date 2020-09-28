@@ -50,30 +50,30 @@ var FactthemUp=A=>{
             dominating[subset]=true
     }
     //dp part
-    let result=0,
-        dp=[...Array(1<<N)].map(d=>0)//holds the DOMATIC number of subset with bin rep (i)
-    //To find the domatic number of a subset A, we pick a dominating set D ⊆ A and note that the domatic number of A is at least one more than that of A − D, because as I 've already explained above, that means that the partition A-D,D is now possible increasing the domatic number by at least 1 (the new dominating subset D)
+    let dp=[...Array(1<<N)].map(d=>0)//holds the DOMATIC number of subset with bin rep (i)
+    //To find the domatic number of a set A, we pick a dominating subset D ⊆ A and note that the domatic number of A is at least one more than that of A \ D, because as I 've already explained above, that means that the partition A-D,D is now possible, increasing the domatic number by at least 1 (the new dominating subset D)
 
 
-    for (let subset = 0; subset < (1<<N); subset++) {
+    for (let set = 0; set < (1<<N); set++) {
         // A subset of a mask is a mask which has SOME of the ones of the original mask
         // for examle 0101 is a subset of 1101 
         //subsubset has to be a subset of my original subset
 
         // I can iterate immediately over all the subsets of subset with
         // subsubset=(subsubset-1)&subset, which generates the next subset of subset
-        // BUT STARTING FROM subset to 0
-        for(subsubset=subset;subsubset>0; ){
+        // BUT STARTING FROM subset to 0,NOT INCLUDING 0
+        for(subset=set;subset>0; ){
             // but NOT going through 0 
-            if(dominating[subsubset]) //if it is a dominating subsubset
-                dp[subset]=Math.max(dp[subsubset^subset]+1,dp[subset])
-                // the difference between a set A and its subset B<=A is
+            if(dominating[subset]) //if it is a dominating subsubset
+                dp[set]=Math.max(dp[subset^set]+1,dp[set])
+                // the difference between a set A and its subset B⊆A is
                 // A\B=A^B
-            subsubset=(subsubset-1)&subset //generating the next subset of subset
+            subset=(subset-1)&set //generating the next subset of set
         }
     }
 
-    //easier to come up with, but takes considerably more time because I have to generate ALL the subsets of subset
+    //easier to come up with, but takes considerably more time because I have to generate ALL the subsets 
+    // and NOT ONLY the subsets of my (subset)
     // for (let subset = 0; subset < (1<<N); subset++) {
     //     //Instead I could just geenerate all the subsets OF my subset
     //     for(subsubset=0;subsubset<=subset;subsubset++ )
@@ -100,11 +100,11 @@ var FactthemUp=A=>{
             dominating[subset]=true
     }
 
-    //calculate the domatic number based on the subsets of every subset
-    for (let subset = 0; subset < (1<<N); subset++) 
-        for(subsubset=subset;subsubset>0;subsubset=(subsubset-1)&subset )
-            if(dominating[subsubset]) 
-                dp[subset]=Math.max(dp[subsubset^subset]+1,dp[subset])        
+    //calculate the domatic number based on the subsets of every set
+    for (let set = 0; set < (1<<N); set++) 
+        for(subset=set;subset>0;subset=(subset-1)&set )
+            if(dominating[subset]) 
+                dp[set]=Math.max(dp[subset^set]+1,dp[set])
 
     return dp[(1<<N)-1]
 
