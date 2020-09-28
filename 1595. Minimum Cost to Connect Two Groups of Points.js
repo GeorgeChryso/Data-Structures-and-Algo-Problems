@@ -126,6 +126,8 @@ var connectTwoGroups = function (cost) {
     return dfs( 0, 0 )
   }
 
+
+  //there is another solution with polynomial time regarding bipartite matching. 
   console.log(connectTwoGroups(
     [[2,5,1],[3,4,7],[8,1,2],[6,2,4],[3,8,8]]
   ))
