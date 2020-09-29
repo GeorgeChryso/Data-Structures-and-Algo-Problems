@@ -107,6 +107,3 @@ console.log(
             "kcjmkggcmnami"]
     )
 )
-
-326426434
-326425922
