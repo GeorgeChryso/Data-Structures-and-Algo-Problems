@@ -63,3 +63,46 @@ var wordBreak = function(s, wordDict) {
       })
     }
   };
+
+
+
+
+  //dfs +dp (top down dp)
+  var wordBreak = function(s, wordDict) {
+      let memo={}
+      // memo[substring] gives an array of potential splits such that 
+      // substring can be cut into some pieces that exist in wordDict
+
+      memo['']=[''] //essential basecase '' can be written as '' obviously
+
+      let dfs=(word)=>{
+          if(memo[word]!==undefined)
+            return memo[word]
+          let res=[]
+          // see if ur word can be written as dword+sth
+          // if sth has actual words in wordDict, its length wont be 0
+          // so the result for this specific word will be dword+ every word in sth
+          for (const dword of wordDict) {
+              let len=dword.length, secondpart=[]
+              if(word.slice(0,len)==dword)
+                secondpart=dfs(word.slice(len))
+
+              if(secondpart.length){
+                secondpart.forEach(d=> 
+                  d?res.push(dword+' '+d):res.push(dword)
+                  )
+              }
+          }
+
+          memo[word]=res // which i cache, so i dont recompute it 
+          return memo[word]
+      }
+      return dfs(s)
+  };
+
+console.log(
+  wordBreak(
+    `catsanddog`,
+    ["cat", "cats", "and", "sand", "dog"]
+  )
+)
