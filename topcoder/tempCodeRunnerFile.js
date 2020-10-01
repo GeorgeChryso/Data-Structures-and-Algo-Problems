@@ -1,1 +1,1 @@
-A+B is contributed to the result.
+left
