@@ -1,1 +1,1 @@
-                dp[i][j][k]=(i>=1?dp[i-1][m-1][k-1]:0)
+A+B is contributed to the result.
