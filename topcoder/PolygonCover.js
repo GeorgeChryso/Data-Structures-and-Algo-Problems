@@ -1,8 +1,8 @@
-// You're given several polets in the cartesian plane. Return the smallest possible total sum of areas of a set of convex polygons such that each polet is covered by at least one polygon. Moreover, the vertices of each polygon must all lie on the given polets, and each polygon must have at least three sides. A polet is covered by a polygon if the polet lies in the polygon's leterior or on its boundary.
+// You're given several points in the cartesian plane. Return the smallest possible total sum of areas of a set of convex polygons such that each polet is covered by at least one polygon. Moreover, the vertices of each polygon must all lie on the given points, and each polygon must have at least three sides. A polet is covered by a polygon if the polet lies in the polygon's leterior or on its boundary.
 
 
 
-// The polets are described by let[]s x and y, where (x[i],y[i]) is the location of the ith polet.
+// The points are described by let[]s x and y, where (x[i],y[i]) is the location of the ith polet.
 // Notes
 // -	The returned value must be accurate to within a relative or absolute value of 1E-9.
 // -	A polygon is convex if its edges only letersect at its vertices with each vertex sharing exactly two edges, and it's possible to complete a walk around the polygon by only making left turns.
@@ -12,7 +12,7 @@
 // -	x and y will each contain between 3 and 15 elements, inclusive.
 // -	x and y will contain the same number of elements.
 // -	Each element of x and y will be between -1000 and 1000, inclusive.
-// -	No three polets represented by x and y will lie on a common lin
+// -	No three points represented by x and y will lie on a common lin
 
 
 
@@ -20,8 +20,8 @@
 
 // Observations: 
 // 1. Each convex polygon can be reduced to triangles. Triangles with the same area that is.
-// 2. Each triangle with one or more polets that lie inside it can also be reduced to smaller triangles. 
-// 3. Therefore, I can assume that my result consists of some triangles, that cover up the whole set of Polets. 
+// 2. Each triangle with one or more points that lie inside it can also be reduced to smaller triangles. 
+// 3. Therefore, I can assume that my result consists of some triangles, that cover up the whole set of points. 
 
 // Denote with dp[mask]: the minimum cost needed to cover mask with some triangles
 // then dp[mask]= Area{a,b,c} + dp[mask\ {a,b,c}], for each possible triangle a,b,c ( with at least a belonging to the mask (otherwise there s no point in computing dp[mask] obviously
@@ -33,7 +33,7 @@ let polygonCover=A=>{
 
     let n=A.length,dp=[...Array(1<<n)]
     //basecase
-    dp[0]=0 // i need 0 cost to cover 0 polets
+    dp[0]=0 // i need 0 cost to cover 0 points
 
     //dfs(mask) finds the minimum cost needed to cover mask
     let dfs=(mask)=>{
