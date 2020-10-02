@@ -36,82 +36,34 @@
 // };
 
 
-// var combinationSum = function(A, target) {
-//     A.sort((a,b)=>a-b)
-//     let result={}
-//     let termination=false
-//     let bktrk=(currSet,remaining,index)=>{
-//         console.log(currSet,remaining,index)
-//         if(index<0||remaining<0)return
-//         if(remaining==0){
-//             //save a string hashmap
-//             let cs=currSet.toString()
-//             if(!result[cs])result[cs]=currSet
-//             return
-//         }
-//         //choosing A[Index] multiple times
-//         bktrk(currSet.concat(A[index]),remaining-A[index],index)
-        
-//         //choosing A[index] and moving to the next element
-//         if(remaining-A[index]>0)bktrk(currSet.concat(A[index]),remaining-A[index],index-1)
-
-//         //not choosing A[index] and moving to the next element
-//         bktrk(currSet,remaining,index-1)
-//         return
-//     }
-
-//     bktrk([],target,A.length-1)
-//     return Object.values(result)
-// };
-
 
 // //optimized
-//   var combinationSum = (candidates, target) => {
-//     const result = []
-//     const backtracking = (path, currSum, index) => {
-//       if (currSum > target)return
-//       if (currSum === target)return result.push([...path])
+  var combinationSum = (candidates, target) => {
+    const result = []
+    const backtracking = (path, currSum, index) => {
+      if (currSum > target)return
+      if (currSum === target)return result.push([...path])
       
     
-//       while(index<candidates.length){
-//         const item = candidates[index]
-//         path.push(item)
-//         //try to add the element
-//         backtracking(path, currSum + item,index)
-//         //when ure here all the possibilities will be explored
-//         path.pop()
-//         index++
-//       }
+      while(index<candidates.length){
+        const item = candidates[index]
+        path.push(item)
+        //try to add the element
+        backtracking(path, currSum + item,index)
+        //when ure here all the possibilities will be explored
+        path.pop()
+        index++
+      }
 
-//     }
+    }
   
-//     backtracking([], 0, 0)
+    backtracking([], 0, 0)
   
-//     return result
-//   } 
+    return result
+  } 
 
 
-//   function combinationSum(candidates, target) {
-//     candidates.sort((a, b) => a - b);
-  
-//     var length = candidates.length;
-//     var res = [];
 
-//     function search(idx, prefix, target) {
-//         if (idx === length || target<=0) return;
-//         if (target === 0)return res.push(prefix.slice());
-  
-//         prefix.push(candidates[idx]);
-//         search(idx, prefix, target - candidates[idx]);
-//         prefix.pop();
-//         search(idx + 1, prefix, target);
-//       }
-    
-//     search(0, [], target);
-//     return res;
-  
-   
-//   };
 
 
 // No duplicates=>but repetion is allowed=> unbounded knapsack
@@ -149,7 +101,46 @@ function combinationSum(candidates, target) {
     return result
 };
 
+// bottom up no recursion
+// the extra  work in copying the whole array even when the sum does not equal target is 
+// redundant
+function combinationSum(candidates, target) {
+  let dp=[...Array(candidates.length+1)].map(d=>[...Array(target+1)].map(d=>[]))
+  // dp[i][sum]= #ways to reach sum with the first i items
 
+  dp[0][0]=[[]]// we can reach sum 0 with 0 items in 1 way
+  for (let i = 1; i <= candidates.length; i++) {
+      let ele=candidates[i-1]
+      for (let s = 0; s <=target; s++) {
+        if(ele<=s)
+          dp[i][s-ele].forEach(d=> dp[i][s].push( [...d.concat([ele])]))
+        dp[i-1][s].forEach(d=>dp[i][s].push([...d]))
+      }      
+  }
+  return dp[candidates.length][target]
+};
+
+
+// with backtracking, the only array copying is when the actual result is found
+// No dp happens here btw, just dfs backtracking
+var combinationSum = function(candidates, target) {
+    var res = [];
+
+    var combinationSumDFS = function(target, out=[], start = 0){
+      if(target < 0) return;
+      if(target === 0){
+          res.push(out.slice(0));
+          return;
+      }
+      for(let i = start; i < candidates.length; ++i){
+          out.push(candidates[i]); //try adding 
+          combinationSumDFS( target-candidates[i],out,i);
+          out.pop();
+      }
+   }
+    combinationSumDFS(target);
+    return res;
+};
 
 
 
