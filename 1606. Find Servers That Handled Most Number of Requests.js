@@ -235,6 +235,7 @@ var busiestServers = ( k, arrival, load ) => {
 }
 
 
+// Approach 3: 
 //splay trees / red black trees / Self Balancing BST
 // Ordered Set, is a set that is always sorted
 

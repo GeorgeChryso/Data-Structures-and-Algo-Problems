@@ -20,7 +20,6 @@ var removeCoveredIntervals = function(INT) {
     return INT.filter(([start,end],i)=>{
         let flag=true
         INT.forEach(([s,e])=>{
-            console.log([start,end],[s,e],(s<=start && end<e) || (s<start&&end<=e))
             if((s<=start && end<e) || (s<start&&end<=e))flag=false
         })
         return flag
