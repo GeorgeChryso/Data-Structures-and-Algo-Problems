@@ -220,34 +220,18 @@ var isValidSudoku = function (board) {
 
 var isValidSudoku = function (board) {
   
-    
-    
-  
-
-
-    for (let i = 0; i < 9; i++) {
-        let arr = []
-        var box = []
-
-        for (let j = 0; j < 9; j++) {
-            let uhu = board[Math.floor(i / 3) * 3 + Math.floor(j / 3)][(i % 3) * 3 + j % 3]
-            if (
-                board[i].indexOf(String(j + 1)) != board[i].lastIndexOf(String(j + 1))
-                || (arr.indexOf(board[j][i]) != -1 && board[j][i] != '.')
-                 || (box.indexOf(uhu) != -1 && uhu != '.')
-            ) { console.log(arr,i,j)
-                return false
-            }
-            
-          
-            box.push(uhu)
-            arr.push(board[j][i])
-                
+    let seen=new Set()
+    for (let i=0; i<9; ++i) {
+        for (let j=0; j<9; ++j) {
+            let number = board[i][j];
+            if (number != '.')
+                if (!seen.add(number + " in row " + i) ||
+                    !seen.add(number + " in column " + j) ||
+                    !seen.add(number + " in block " + i/3 + "-" + j/3))
+                    return false;
         }
-
-}
-    
-return true
+    }
+    return true;
 
 
 }

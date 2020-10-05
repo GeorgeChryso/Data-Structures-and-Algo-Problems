@@ -90,15 +90,14 @@ var visiblePoints = function(points, angle, location) {
     // (every element of my starting array), which are obviously visible with anangle fo 200 deg
 
 
-    //now i will perform a sliding window that tracks the length of my window
-    // of points within angle
+    //now i will perform a sliding window that tracks the points visible from my current degree-my angle degrees
     let start=0,n=points.length,result=0
     for (let end = 0; end < n; end++) {
-        while(start<end&&points[start]<points[end]-angle)
-            start++        
+        while(start<end&&points[start]<points[end]-angle) //if the point of start is no bueno
+            start++ // shrink the window until all the points are within angle degrees 
         result=Math.max(result,end-start+1)
     }
-    return result+onCenter
+    return result+onCenter //the points i can see + the ones i ms tanding on
 
 };
 console.log(
