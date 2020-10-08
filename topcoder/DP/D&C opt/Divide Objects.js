@@ -73,7 +73,13 @@ var divideEmB=(W,m)=>{
     for (let j = 0; j <n; j++)
         dp[0][j]=prefix[j+1]**2        
     
-    let DC=(i,jleft,jright,kleft,kright)=>{
+
+
+    //essentially dc calculates dp[i]
+    // the whole line,based on dp[i-1]
+    // by splitting in half each time
+    // taking advantage of the monotonicy of k
+    let DC=(i,jleft,jright,kleft,kright)=>{ 
         if(jleft>jright)
             return
         let mid=(jleft+jright)>>1,best=Infinity,bestk=-1
@@ -84,20 +90,23 @@ var divideEmB=(W,m)=>{
                 bestk=k
             }     
 
-        dp[i][mid]=best
+        dp[i][mid]=best //set dp[i][mid]
         DC(i,jleft,mid-1,kleft,bestk)
         DC(i,mid+1,jright,bestk,kright)
     }
    
-    for (let i = 1; i < m-1; i++) 
-        DC(i,0,n,0,n)
+    for (let i = 1; i < m-1; i++) //calculate line by line,just like
+        DC(i,0,n,0,n)               // the normal dp
+        //It's just that the way we calculate the line changes to DC
+        // rather than just a naive O(n) search for the best k
+        // such that dp[i][j]=dp[i-1][k]+ (prefix[mid+1]-prefix[k+1])**2
 
     //consider the remaining elements to the right (aka the last group)
     for (let j = m-2; j < n; j++) 
         dp[m-2][j]=dp[m-2][j]+(prefix[n]-prefix[j+1])**2        
     
     dp=dp.map((d,i)=>d.map((q,j)=>j<i?Infinity:q))// remove the impossible
-    dp.forEach(d=>console.log(d.map(d=>d==Infinity?-1:d)+'\t'))
+    dp.forEach(d=>console.log(d.map(d=>d==Infinity?`**`:d)+'\t'))
 
     return Math.min(...dp[m-2])
 }
