@@ -194,10 +194,8 @@ var lengthOfLIS = function(A) {
             tails[lo] = A[i];
         }
     }
-    
     return tails.length-1;// is the length of the longest possible subarray (-1 because of the -Infinity I added)
 };
-
 console.log(
     lengthOfLIS(
         [1,3,6,7,9,4,10,5,23,2,3]
