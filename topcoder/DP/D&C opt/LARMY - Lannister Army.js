@@ -23,7 +23,7 @@
 
 
 
-
+// O(n*n*m)
 var sistafuka = (n, m, Heights) => {
     //so let's first deal with the scoring function
     //dp[i][j]=minimum Unhapiness if i split the first j people into i+1 groups
@@ -74,6 +74,7 @@ var sistafuka = (n, m, Heights) => {
 
 // Divide and Conquer Optimization
 // because monotonicity of k on j is proven by contradiction
+// O(n*2+ m*nlogn)
 var sistafuka = (n, m, Heights) => {
     let tallerThan = [...Array(n)].map(d => [...Array(n)].map(d => 0))
     for (let i = n - 1, count = 0; i >= 0; i--, count = 0)
