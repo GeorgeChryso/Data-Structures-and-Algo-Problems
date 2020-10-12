@@ -44,7 +44,7 @@ var findMinArrowShots = function(points) {
     while(points.length){
         let [cx,cy]=points.shift()
         // if there's no intersection that means i need a new arrow
-        if(cx>y||cy<x){
+        if(cx>y||cy<x){// cy< x can never  happen because i sorted btw
             x=cx 
             y=cy
             result++
