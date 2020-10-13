@@ -48,8 +48,8 @@ A[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) return false; //check 3*3 
         }
         return true
     }
-
-    return solve(A)
+    solve(A)
+    return A
 }
 
 console.log(

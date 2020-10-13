@@ -64,4 +64,4 @@ var sortList = function(head) {
 };
 
 
-// mergesort
+// bottom up-mergesort
