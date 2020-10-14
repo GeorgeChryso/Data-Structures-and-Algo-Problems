@@ -21,49 +21,50 @@
 
 let solveSudoku=A=>{
     
-    let solve=(A)=>{
-        for (let i = 1; i <10; i++) {
-            for (let j = 1; j < 10; j++) {
-                if(A[i][j]=='.'){
-                    for (let num = 1; num <10; num++) 
-                        if(isValidChoice(i,j,num)){
-                            A[i][j]=num
-                            if(solve(A))
-                                return true
+    let solve=()=>{
+        for (let i = 0; i <9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if(A[i][j]=='.'){// for each blank
+                    for (let num = 1; num <10; num++) //try any possible candidate 
+                        if(isValidChoice(i,j,num)){ //if there's  no collision
+                            A[i][j]=String(num) //fill in the candidate
+                            if(solve())  //and solve the same problem with the position filled
+                                return true //if a solution is found, this returns true
                             else
-                                A[i][j]='.'//backtrack
-                        }                        
-                }   
-                return false   
-            }            
+                                A[i][j]='.'//Otherwise, remove the candidate that you just placed and try
+                                // the next one
+                        }      
+                    if(A[i][j]=='.') // this means that no  candidate was correct
+                        return false                  
+                } 
+            }
         }
         return true
     }
     let isValidChoice=(row,col,c)=>{
         for (let i = 0; i <9; i++) {
-            if(A[i][col] != '.' && A[i][col] == c) return false; //check row
-            if(A[row][i] != '.' && A[row][i] == c) return false; //check column
-            if(A[3 * (row / 3)|0 + (i % 3)][ 3 * (col / 3) + i % 3] != '.' && 
-A[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) return false; //check 3*3 block
+            if(A[i][col] != '.' && A[i][col] == c) 
+                return false; //check row
+            if(A[row][i] != '.' && A[row][i] == c) 
+                return false; //check column
         }
+        //box of i,j
+        let starti=((row/3) >>0)*3,startj=((col/3)>>0)*3 //need the floors to get the box
+        for (let i = starti; i<=starti+2; i++) 
+           for (let j = startj; j <= startj+2; j++) {
+               if(A[i][j]!='.'&&A[i][j]==c)
+                    return false  
+           }
         return true
     }
-    solve(A)
-    return A
+    return solve()?A:-1
 }
+
+
 
 console.log(
     solveSudoku(
-        [   [".", ".", "9", "7", "4", "8", ".", ".", "."],
-            ["7", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", "2", ".", "1", ".", "9", ".", ".", "."],
-            [".", ".", "7", ".", ".", ".", "2", "4", "."],
-            [".", "6", "4", ".", "1", ".", "5", "9", "."],
-            [".", "9", "8", ".", ".", ".", "3", ".", "."],
-            [".", ".", ".", "8", ".", "3", ".", "2", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", "6"],
-            [".", ".", ".", "2", "7", "5", "9", ".", "."]
-        ]
+        [["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]]
     )
 )
 
