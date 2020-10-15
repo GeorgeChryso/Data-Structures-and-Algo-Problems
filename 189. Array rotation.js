@@ -6,7 +6,7 @@ var rotate0 = function(A, k) {
     
 
     for (let i = 0; i < k; i++) {
-  A.unshift(A[A.length-1])
+        A.unshift(A[A.length-1])
     A.splice(A.length-1,1)        
     }
     return A

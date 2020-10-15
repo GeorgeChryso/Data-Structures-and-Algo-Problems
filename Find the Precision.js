@@ -21,3 +21,23 @@ var findPrecision=(x,n,precision)=>{
 }
 
 console.log(findPrecision(2,10**(-2)))
+let root=(x,n)=>{
+    if (x == 0)
+        return 0
+
+    let lowerBound = 0,upperBound = Math.max(1, x),approxRoot = (upperBound + lowerBound) / 2
+
+    while (approxRoot - lowerBound >= 0.001){
+        if (Math.pow(approxRoot, n) > x)
+            upperBound = approxRoot
+        else if (Math.pow(approxRoot, n) < x)
+            lowerBound = approxRoot
+        else
+            break
+
+        approxRoot = (upperBound + lowerBound) / 2
+    }
+      
+
+    return approxRoot
+}
