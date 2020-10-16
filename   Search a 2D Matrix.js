@@ -5,9 +5,9 @@
 
 
 
-// lg(M*N)
+// O(lg(M*N))
 // map each cell to it's cell's total number
-// and binary search from [0,...MN]
+// and binary search from [0,...,MN-1]
 // So basically I view the matrix as a sorted array
 // And a simple Binary search over that array will determine the answer
 var searchMatrix = function(A, target) {
@@ -28,7 +28,7 @@ var searchMatrix = function(A, target) {
 };
 
 // However viewing it as a sorted array, m*n can overflow
-// however, i can keep the complexity at O(logmn) by doing 2
+// but I can keep the complexity at O(logmn) by doing 2
 // binary searches, 1 to determine the row my target can be at
 // and 1 to determine whether the candidate is in that row
 // Complexity O(logn+ logm)= O(logmn) same complexity, no overflow
