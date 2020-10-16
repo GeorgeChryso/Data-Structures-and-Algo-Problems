@@ -33,4 +33,44 @@ var diameterOfBinaryTree = function(root) {
     return result-1
 };
 
+// diameter of an N-ary Tree's logic is:
+
+// pick any node x
+// find through bfs/dfs the node farthest from x, y
+// run bfs again to find the farthest node from y, z
+// distance( y,z ) is the diameter of the N-Ary tree
+// Takes O(n)
+var diameterOfNaryTree = function(root) {
+    let x=root //random node
+    let y=null //the nodefarthest from x
+    let q=[root]
+    let visited=new Set([root]) //dont revisit nodes
+    //1st bfs, determkine y
+    while(q.length){
+        let temp=[]
+        for(let node of q){
+            y=node
+            for(let neighbor of node.neighbors)
+                if(!visited.has(neighbor))
+                    temp.push(neighbor)
+        }
+        q=temp
+    }
+    //2nd bfs to determine z, aka the diameter
+    let diameter=1
+    visited=new Set([y])
+    q=[y]
+    while(q.length){
+        let temp=[]
+        for(let node of q){
+            for(let neighbor of node.neighbors)
+                if(!visited.has(neighbor))
+                    temp.push(neighbor)
+        }
+        q=temp
+        diameter++
+    }
+    return diameter
+};
+
 
