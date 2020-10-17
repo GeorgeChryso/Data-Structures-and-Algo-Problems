@@ -107,35 +107,6 @@ var countSubgraphsForEachDiameter = function(n, edges) {
     return result
 };
 
-//comma monstrosity
-var countSubgraphsForEachDiameter = function(n, edges) {
-    let result=[...Array(n-1)].map(d=>0), adj=[...Array(n)].map(d=>[...Array(n)].map(d=>0))
-    for (const [f,t] of edges)
-        adj[f-1][t-1]=1,adj[t-1][f-1]=1
-    let bfs=(x,mask)=>{
-        let memo=1<<x,level=0
-        while(memo!==mask){
-            console.log(memo.toString(2),mask.toString(2))
-            for (const [f,t] of edges) 
-                if(((memo&(1<<f-1))||(memo&(1<<t-1)))
-                    &&((mask&(1<<f-1))&(1<<t-1))&&
-                    ((memo&(1<<f-1))==0||(memo&(1<<t-1))==0))
-                    z=(memo&(1<<(t-1)))?t-1:f-1,memo|=(1<<(t-1)),memo|=(1<<(f-1))
-            level++
-        }
-        return [z,level]
-    }
-    for (let i = 1; i < (1<<n); i++) {
-        let mask=i,numberEdges=0,numberNodes=0,x=0
-        for(let j=0;j<n;j++) 
-            if((mask&(1<<j))!==0)
-                x=j ,numberNodes++
-        numberEdges=edges.reduce((acc,[f,t])=>acc+((mask&(1<<(f-1)))!==0&&(mask&(1<<(t-1)))!==0),0)
-        if(numberNodes==numberEdges+1&&numberNodes!=1)
-            result[bfs(bfs(x,mask)[0],mask)[1]-2]++
-    }
-    return result
-};
 console.log(
     countSubgraphsForEachDiameter(
         4,[[1,2],[2,3],[2,4]]

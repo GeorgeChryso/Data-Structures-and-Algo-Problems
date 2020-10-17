@@ -62,7 +62,7 @@ var findRepeatedDnaSequences = function(s) {
 var findRepeatedDnaSequences = function(s) {
     if(s.length<=10)
         return []
-    let n=s.length, map={'A':1,'C':2,'T':3,'G':4},freq={},currHash=0
+    let n=s.length, map={'A':1,'C':2,'T':3,'G':4},freq={},currHash=0,toLetter=['','A','C','T','G']
     for(let i=0;i<n;i++){
         let curr=map[s[i]]// 1 2 3 4 
         if(i<10)
@@ -77,16 +77,7 @@ var findRepeatedDnaSequences = function(s) {
     return Object.keys(freq).filter(d=>freq[d]>1).map(d=>{
         let result=''
         while(d){
-            let lastdigit=d%10,toadd=''
-            if(lastdigit==1)
-               toadd='A'
-            else if (lastdigit==2)
-               toadd='C'
-            else if(lastdigit==3)
-                toadd='T'
-            else 
-                toadd='G'
-            result=toadd+result
+            result=toLetter[d%10]+result
             d=(d-(d%10))/10
         }
         return result
