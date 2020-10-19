@@ -28,7 +28,7 @@
 // dp[i][k] Maximum Profit until index i, with AT MOST k transactions
 // dp[i][k]=Math.max( dp[i-1][k],dp[j][k-1]+ A[i]-A[j] ) for j<i
 var maxProfit = function(k,A) {
-    let n=A.length,k=2
+    let n=A.length
     let dp=[...Array(n+1)].map(d=>[...Array(k+1)].map(q=>0))
 
     //base cases
