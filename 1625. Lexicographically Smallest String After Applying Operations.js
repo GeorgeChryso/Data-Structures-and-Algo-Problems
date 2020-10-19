@@ -21,7 +21,7 @@
 // ​​​​​​​Add:    "2050"​​​​​​​​​​​​
 // There is no way to obtain a string that is lexicographically smaller then "2050".
 
-// BFS
+// BFS brute force
 var findLexSmallestString = function(s, a, b) {
      let result=Number(s),memo=new Set([s]),n=s.length
      let stringres=s
