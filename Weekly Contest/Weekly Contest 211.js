@@ -2,18 +2,19 @@
 
 
 
-
-// var maxLengthBetweenEqualCharacters = function(s) {
-//     let result=-1,n=s.length
-//     for(let i=0;i<n;i++){
-//         for (let j = i+1; j <n; j++) {
-//             if(s[i]===s[j]){
-//                 result=Math.max(result,j-i-1)
-//             }            
-//         }
-//     }
-//     return result
-// };
+//O(n) O(26)=O(1)
+var maxLengthBetweenEqualCharacters = function(s) {
+    let result=-1,n=s.length,min=[...Array(26)].map(d=>Infinity)
+    for (let i = 0; i < s.length; i++) {
+        if(i<min[s[i].charCodeAt(0)-97]){
+            min[s[i].charCodeAt(0)-97]=i
+        }            
+        else{
+            result=Math.max(i-min[s[i].charCodeAt(0)-97]-1,result)
+        }
+    }
+    return result
+};
 
 
 var findLexSmallestString = function(s, a, b) {
