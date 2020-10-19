@@ -101,6 +101,5 @@ var areConnected = function(n, threshold, queries) {
         for (let secondnode = node+node; secondnode <=n; secondnode+=node) 
             dsu.union(node,secondnode)            
         
-    
     return queries.map(([a,b])=>dsu.sameGroup(a,b))
 };
