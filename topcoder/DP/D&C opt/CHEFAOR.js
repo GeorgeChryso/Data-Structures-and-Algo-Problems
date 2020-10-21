@@ -133,47 +133,47 @@ var CHEFAOR = (n, m, A) => { //or and not xor
     return Math.max(...dp[m - 2])
 }
 // Knuth optimization
-var CHEFAOR = (n, m, A) => { 
+// var CHEFAOR = (n, m, A) => { 
 
-    let dp = [...Array(m)].map(d => [...Array(n)].map(d => 0)),
-    h=[...Array(m)].map(d=>[...Array(n)].map(d=>Infinity)) 
+//     let dp = [...Array(m)].map(d => [...Array(n)].map(d => 0)),
+//     h=[...Array(m)].map(d=>[...Array(n)].map(d=>Infinity)) 
 
 
    
-    for (let len = 0; len <= n+1; len++) {
-        for (let left = 0; left+len<=n+1; left++) {
-            let right=left+len
-            if(len<1){
-                dp[left][right]=0
-                h[left][right]=left //set it to the left doesnt matter
-                continue
-            }
-            dp[left][right]=Infinity
+//     for (let len = 0; len <= n+1; len++) {
+//         for (let left = 0; left+len<=n+1; left++) {
+//             let right=left+len
+//             if(len<1){
+//                 dp[left][right]=0
+//                 h[left][right]=left //set it to the left doesnt matter
+//                 continue
+//             }
+//             dp[left][right]=Infinity
 
-            //here's what changes, I just use the Knuth formula as i know that k lies between 
-            // h[i][j-1]<= k <= h[i+1][j]
-            for (let k = h[left][right-1]; k <=h[left+1][right]; k++){
-                let consideredval=dp[left][k] + dp[k][right] + (Breaks[right] - Breaks[left])
-                if(consideredval<dp[left][right]){
-                    dp[left][right]=consideredval
-                    h[left][right]=k // dont forget to update this aswell for better k's 
-                }
+//             //here's what changes, I just use the Knuth formula as i know that k lies between 
+//             // h[i][j-1]<= k <= h[i+1][j]
+//             for (let k = h[left][right-1]; k <=h[left+1][right]; k++){
+//                 let consideredval=dp[left][k] + dp[k][right] + (Breaks[right] - Breaks[left])
+//                 if(consideredval<dp[left][right]){
+//                     dp[left][right]=consideredval
+//                     h[left][right]=k // dont forget to update this aswell for better k's 
+//                 }
 
-            }
-        }        
-    }
+//             }
+//         }        
+//     }
 
-    for (let i = 1; i < m - 1; i++)
-        DC(i, 0, n - 1, 0, n - 1)
+//     for (let i = 1; i < m - 1; i++)
+//         DC(i, 0, n - 1, 0, n - 1)
 
-    let acc=A[n-1]
-    for (let j = n-2; j >=0; j--){
-        dp[m - 2][j] += acc
-        acc|=A[j]
-    }
+//     let acc=A[n-1]
+//     for (let j = n-2; j >=0; j--){
+//         dp[m - 2][j] += acc
+//         acc|=A[j]
+//     }
 
-    return Math.max(...dp[m - 2])
-}
+//     return Math.max(...dp[m - 2])
+// }
 let tests = [
     [3, 2, [1, 2, 2]], //5
     [4, 3, [1, 2, 3, 4]], //10
@@ -183,4 +183,13 @@ let tests = [
 for (const [n, m, ar] of tests) {
     console.log(CHEFAOR(n, m, ar))
 
+}
+
+
+for(let a=0;a<1000;a++){
+    for (let b =0; b <100000; b++) {
+            if( (a|b) >a+b)
+                console.log(a,b)            
+        
+    }
 }
