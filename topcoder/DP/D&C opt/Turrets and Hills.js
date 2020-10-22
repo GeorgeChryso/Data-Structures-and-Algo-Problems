@@ -173,12 +173,16 @@ var TurretsNaiveDP=A=>{
     let n=A.length,m=A[0].length,result=0
     //first i ll save my matrix as an array of n numbers, 0 for empty places and 1 for hills
     let M=A.map(d=>{
+
         let mask=0,len=d.length
         for (let i = 0; i < len; i++) 
             if(d[i]==='H')
                 mask|=(1<<(len-1-i))
         return mask
     })
+
+    //=========== H E L P E R    F U N C T I  O N S =============\\ 
+
     //checks if the current choice of mask doesnt place any turrets 
     // on hills of the current row, and all turrets have at least 2 spaces between them
     let isValidMask=(mask,row)=>{
@@ -201,7 +205,6 @@ var TurretsNaiveDP=A=>{
         }
         return true
     }
-
     let countbits=mask=>{
         let count=0 ,m=mask
         while(mask)
@@ -209,16 +212,6 @@ var TurretsNaiveDP=A=>{
             mask>>=1
         return count
     }
-    if(n==1){//just 1 row edge case
-        for (let mask = 0; mask < (1<<m); mask++) 
-            if(isValidMask(mask,0))
-                result=Math.max(result,countbits(mask))           
-        return result
-    }
-
-
-    //basecases, any mask for the 2 first rows
-    // the first two rows can be filled wif anyfin as long as its valid
     let isValidMask2D=(mask,currow)=>{
         //check if every 1 has a distance of 2 from every other 1
         // and 0 from the next 0
@@ -250,9 +243,6 @@ var TurretsNaiveDP=A=>{
             mask='0'+mask 
         return mask.split('').reduce((a,c)=>a+(c=='2'?0:1),0)
     }
-
-
-
     //checks if prevrows can be the 2 previous rows fo curmask
     let createTuple=(prevrows,currmask)=>{
         prevrows=prevrows.toString(3)
@@ -283,6 +273,8 @@ var TurretsNaiveDP=A=>{
         return parseInt(res,3)
     }
 
+    //=========== P R E P R O C E S S I N G ===============\\ 
+
     //for each row, create a memo validMask2dRow[i] which basically 
     // contains all the possible previous 2 rows that are valid for this row base 3
     let validmask2dRow=[...Array(n)].map(d=>[...Array(3**m)].map(d=>false))
@@ -291,9 +283,6 @@ var TurretsNaiveDP=A=>{
         for (let mask = 0; mask < 3**m; mask++)
             if(isValidMask2D(mask,i))
                 validmask2dRow[i][mask]=true
-    
-    // console.log(validmask2dRow[1].map((d,i)=>[d,i]).filter(([a,b])=>a)
-    // )
     //for each row, create also a validMask1dRow[i] which contains all the possible
     // masks base 2 for that row
     let validMask1dRow=[...Array(n)].map(d=>[...Array(1<<m)].map(d=>false))
@@ -319,28 +308,49 @@ var TurretsNaiveDP=A=>{
             isValid3rows[mask][curmask]=createTuple(mask,curmask)
 
 
+
+    //=========== M A I N   A L G O R I T H M ===============\\ 
+
+
+    //edge case, just 1 row
+    if(n==1){
+        for (let mask = 0; mask < (1<<m); mask++) 
+        //check if the current mask doesnt overlap with any hills on row 0
+            if(validMask1dRow[0][mask]) 
+                result=Math.max(result,count[mask])// and just update bitcount           
+        return result
+    }
+    
     //dp part
     //initialize my matrix, N*3^M cos it saves the last 2 compressed rows
     let dp=[...Array(n)].map(d=>[...Array(3**m)].map(d=>-1))
 
     //basecase
     for (let mask = 0; mask < (3**m); mask++)
+        //check if the mask doesnt overlap with any hills on rows 1,0
         if(validmask2dRow[1][mask])
-            dp[1][mask]=countbits2d(mask.toString(3)),result=Math.max(result,dp[1][mask])
+            dp[1][mask]=countbits2d(mask.toString(3)),
+            result=Math.max(result,dp[1][mask])
         
 
 
     for(let i=2;i<n;i++){
         //try all cases for the prev 2 rows
         for (let mask = 0; mask < (3**m); mask++) {
+            //if the previous two rows' mask cant be applied (aka overlap with a hill)
             if(!validmask2dRow[i-1][mask])
                 continue
+            //try alll cases for the curr row
             for (let curmask = 0; curmask < (1<<m); curmask++) {
+                //if the currmask cant be applied on the current row
                 if(!validMask1dRow[i][curmask])
                     continue
+                // if the previous two rows cant be previous to curmask
                 if(isValid3rows[mask][curmask]<0)
                     continue
                 let cur2rows=isValid3rows[mask][curmask] //turned into a number from base 3
+                //the max number of turrets placed on this row, by using the cur2rows
+                //is the max out of using mask as the prev 2 rows + the bitcount of curmask
                 dp[i][cur2rows]=Math.max(dp[i][cur2rows],dp[i-1][mask]+count[curmask])       
                 result=Math.max(result,dp[i][cur2rows])         
             }
@@ -349,10 +359,13 @@ var TurretsNaiveDP=A=>{
     return result
 }
 
-let b3=n=>{
-    console.log(n.toString(3),parseInt(n.toString(3),3))
-}
 
+
+console.log(
+    Turrets(
+        ['PPPPPPPHHPH']
+    )
+)
 
 console.log(
     Turrets(
