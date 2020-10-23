@@ -71,3 +71,9 @@ let base6=(n)=>{
     console.log(z,parseInt(z,6))
 }
 base6(6**3-1)
+
+let base12=(n)=>{
+    let z=n.toString(12)
+    console.log(z,parseInt(z,12))
+}
+base12(1000)

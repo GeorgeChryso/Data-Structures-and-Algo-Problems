@@ -72,3 +72,25 @@ var numTilings = function(n) {
     return dp[n-1].reduce((a,c)=>(a+c)%mod)
 };
 console.log(numTilings(4))
+
+
+
+//turns out this is an arithmetic sequence
+
+// 1 2 5 11 24,...
+
+//A[i]=2*A[i-1] + A[i-3]
+// O(n) O(1)
+// so the code can become
+var numTilings = function(n) {
+    if(n<=2)
+        return n
+    let pr3=1,pr2=1, pr1=2
+    for (let i = 0; i < n-2; i++) {
+        let curr=(2*pr1+pr3)%(1e9+7)
+        pr3=pr2
+        pr2=pr1
+        pr1=curr
+    }
+    return pr1
+};
