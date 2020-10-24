@@ -66,14 +66,58 @@ var Xenia=(A)=>{
     return dp[m-1].reduce((a,c)=>a+c)
 }
 
-let base6=(n)=>{
-    let z=n.toString(6)
-    console.log(z,parseInt(z,6))
-}
-base6(6**3-1)
+// let base6=(n)=>{
+//     let z=n.toString(6)
+//     console.log(z,parseInt(z,6))
+// }
+// base6(6**3-1)
 
-let base12=(n)=>{
-    let z=n.toString(12)
-    console.log(z,parseInt(z,12))
+// let base12=(n)=>{
+//     let z=n.toString(12)
+//     console.log(z,parseInt(z,12))
+// }
+// base12(1000)
+
+//https://codeforces.com/contest/342/problem/D
+//copied solution, no idea wassup
+var Xenia=(A)=>{
+    let n=A[0].length,mod=1e9+7,VR=[0,3,6],
+        rowcircle,colcircle
+
+    let f=[...Array(n)].map(d=>0) //essentially map into n columns bitwise 
+
+    for (let i = 0; i < n; i++) 
+        for (let j = 0; j < 3; j++){ 
+            f[i]|=((A[i][j]!=='.')<<j)    //1 for blocks/'O',  0 for free
+            if(A[i][j]==='O'){
+                rowcircle=i
+                colcircle=j
+            }
+        }
+
+
+
+    let dp=[...Array(n)].map(d=>[...Array(8)].map(d=>[0,0]))
+
+    //basecase (aka 1st column)
+    dp[0][7][0]=1
+    //111 in col 0 is made only with 1 way
+
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < 8; j++) {
+            let cm=(j|f[i])^7 //the inverse of mask j|i-th col 
+            for (let k = 0; k < 3; k++) {
+                if(cm&VR[k]) //hmmmmzors, so 000,011,110 as tests
+                    continue
+                let am=cm|VR[k]
+                if(am&f[i+1])
+                    continue
+                let  w = rp == i && ((1 << sp) | VR[k]) == 7 || rp == i - 2 && ((1 << sp) & ~j) || rp == i + 1 && ((1 << sp) & cm);
+
+                dp[i][am][0] = (dp[i][am][0] + (w ? 0 : dp[i - 1][j][0])) % mod;
+                dp[i][am][1] = ((dp[i][am][1] + dp[i - 1][j][1]) % mod + (w ? dp[i - 1][j][0] : 0)) % mod;
+            }            
+        }        
+    }
+    return dp[n-1][0][1]
 }
-base12(1000)

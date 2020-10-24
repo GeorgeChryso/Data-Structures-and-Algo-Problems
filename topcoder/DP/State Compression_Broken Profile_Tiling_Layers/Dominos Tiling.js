@@ -33,7 +33,44 @@ var Dominos=n=>{
                     dp[i][cur]=1
                 else if(adj[prev][cur])
                     dp[i][cur]=dp[i][cur]+dp[i-1][prev]
+    console.log(dp[1])
     return dp[n-1].reduce((a,c)=>a+c)
 }
 
 tests.forEach(d=>console.log(Dominos(d)))
+
+// tiling problems
+//https://projecteuler.net/problem=189
+//7255 - Land of Farms
+// dp tiling
+//http://fileadmin.cs.lth.se/contest/nwerc/Problemset_NWERC2004.pdf
+// poj 2411
+// poj 1038
+// sgu 131
+// sgu 132
+// sgu 223
+// sgu 225
+// zoj 1346
+// poj 3254
+// poj 1185
+// poj 3311
+// hdu 3001
+// poj 2288
+// zoj 4257
+// hdu 3681
+// poj 2430
+// poj 2436
+// poj 2541
+// poj 2836
+// poj 1699
+// poj 2288
+// poj 2688
+// poj 3411
+// poj 2686
+// poj 1482
+// poj 2690
+// poj 3719
+// poj 1795
+// poj 1739
+// poj 3593
+// poj 2088

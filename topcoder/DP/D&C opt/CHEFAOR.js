@@ -193,3 +193,6 @@ for(let a=0;a<1000;a++){
         
     }
 }
+
+//https://projecteuler.net/problem=307
+//https://open.kattis.com/problems/fancy
