@@ -24,7 +24,7 @@
 
 
 // N is the number of people in the q, m is the numer of gondolas, U is the unfamiliarity matrix
-var gondolASS=(n,m,U)=>{
+var gondolASSs=(n,m,U)=>{
         
     // let us first deal with the scoring function, I want to be able to calculate in O(1)
     // queries of the form unf(i,j) which returns the unfamiliarity of the group
@@ -99,14 +99,16 @@ var gondolASS=(n,m,U)=>{
     //so dp[0][6] is  the total unfamiliarity of the first 6 ppl, if i put them in 1 gondola
 
     let DC=(i,jleft,jright,kleft,kright)=>{
-        if(jleft>=jright)
+        if(jleft>jright)
             return
         let mid=(jleft+jright)>>1,bestk=-1
-        for (let k =kleft; k <=Math.min(mid,kright); k++)
+        for (let k =kleft; k <=Math.min(mid-1,kright); k++)
             if(dp[i][mid]>dp[i-1][k]+udp[k+1][mid]){
                 bestk=k
                 dp[i][mid]=dp[i-1][k]+udp[k+1][mid]
             }
+        if(jleft===jright)
+            return
         DC(i,jleft,mid-1,kleft,bestk)
         DC(i,mid+1,jright,bestk,kright)
     }
@@ -117,8 +119,10 @@ var gondolASS=(n,m,U)=>{
     for (let i = 1; i < m; i++)
         DC(i,0,n-1,0,n-1)
     // add the last group
+    console.log(dp[m-2])
     for (let j = 0; j <n-1; j++)
         dp[m-2][j]+=udp[j+1][n-1]
+    console.log(dp[m-2])
     return Math.min(...dp[m-2])
 }
 
@@ -128,7 +132,21 @@ var gondolASS=(n,m,U)=>{
 
 
 
-
+console.log(
+    gondolASS(
+        9,3,[
+            [0, 0, 0, 0, 1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 1, 1, 1, 1, 1],
+            [0, 0, 0, 0, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 0, 0, 1, 1, 1],
+            [1, 1, 1, 1, 0, 0, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [1, 1, 1, 1, 1, 1, 0, 0, 0]
+        ]
+    )
+)
 
 console.log(
     gondolASS(
