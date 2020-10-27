@@ -11,35 +11,64 @@
 
 
 
+// recursion O(n^3) + memoization
+var stoneGameII = (A) => {
+    let n = A.length,
+        prefixSum = [0]
+    for (let i = 0; i < n; i++)
+        prefixSum.push(prefixSum[prefixSum.length - 1] + A[i])
+    let sumfromto = (i, j) => prefixSum[j + 1] - prefixSum[i]
+
+    let dp = [...Array(n+1)].map(d => [...Array(n+1)])
+    //dp[i][m]= The max difference the curr palyer can achieve with M=m over his opponent,
+    // from i  onwards
+
+    let getMaxDiff=(i,M)=>{
+        if(i>=n) 
+            return 0 //the max diff is 0
+        if(dp[i][M]===undefined){
+            dp[i][M]=-Infinity
+            for (let x = 1; x <=2*M&&i+x<=n; x++) //the first player chooses a number X from 1 to 2M
+                //the second player will choose a number between 1 and 2*X, essentially raising the upper bound
+                // of his choices
+                dp[i][M]=Math.max(dp[i][M],sumfromto(i,i+x-1)-getMaxDiff(i+x,Math.max(x,M)) )            
+        }      
+        return dp[i][M]
+    }
+
+    let delta=getMaxDiff(0,1), // delta=my_score-opponet_score
+        totalSum=prefixSum[n] // total=my_score+opponetnt_score
+    return (delta +totalSum)/2// my_score=(delta+total)/2
+}
 
 
-var stoneGameII=(A)=>{
-    let n=A.length,
-        prefixSum=[0]
-    for (let i = 0; i < n; i++) 
-        prefixSum.push(prefixSum[prefixSum.length-1]+A[i])        
-    let sumfromto=(i,j)=>prefixSum[j+1]-prefixSum[i]
+var stoneGameII = (A) => {
+    let n = A.length,
+        prefixSum = [0]
+    for (let i = 0; i < n; i++)
+        prefixSum.push(prefixSum[prefixSum.length - 1] + A[i])
+    let sumfromto = (i, j) => prefixSum[j + 1] - prefixSum[i]
 
-    let dp=[...Array(n)].map(d=>[...Array((n+1)>>1)].map(d=>-Infinity))
+    let dp = [...Array(n+1)].map(d => [...Array(n+1)].map(d => -Infinity))
     //dp[i][m]= The max difference the curr palyer can achieve with M=m over his opponent
     // from i: onwards
 
-
     //basecase
-    for (let m = 1; m <= (n)>>1 ; m++) 
-        for (let i = n-1; i>=n-m; i--){
-            dp[i][m]=sumfromto(i,n-1)            
-        }
-        
-    for (let i = n-1; i >=0; i--) 
-        for (let m = 1; m <=(n>>1); m++) // the max m at any time can be n/2 at most
-            for (let x = 1; x <=2*m&&i+x<n; x++) 
-                dp[i][m]=Math.max(dp[i][m],sumfromto(i,i+x) - dp[i+x][Math.max(m,x)])           
-    console.log(dp)
-    return dp[0][1] 
-}
+    for (let m = 0; m <= n; m++)
+        dp[n][m] = 0
 
-    console.log(stoneGameII(
-        [2,7,9,4,4]
-        )
-    )
+    for(let i = n - 1; i >= 0; i--)
+        for(let M = 1; M <= n; M++) //for each potential M 
+            for(let x = 1; x <= 2 * M && i + x <= n; x++) // THe current player can choose a number x
+                //take the x first stones, but then the opponent will immediately choose
+                // the next best choice, which is dp[i+x][Math.max(x,M)], making the difference:
+                dp[i][M] = Math.max(dp[i][M], sumfromto(i,i+x-1) - dp[i + x][Math.max(x, M)]);
+            
+        
+    return (prefixSum[n]+dp[0][1] )/2
+}
+console.log(stoneGameII(
+    [1, 2, 3, 4, 5, 100]
+    //[2,7,9,4,4]
+)
+)
