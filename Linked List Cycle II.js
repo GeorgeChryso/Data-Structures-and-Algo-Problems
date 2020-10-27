@@ -23,10 +23,13 @@ var detectCycle = function(head) {
     while (fast != null && fast.next != null) {
         slow = slow.next;
         fast = fast.next.next;
-        if (slow == fast) break;
+        if (slow == fast) //Intersection
+            break;
     };
+    if (fast == null || fast.next == null) 
+        return null; //no cycle
+
     // Let the point of intersection be P
-    if (fast == null || fast.next == null) return null;
     // Let the start of the cycle be S
 
     // Distance(head,S)===Distance(P,S) 
