@@ -48,3 +48,8 @@ var getMoneyAmount = function(n) {
 };
 
 console.log(getMoneyAmountz(10),getMoneyAmount(10))
+
+
+
+// can be dp optimzied to O(n^2) with monoq, convex hull optimziation?
+//https://artofproblemsolving.com/community/c296841h1273742

@@ -39,7 +39,7 @@ let DominoEs=(n,m)=>{
                 calc(x,y+1,mask,nextmask) //current cell not free, skip it 
             else{
                 calc (x, y+1, mask, nextmask | mymask); //tile the next bit 
-                
+
                 if (y+1 < m && ! (mask & mymask) && ! (mask & (mymask << 1)))
                     calc (x, y+2, mask, nextmask);
             }
@@ -57,3 +57,4 @@ let DominoEs=(n,m)=>{
 
     return dp[n][0]
 }
+

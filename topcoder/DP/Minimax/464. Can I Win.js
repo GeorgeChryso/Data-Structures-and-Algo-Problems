@@ -8,55 +8,6 @@
 
 
 
-
-//dp[i]: can a player win if he has i as desired total
-var canIWin = function(maxChoosableInteger, desiredTotal) {
-    let n=desiredTotal
-    
-    let dp=[...Array(n+1)].map(d=>0)
-    dp[0]=1
-    for (let i = 1; i <=n; i++) {
-        for (let first = 1; first <= maxChoosableInteger; first++) //if my curr guy
-            dp[i]|=!dp[i-first-1]
-    }
-    return dp[n]
-};
-
-
-
-var canIWin = function(maxChoosableInteger, desiredTotal) {
-    let n=desiredTotal,m=maxChoosableInteger
-    let st={}
-    for (let state = 0; state < (1<<m); state++) {
-        let acc=0,s=state
-        for (let i = 1; i <=m; i++) 
-            if(s&(1<<i))
-                acc+=(i)    
-        if(st[acc]==undefined)
-            st[acc]=[state]
-        else
-            st[acc].push(state)
-    }
-
-    let dp=[...Array(n+1)].map(d=>0)
-    dp[n]=1
-    for (let i = n-1; i>=0; i--) {
-        //for every valid state that sums up to i
-        // is it possible to make a move and go to a winning state?
-        let s=st[i]
-        for (const state of s) 
-            for (let k = 1; k <=m; k++) 
-                if(state&(1<<k)==0)
-                    dp[i]|=!dp[i+k]
-    }
-
-    console.log(dp)
-    return dp[0]
-};
-
-
-console.log(canIWin(10,1))
-
 var canIWin = function(maxChoosableInteger, desiredTotal) {
     if (desiredTotal <= 0 || maxChoosableInteger >= desiredTotal) return true;
     if ((maxChoosableInteger * (maxChoosableInteger + 1)) / 2 < desiredTotal) return false; // unwinnable 
@@ -101,3 +52,45 @@ var canIWin = function(maxChoosableInteger, desiredTotal) {
     
     return helper(desiredTotal);
 };
+
+
+// this actually causes a Memory Error
+// dp[n][s]= can a player win if the current running value is n, and s is the state of the chosen integers
+var canIWin = function(maxChoosableInteger, desiredTotal) {
+    let n=desiredTotal,m=maxChoosableInteger
+    if(n<=m)
+        return true
+    let comesfrom=[...Array(n+1)].map(d=>[])
+    for (let curstate = 0; curstate <(1<<m); curstate++) {
+        let acc=0
+        for (let j = 0; j < m; j++) 
+            acc+= (curstate&(1<<j))?(j+1):0
+        comesfrom[acc].push(curstate)
+    }
+    let dp=[...Array(n+1)].map(d=>[...Array(1<<m)].map(d=>true))
+    for (let i = n-1; i>=0; i--) {
+        for (const state of curstate[]) {
+            
+        }
+        for (let curstate = 0; curstate <(1<<m); curstate++) {
+            let acc=0
+            for (let j = 0; j < m; j++) 
+                acc+= (curstate&(1<<j))?(j+1):0
+            if(acc!==i)
+                continue
+            //if for every next move
+            //the other guy loses, this guy wins
+            //so if there is a winning next state, this guy loses
+            for (let j = 0; j < m; j++)
+                if((curstate&(1<<j))==0 && i+j+1<n && dp[i+j+1][curstate|(1<<j)]==true)
+                    dp[i][curstate]=false
+        }
+
+    }
+
+    return dp[0][0]
+};
+
+
+console.log(canIWin(10,0))
+
