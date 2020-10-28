@@ -7,7 +7,7 @@
 // Given two integers maxChoosableInteger and desiredTotal, return true if the first player to move can force a win, otherwise return false. Assume both players play optimally.
 
 
-
+// recursive small pp
 var canIWin = function(maxChoosableInteger, desiredTotal) {
     if (desiredTotal <= 0 || maxChoosableInteger >= desiredTotal) return true;
     if ((maxChoosableInteger * (maxChoosableInteger + 1)) / 2 < desiredTotal) return false; // unwinnable 
@@ -54,8 +54,9 @@ var canIWin = function(maxChoosableInteger, desiredTotal) {
 };
 
 
-// this actually causes a Memory Error
-// dp[n][s]= can a player win if the current running value is n, and s is the state of the chosen integers
+//TLE,we use a map here to avoid memory overflow, 
+// What was wrong here is that the only dimension needed to compute the result is 
+// only the state, and not the current sum
 var canIWin = function(maxChoosableInteger, desiredTotal) {
     let n=desiredTotal,m=maxChoosableInteger
     if(n<=m)
@@ -65,32 +66,49 @@ var canIWin = function(maxChoosableInteger, desiredTotal) {
         let acc=0
         for (let j = 0; j < m; j++) 
             acc+= (curstate&(1<<j))?(j+1):0
-        comesfrom[acc].push(curstate)
+        if(acc<=n)
+            comesfrom[acc].push(curstate)
     }
-    let dp=[...Array(n+1)].map(d=>[...Array(1<<m)].map(d=>true))
-    for (let i = n-1; i>=0; i--) {
-        for (const state of curstate[]) {
-            
+    let dp=new Map()
+    for (let i = n-1; i>=0; i--) 
+        for (const curstate of comesfrom[i]) {
+            dp[[i,curstate]]=false //let default be false
+            for (let j = 0; j < m; j++) //for any available number to choose next
+                if((curstate&(1<<j))==0) //if i can pick the j-th number to add it
+                    //if i reach my goal or if I can reach a false
+                    if(i+1+j>=n||dp[ [i+j+1,curstate|(1<<j)] ]===false){
+                        dp[[i,curstate]]=true //i ll reach a false next turn, so my opponent loses
+                        break
+                    }
         }
-        for (let curstate = 0; curstate <(1<<m); curstate++) {
-            let acc=0
-            for (let j = 0; j < m; j++) 
-                acc+= (curstate&(1<<j))?(j+1):0
-            if(acc!==i)
-                continue
-            //if for every next move
-            //the other guy loses, this guy wins
-            //so if there is a winning next state, this guy loses
-            for (let j = 0; j < m; j++)
-                if((curstate&(1<<j))==0 && i+j+1<n && dp[i+j+1][curstate|(1<<j)]==true)
-                    dp[i][curstate]=false
-        }
-
-    }
-
-    return dp[0][0]
+    
+    return dp[[0,0]]
 };
 
 
-console.log(canIWin(10,0))
+//dp[i]= can the player who plays first while at state i win?
+var canIWin = function(maxChoosableInteger, desiredTotal) {
+    let n=desiredTotal,m=maxChoosableInteger,dp=[...Array(1<<m)].map(d=>0)
+    for (let i = (1<<m)-1; i >=0; i--) {
+        let next=[],totalSum=0
+        for (let j = 0; j < m; j++)
+            if(i&(1<<j))
+                totalSum+=j+1
+            else
+                //[next's mask, their difference]
+                next.push( [i|(1<<j),j+1] ) 
+
+        dp[i]=totalSum>=n|| // my curr state wins only if its totalSum exceeds desired
+             next.some(([nextmask,difference])=>
+             // or when a next state's total sum  exceeds desired
+                                        difference+totalSum>=n||
+            // or when some next state loses 
+            // (aka I pick the losing state and my opponents loses cos he plays next)
+                                        dp[nextmask]==0
+                       )
+    } 
+    return dp[0]
+};
+console.log(canIWin(10,
+    11))
 
