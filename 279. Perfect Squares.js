@@ -178,6 +178,7 @@ var numSquares=n=>{
     return 3
 }
 
+console.log(numSquares(7))
 
 //bfs with memo (slow)
 var numSquares = function(n) {
@@ -210,5 +211,4 @@ var numSquares = function(n) {
 };
 
 
-console.log(numSquares(12))
 

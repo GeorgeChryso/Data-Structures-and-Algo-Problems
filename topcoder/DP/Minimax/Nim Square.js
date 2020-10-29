@@ -4,7 +4,7 @@
 // If 0≤a≤b≤c≤29 then the number of losing positions for the next player is 1160.
 
 // Find the number of losing positions for the next player if 0≤a≤b≤c≤100 000.
-
+//https://projecteuler.net/problem=310
 
 // so, sprague grundy tells us that the grundy number of multiple games
 // is the xor sum of all the games themselves
@@ -19,19 +19,22 @@
 // we ll first have to calculate the Grundy number for a simple stack of 29
 
 let GrundyResults=x=>{
-    let n=x, dp=[...Array(n+1)].map(d=>0)
-    dp[0]=0//0 is a losing state
-
-    let candidates=[] //my candidates to remove
+    let n=x,candidates=[] //my candidates to remove
     for(let i=1;i*i<=x;i++)
         candidates.push(i*i)
     let m=candidates.length
-    for (let i = 1; i <=n; i++) 
-        for (let j = 0; j < m&&candidates[j]<=i; j++)
-            if(dp[i-candidates[i]]==0)
-                dp[i]=1
+
+    // let dp=[...Array(n+1)].map(d=>0)
+    //  dp[0]=0//0 is a losing state
+    // for (let i = 1; i <=n; i++) 
+    //     for (let j = 0; j < m&&candidates[j]<=i; j++)
+    //         if(dp[i-candidates[i]]==0)
+    //             dp[i]=1
     
     //now dp[n] DOES NOT HOLD the grundy number of n
+    // dp holds whether a state is winning or losing (1 or 0 respectively)
+
+
     //Actually Im going to manually calculate the grundy number of each state
     // through the recursion grundy[n]=mex{,...grundy[n-k**2]}, k**2<=n
     let nimber=[...Array(n+1)].map(d=>0)
@@ -47,16 +50,34 @@ let GrundyResults=x=>{
                 break
             }            
     }
-    console.log(nimber)
-    let result=0
-    for (let a = 0;  a<=n; a++) 
+
+    
+    // // O R D E R E D    T R I P L E 
+    // B R U T E  F O R CE IS B A D 
+    // for (let a = 0;  a<=n; a++) 
+    //     for (let b = a; b <=n; b++) 
+    //         for (let c = b; c <= n; c++) 
+    //             if(((nimber[a]^nimber[b])^nimber[c])===0)
+    //                 result++
+
+                        
+    let freqs=[...Array(n+1)].map(d=>0)
+    // freq[k]
+    // number of frequency of k=nims[i]^nims[j] pairs, where i<=j
+    let res=0
+
+    // Essentially how many pairs are there from a onwards, such that(nimber[a]^sth)==0
+    for (let a= n;a>=0; a--){ //
         for (let b = a; b <=n; b++) 
-            for (let c = b; c <= n; c++) 
-                if(((nimber[a]^nimber[b])^nimber[c])===0)
-                    result++
-    return result
+            freqs[nimber[a]^nimber[b]]++               
+        res+=freqs[nimber[a]] 
+    }
+              
+    console.log(freqs)
+    return res
 }
-console.log(GrundyResults(100000))
+console.log(GrundyResults(29)) //1160
+console.log(GrundyResults(100000)) //2586528661783
 
 //More nimbers
 // https://projecteuler.net/problem=306
