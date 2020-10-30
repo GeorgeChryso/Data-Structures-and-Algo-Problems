@@ -452,7 +452,33 @@ var minimumEffortPath = function(A) {
     }
     return dist[n-1][m-1]
 };
+
+ 
+//Bellman Ford T L E
+var minimumEffortPath = function(A) {
+    let n=A.length,m=A[0].length,
+        distanceFromSource=[...Array(n*m)].map(d=>Infinity),
+        edges=[]
+        for (let i = 0; i < n; i++) 
+            for (let j = 0; j < m; j++) {
+                if(i>=1)
+                    edges.push( [(i-1)*m+j, i*m+j, Math.abs(A[i-1][j]-A[i][j])]),
+                    edges.push( [i*m+j,(i-1)*m+j, Math.abs(A[i-1][j]-A[i][j])])                
+                if(j>=1)    
+                    edges.push( [i*m+j-1  , i*m+j, Math.abs(A[i][j-1]-A[i][j])]),
+                    edges.push( [i*m+j,i*m+j-1 , Math.abs(A[i][j-1]-A[i][j])])        
+            }      
+
+    distanceFromSource[0]=0
+    for (let i = 0; i <=n*m; i++)  //i here means the number of  inbetween EDGES i m checking. For i=1 immediate edges are taken under consideration.
+        for (const [start,end,cost] of edges)
+            if(distanceFromSource[start]!==Infinity&&
+                Math.max(distanceFromSource[start],cost)<distanceFromSource[end])
+                    distanceFromSource[end]=Math.max(distanceFromSource[start],cost)
+                    
+    return distanceFromSource[n*m-1]
+};
 console.log(minimumEffortPath(
-    [[1,10,6,7,9,10,4,9]]
+   [[1,2,1,1,1],[1,2,1,2,1],[1,2,1,2,1],[1,2,1,2,1],[1,1,1,2,1]]
       
 ))
