@@ -17,6 +17,11 @@ var minimumEffortPath = function(heights) {
         lo=0,hi=1e6,result=Infinity
 
     //iterative dfs
+    // essentially you want to find any path such that
+    // the cost of that path, aka max diff between any two consecutive nodes
+    // is <= effort
+    // Again, you need to find A N Y path that satisfies this, so you 
+    // re ok with exploring the minimum path first. 
     let dfs=(effort)=>{
         let seen=new Set(),stack=[[0,0]]
         seen.add([0,0].toString())
@@ -31,7 +36,7 @@ var minimumEffortPath = function(heights) {
                     Math.abs(heights[r+dx][c+dy]-heights[r][c])<=effort //with good diff
                     )
                     seen.add([r+dx,c+dy].toString()), //explore it 
-                    stack.push([r+dx,c+dy])
+                    stack.push([r+dx,c+dy]) //explore the minimum path first
         }
         return false
     }
@@ -47,8 +52,96 @@ var minimumEffortPath = function(heights) {
 
     return result
 };
+// recursive dfs + binary search
+var minimumEffortPath = function(heights) {
+    let n=heights.length,m=heights[0].length,
+        moves=[[0,1],[0,-1],[1,0],[-1,0]],
+        lo=0,hi=1e6,result=Infinity
 
+    let isPossible=(i,j,effort,seen)=>{
+        if(i==n-1&&j==m-1) //reached my target with maxEffort<=effort
+            return true        
+        seen.add([i,j].toString())
+        let result=false
+        for (const [dx,dy] of moves) 
+            if( i+dx>=0&&i+dx<n&&j+dy>=0&&j+dy<m  &&   //inbound neighbor
+                !seen.has([i+dx,j+dy].toString()) &&    // not  explored
+                Math.abs(heights[i+dx][j+dy]-heights[i][j])<=effort&&//with good diff
+                !result //and a previous path wasnt successful (cut the recursive stack overhead)
+                )
+                seen.add([i+dx,j+dy].toString()), //explore it 
+                result|=isPossible(i+dx,j+dy,effort,seen)//explore the minimum path first
+        
+        return result
+        //alternatively (concise)
+        return moves.some(([dx,dy])=>{
+            if( i+dx>=0&&i+dx<n&&j+dy>=0&&j+dy<m  &&   //inbound neighbor
+                !seen.has([i+dx,j+dy].toString()) &&    // not  explored
+                Math.abs(heights[i+dx][j+dy]-heights[i][j])<=effort //with good diff
+                ){
+                    seen.add([i+dx,j+dy].toString()) //explore it 
+                    return isPossible(i+dx,j+dy,effort,seen)//explore the minimum path first
+                }
+               
+            return false
+        })
+    }
 
+    while(lo<=hi){
+        let mid=(lo+hi)>>1
+        let seen=new Set()  
+        if(isPossible(0,0,mid,seen))//is mid cost possible? through dfs
+            result=Math.min(result,mid),
+            hi=mid-1
+        else
+            lo=mid+1
+    }
+
+    return result
+};
+//bfs alternative + binary search
+var minimumEffortPath = function(heights) {
+    let n=heights.length,m=heights[0].length,
+        moves=[[0,1],[0,-1],[1,0],[-1,0]],
+        lo=0,hi=1e6,result=Infinity
+    
+    
+    //bfs
+    let isPossible=(effort,seen)=>{
+        let q=[[0,0]]
+        seen.add([0,0].toString())
+        while(q.length){
+            let temp=[]
+            while(q.length){
+                let [i,j]=q.shift()
+                if(i==n-1&&j==m-1)
+                    return true
+                for (const [dx,dy] of moves) 
+                    if( i+dx>=0&&i+dx<n&&j+dy>=0&&j+dy<m  &&   //inbound neighbor
+                        !seen.has([i+dx,j+dy].toString()) &&    // not  explored
+                        Math.abs(heights[i+dx][j+dy]-heights[i][j])<=effort//with good diff
+                        )
+                        seen.add([i+dx,j+dy].toString()), //explore it 
+                        temp.push([i+dx,j+dy])
+            }
+            q=temp
+        }
+        return false
+        
+    }
+
+    while(lo<=hi){
+        let mid=(lo+hi)>>1
+        let seen=new Set()  
+        if(isPossible(mid,seen))//is mid cost possible? through dfs
+            result=Math.min(result,mid),
+            hi=mid-1
+        else
+            lo=mid+1
+    }
+
+    return result
+};
 
 
 //dijkstras
@@ -144,21 +237,22 @@ class minBinaryHeap{
 var minimumEffortPath = function(A) {
     let n=A.length,m=A[0].length,
         moves=[[0,1],[0,-1],[1,0],[-1,0]],
+        //holds the lowest distance from the beginning of node (i,j)
         distance=[...Array(n)].map(d=>[...Array(m)].map(d=>Infinity))
         pq=new minBinaryHeap()
     pq.comparator=( (a,b)=>a[0]-b[0])
 
-    pq.push([0,0,0])
-    distance[0][0]=0
+    pq.push([0,0,0]) // [ Max path distance from the beginning, node's i, node's j ]
+    distance[0][0]=0// lowest distance from itself is 0
     while(pq.length()){
-        let [d,i,j]=pq.poll()
+        let [d,i,j]=pq.poll() 
         if(i==n-1&&j==m-1)
             return d
-        for (const [dx,dy] of moves) 
-            if( i+dx>=0&&i+dx<n&&j+dy>=0&&j+dy<m){
+        for (const [dx,dy] of moves) //find all its neighbors
+            if( i+dx>=0&&i+dx<n&&j+dy>=0&&j+dy<m){ //that are valid
                 let ni=i+dx,nj=j+dy,
-                    nd=Math.max(d,Math.abs(A[ni][nj]-A[i][j]))
-                if(nd<distance[ni][nj])
+                    nd=Math.max(d,Math.abs(A[ni][nj]-A[i][j])) //and update their distance 
+                if(nd<distance[ni][nj]) //if deemed better,update it and explore it
                     distance[ni][nj]=nd,
                     pq.push([nd,ni,nj])
 
@@ -168,7 +262,7 @@ var minimumEffortPath = function(A) {
 
 
 
-// Kruskal's DSU
+// Kruskal's DSU MST
 class UnionFind {
 
     constructor(size){
@@ -220,7 +314,7 @@ class UnionFind {
         let root1=this.find(A) //parent of A
             ,root2=this.find(B) //parent of B
         if(root1===root2) //already unified
-            return
+            return false
         // I want to put the set with fewer elements 
         // to the one with more elemenets
         if(this.groupSize[root1]<this.groupSize[root2]){
@@ -233,6 +327,7 @@ class UnionFind {
         }
 
         this.numComponents-- //cos 1 less group, since i merged 2
+        return true
     }
 
     //same parent=>samegroup
@@ -242,12 +337,122 @@ class UnionFind {
     sizeOfGroup=(A)=>this.groupSize[this.find(A)]
 
 }
+
+var minimumEffortPath = function(A) {
+    let n=A.length,m=A[0].length
+    // PUSH ALL THE EDGES ONTO A QUEUE AND THEN SORT EM
+    let edges=[]
+    for (let i = 0; i < n; i++) 
+        for (let j = 0; j < m; j++) {
+            if(i>=1)
+                edges.push( [(i-1)*m+j, i*m+j, Math.abs(A[i-1][j]-A[i][j])])        
+            if(j>=1)    
+                edges.push( [i*m+j-1  , i*m+j, Math.abs(A[i][j-1]-A[i][j])])        
+        }        
+    //edge: [from cell, to cell, their distance]
+    // mapping : (i,j)=>i*m+j
+    edges.sort((a,b)=>a[2]-b[2]) //sort distance ascending
+
+    let DSU=new UnionFind(n*m)
+    //Note: the last edge that will connect the target's group with start's group will contain
+    // the result distance, cos I sorted ascending, so it will be the maximum edge of that group
+    for(let [n1,n2,dist] of edges)
+        //DSU.union will unify n1 and n2  and return true if they were not already unified. 
+        if(DSU.union(n1,n2)&&DSU.sameGroup(0,(n-1)*m+m-1)) 
+            return dist
+    
+    return 0
+};
+
+//PRIM'S, completely inefficient
+var minimumEffortPath = function(A) {
+    let n=A.length,m=A[0].length,visited=new Set()
+    pq=new minBinaryHeap()
+    pq.comparator=( (a,b)=>a[2]-b[2])
+        // PUSH ALL THE EDGES ONTO A PRIORITY Queue
+    for (let i = 0; i < n; i++) 
+        for (let j = 0; j < m; j++) {
+            if(i>=1)
+                pq.push( [(i-1)*m+j, i*m+j, Math.abs(A[i-1][j]-A[i][j])])        
+            if(j>=1)    
+                pq.push( [i*m+j-1  , i*m+j, Math.abs(A[i][j-1]-A[i][j])])        
+        }        
+    let MST=new Set()
+    //EXECUTE PRIM'S
+    while(MST.size!=n*m-1){
+        var [from,to,distance]=pq.poll()
+        if(visited.has(to))
+            continue
+        visited.add(to)
+        MST.add([from,to,distance].toString())
+
+        let DeMap=(x)=>
+            A[(x/m)>>0][x-m*((x/m)>>0)]     
+        //the bottom adjacent node differs by m
+        if(to+m<m*n&&!visited.has(to+m)&&(((to/m)>>0)===1-(((to+m)/m)>>0)) )// they also have to be on the same column
+            pq.push([to,to+m, Math.abs(DeMap(to)-DeMap(to+m))])
+        //the next one differs by one
+        if(to+1<m*n&&!visited.has(to+1)&&(((to/m)>>0)==(((to+1)/m)>>0)) )
+            pq.push([to,to+1, Math.abs(DeMap(to)-DeMap(to+1))])
+    }
+
+    //DO A DFS ON THE MST Starting from source and going up to target
+    let seen=new Set(),
+        DFS=(i,j,MST,maxDist)=>{
+            if(i<0||j<0||i>=n||j>=m||seen.has([i,j].toString()))
+                return Infinity
+            if(i==n-1&&j==m-1)
+                return maxDist
+            seen.add([i,j].toString())
+            let result=Infinity
+            if(i+1<n&&MST.has([i*m+j,(i+1)*m+j,Math.abs(A[i][j]-A[i+1][j])].toString()))
+                result=Math.min(result,DFS(i+1,j,MST,
+                    Math.max(maxDist,Math.abs(A[i][j]-A[i+1][j]))))
+            if(j+1<m&&MST.has([i*m+j,i*m+j+1,Math.abs(A[i][j]-A[i][j+1])].toString()))
+                result=Math.min(
+                        result,
+                        DFS(i,j+1,MST,
+                                    Math.max(
+                                        Math.abs(A[i][j]-A[i][j+1]),
+                                        maxDist)))    
+            return result
+        }
+
+    return DFS(0,0,MST,0)
+};
+
+
+// D'esopo Pape
 var minimumEffortPath = function(A) {
     let n=A.length,m=A[0].length,
         moves=[[0,1],[0,-1],[1,0],[-1,0]],
-        distance=[...Array(n)].map(d=>[...Array(m)].map(d=>Infinity))
-    
+        dist=[...Array(n)].map(d=>[...Array(m)].map(d=>Infinity)),
+        mm=[...Array(n*m)].map(d=>2), //map everything to 2
+        q=[ [0,0] ]
+
+    dist[0][0]=0
+    while(q.length){
+        let [x,y]=q.shift()
+        mm[x*m+y]=0
+        for (const [dx,dy] of moves) {
+            if(x+dx<0||x+dx>=n||y+dy>=m||y+dy<0)
+                continue
+            let ndist=Math.abs(A[x][y]-A[x+dx][y+dy])
+            if(Math.max(dist[x][y],ndist)<dist[x+dx][y+dy]){
+                dist[x+dx][y+dy]=Math.max(dist[x][y],ndist)
+                let encoded= (x+dx)*m+y+dy
+                if(mm[encoded]==2)
+                    mm[encoded]=1,
+                    q.push([x+dx,y+dy])
+                else if(mm[encoded]==0)
+                    mm[encoded]=1,
+                    q.unshift([x+dx,y+dy])
+            }
+        }
+    }
+    return dist[n-1][m-1]
 };
 console.log(minimumEffortPath(
-    [[1,2,2],[3,8,2],[5,3,5]]
+    [[1,10,6,7,9,10,4,9]]
+      
 ))
