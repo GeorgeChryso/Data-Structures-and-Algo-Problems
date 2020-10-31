@@ -1,99 +1,72 @@
 
-var findNumberOfLIS = function(A) { 
-    var overallBiggestLength=0
-    var overallBiggestLengthIndex=-1
-    if (!A.length )return 0
-    var biggesttLengthAtStart=Array(A.length).fill(1) // each element of this array, represents
-    var waysToAchieveIt=Array(A.length).fill(1)
-    // the LENGTH of the LONGEST subarray STARTING FROM i, its index.
-    // if m[3]=8, that means that the LONGEST subarray starting from A[3] is of length 8
 
+// T L E 
+// bottom up dp TLE
+var findNumberOfLIS=A=>{
 
+    let n=A.length,
+        dp=[...Array(n+1)].map(d=>[...Array(n)].map(d=>0))
 
-    for (let start = A.length-2; start >= 0; start--) {
-        let currMax=0
-        for (let potentialNext = start+1; potentialNext < A.length; potentialNext++) {
-             if( A[start]<A[potentialNext]) {
-
-                
-                if(biggesttLengthAtStart[potentialNext]+1 >biggesttLengthAtStart[start]){
-                    
-                    waysToAchieveIt[start]=waysToAchieveIt[potentialNext]
-                    biggesttLengthAtStart[start]= biggesttLengthAtStart[potentialNext]+1 
-                    currMax=biggesttLengthAtStart[potentialNext]+1 
-                }
-                else if(biggesttLengthAtStart[potentialNext]+1 ==biggesttLengthAtStart[start] ){
-                    waysToAchieveIt[start]+=waysToAchieveIt[potentialNext]
-  
-                }
-               
-
-             }  
-            
-             
-        }
-   
-        
-        
+    //basecase
+    //each subsequence of length 1 is itself
+    for (let i = 0; i <n; i++)
+        dp[1][i]=1        
+    //dp[k][i]= number of increasing subsequences of length k ending at index i 
+    for (let k = 2; k <=n; k++) 
+        for (let i = k-1; i < n; i++) 
+            for (let j =0; j <i; j++) 
+                if(A[i]>A[j])
+                    dp[k][i]+=dp[k-1][j]
+    console.log(dp)
+    for (let k = n; k >=1; k--) {
+        let currentCount=dp[k].reduce((a,c)=>a+c)
+        if(currentCount!==0)
+            return currentCount        
     }
-    
-       
-
-    return waysToAchieveIt,biggesttLengthAtStart
+    return 0
 }
 
-var findNumberOfLIS = function(A) {
-    var counters=Array(A.length).fill(1)
-
-
-    if(!A.length) return 0;
-    let tails = []; // the possible ends of arrays of length i+1, if tails[0]=3, then i have 1 subarray of length 0+1=1, [3]
-    tails[0] = A[0]; // the subarray ending at itself of length 1
-
-    for(let i=1; i<A.length; i++){
+// O(n^2)
+var findNumberOfLIS=A=>{
+    let n=A.length,longestLength=0
+        //the length of the Longest Increasing Subsequence which ends with nums[i].
+        LisLen=[...Array(n)].map(d=>1),
+        //the number of the Longest Increasing Subsequences which end with nums[i].
+        count=[...Array(n)].map(d=>1)
         
-        // If my curr element is bigger than all possible tails, i just need to create a new subarray, which of course will be of length tails.length-1 +1
-        if(A[i]>tails[tails.length-1]){
-            tails.push(A[i]);
-          //  counters[i]=counters[i-1]
-            counters[tails.length-1]=Math.max(...counters.slice(0,tails.length-1))
-        }
+    for (let i = 0; i < n; i++){
+        for (let j = 0; j <i; j++)
+             /*      Essentially, try creating all the subsequences of the form
+                                    ..., A[j], A[i]
+                with ... indicating the longest subsequences that end at A[j]
+                So the new subsequences will have a length of LisLen[j]+1     */
+            if(A[j]<A[i])
+                // if I ve seen subsequences of that length already that end at A[j]
+                if(LisLen[j]+1==LisLen[i]) 
+                    count[i]+=count[j] //then i need to count the extra ones
 
-        // If my element is less than every possible end, hence the first element, I need to consider starting a new array, this will not hinder my current longest array as I already have saved it
-        else if(A[i] < tails[0]){
-            tails[0] = A[i];
-            counters[0]++
-        }
+                // If the longest subsequences that end at A[i] have smaller length
+                // then we found a new best length for A[i],
+                //  because our type beats the old one in terms of size
+                else if(LisLen[j]+1>LisLen[i])
+                    LisLen[i]=LisLen[j]+1,
+                    count[i]=count[j]
 
-        // if my element is inbetween every other element , i just need to find somewhere to place it, inface i need to find the first greater element so i can have better chances of creating a longest array. for example
-        // If tails=[,....3, 5,9] and I come across an element A[i]= 4, then by replacing 5 with 4 I have a better chance of coming across an element bigger than 4 in the future, let's say another 5, therefore extending my current array.
-        else{
-            if(tails.length==1){
-                counters[0]++
-                continue
-            }
-            let lo=0, hi = tails.length-1;
-            //binary search to find where to place my current element so i have more chances of creating a bigger subarray
-            while(lo<hi){
-                let mid = Math.floor((lo+hi)/2);
-                if(tails[mid] < A[i]){
-                    lo = mid+1;
-                }else{
-                    hi = mid;
-                }
-            }
-            tails[lo] = A[i];
+                // If the new subsequences I consider are smaller than what I ve already
+                // found for A[i], that means that I already found bigger subsequences
+                // that end at A[i], then I dont need to even consider the ones of the form
+                //                  ..., A[j], A[i]
+                else // if( LisLen+1<LisLen[i])
+                    continue
 
-            counters[lo]=Math.max(...counters.slice(0,lo))+1
-
-        }
+        longestLength=Math.max(longestLength,LisLen[i]) //update the maximum found length
+        console.log(count+'',LisLen+'')
     }
-    console.log(tails)
-    console.log(counters)
-    return counters[tails.length-1];// meaning the length of the longest possible subarray
-};
+    //count only the ones of longest length
+    return count.filter((d,i)=>LisLen[i]==longestLength).reduce((a,c)=>a+c,0)
+}
 console.log(findNumberOfLIS(
 //[1,3,5,4,7,2,3,1,7,324,12,31,1,12,33]
-[2,2,2,2,2]
-//[1,3,5,4,7]
+//[2,2,2,2,2]
+    [1,3,5,4,2,1,12,3,12,31,123,12,7]
 ))

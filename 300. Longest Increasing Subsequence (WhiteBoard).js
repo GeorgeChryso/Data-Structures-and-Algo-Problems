@@ -58,44 +58,6 @@ var lengthOfLISz = function(A) {
 
 
 
-// O(Nlogn) Binary Search
-var lengthOfLISB = function(nums) {
-    const lis = [];
-
-    function insertLIS(lis, n) {
-        const len = lis.length;
-
-        // find a new max, create a new array that ends on n 
-        if (len < 1 || n > lis[len - 1]) return lis.push(n)
-
-        //find a new min, potentially starting anew array
-        if (n < lis[0] && len === 1) return lis[0] = n
-        if (n < lis[0] && len > 1) return
-        
-
-        // Binary search
-        let left = 0;
-        let right = len - 1;
-        while (left <= right) {
-            let mid = Math.ceil((left + right) / 2);
-            if (n > lis[mid]) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
-        lis[left] = n;
-      }
-
-
-    for (let n = 0; n < nums.length; n++) {
-      insertLIS(lis, nums[n]);
-      console.log(lis)
-    }
-
-
-    return lis.length;
-  };
   
   
 //  Linear search
@@ -154,6 +116,8 @@ var LIS=A=>{
             }
             max=Math.max(max,dp[i])
         }
+        console.log(dp+'')
+
     }
 
 
@@ -163,11 +127,22 @@ var LIS=A=>{
         console.log(A[idx-1])
     }
 
-    reconstruction(dp.indexOf(max))
+   // reconstruction(dp.indexOf(max))
     return max
 }
+console.log(
+    LIS(
+        [1,3,6,7,9,4,10,5,23,2,3]
+                       // [2,2,2,2,2]
+    )
+)
 
-
+console.log(
+    LIS(
+        [1,3,6,7,9,4,10,5,23,2,3]
+                       // [2,2,2,2,2]
+    )
+)
 
 // PATIENCE SORTING (CARDS GAME PATIENCE)
 // O(NlogN) no secondary function approach
@@ -193,6 +168,7 @@ var lengthOfLIS = function(A) {
             }
             tails[lo] = A[i];
         }
+        console.log(tails)
     }
     return tails.length-1;// is the length of the longest possible subarray (-1 because of the -Infinity I added)
 };
