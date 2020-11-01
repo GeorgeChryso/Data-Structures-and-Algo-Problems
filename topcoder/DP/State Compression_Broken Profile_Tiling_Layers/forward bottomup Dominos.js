@@ -26,22 +26,28 @@ We will be building the DP state by iterating over each i=1,⋯N and each mask=0
 //forward bottom up with recursion
 let DominoEs=(n,m)=>{
     // row, column, mask,nextmask
-    let calc=(x,y,mask,nextmask)=>{
+    let calc=(x,y,cur_mask,nextmask)=>{
         //lastrow
         if(x==n)
             return
         //lastcolumn
         if(y>=m)
-            dp[x+1][nextmask]+=dp[x][mask]
+            dp[x+1][nextmask]+=dp[x][cur_mask]
         else{
             let mymask=1<<y //try turning on the y-th bit of the row
-            if(mask&mymask) // problem, try turning on the next bit 
-                calc(x,y+1,mask,nextmask) //current cell not free, skip it 
-            else{
-                calc (x, y+1, mask, nextmask | mymask); //tile the next bit 
+            if(cur_mask&mymask!==0) // not fully filled, try next bit
+                calc(x,y+1,cur_mask,nextmask)  
 
-                if (y+1 < m && ! (mask & mymask) && ! (mask & (mymask << 1)))
-                    calc (x, y+2, mask, nextmask);
+            else{ //fully filled, aka mymask completes cur_mask
+
+                calc (x, y+1, cur_mask, nextmask | mymask); //tile the next bit 
+
+                if (
+                        y+1 < m &&
+                        !(cur_mask & mymask) && 
+                        !(cur_mask & (mymask << 1))
+                    )
+                        calc (x, y+2, cur_mask, nextmask);
             }
         }
     }
@@ -58,3 +64,4 @@ let DominoEs=(n,m)=>{
     return dp[n][0]
 }
 
+console.log(DominoEs(4,5))
