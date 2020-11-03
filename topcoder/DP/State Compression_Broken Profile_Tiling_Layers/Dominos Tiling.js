@@ -9,14 +9,13 @@ output=[3,0,153,2131]
 //there are only 12 states for each column. DRAW THEM and the adjacency matrix for each
 // some cannot be previous to some
 var Dominos=n=>{
-
     //create the adjacency matrix
     // adj[prev][next]=1 if prev can be previous to next, 0 otherwise
     let adj=[...Array(12)].map(d=>[...Array(12)].map(d=>0))
     let z=[[1,4,11],[0,2,3],[7,8],[9],[10],[7,8],[11],[0,2,3],[5],[0,2,3],[4,1],[6]]
     for (let i = 0; i <12; i++) 
         while(z[i].length)
-            adj[i][ar.shift()]=1
+            adj[i][z[i].shift()]=1
     
     let dp=[...Array(n)].map(d=>[...Array(12)].map(d=>0))
     //first column can be only states 0,2,3         
@@ -33,12 +32,31 @@ var Dominos=n=>{
                     dp[i][cur]=1
                 else if(adj[prev][cur])
                     dp[i][cur]=dp[i][cur]+dp[i-1][prev]
-    console.log(dp[1])
     return dp[n-1].reduce((a,c)=>a+c)
 }
 
-tests.forEach(d=>console.log(Dominos(d)))
-
+console.log(tests.map(d=>Dominos(d)))
+//istead, a less brute forcy approach is to consider each column as a base 2 number
+// 1 for occupied and 0 for free
+//DRAW THE STATES AND HOW THEY CAN COME FROM PREVIOUS STATES
+var Dominos=n=>{
+    let prev=[...Array(8)].map(d=>0)
+    //basecases
+    prev[0]=1,prev[3]=1,prev[6]=1 //basecases, i can place 0, 1 dominos in a single column
+    // so the cases 3 and 6 come from placing 1 domino, and 0 from placing 0 dominos
+    for (let i = 1; i <n; i++) {
+        let next=[...prev]
+        next[0]=prev[7]     
+        next[1]=prev[6]//+prev[0] Prev[0] is already accounted for in prev[6], because it's the same placing of dominos
+        next[3]=prev[7]+prev[4]
+        next[4]=prev[3]//+prev[0] same here, prev[3] handles the case of prev[0], cos it's the same arrangements of dominos (1 vertical and 1 horizontal)
+        next[6]=prev[7]+prev[1]
+        next[7]=prev[6]+prev[3]+prev[0]
+        prev=next
+    }
+    return prev[7]
+}
+console.log(tests.map(d=>Dominos(d)))
 // tiling problems
 //https://projecteuler.net/problem=189
 //7255 - Land of Farms

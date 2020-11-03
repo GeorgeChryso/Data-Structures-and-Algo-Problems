@@ -29,6 +29,7 @@
 
 // O(n*81)=O(n) runtime O(n*81)=O(n) space
 // can turn it into O(1) space with 2 cols
+//brute force states 
 var numTilings = function(n) {
     if(n<=2)
         return n
@@ -73,10 +74,28 @@ var numTilings = function(n) {
 };
 console.log(numTilings(4))
 
+// there are a total of 2^2 states for any column
+var numTilings = function(n) {
+    if(n<=2)
+        return n
+    let mod =1e9+7, prev=[...Array(1<<2)].map(d=>0)
+    prev[0]=1,prev[3]=1
+    for (let i = 1; i <n; i++) {
+        let next=[...Array(1<<2)].map(d=>0)        
+        next[0]=prev[3] %mod
+        next[1]=(prev[0]+prev[2])%mod
+        next[2]=(prev[0]+prev[1])%mod
+        next[3]=(prev[0]+prev[1]+prev[2]+prev[3])%mod
+        prev=next
+    }
+    return prev[3]
+};
+
+console.log(numTilings(4))
 
 
 //turns out this is an arithmetic sequence
-
+// from OEIS
 // 1 2 5 11 24,...
 
 //A[i]=2*A[i-1] + A[i-3]
