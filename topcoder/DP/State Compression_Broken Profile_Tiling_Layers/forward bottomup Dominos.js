@@ -24,44 +24,89 @@ We will be building the DP state by iterating over each i=1,⋯N and each mask=0
 
 
 //forward bottom up with recursion
-let DominoEs=(n,m)=>{
-    // row, column, mask,nextmask
-    let calc=(x,y,cur_mask,nextmask)=>{
-        //lastrow
-        if(x==n)
+var DominoEs=(n,m)=>{
+    let dp=[...Array(m+1)].map(d=>[...Array(1<<n)].map(d=>0)) 
+    dp[0][0]=1
+    let isOccupied=(i,mask)=> mask&(1<<i)
+
+    // i-th cell to change on p
+    let search=(i,p,q,k)=>{
+        // n-th element doesnt exist
+        if(i==n){
+            // DP[K+1][ NEXT ] NEEDS TO COUNT DP[K][PREVIOUS]
+            // BECAUSE P CAN PRODUCE Q 
+            dp[k+1][q]+=dp[k][p]
             return
-        //lastcolumn
-        if(y>=m)
-            dp[x+1][nextmask]+=dp[x][cur_mask]
-        else{
-            let mymask=1<<y //try turning on the y-th bit of the row
-            if(cur_mask&mymask!==0) // not fully filled, try next bit
-                calc(x,y+1,cur_mask,nextmask)  
+        }
+        //TRY PRODUCING EVERY Q
+        if(isOccupied(i,p)){
+            search(i+1,p,q,k) //try changing the next
+            return
+        }
+        if(i+1<n&&!isOccupied(i+1,p)){
+            search(i+2,p,q,k) //place a vertical domino on i,i+1
+                            // so the EQUVALENT ELEMENTS OF Q REMAIN UNCHANGED
+                            // aka Q[i] and Q[i+1]
+        }
 
-            else{ //fully filled, aka mymask completes cur_mask
-
-                calc (x, y+1, cur_mask, nextmask | mymask); //tile the next bit 
-
-                if (
-                        y+1 < m &&
-                        !(cur_mask & mymask) && 
-                        !(cur_mask & (mymask << 1))
-                    )
-                        calc (x, y+2, cur_mask, nextmask);
-            }
+        if(k+1<m){ // IF THIS ISNT THE LAST ROW, I CAN PLACE A HORIZONTAL
+            // DOMINO OCCUPYING PREVIOUS[i] AND Q[i]
+            // placed a horizontal domino
+            search(i+1,p,q|(1<<i),k);
         }
     }
-    // dp[i][mask] =#ways to tile up to i-th row, with the i-th row being the mask base2
-    let dp=[...Array(n)].map(d=>[...Array(1<<m)].map(d=>0))
-
-    //basecase
-    dp[0][0]=1 //the first row can be fully tiled in 1 way
     
-    for (let row=0; row<n; row++)
-        for (let mask=0; mask<(1<<m); ++mask)
-            calc (row, 0, mask, 0);
+    for (let k = 0; k <m; k++) 
+        for (let p = 0; p < (1<<n); p++) {
+            let q=0 //next profile
+            // start the process and try to change 0-th element of p       
+            search(0,p,q,k) 
+        }        
+    
+    return dp[m][0]
+}
+tests=[2,3,8,12]
+output=[3,0,153,2131]
 
-    return dp[n][0]
+console.log(tests.map(d=>(DominoEs(3,d))))
+
+//forward bottom up with recursion
+var DominoEs=(n,m)=>{
+    let dp=[...Array(m+1)].map(d=>[...Array(1<<n)].map(d=>0)) 
+    dp[0][0]=1
+    let isOccupied=(i,mask)=> mask&(1<<i)
+
+    // i-th cell to change on p
+    let search=(i,p,q,k)=>{
+        //essentially reached the end, as my column has n-1 elements
+        if(i==n)
+            // DP[K+1][ NEXT ] NEEDS TO COUNT DP[K][PREVIOUS]
+            // BECAUSE P CAN PRODUCE Q 
+            dp[k+1][q]+=dp[k][p]
+
+
+        for (let j = i; j < n; j++) {
+            if(isOccupied(j,p))
+                continue
+            if( j+1<n && !isOccupied(j+1,p) )
+                search(j+2,p,q,k)
+            if( k+1<m )
+                search(j+1,p,q|(1<<j),k);
+        }
+
+    }
+    
+    for (let k = 0; k <m; k++) 
+        for (let p = 0; p < (1<<n); p++) {
+            let q=0 //next profile
+            // start the process and try to change 0-th element of p       
+            search(0,p,q,k) 
+        }        
+    
+    return dp[m][0]
 }
 
-console.log(DominoEs(4,5))
+tests=[2,3,8,12]
+output=[3,0,153,2131]
+
+console.log(tests.map(d=>(DominoEs(3,d))))

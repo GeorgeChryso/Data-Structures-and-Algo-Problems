@@ -57,6 +57,10 @@ var Dominos=n=>{
     return prev[7]
 }
 console.log(tests.map(d=>Dominos(d)))
+
+
+
+
 // tiling problems
 //https://projecteuler.net/problem=189
 //7255 - Land of Farms

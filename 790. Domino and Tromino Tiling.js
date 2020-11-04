@@ -92,7 +92,35 @@ var numTilings = function(n) {
 };
 
 console.log(numTilings(4))
+//do it top down
+var numTilings = function(n) {
+    if(n<=2)
+        return n
+    let mod =1e9+7
+    let dp=new Map()
+    dp.set( ''+[0,0],1)
+    dp.set( ''+[0,3],1)
+    let recursion=(i,state)=>{
+        if(dp.has(''+[i,state]))
+            return dp.get(''+[i,state])
+        if(i<=0)
+            return 0
+        let count=0
+        if(state==0)
+            count+= recursion(i-1,3)
+        else if(state==1)
+            count+= recursion(i-1,0)+recursion(i-1,2)
+        else if(state==2)
+            count+= recursion(i-1,0)+recursion(i-1,1)
+        else if(state==3)
+            count+= recursion(i-1,3)+ recursion(i-1,2)+ recursion(i-1,1)+ recursion(i-1,0)
+        dp.set(''+[i,state],count%mod)
+        return count
+    }
 
+    return recursion(n-1,3)%mod
+};
+console.log(numTilings(4))
 
 //turns out this is an arithmetic sequence
 // from OEIS
