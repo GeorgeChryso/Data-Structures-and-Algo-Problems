@@ -79,7 +79,35 @@ var findMinHeightTrees = function(n, edges) {
     }
     return result
 };
+// The roots of the MHT's  ARE the middle vertice(s) of the path of its diameter
+// O(n)
+var findMinHeightTrees = function(n, edges) {
+    if(n==1)
+        return [0]
+    let adj=[...Array(n)].map(d=>[])
+    for (const [f,t] of edges) 
+        adj[f].push(t),
+        adj[t].push(f)
+    //returns the longest path that starts from node
+    let dfs=(node,seen)=>{ 
+        let max=[]
+        for (const neighbor of adj[node]) 
+            if(!seen.has(neighbor)){
+                seen.add(neighbor)
+                let cur=dfs(neighbor,seen)
+                if(cur.length>max.length)
+                    max=cur
+            }
+        return max.concat([node])
+    }
+    //find the diameter's path with x2 DFSes
+    let vertex1=dfs(0,new Set([0]))[0],diameterPath=dfs(vertex1,new Set([vertex1]))
 
+    if(diameterPath.length&1!==0) //if the longest path is odd
+        return [diameterPath[diameterPath.length>>1]] //theres only 1 mht root
+    //else there are 2 ( the middle points)
+    return [diameterPath[(diameterPath.length>>1)-1],diameterPath[diameterPath.length>>1]]
+};
 // the result can be at most of length 2 
 // Iteratively, cut leaves until you get to the last <=2 nodes, which are the roots of the MHT's
 // The roots of the MHT's can be the middle vertice(s) of the path of its diameter
@@ -107,6 +135,12 @@ var findMinHeightTrees = function(n, edges) {
     
     return Object.keys(g);
 };
+
+
+
+// DP solution todo
+//https://leetcode.com/problems/minimum-height-trees/discuss/76052/Two-O(n)-solutions
+
 console.log(findMinHeightTrees(
    4, [[1,0],[1,2],[1,3]]
 ))
