@@ -58,41 +58,51 @@ var Dominos=n=>{
 }
 console.log(tests.map(d=>Dominos(d)))
 
+//bottomup forward dp
+var DominoEs=(n,m)=>{
+    
+    let dp=[...Array(m+1)].map(d=>[...Array(1<<n)].map(d=>0)) 
+    dp[0][0]=1 //basecase
+    let isOccupied=(i,mask)=> mask&(1<<i)
 
+    // i-th cell to change on mask p, 
+    let search=(i,p,q,k)=>{
+        // n-th element doesnt exist
+        if(i==n){
+            // DP[K+1][ NEXT ] NEEDS TO COUNT DP[K][PREVIOUS]
+            // BECAUSE P CAN PRODUCE Q 
+            dp[k+1][q]+=dp[k][p]
+            return
+        }
+        //TRY PRODUCING EVERY Q
+        if(isOccupied(i,p)){
+            search(i+1,p,q,k) //try changing the next element in that column
+            return
+        }
+        //if this isnt the last element of my column (aka there's at least 1 more (i+1))
+        // and the i+1-th of my column is free
+        if(i<n-1&&!isOccupied(i+1,p)){
+            search(i+2,p,q,k) //place a vertical domino on i,i+1
+                            // so the EQUVALENT ELEMENTS OF Q REMAIN UNCHANGED
+                            // aka Q[i] and Q[i+1]
+        }
 
+        if(k<m-1){ // IF THIS ISNT THE LAST COLUMN, I CAN PLACE A HORIZONTAL
+            // DOMINO OCCUPYING PREVIOUS[i] AND Q[i]
+            // placed a horizontal domino
+            search(i+1,p,q^(1<<i),k);
+        }
+    }
+    
+    for (let k = 0; k <m; k++) 
+        for (let p = 0; p < (1<<n); p++) {// for every possible profile on column k
+            let q=0 //next profile (on column k+1)
+            // start the process and try to change 0-th element of p       
+            search(0,p,q,k)  //create and fill all possible nexts profile q
+            // with my current profile's count
+        }        
+    
+    return dp[m][0]
+}
+console.log(tests.map(d=>DominoEs(3,d)))
 
-// tiling problems
-//https://projecteuler.net/problem=189
-//7255 - Land of Farms
-// dp tiling
-//http://fileadmin.cs.lth.se/contest/nwerc/Problemset_NWERC2004.pdf
-// poj 2411
-// poj 1038
-// sgu 131
-// sgu 132
-// sgu 223
-// sgu 225
-// zoj 1346
-// poj 3254
-// poj 1185
-// poj 3311
-// hdu 3001
-// poj 2288
-// zoj 4257
-// hdu 3681
-// poj 2430
-// poj 2436
-// poj 2541
-// poj 2836
-// poj 1699
-// poj 2288
-// poj 2688
-// poj 3411
-// poj 2686
-// poj 1482
-// poj 2690
-// poj 3719
-// poj 1795
-// poj 1739
-// poj 3593
-// poj 2088

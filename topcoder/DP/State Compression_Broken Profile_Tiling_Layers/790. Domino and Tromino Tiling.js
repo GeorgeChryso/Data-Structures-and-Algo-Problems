@@ -72,7 +72,6 @@ var numTilings = function(n) {
     
     return dp[n-1].reduce((a,c)=>(a+c)%mod)
 };
-console.log(numTilings(4))
 
 // there are a total of 2^2 states for any column
 var numTilings = function(n) {
@@ -91,7 +90,6 @@ var numTilings = function(n) {
     return prev[3]
 };
 
-console.log(numTilings(4))
 //do it top down
 var numTilings = function(n) {
     if(n<=2)
@@ -120,7 +118,6 @@ var numTilings = function(n) {
 
     return recursion(n-1,3)%mod
 };
-console.log(numTilings(4))
 
 //turns out this is an arithmetic sequence
 // from OEIS
@@ -141,3 +138,83 @@ var numTilings = function(n) {
     }
     return pr1
 };
+
+console.log([4,5,6,12,15,17,21].map(d=>numTilings(d)))
+
+//forward bottom up dp
+var numTilings=(n)=>{
+    if(n<=2)
+        return n
+
+    let m=n
+    n=2 //notice that this has to be 1 less than the column, which is strange-u
+    let dp=[...Array(m+1)].map(d=>[...Array(1<<n)].map(d=>0)) 
+    dp[0][0]=1 //basecase
+    let isOccupied=(i,mask)=> mask&(1<<i)
+
+    // i-th cell to change on p
+    let search=(i,p,q,k)=>{
+        // n-th element doesnt exist
+        if(i==n){
+            // DP[K+1][ NEXT ] NEEDS TO COUNT DP[K][PREVIOUS]
+            // BECAUSE P CAN PRODUCE Q 
+            //console.log(p.toString(2),q.toString(2),k,dp[k][p])
+            dp[k+1][q]=(dp[k+1][q]+dp[k][p])%(1e9+7)
+            return
+        }
+        //TRY PRODUCING EVERY Q
+        if(isOccupied(i,p)){
+            search(i+1,p,q,k) //try changing the next element in that column
+            return
+        }
+        //if this isnt the last element of my column (aka there's at least 1 more (i+1))
+        // and the i+1-th of my column is free
+        
+        //the previous line is tiled or i==0
+        // 
+        /*       
+             (*) *      (*) *         (*)
+              *             *          * *
+        */
+        if(i<n-1&&k<m-1){
+            if(!isOccupied(i,q)&&!isOccupied(i+1,p))
+                search(i+2,p,q|(1<<i),k)
+
+            if(!isOccupied(i,q)&&!isOccupied(i+1,q)) //edge case bottom
+                search(i+1,p,q|(1<<i)|(1<<(i+1)),k)
+                
+            if(!isOccupied(i+1,q)&&!isOccupied(i+1,p))
+                search(i+2,p,q|(1<<(i+1)),k)
+        }
+        /*
+               *     
+           (*) *             
+        */
+        if(i>=1&&k<m-1&&!isOccupied(i-1,q)&&!isOccupied(i,q))
+            search(i+1,p,q|(1<<i)|(1<<(i-1)),k)
+
+        /*
+                              (*)     
+             (*) *             *    
+        */
+        if(k<m-1 && !isOccupied(i,q))
+            search(i+1,p,q|(1<<i),k);
+
+        if(i<n-1 && !isOccupied(i+1,p) )
+            search(i+2,p,q,k) 
+
+    }
+    
+    for (let k = 0; k <m; k++) 
+        for (let p = 0; p < (1<<n); p++) {// for every possible profile on column k
+            let q=0 //next profile (on column k+1)
+            // start the process and try to change 0-th element of p       
+            search(0,p,q,k)  //create and fill all possible nexts profile q
+            // with my current profile's count
+        }        
+    
+    return dp[m][0]
+}
+
+
+console.log([4,5,6,12,15,17,21].map(d=>numTilings(d)))
