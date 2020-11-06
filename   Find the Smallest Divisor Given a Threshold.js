@@ -31,17 +31,16 @@
 
 //binary search the result
 var smallestDivisor = function(nums, threshold) {
-    let func=k=>nums.reduce((a,c)=>a+ (Math.ceil(c/k)),0)
-    let lo=1,hi=Math.max(...nums),result=Infinity
-    while(lo<=hi){  
+    let func=k=>nums.reduce((a,c)=>a+ (Math.ceil(c/k)),0),
+        lo=1,hi=Math.max(...nums)
+    while(lo<hi){  
         let mid=(lo+hi)>>1
         if(func(mid)>threshold)
             lo=mid+1        
         else 
-            result=Math.min(result,mid),
-            hi=mid-1
+            hi=mid
     }
-    return result
+    return hi
 };
 
 console.log(smallestDivisor(
