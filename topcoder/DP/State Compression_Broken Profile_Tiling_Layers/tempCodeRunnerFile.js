@@ -1,0 +1,1 @@
+(curr|(curr<<1)|prev)

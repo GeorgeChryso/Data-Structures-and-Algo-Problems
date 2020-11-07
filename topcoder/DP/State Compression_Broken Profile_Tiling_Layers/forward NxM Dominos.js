@@ -27,7 +27,7 @@ var DominoEs=(n,m)=>{
     // I m gonna try to produce each possible next (q) mask from its previous (p)
     // by placing, when possible, each of my tiles. 
 
-    
+
     dp[0][0]=1 //basecase
     let isOccupied=(i,mask)=> mask&(1<<i)
 
@@ -156,6 +156,63 @@ console.log([4,5,6,12,15,17,21].map(d=>numTilings(3,d)))
 //output has to be, [ 11, 24, 53, 6105, 65501, 318632, 7540017 ]
 
 
+
+// Forward with BLOCKED CELLS
+var Xenia=(A)=>{
+
+    // INPUT 
+    A=A.map(d=>d.split(','))
+    let z=[],n=A.length,m=A[0].length
+    for (let col = 0; col < A[0].length; col++) {
+        let mask=0
+        for (let i = 0; i < A.length; i++) {
+            if(A[i][col]!=='.') // 'X' cells are blocked
+                mask|=(1<<(i))
+        }        
+        z.push(mask)
+    }
+    A=z
+
+    // Forward DP
+    n--
+    //prefer to always have n as the smaller number
+    let dp=[...Array(m+1)].map(d=>[...Array(1<<n)].map(d=>0)) 
+    dp[0][0]=1 //basecase
+    let isOccupied=(i,mask,j)=>mask&(1<<i)
+    // i-th cell to change on p
+    let search=(i,p,q,k)=>{
+        if(i==n&&(A[k+1]&q)==0){
+            //the next also has to be valid, aka not overlap with the k+1's mask
+            console.log(p.toString(2),q.toString(2),A[k].toString(2),k)
+            dp[k+1][q]=(dp[k+1][q]+dp[k][p])%(1e9+7)
+            return
+        }
+        if(isOccupied(i,p,k)){
+            search(i+1,p,q,k) 
+            return
+        }
+        /*
+                              (*)     
+             (*) *             *    
+        */
+        if(k<m-1 && !isOccupied(i,q,k))
+            search(i+1,p,q|(1<<i),k);
+        if(i<n-1 && !isOccupied(i+1,p,k) )
+            search(i+2,p,q,k) 
+    }
+
+    // Driver
+    for (let k = 0; k <m; k++) 
+        for (let p = 0; p < (1<<n); p++) {// for every possible profile on column k
+            if(p&A[k]) //p must be valid
+                continue
+            let q=0 //next profile (on column k+1)
+            // start the process and try to change 0-th element of p       
+            search(0,p,q,k)  //create and fill all possible nexts profile q
+            // with my current profile's count
+        }        
+    return dp[m][0]
+}
 // tiling problems
 //https://projecteuler.net/problem=189
 //7255 - Land of Farms

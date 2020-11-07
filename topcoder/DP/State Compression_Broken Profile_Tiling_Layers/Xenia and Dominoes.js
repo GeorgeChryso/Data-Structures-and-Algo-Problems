@@ -121,3 +121,82 @@ var Xenia=(A)=>{
     }
     return dp[n-1][0][1]
 }
+
+
+var Xenia=(A)=>{
+    A=A.map(d=>d.split(','))
+    let z=[],sx,sy,n=A.length,m=A[0].length
+    for (let col = 0; col < A[0].length; col++) {
+        let mask=0
+        for (let i = 0; i < A.length; i++) {
+            if(A[i][col]!=='.')
+                mask|=(1<<(i))
+            if(A[i][col]=='O')
+                sx=i,
+                sy=col
+        }        
+        z.push(mask)
+    }
+    n--
+    A=z// m columns of length 3 
+    console.log(A,n,m)
+    //prefer to always have n as the smaller number
+    let dp=[...Array(m+1)].map(d=>[...Array(1<<n)].map(d=>0)) 
+    dp[0][0]=1 //basecase
+    let isOccupied=(i,mask,j)=> (mask&(1<<i))
+
+    // i-th cell to change on p
+    let search=(i,p,q,k)=>{
+        if(i==n){
+            if(A[k+1]&q) // the next mask q cant overlap with my next column
+                return
+            console.log(p.toString(2),q.toString(2),A[k].toString(2))
+            dp[k+1][q]=(dp[k+1][q]+dp[k][p])%(1e9+7)
+            return
+        }
+        // A[k]&q means that my mask overlaps with a blocked area
+        if(isOccupied(i,p,k)){
+            search(i+1,p,q,k) 
+            return
+        }
+        // sx==i, sy==j then curr point is 'O'
+        /*
+                              (*)     
+             (*) *             *    
+        */
+        if(k<m-1 && !isOccupied(i,q,k))
+            search(i+1,p,q|(1<<i),k);
+
+        if(i<n-1 && !isOccupied(i+1,p,k))
+            search(i+2,p,q,k) 
+            
+    }
+    for (let k = 0; k <m; k++) 
+        for (let p = 0; p < (1<<n); p++) {// for every VALID possible profile on column k
+            if(p&A[k])// that doesnt overlap with my blocked cells
+                continue
+
+            let q=0 //next profile (on column k+1)
+            // start the process and try to change 0-th element of p       
+            search(0,p,q,k)  //create and fill all possible nexts profile q
+            // with my current profile's count
+        }        
+    console.log(dp)
+    return dp[m][0]
+}
+
+
+let tests=[
+    [
+        '.,.,.,.,X',
+        '.,O,.,.,.',
+        '.,.,.,X,.'
+    ]
+]
+
+
+let output=[
+    1
+]
+
+tests.forEach(d=>console.log(Xenia(d)))
