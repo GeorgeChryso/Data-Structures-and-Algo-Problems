@@ -145,12 +145,11 @@ var maxScoreA=A=>{
 }
 
 
-// O(m*n*2^(n+1)) , petr code
+// O(m*n*2^(n+1)) , petr code dunno
 var maxScoreB=A=>{
     let M=A[0].length,N=A.length,
-        dp=[...Array(M+1)].map(d=>[...Array(1<<N)].map(d=>-Infinity))
-
-    let max =[...Array(1 << (N + 1))].map(d=>-1);
+        max =[...Array(1 << (N + 1))].map(d=>-1);
+        
     max[max.length - 1] = 0;
 
     for (let col = 0; col < M; ++col)
@@ -229,7 +228,7 @@ var maxScore=A=>{
     for (let k = 0; k < M; k++) 
         for (let j = 0; j < (1 << N); ++j) //for each possible mask on this column
           if ((j & columns[k]) == 0) // that doesnt overlap with the mask
-            rec(0, j |  columns[k], 0, dp[k][j],k);
+            rec(0,prev=j |  columns[k], next=0, sum=dp[k][j],k);
       
     return dp[M][0] + placedAlrdy;
 }

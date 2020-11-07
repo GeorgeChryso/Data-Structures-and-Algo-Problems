@@ -10,39 +10,59 @@
 // Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
 // Output: 7 -> 8 -> 0 -> 7
 
+// more elegant
+/* Essentially create nodes liek that
 
+    l1-> 7-> 1 -> 2  -> 3  -> 4
+    l2->          8  -> 9  -> 5
+    -------------------
+         7<- 1 <- 10 <- 12 <- 9
+    And then transform your created list so it transfers the remainder
+         7<- 1 <- 10 <- 2  <- 9  
+                        remainder =1
+         7<- 1 <- 1  <- 2  <- 9  
+                        remainder =1
+         7<- 2 <- 1  <- 2  <- 9  
+                        remainder =0
+         7<- 2 <- 1  <- 2  <- 9  <=need to reverse taht 
 
- function ListNode(val) {
-        this.val = val;
-        this.next = null;
-    }
+result=> 7-> 2 -> 1  -> 2  -> 9
 
+*/
 var addTwoNumbers = function(l1, l2) {
-    let stack=[],stack2=[]
-    while(l1){
-        stack.push(l1.val)
+    let findListLength=(head,result=0)=>head?findListLength(head.next,result+1):result,
+    n=findListLength(l1),m=findListLength(l2)
+    if(m>n)
+        temp=l1,l1=l2,l2=temp,tempn=n,n=m,m=tempn //ensure l1 is the bigger list
+    
+    let prev=null,node
+    for (let i = 0; i <n; i++){
+        node=new ListNode(l1.val)
+        if(i>=n-m)
+            node.val+=l2.val,
+            l2=l2.next
         l1=l1.next
+        node.next=prev,
+        prev=node
     }
-    while(l2){
-        stack2.push(l2.val)
-        l2=l2.next
+    let remainder=0,head=prev
+    while(prev){
+            prev.val+=remainder
+            remainder=(prev.val-(prev.val%10))/10
+            prev.val%=10
+            if(!prev.next&&remainder>0)
+                prev.next=new ListNode(0)
+            prev=prev.next 
     }
-    let start=null
-    let carry=0
-    while(stack.length||stack2.length||carry){
-        let curr=(stack.length?stack.pop():0)+(stack2.length?stack2.pop():0)+carry
-        if(curr>=10){
-            carry=(curr-(curr%10))/10
-            curr=curr%10
-        }
-        else{
-            carry=0
-        }
-    //next node creation
-        let node=new ListNode(curr)
-        node.next=start
-        start=node
-
-    }
-    return start
+    return reverseLinkedList(head)
 };
+
+let reverseLinkedList=head=>{
+    let prev=null,temp
+    while(head)
+        temp=head.next,
+        head.next=prev,
+        prev=head,
+        head=temp
+    return prev
+}
