@@ -149,7 +149,7 @@ var maxScoreA=A=>{
 var maxScoreB=A=>{
     let M=A[0].length,N=A.length,
         max =[...Array(1 << (N + 1))].map(d=>-1);
-        
+
     max[max.length - 1] = 0;
 
     for (let col = 0; col < M; ++col)
@@ -184,10 +184,11 @@ var maxScoreB=A=>{
     return res * 12 + N * M;
 }
 
-
+// Forward dp
 var maxScore=A=>{
-    let bitCount=(mask,res=0)=>mask?bitCount(mask>>1,res+(mask&1)):res,
+    let bitCount=(mask,res=0)=>mask!==0?bitCount(mask>>1,res+(mask&1)):res,
         M=A[0].length,N=A.length,
+        //DP[i][mask] is the max value i can get when up to the i-th column EVERYTHING IS TILED, and the i+1-th column has profile mask. This max value entails only the tiles I PLACED, and not the ones that were already placed by the other player. 
         dp=[...Array(M+1)].map(d=>[...Array(1<<N)].map(d=>-1)),
         placedAlrdy=1,columns=[]
 
@@ -218,19 +219,24 @@ var maxScore=A=>{
         let mask = 0;
         for (let j = 0; j < N; ++j) 
           if (A[j][i] === '1') 
-            mask |= 1 << j;
-    
+            mask |=(1 << j);
+
         columns.push(mask)
         placedAlrdy += bitCount(mask); // count the preplaced ones
     }
 
     //for each column
     for (let k = 0; k < M; k++) 
-        for (let j = 0; j < (1 << N); ++j) //for each possible mask on this column
-          if ((j & columns[k]) == 0) // that doesnt overlap with the mask
-            rec(0,prev=j |  columns[k], next=0, sum=dp[k][j],k);
+    //==================== These 2 lines are the most imposrtant part========================\\
+/*
+                Instead of immediately searching for my mask of choice for the k-th column,
+                I'm searching for masks that do not overlap with the column itself, so I dont recount the placedAlrdy elements. 
+*/
+        for (let mask = 0; mask < (1 << N); mask++) //for each possible mask on this column
+          if ((mask & columns[k]) == 0) // that doesnt overlap with the mask
+            rec(0,mask|columns[k], next=0, sum=dp[k][mask],k);
       
-    return dp[M][0] + placedAlrdy;
+    return dp[M][0] + placedAlrdy; // All M columns tiled and m+1-th has profile 0 (there is no  m+1th column obviously.)
 }
 let tests=[
 
