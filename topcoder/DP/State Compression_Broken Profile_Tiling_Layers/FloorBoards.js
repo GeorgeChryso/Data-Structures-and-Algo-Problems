@@ -91,6 +91,3 @@ var layout=( room)=>{
   }
   
 
-  let a=5
-  let b=~a&(1<<4-1)
-  console.log(b.toString(2))
