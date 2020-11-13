@@ -42,41 +42,6 @@
   */
 
 
-var Xenia=(A)=>{
-    let n=2,m=A[0].length,mod=1e9+7
-    let dp=[...Array(m)].map(d=>[...Array(6**3)])
-    //basecase (aka 1st column)
-    for(let j=1;j<m;j++){
-
-        for (let curr = 0; curr < 6**3; curr++) {
-            //validity of cur mask for curr column //can be tabulated
-            for (let prev = 0; prev < 6**3; prev++) {           
-                //validity of prev mask for prev column// can be tabulated
-                //validity of continuity for prev and cur // can be tabulated
-                
-                dp[j][cur]=( dp[j][cur]+dp[j-1][prev])%mod
-            }            
-        }
-
-    }
-    // actually I can handle the case of star column here
-    // So up until now I counted every possible puzzle
-    // but I need to remove the ones where there is no available move
-    // aka the ones where the adjacent elements to my dot are incorrect
-    return dp[m-1].reduce((a,c)=>a+c)
-}
-
-// let base6=(n)=>{
-//     let z=n.toString(6)
-//     console.log(z,parseInt(z,6))
-// }
-// base6(6**3-1)
-
-// let base12=(n)=>{
-//     let z=n.toString(12)
-//     console.log(z,parseInt(z,12))
-// }
-// base12(1000)
 
 //https://codeforces.com/contest/342/problem/D
 //copied solution, no idea wassup
@@ -122,6 +87,9 @@ var Xenia=(A)=>{
     return dp[n-1][0][1]
 }
 
+
+// So this solution counts the ways to tile the board, but that's not correct, as I only need the ways
+// that contain AT LEAST ONE MOVE on them. I need to use inclusion /exclusion but I dont know how. 
 
 var Xenia=(A)=>{
     A=A.map(d=>d.split(','))
