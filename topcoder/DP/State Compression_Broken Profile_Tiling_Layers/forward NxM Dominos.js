@@ -218,7 +218,6 @@ var Xenia=(A)=>{
 //7255 - Land of Farms
 // dp tiling
 //http://fileadmin.cs.lth.se/contest/nwerc/Problemset_NWERC2004.pdf
-// poj 2411
 // poj 1038
 // sgu 131
 // sgu 132
