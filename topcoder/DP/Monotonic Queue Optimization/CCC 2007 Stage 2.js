@@ -28,21 +28,22 @@ let Bowling=(A,k,w)=>{
 
     for (let i = 1; i <= k; i++) 
         for (let j = w; j < n; j++) 
-            dp[i][j]=Math.max(dp[i][j],dp[i][j-1],dp[i-1][j-w]+ prefix[j+1]-prefix[j+1-w] ) //hit the last w items
-
-    dp.forEach(d=>console.log(d+''))
+            //             not hit the last w items, hit the last w items
+            dp[i][j]=Math.max(dp[i][j-1] ,dp[i-1][j-w]+ prefix[j+1]-prefix[j+1-w] ) 
     return dp[k][n-1]
-}
+}// can be optimized to 1D with a 2 row optimization
 
-console.log(Bowling(
-   // [2 ,8 ,5 ,1 ,9 ,6 ,9 ,3 ,2], 2, 3 //39
-   // [2 ,18 ,5 ,1 ,9 ,6 ,9 ,3 ,2], 2, 2 // 38
-  // [2 ,8 ,5 ,1 ,9 ,6 ,69 ,3 ,2], 1, 1 //69
-    [1,1,1,1,1], 5, 2 // 5
-))
-
+let tests=[
+    [[2 ,8 ,5 ,1 ,9 ,6 ,9 ,3 ,2], 2, 3],
+    [[2 ,18 ,5 ,1 ,9 ,6 ,9 ,3 ,2], 2, 2],
+    [[2 ,8 ,5 ,1 ,9 ,6 ,69 ,3 ,2], 1, 1],
+    [[1,1,1,1,1], 5, 2]
+]
+let output=[39,38,69,5]
+console.log(tests.map(([a,b,c])=>Bowling(a,b,c)))
 
 //      ==================   Bowling for Numbers ++ ==================  \\
+//                     V    R   I   A   T   I   O   N
 // Negative Numbers are now allowed
 /*  
         Example:  K = 4, w = 3
@@ -55,3 +56,108 @@ console.log(Bowling(
 
         So, not using a ball is possible, and throwing over empty cells is also possible
 */
+
+
+// O( k*n^2)
+//• Let dp[i][j] be the maximum achievable score with i hits
+// ++++++++++ 
+// and the rightmost hit pin being j <--additional constraint
+let BowlingPP=(A,k,w)=>{
+    let n=A.length
+    let prefix=[0]
+    for (let i = 0; i < n; i++) 
+        prefix.push(prefix[prefix.length-1]+A[i])
+
+    let dp=[...Array(k+1)].map(d=>[...Array(n)].map(d=>0))
+    //basecase dp[0][k]=0, if we use 0 balls we get nothing
+
+    for (let i = 0; i < w; i++)
+        for (let j = 1; j <=k; j++)
+            dp[j][i]=prefix[i+1]
+
+    for (let i = 1; i <= k; i++) 
+        for (let j = w; j < n; j++) 
+            for (let k = 0; k <j; k++) 
+                if(k>=j-w) //overlapping with previous throw ( so i m not getting all of the previous items, as some of the m were taken on  previous throws )
+                    dp[i][j]=Math.max(
+                        dp[i-1][k]+prefix[j+1]-prefix[k+1],
+                        dp[i][j] 
+                    ) 
+                else // not overlapping (so i take the full score of my w previous items)
+                    dp[i][j]=Math.max(
+                        dp[i][j],
+                        dp[i-1][k]+prefix[j+1]-prefix[j+1-w] //take the last w (throw the ball and hit the last w) but pick something else as the previous ball , pick dp[i-1][k] as the last used  ball 
+                    )
+    dp.forEach(d=>console.log(d+''))
+    return Math.max(...dp[k])
+}// can be optimized to 1D with a 2 row optimization
+// There is also an optimization to O(n*k*w), where you keep track of the max(dp[i-1][k]),k<j-w
+// So you dont have to search in the interval 0<k<j, but  j-w<=k<j instead
+
+tests=[
+    [[2 ,8 ,-5 ,3 ,5 ,8 ,4 ,8, -6], 4, 3],
+    [[2 ,18 ,5 ,1 ,9 ,6 ,9 ,3 ,2], 2, 2],
+    [[2 ,8 ,5 ,1 ,9 ,6 ,69 ,3 ,2], 1, 1],
+    [[1,1,1,1,1], 5, 2]
+]
+output=[38,38,69,5]
+console.log(tests.map(([a,b,c])=>BowlingPP(a,b,c)))
+
+
+
+// M O N O T O N E      Q U E U E       O   P   T   I   M   I   Z   A   T   I   O   N
+//                             O(N*K*W)  => TO O(N*K)
+/*
+    Criteria met: 
+        *  dp[j] = max(f(j) + g(k)), L(j)=j-w <=k<j //after the 1row optimization
+                    f(j)=prefix[j+1], 
+                    g(k)=dp[i-1][k]-prefix[k+1]
+        *  L(j)=j-w is increasing
+
+
+    Course of action: 
+        Mintain a Queue of indices, such that
+        * Q[j]<Q[j+1] //remember, these are indices
+        * g(Q[j])>=g(Q[j+1]) // aka dp[i-1][Q[j]]-prefix[Q[j]+1]>=dp[i-1][Q[j+1]]-prefix[Q[j+1]+1]
+
+    Then:
+        dp[j]=f(j)+g(Q[l]), because g(Q[l])=Max( dp[i-1][p]-prefix[p+1]),holds the max value j>p>=Q[l] 
+
+*/
+
+ // I N C O M P L E T E 
+let BowlingPPMQ=(A,k,w)=>{
+    let n=A.length
+    let prefix=[0]
+    for (let i = 0; i < n; i++) 
+        prefix.push(prefix[prefix.length-1]+A[i])
+
+    let dp=[...Array(k+1)].map(d=>[...Array(n)].map(d=>0))
+    //basecase dp[0][k]=0, if we use 0 balls we get nothing
+
+    for (let i = 0; i < w; i++)
+        for (let j = 1; j <=k; j++)
+            dp[j][i]=prefix[i+1]
+
+    
+    let Q=[...Array(n)].map(d=>0),l=0,r=0
+    let g=(i,index)=>dp[i-1][index]-prefix[index+1]
+
+    for (let i = 1; i <= k; i++) 
+        for (let j = w; j < n; j++){
+            while (l<Q.length-1 && Q[l] < j-w )
+                l++;
+            if(l<Q.length)
+                dp[i][j]=prefix[j+1] + g(i,Q[l]) //f+g
+
+            while ( r<Q.length && g(i,Q[r]) < g(i,j))
+                r--;
+            
+            Q[r++]=i
+        }
+
+    dp.forEach(d=>console.log(d+''))
+    return Math.max(...dp[k])
+}
+
+console.log(tests.map(([a,b,c])=>BowlingPPMQ(a,b,c)))
