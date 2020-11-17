@@ -88,7 +88,7 @@ let BowlingPP=(A,k,w)=>{
                         dp[i][j],
                         dp[i-1][k]+prefix[j+1]-prefix[j+1-w] //take the last w (throw the ball and hit the last w) but pick something else as the previous ball , pick dp[i-1][k] as the last used  ball 
                     )
-    dp.forEach(d=>console.log(d+''))
+    //dp.forEach(d=>console.log(d+''))
     return Math.max(...dp[k])
 }// can be optimized to 1D with a 2 row optimization
 // There is also an optimization to O(n*k*w), where you keep track of the max(dp[i-1][k]),k<j-w
@@ -118,46 +118,45 @@ console.log(tests.map(([a,b,c])=>BowlingPP(a,b,c)))
     Course of action: 
         Mintain a Queue of indices, such that
         * Q[j]<Q[j+1] //remember, these are indices
-        * g(Q[j])>=g(Q[j+1]) // aka dp[i-1][Q[j]]-prefix[Q[j]+1]>=dp[i-1][Q[j+1]]-prefix[Q[j+1]+1]
+        * g(Q[j])>=g(Q[j+1]) // aka dp[i-1][Q[0]]= Max (... dp[i-1][z]), zε[j-w,j)
+        essentially Q[0] holds the index inside my window, where dp[i-1][z] is maximized
 
     Then:
-        dp[j]=f(j)+g(Q[l]), because g(Q[l])=Max( dp[i-1][p]-prefix[p+1]),holds the max value j>p>=Q[l] 
+        dp[j]=f(j)+g(Q[0]), because g(Q[0])=Max( dp[i-1][p]-prefix[p+1]),holds the max value j-w<p<j
 
 */
 
  // I N C O M P L E T E 
 let BowlingPPMQ=(A,k,w)=>{
-    let n=A.length
-    let prefix=[0]
+    let n=A.length, prefix=[0]
     for (let i = 0; i < n; i++) 
         prefix.push(prefix[prefix.length-1]+A[i])
 
-    let dp=[...Array(k+1)].map(d=>[...Array(n)].map(d=>0))
+    let dp=[...Array(k+1)].map(d=>[...Array(n+1)].map(d=>-Infinity))
     //basecase dp[0][k]=0, if we use 0 balls we get nothing
-
-    for (let i = 0; i < w; i++)
-        for (let j = 1; j <=k; j++)
-            dp[j][i]=prefix[i+1]
-
+    dp[0][0]=0
     
-    let Q=[...Array(n)].map(d=>0),l=0,r=0
-    let g=(i,index)=>dp[i-1][index]-prefix[index+1]
+    let Q=[0]
+    let g=(i,index)=>dp[i-1][index]-prefix[index]
+    //  [[2 ,8 ,-5 ,3 ,5 ,8 ,4 ,8, -6], 4, 3],
+    for (let i = 1; i <= k; i++,Q=[i-1]) 
+        for (let j = 0,maxprev=-Infinity; j <= n; j++){
+            while (Q.length && Q[0] <j-w )
+                Q.shift()
 
-    for (let i = 1; i <= k; i++) 
-        for (let j = w; j < n; j++){
-            while (l<Q.length-1 && Q[l] < j-w )
-                l++;
-            if(l<Q.length)
-                dp[i][j]=prefix[j+1] + g(i,Q[l]) //f+g
-
-            while ( r<Q.length && g(i,Q[r]) < g(i,j))
-                r--;
+            dp[i][j]=prefix[j] + g(i,Q[0]) //take the max inside the window
             
-            Q[r++]=i
+            if(j>=w) // or take the max before the window + claim full value of the current window
+                dp[i][j]=Math.max(maxprev+prefix[j]-prefix[j-w],dp[i][j]),
+                maxprev=Math.max(maxprev,dp[i-1][j-w])
+    
+            while ( Q.length && g(i,Q[Q.length-1]) <= g(i,j))
+                Q.pop()
+            Q.push(j)
         }
 
     dp.forEach(d=>console.log(d+''))
     return Math.max(...dp[k])
 }
 
-console.log(tests.map(([a,b,c])=>BowlingPPMQ(a,b,c)))
+console.log(tests.map(([a,b,c],i)=>BowlingPPMQ(a,b,c)))
