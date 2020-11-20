@@ -71,3 +71,35 @@ let tests=[
 let output=[ 9,10]
 
 console.log(tests.map(d=>NuttinCHT(d)))
+
+let NuttinCHTT=(recs)=>{
+
+    //sort ascending x 
+    recs.sort((a,b)=>a[0]-b[0]) 
+    // the slope is -xi, sorting by ascending xi means sorting by descending slope
+    
+    let n=recs.length,dp=[...Array(n)].map(d=>-Infinity)
+
+    let y=([M,C],x)=> M*x+C //calculates y=Mx+C
+    let Intersection=([m1,c1],[m2,c2])=>{return {'x':(c2-c1)/(m1-m2),'y': (m1*(c2-c1)/(m1-m2)+c1)}}
+
+    /*
+        dp[i]=Max( dp[j] + X[i]*Y[i]  - A[i]  -Y[i]*X[j]) for j<i
+    */
+
+    let Q=[[0,0]],result=0
+    for (let i = 0; i < n; i++){
+        let [Xi,Yi,Ai]=recs[i]
+        while(Q.length>=2&& y(Q[0],Yi)<=y(Q[1],Yi))
+            Q.shift()
+        let f= y(Q[0],Yi) -Ai+ Xi*Yi
+        console.log(f)
+        result=Math.max(result,f)
+        nextLine=[-Xi,f]
+        while(Q.length>=2 && Intersection(nextLine,Q[Q.length-2]).x <= Intersection(Q[Q.length-2],Q[Q.length-1]).x )
+            Q.pop()
+        Q.push(nextLine)
+    }
+    return result
+}
+console.log(tests.map(d=>NuttinCHTT(d)))

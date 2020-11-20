@@ -34,3 +34,29 @@ let Chicago=(A,c)=>{
 console.log(tests.map(d=>Chicago(d[0],d[1])))
 
 //Can be Optimized through convex hull + binary search somehow
+
+let ChicagoCHT=(A,c)=>{
+    let y=(line,x)=>{
+        let [M,C]=line
+        return M*x+C 
+    }
+    let Intersection=(l1,l2)=>{
+        let [m1,c1]=l1,[m2,c2]=l2
+        return {'x':(c2-c1)/(m1-m2),'y': (m1*(c2-c1)/(m1-m2)+c1)}
+    }
+    let n=A.length, //A is sorted
+        dp=[...Array(n)].map(d=>Infinity)
+    dp[0]=c // the min  cost to tile up to the first element is the constant ,cos i m only picking this element
+    let Q=[[-2*A[0],A[0]**2]]
+    for (let i = 0; i <n; i++){
+        while(Q.length>=2&& y(Q[0],A[i])>=y(Q[1],A[i]))
+        Q.shift()
+        dp[i]=y(Q[0],A[i])+c+A[i]**2        
+        nextLine=[-2*A[i+1],dp[i]+A[i+1]**2]
+        while(Q.length>=2 && Intersection(nextLine,Q[Q.length-2]).x <= Intersection(Q[Q.length-2],Q[Q.length-1]).x )
+            Q.pop()
+        Q.push(nextLine)
+    }
+    return dp[n-1]
+}
+console.log(tests.map(d=>ChicagoCHT(d[0],d[1])))
