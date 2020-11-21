@@ -34,7 +34,7 @@
 
 */      
 
-let NuttinCHT=(recs)=>{
+let Nuttin=(recs)=>{
 
     //sort ascending x 
     recs.sort((a,b)=>a[0]-b[0]) 
@@ -70,9 +70,9 @@ let tests=[
 ]
 let output=[ 9,10]
 
-console.log(tests.map(d=>NuttinCHT(d)))
+console.log(tests.map(d=>Nuttin(d)))
 
-let NuttinCHTT=(recs)=>{
+let NuttinCHT=(recs)=>{
 
     //sort ascending x 
     recs.sort((a,b)=>a[0]-b[0]) 
@@ -84,7 +84,14 @@ let NuttinCHTT=(recs)=>{
     let Intersection=([m1,c1],[m2,c2])=>{return {'x':(c2-c1)/(m1-m2),'y': (m1*(c2-c1)/(m1-m2)+c1)}}
 
     /*
-        dp[i]=Max( dp[j] + X[i]*Y[i]  - A[i]  -Y[i]*X[j]) for j<i
+        dp[i]=Max( -X[j] *Y[i]+  dp[j]) +X[i]*Y[i] - A[i]    for j<i
+          y      =    M     x      C        . . .constants
+               Q will hold lines [M,C]
+
+               M is descending,
+               x is descending 
+               
+
     */
 
     let Q=[[0,0]],result=0
@@ -93,7 +100,6 @@ let NuttinCHTT=(recs)=>{
         while(Q.length>=2&& y(Q[0],Yi)<=y(Q[1],Yi))
             Q.shift()
         let f= y(Q[0],Yi) -Ai+ Xi*Yi
-        console.log(f)
         result=Math.max(result,f)
         nextLine=[-Xi,f]
         while(Q.length>=2 && Intersection(nextLine,Q[Q.length-2]).x <= Intersection(Q[Q.length-2],Q[Q.length-1]).x )
@@ -102,4 +108,4 @@ let NuttinCHTT=(recs)=>{
     }
     return result
 }
-console.log(tests.map(d=>NuttinCHTT(d)))
+console.log(tests.map(d=>NuttinCHT(d)))
