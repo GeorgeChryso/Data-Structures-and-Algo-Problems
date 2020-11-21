@@ -129,7 +129,7 @@ let acquireCHT=Recs=>{
         descending Slope, ascenidng Queries x
     */
     n=R.length
-    let dp=[...Array(n+1)].map(d=>Infinity)
+    let dp=[...Array(n)].map(d=>Infinity)
     //basecase nothing
     dp[0]=0
     let Intersection=(l1,l2)=>{

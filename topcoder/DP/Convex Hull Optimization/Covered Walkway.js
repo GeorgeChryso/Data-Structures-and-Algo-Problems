@@ -50,7 +50,7 @@ let ChicagoCHT=(A,c)=>{
     let Q=[[-2*A[0],A[0]**2]]
     for (let i = 0; i <n; i++){
         while(Q.length>=2&& y(Q[0],A[i])>=y(Q[1],A[i]))
-        Q.shift()
+            Q.shift()
         dp[i]=y(Q[0],A[i])+c+A[i]**2        
         nextLine=[-2*A[i+1],dp[i]+A[i+1]**2]
         while(Q.length>=2 && Intersection(nextLine,Q[Q.length-2]).x <= Intersection(Q[Q.length-2],Q[Q.length-1]).x )
