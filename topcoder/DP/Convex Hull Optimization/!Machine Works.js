@@ -78,7 +78,7 @@ console.log(
     ))
 )
 
-
+// this is wrong because slope is non ascending/descending and needs a dynamic hull variant
 let MachinesCHT=(D,G,P,R,c,days)=>{
     let y=(line,x)=>{
         let [M,C]=line
