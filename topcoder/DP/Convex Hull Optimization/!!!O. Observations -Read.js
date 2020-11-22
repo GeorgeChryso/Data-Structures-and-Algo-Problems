@@ -63,3 +63,9 @@ https://github.com/RezwanArefin01/CodeTemplate/blob/master/ConvexHullTrick%20(Dy
 // after the implementation of an ordered set with logn removals, do these 
 //next problems: 
 https://robert1003.github.io/2020/02/17/dp-opt-convex-hull-trick.html
+
+
+
+// if the queries are arbitrarily (not sorted) I NEED BINARY SEARCH
+
+// if we have same slopes (aka slopes not STRICTLY MONOTONE,aka there are some parallel lines )direct computation of slope will give division by 0 
