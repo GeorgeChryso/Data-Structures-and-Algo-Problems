@@ -21,9 +21,15 @@
 // Output
 // Print an integer — the minimal possible total unfamiliar value.
 
-
+/*
+                    T   L   D   R
+        *You have to partition N people into  M gondolas and to print the minimum Unfamiliarity that arises
+        *The unfamiliarity of a selection is the sum of unfamiliarities of each group (gondola)
+        *The unfamiliarity of a gondola is the sum of the unfamiliarities between ANY two people in that gondola
+*/
 
 // N is the number of people in the q, m is the numer of gondolas, U is the unfamiliarity matrix
+// O(MNN)
 var gondolASSs=(n,m,U)=>{
         
     // let us first deal with the scoring function, I want to be able to calculate in O(1)
@@ -58,6 +64,7 @@ var gondolASSs=(n,m,U)=>{
  
     let dp=[...Array(m)].map(d=>[...Array(n)].map(d=>Infinity))
     //dp[i][j] : the Minmum Unfalimliarity of all of the gondolas if I divide my first j people in i(+1) gondolas
+    // so the last group is  from [k,j]
     //so dp[0][6] is  the total unfamiliarity of the first 6 ppl, if i put them in 1 gondola
 
     //basecase
@@ -80,6 +87,7 @@ var gondolASSs=(n,m,U)=>{
 
 // now as for the D&C DP optimization,:
 // The k is monotone on j axis, that allows me to calculate the k faster with recursion
+//O(MN log N)
 var gondolASS=(n,m,U)=>{
         
     let udp=[...Array(n)].map(d=>[...Array(n)].map(d=>0)),
@@ -98,19 +106,25 @@ var gondolASS=(n,m,U)=>{
     //dp[i][j] : the Minmum Unfalimliarity of all of the gondolas if I divide my first j people in i(+1) gondolas
     //so dp[0][6] is  the total unfamiliarity of the first 6 ppl, if i put them in 1 gondola
 
-    let DC=(i,jleft,jright,kleft,kright)=>{
+
+
+    // let K[i][j] be the best solution for dp[i][j]
+    // aka dp[i][j]=dp[i-1][K[i][j]]+ udp[K[i][j]+1][j]
+    // then exploit the fact that (after proving it)
+    //------- K[i][j-1]<=K[i][j]<=K[i][j+1] -------------\\
+
+    let DC=(i,jleft,jright,kleft,kright)=>{  //for any line i and an interval [jl,jr]
         if(jleft>jright)
             return
-        let mid=(jleft+jright)>>1,bestk=-1
+        let mid=(jleft+jright)>>1,bestk=-1   //first calculate the mid, and its best k (on the prev line)
         for (let k =kleft; k <=Math.min(mid-1,kright); k++)
-            if(dp[i][mid]>dp[i-1][k]+udp[k+1][mid]){
-                bestk=k
+            if(dp[i][mid]>dp[i-1][k]+udp[k+1][mid])
+                bestk=k,
                 dp[i][mid]=dp[i-1][k]+udp[k+1][mid]
-            }
-        if(jleft===jright)
-            return
-        DC(i,jleft,mid-1,kleft,bestk)
-        DC(i,mid+1,jright,bestk,kright)
+        // if(jleft===jright)
+        //     return
+        DC(i,jleft,mid-1,kleft,bestk)    //then split the interval into [jl,mid] which WILL have its best k between kleft and the newly found bestk
+        DC(i,mid+1,jright,bestk,kright) // same for right side
     }
     //basecase
     for (let j = 0; j < n; j++) 
@@ -119,10 +133,9 @@ var gondolASS=(n,m,U)=>{
     for (let i = 1; i < m; i++)
         DC(i,0,n-1,0,n-1)
     // add the last group
-    console.log(dp[m-2])
     for (let j = 0; j <n-1; j++)
         dp[m-2][j]+=udp[j+1][n-1]
-    console.log(dp[m-2])
+
     return Math.min(...dp[m-2])
 }
 
