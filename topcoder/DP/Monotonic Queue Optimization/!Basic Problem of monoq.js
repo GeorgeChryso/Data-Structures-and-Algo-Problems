@@ -29,16 +29,14 @@ console.log(
 // front of the queue: the minimum element INSIDE THE WINDOW
 // insert new elements from back of the queue, that pop all the elements bigger than them
 // O(n), every element gets inside the queue only once.
-
-var maxSlidingWindow = function(A, k) {
-    let n=A.length,result=[]
-       monoq=[]
+var maxSlidingWindow = function(A, k) { 
+   let n=A.length,result=[],monoq=[]
    for (let i =0; i < n; i++){
         while(i>=k&&monoq.length&& monoq[0]<=i-k) //remove invalid front (aka out of the window)
             monoq.shift()
         while(monoq.length&& A[monoq[monoq.length-1]]<=A[i]) // remove lesser back 
             monoq.pop()
-        monoq.push(i) // push the new index of the max 
+        monoq.push(i) // push the new index of the current
         if(i>=k-1)
             result.push(A[monoq[0]]) // monoq[0] is the index of the smallest element inside the k-length window
    }        
