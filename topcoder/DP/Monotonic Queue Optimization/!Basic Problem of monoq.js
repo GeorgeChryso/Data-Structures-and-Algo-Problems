@@ -25,29 +25,25 @@ console.log(
 )
 
 
-//monotonic queue approach, elements : [A[i],i]
+//monotonic queue approach, elements : [i]
 // front of the queue: the minimum element INSIDE THE WINDOW
 // insert new elements from back of the queue, that pop all the elements bigger than them
 // O(n), every element gets inside the queue only once.
-var minslidingwindow=(A,k)=>{
-    let n=A.length,result=[...Array(n)].map(d=>Infinity),
-        monoq=[]
-    for (let i = -k+1; i < n; i++){
-        //if there is a new element to insert
-        // aka the last element of the current window 
-        // and this new element pops anything bigger than it / anything that 's not inside my curr window
-        while(i+k-1<n&&monoq.length&&(monoq[monoq.length-1][0]>=A[i+k-1]||monoq[monoq.length-1][1]<i))
-            monoq.pop()
-        monoq.push([A[i+k-1],i+k-1]) 
-        //push any elements out of the window at the front of the queue
-        while(monoq.length&&monoq[0][1]<i)
-            monoq.shift()
-        if(i>=0)
-            result[i]=monoq[0][0]
-    }        
-    return result
-}
 
+var maxSlidingWindow = function(A, k) {
+    let n=A.length,result=[]
+       monoq=[]
+   for (let i =0; i < n; i++){
+        while(i>=k&&monoq.length&& monoq[0]<=i-k) //remove invalid front (aka out of the window)
+            monoq.shift()
+        while(monoq.length&& A[monoq[monoq.length-1]]<=A[i]) // remove lesser back 
+            monoq.pop()
+        monoq.push(i) // push the new index of the max 
+        if(i>=k-1)
+            result.push(A[monoq[0]]) // monoq[0] is the index of the smallest element inside the k-length window
+   }        
+   return result
+};
 console.log(
     minslidingwindow(
         [1,2,4,2,4,5,3,1], 3
