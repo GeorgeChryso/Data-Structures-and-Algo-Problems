@@ -34,10 +34,33 @@ process.stdin.on('end', _ => {
 
     dp[i][j][k] represents the count of numberings 
     where j  numbers are selected in the subtree rooted at i,
-    and the state of the current node i is k .
+    and the state of the current node i is k.
 */
-let solve=(n,m,A,k,x)=>{
+let solve=(n,m,A,K,x)=>{
     let mod=1e9+7
+    //make the graph rooted 
+    let adj=[...Array(n)].map(d=>[])
+    for(let [f,t] of A)
+        adj[f].push(t),
+        adj[t].push(f)
 
+    let dfs=(i,j,k)=>{
+        if(adj[i].length===1)
+            return 1
+        if(k==K){
 
+        }
+        else if( k>K ){
+
+        }
+        else{
+
+        }
+        //dp[i][j][k]=
+    }
+    let result=0
+    for(let k=1;k<=m;k++)
+        for(let j=1;k<=m;k++)
+            result=(result+dfs(0,j,k))%mod
+    return result
 }

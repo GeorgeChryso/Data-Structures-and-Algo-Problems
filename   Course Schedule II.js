@@ -81,8 +81,6 @@ var findOrder = function(n, prerequisites) {
         if(hasCycles(i))return [] 
     }
 
-
-
     //topo sort O(V+E)
     visited=new Set()
     let result=[]
@@ -98,13 +96,12 @@ var findOrder = function(n, prerequisites) {
     for (let i = 0; i < n; i++) {
         dfs(i)        
     }
-    
     return result
 };
 
 console.log(
     findOrder(
-        2,[[1,0]]
+        5,[[0,1],[1,2],[2,3],[3,4]]
      //2,   [[0,1],[1,0]]
     )
 )
