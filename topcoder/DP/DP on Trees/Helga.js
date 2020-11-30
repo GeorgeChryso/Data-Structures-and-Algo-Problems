@@ -40,15 +40,15 @@ process.stdin.on('end', _ => {
 let solve=(n,m,A,K,x)=>{
     let mod=BigInt(1e9+7),adj=[...Array(n)].map(d=>[])
     for(let [f,t] of A)
-        adj[f-1].push(t-1),
-        adj[t-1].push(f-1)
+        adj[Number(f)-1].push(Number(t)-1),
+        adj[Number(t)-1].push(Number(f)-1)
 
-    let dp=[...Array(n+1)].map(d=>[...Array(x+2)].map(d=>[...Array(4)].map(d=>0n)))
+    let dp=[...Array(n+2)].map(d=>[...Array(13)].map(d=>[...Array(4)].map(d=>0n)))
     
     let dfs=(node,parent)=>{
         //essentially precomputes the children, so the dp can occur and all the subtrees rooted at children are known
         for(let child of adj[node])
-            if(child!==parent)
+            if(child!=parent)
                 dfs(child,node)
         /*
             subdp0[i][j]= The number of ways I can create the tree that consists of : 
@@ -58,15 +58,15 @@ let solve=(n,m,A,K,x)=>{
             subdp1[i][j]= numWays to color my subtree rooted at node out of the first i children, such that there are j total Ks used and the root  has a value == K
             subdp2[i][j]= numWays to color my subtree rooted at node out of the first i children, such that there are j total Ks used and the root  has a value > K
         */
-        let subdp0=[...Array(adj[node].length+1)].map(d=>[...Array(x+1)].map(d=>0n)), //root is <k
-            subdp1=[...Array(adj[node].length+1)].map(d=>[...Array(x+1)].map(d=>0n)),// root is k
-            subdp2=[...Array(adj[node].length+1)].map(d=>[...Array(x+1)].map(d=>0n)) // root is >k 
+        let subdp0=[...Array(adj[node].length+1)].map(d=>[...Array(12)].map(d=>0n)), //root is <k
+            subdp1=[...Array(adj[node].length+1)].map(d=>[...Array(12)].map(d=>0n)),// root is k
+            subdp2=[...Array(adj[node].length+1)].map(d=>[...Array(12)].map(d=>0n)) // root is >k 
         subdp0[0][0]=1n
         subdp1[0][0]=1n
         subdp2[0][0]=1n
         let count=0
         for(let child of adj[node]) //for every child
-            if(child!==parent){
+            if(child!=parent){
                 // for every possible Number of Ks The tree that consists of :
                     //my root node, and the first count children
                 for (let curTaken = 0; curTaken <=x; curTaken++) 
@@ -96,5 +96,5 @@ let solve=(n,m,A,K,x)=>{
     for(let k=0;k<3;k++)
         for(let j=0;j<=x;j++)
             result=(result+dp[0][j][k])%mod
-    return result
+    return parseInt(result)
 }
