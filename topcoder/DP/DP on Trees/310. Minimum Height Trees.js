@@ -141,6 +141,41 @@ var findMinHeightTrees = function(n, edges) {
 // DP solution todo
 //https://leetcode.com/problems/minimum-height-trees/discuss/76052/Two-O(n)-solutions
 
+//dp[i] is the minimum height of the tree rooted at node i
+// then dp[i]= Math.max(...dp[children]+1)
+var findMinHeightTrees = function(n, edges) {
+    let adj={}
+    for(let [f,t] of edges){
+        if(!adj[f])
+            adj[f]=[]
+        if(!adj[t])
+            adj[t]=[]
+        adj[f].push(t)
+        adj[t].push(f)
+    }
+    let dp=[...Array(n)].map(d=>0)
+    let dfs=(node,parent)=>{
+        console.log(node,parent)
+        for(let child of adj[node])
+            if(child!==parent)
+                dfs(child,node)
+        let chosen=-1
+        for(let child of adj[node])
+            if(child!==parent){
+                if(dp[child]+1>dp[node])
+                    chosen=child,
+                    dp[node]=dp[child]+1
+            }
+        for(let child of adj[node])
+            if(child!==parent&&child!==chosen){
+                dp[child]=Math.max(dp[child],dp[node]+1)
+            }
+        console.log(node,dp[node])
+    }
+    dfs(0,-1)
+    console.log(dp)
+};
 console.log(findMinHeightTrees(
-   4, [[1,0],[1,2],[1,3]]
+   //4, [[1,0],[1,2],[1,3]]
+   6,[[3,0],[3,1],[3,2],[3,4],[5,4]]
 ))
