@@ -59,17 +59,19 @@ var solvee=(n,m,T,edges)=>{
 
 }
 
-//there's also a topological sorting solution
+//topological sorting + bakward dp style 
+// wrong
 var solve=(n,m,T,edges)=>{
     let adj={},next={}
     for( let [f,t,cost] of edges){
-        if(adj[f-1]===undefined)
-            adj[f-1]=[]
-        adj[f-1].push([t-1,cost])
+        if(adj[t-1]===undefined)
+            adj[t-1]=[]
+        adj[t-1].push([f-1,cost])
         if(next[f-1]===undefined)
             next[f-1]=new Set()
         next[f-1].add(t-1)
     }
+    //find the topological order
     let topoOrder=[],visited=new Set()
     let dfs=(node)=>{
         if(node===undefined||visited.has(node))
@@ -81,28 +83,26 @@ var solve=(n,m,T,edges)=>{
     }
     for(let i=0;i<n;i++)
         dfs(i)
-    let dp=[...Array(n)].map(d=>[-Infinity,Infinity,-2]) //1 row optimziation to pass the test cases 
 
-    console.log(topoOrder)
+
+
+    //process them in that order 
+    // dp[i] holds triplets [maxLengthOfchainThatEndsOni,itsTimeSpent<=T, its previous element]
+    let dp=[...Array(n)].map(d=>[-Infinity,Infinity,-2]) 
     dp[0]=[1,0,-1]
-    for(let curnode of topoOrder){
+    for(let curnode of topoOrder){ //for each current,
         let [maxLength,minTime,prevcur]=dp[curnode]
         if(adj[curnode])
-            for(let [next,time] of adj[curnode]){
-                let [maxLengthNext,minTimeNext,prev] =dp[next]
-                if(maxLength+1>=maxLengthNext&&minTime+time<=T)
-                //if(minTime+time<=T)
-                    dp[next]=[maxLength+1,minTime+time,curnode]
+            for(let [prev,time] of adj[curnode]){ //look at all the previous nodes
+                let [maxLengthPrev,minTimePrev,prevv] =dp[prev]
+                if(maxLengthPrev+1>=maxLength&&minTimePrev+time<=T)
+                    dp[curnode]=[maxLengthPrev+1,minTimePrev+time,prev]
             }
-        console.log(dp)
     }
-    console.log(adj[5],n-1)
-
-    console.log(dp[n-1][0]+'')
+    console.log(dp[n-1][0])
     // path reconstruction
     let last=n-1, res=[]
     while(last!==-1){
-        console.log(last)
         res.unshift(last)
         last=dp[last][2]
     }
