@@ -172,39 +172,51 @@ let BeGreedy=(N,edges,badNodes)=>{
 }
 
 
+
+ /*
+        dp[node][0]=The minimum cost, such that on the subtree rooted at node, no two badnodes are connected
+        dp[node][1]=The minimum cost, such taht on the subteree rooted at node, no two badnodes are connected, but one badnode path escapes upwards
+
+        demonstrating
+
+                        \
+                        v*
+                    /4  |2  \1
+                   a    b*    c*            dp[v][0]= Infinity, there is no way v's path doesnt escape upward
+                                            dp[v][1]= 1+2 =3  
+                                            
+                        v
+                    /4  |2  \1              dp[v][0]=1+2=3
+                    a    b*    c*           dp[v][1]=1+2 -2=1, we always pick the biggest cost as the one to leave escapign, aka 2
+                                            to keep track of the biggest cost (edge) to leave escaping upwards, we assign var max
+    */
+
+
+
 //dp on subtrees O(n**2)
 let BEdp=(N,edges,badNodes)=>{
     badNodes=new Set(badNodes)
     if(badNodes.size==1)
         return 0
     let dp=[...Array(N)].map(d=>[Infinity,Infinity]),next={}
-    //dp[v][flag]= Minimum Cost to disconnect all of the badnodes on subtree rooted at v 
-    // flag is 1 if the subtree selection contains a black node, else 0 
-    for( let [f,t,cost] of edges )
-        f=Number(f),t=Number(t),cost=Number(cost),
-        next[f]=next[f]||{},
-        next[t]=next[t]||{},
-        next[f][t]=next[t][f]=cost
-    
+    for( let [f,t,cost] of edges ) //create the graph
+        next[f]=next[f]||{},next[t]=next[t]||{},next[f][t]=next[t][f]=cost
     let dfs=(node,parent=-1)=>{
-        let children=Object.keys(next[node]).map(d=>Number(d)),
-            res=0,max=-1
-        for(let child of children)
+        let res=0,max=-1 //res is the total sum of children costs
+        for(let child of Object.keys(next[node]))
             if(child!=parent){
                 dfs(Number(child),node)
-                if(dp[child][1]+next[node][child]<=dp[child][0])
+                if(dp[child][1]+next[node][child]<=dp[child][0])//should the child be considered bad or good?
                     res+=dp[child][1]+next[node][child],
                     max=Math.max(max,next[node][child])
                 else
                     res+=dp[child][0],
-                    max=Math.max(max,dp[child][0]-dp[child][1])
+                    max=Math.max(max,dp[child][0]-dp[child][1]) //this line is the most interesting
             }
         if(badNodes.has(node))
-            dp[node][0]=Infinity,
-            dp[node][1]=res
+            dp[node]=[Infinity,res]
         else
-            dp[node][0]=res,
-            dp[node][1]=max===-1?Infinity:res-max
+            dp[node]=[res,max===-1?Infinity:res-max]
     }
     dfs(0)
     return Math.min(dp[0][0],dp[0][1])
