@@ -193,7 +193,7 @@ let BeGreedy=(N,edges,badNodes)=>{
 
 
 
-//dp on subtrees O(n**2)
+//dp on subtrees O(n**2) elegant + BigBrainTime
 let BEdp=(N,edges,badNodes)=>{
     badNodes=new Set(badNodes)
     if(badNodes.size==1)
@@ -202,16 +202,16 @@ let BEdp=(N,edges,badNodes)=>{
     for( let [f,t,cost] of edges ) //create the graph
         next[f]=next[f]||{},next[t]=next[t]||{},next[f][t]=next[t][f]=cost
     let dfs=(node,parent=-1)=>{
-        let res=0,max=-1 //res is the total sum of children costs
+        let res=0,max=-1 //res is the total sum of children costs,max is the maximum one I can spare and let escape upwards
         for(let child of Object.keys(next[node]))
             if(child!=parent){
                 dfs(Number(child),node)
                 if(dp[child][1]+next[node][child]<=dp[child][0])//should the child be considered bad or good?
                     res+=dp[child][1]+next[node][child],
-                    max=Math.max(max,next[node][child])
+                    max=Math.max(max,next[node][child]) //try sparing this edge
                 else
                     res+=dp[child][0],
-                    max=Math.max(max,dp[child][0]-dp[child][1]) //this line is the most interesting
+                    max=Math.max(max,dp[child][0]-dp[child][1]) //try sparing the biggest edge that made the previous white
             }
         if(badNodes.has(node))
             dp[node]=[Infinity,res]
