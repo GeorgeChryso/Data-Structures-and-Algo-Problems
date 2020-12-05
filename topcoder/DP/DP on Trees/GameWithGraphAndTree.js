@@ -26,6 +26,7 @@ let GameWithGraphAndTree=(graph, tree)=>{
         dp[t][p][mask]= Number of mappings such that tree node t goes to graph node p and 
                         mask represents the Graph nodes that are used in such mappings. 
     */
+   // O(n*n*n*(1<<n)*(1<<n))
     let dfs=(node,parent=-1)=>{
         let children=[]
         for (let child = 0; child <n; child++)
@@ -48,12 +49,12 @@ let GameWithGraphAndTree=(graph, tree)=>{
                                     c1      c2            a  b          c1  c2       b     a
 
 
-            ires[k][graphNode][mask]= the number of mappings of the tree that consists of : 
+            ires[k][graphNode][mask]= the number of mappings of the PARTIAL tree that consists of : 
                 our tree vertex: node
                 the first k children of the tree node,and their subtrees
             such that
-                node -> graphNode
-                the k-th child -> q , with a q mask being used by the graph subtree of q 
+                node -> nodeimg
+                the k-th child -> childImg , with a q mask being used by the graph subtree of q 
                 and mask are the elements used in the graph already
         */
         for (let k = 0; k < children.length; k++)                                       //for erery tree child
@@ -63,8 +64,49 @@ let GameWithGraphAndTree=(graph, tree)=>{
                     for (let childImg = 0; childImg<n; childImg++)//the image of the k-th child , a graph Node
                         for (let qMask = 0;graph[childImg][nodeimg]==='Y'&&qMask < (1<<n); qMask++) //the graph nodes used in this image q 
                             if((qMask&curGraph)==0)
-                                ires[k+1][nodeimg][qMask^curGraph]+=
-                                (ires[k][nodeimg][curGraph]*dp[child][childImg][qMask])%mod
+                                ires[k+1][nodeimg][qMask|curGraph]=
+                                ( ires[k+1][nodeimg][qMask|curGraph]+ires[k][nodeimg][curGraph]*dp[child][childImg][qMask])%mod
+        dp[node]=ires[children.length]
+    }
+    dfs(0)
+    // map the tree node 0 to the graph node r while the image of the graph is 
+    // 11111...1 aka all of its elements are used. 
+    for (let r = 0; r <n; r++) 
+        result=(result+dp[0][r][(1<<n)-1])%mod   
+
+    console.log(result)
+    return result
+}
+// The graph can also contain cycles btw
+let GameWithGraphAndTreeOptimized=(graph, tree)=>{
+    let mod=1000000007,result=0,n=graph.length,
+        dp=[...Array(n)].map(d=>[...Array(n)].map(d=>[...Array(1<<n)].map(d=>0)))
+
+    let dfs=(node,parent=-1)=>{
+        let children=[]
+        for (let child = 0; child <n; child++)
+            if(tree[node][child]==='Y' && child!==parent )
+                dfs(child,node),
+                children.push(child)
+        let ires=[...Array(children.length+1)].map(d=>[...Array(n)].map(d=>[...Array(1<<n)].map(d=>0)))
+        for (let graphNode = 0; graphNode < n; graphNode++)
+            ires[0][graphNode][1<<graphNode]=1 
+        
+        //instead of iterating over all qMasks, i want only those which do not intersect with curGraph, So i can iterate
+        // over all subsets of the remaining nodes that are not used in curGraph
+        for (let k = 0; k < children.length; k++)                                      
+            for (let nodeimg = 0,child=children[k]; nodeimg < n; nodeimg++)  
+                for (let curGraph = 0; curGraph < (1<<n); curGraph++)
+                    for (let childImg = 0; ires[k][nodeimg][curGraph] && childImg<n; childImg++)
+                        if( (curGraph&(1<<childImg) )===0){ // my graph cant contain the childimg
+                            let complement= ((1<<n)-1)^curGraph
+                            //iterate over all subsets of the complement instead to reduce the time to O(3**n)
+                            for (let qMask = complement; qMask>0&&graph[childImg][nodeimg]==='Y'; qMask = (qMask-1) &complement ) 
+                                if(dp[child][childImg][qMask])
+                                    ires[k+1][nodeimg][qMask|curGraph]=
+                                        ( ires[k+1][nodeimg][qMask|curGraph]+ires[k][nodeimg][curGraph]*dp[child][childImg][qMask])%mod
+        
+                        }
         dp[node]=ires[children.length]
     }
     dfs(0)
@@ -76,8 +118,12 @@ let GameWithGraphAndTree=(graph, tree)=>{
     return result
 }
 
-
 let tests=[
+    [['NYY','YNY','YYN'],['NYN','YNY','NYN']],
+    [["NYYYN", "YNYYY", "YYNNY", "YYNNY", "NYYYN"],["NYNNN", "YNYYY", "NYNNN", "NYNNN", "NYNNN"]],
+    [["NNNYNNNNNYYY", "NNNYNNNNNNYN", "NNNNNNNNYYNN", "YYNNNYYNYNNN", "NNNNNNYNNNNY", "NNNYNNNNYNNY", "NNNYYNNNNNYN", "NNNNNNNNNNNY", "NNYYNYNNNYNN", "YNYNNNNNYNNN", "YYNNNNYNNNNY", "YNNNYYNYNNYN"],["NNNNNNYNNNNN", "NNNNNNNNNYNN", "NNNYYNNNNNNN", "NNYNNNYNYNYN", "NNYNNNNNNNNN", "NNNNNNNNNYNN", "YNNYNNNYNNNN", "NNNNNNYNNNNY", "NNNYNNNNNYNN", "NYNNNYNNYNNN", "NNNYNNNNNNNN", "NNNNNNNYNNNN"]],
+    [["NYYYYYNYYYYYYY", "YNYYYYYYYYYYYY", "YYNYYYNYYYYYYY", "YYYNYYYYYYYYYY", "YYYYNYYYYYYYYY", "YYYYYNYYYYYYYY", "NYNYYYNYYYYYYY", "YYYYYYYNYYYYYY", "YYYYYYYYNYYYYY", "YYYYYYYYYNYYYY", "YYYYYYYYYYNYYY", "YYYYYYYYYYYNYY", "YYYYYYYYYYYYNY", "YYYYYYYYYYYYYN"],["NNNNNYNNNNNNNN", "NNYNNNNNNNNNNN", "NYNNNNNYYNNNNN", "NNNNNNYNNNNNNN", "NNNNNNYNNYYNYY", "YNNNNNNYNNNYNN", "NNNYYNNYNNNNNN", "NNYNNYYNNNNNNN", "NNYNNNNNNNNNNN", "NNNNYNNNNNNNNN", "NNNNYNNNNNNNNN", "NNNNNYNNNNNNNN", "NNNNYNNNNNNNNN", "NNNNYNNNNNNNNN"]],
+    [ ["NYYYYYYYYYYYYY", "YNYYYYYYYYYYYY", "YYNYYYYYYYYYYY", "YYYNYYYYYYYYYY", "YYYYNYYYYYYYYY", "YYYYYNYYYYYYYY", "YYYYYYNYYYYYYY", "YYYYYYYNYYYYYY", "YYYYYYYYNYYYYY", "YYYYYYYYYNYYYY", "YYYYYYYYYYNYYY", "YYYYYYYYYYYNYY", "YYYYYYYYYYYYNY", "YYYYYYYYYYYYYN"], ["NNNNYNNNNNNNNN", "NNNYNYNNNNNNNN", "NNNNNNNYNNNNYN", "NYNNNNNNNNNNNN", "YNNNNYNNNNNNNN", "NYNNYNNYNNYNNY", "NNNNNNNNNNNNYN", "NNYNNYNNNYNNNN", "NNNNNNNNNNYNNN", "NNNNNNNYNNNNNN", "NNNNNYNNYNNYNN", "NNNNNNNNNNYNNN", "NNYNNNYNNNNNNN", "NNNNNYNNNNNNNN"]],
     [['NY','YN'],['NY','YN']],
     [ ["NYN",
     "YNY",
@@ -134,5 +180,4 @@ let tests=[
     "NNNNYYNNN"]]
 ]
 
-
-console.log(tests.map( ([a,b])=>GameWithGraphAndTree(a,b)))
+console.log(tests.map( ([a,b])=>GameWithGraphAndTreeOptimized(a,b)))
