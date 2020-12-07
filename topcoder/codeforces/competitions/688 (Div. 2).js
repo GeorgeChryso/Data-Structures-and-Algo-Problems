@@ -7,9 +7,7 @@ process.stdin.on('end', _ => {
     let t=Number(readline())
     for (let i = 0; i < t; i++) {
         let n=Number(readline())
-        A=[]
-        for (let j = 0; j < n; j++) 
-            A.push(readline().split('').map(d=>Number(d)))
+        A=readline().split('').map(d=>Number(d))
         solve(A,n)
     }    
   
