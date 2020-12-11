@@ -1,0 +1,28 @@
+
+/*
+                                            --Diminishing returns--
+    when you notice concavity among the function you want to calculate
+    WQS is applicable,
+    
+    The task is to calculate f(k), k being the number of tools ure using
+
+    When you re increasing the tools, the gain (delta) is dropping/increasing (convexity/concavity)
+        f(i+1)-f(i)>f(i)-f(i-1) or
+        f(i+1)-f(i)<f(i)-f(i-1)
+
+    Then you binary search over an incurred COST p for using 1 extra item. How many more items are you willing to use if for each one you have to pay a fixed value p instead??
+    
+    
+    for each cost of the binarysearch 2 things will be calculated:
+    [optimalSol,count]
+    the optimal solution I found after having to pay p for each tool I used, 
+    the count of tools I used for that optimal solution
+
+    if the count===k, then I can consider the solution : optimalSol - p*count, p being
+    if the count >k then i should increase my p so that my calculations find less items for the optimal solution
+    if the count <k then i should decrease my p so that I  can choose more items. 
+
+    //Essentially on the binary search you re solving a different problem, what if you had Infinite tools, but you had to pay a fixed cost per tool? How many would you take then in order to find the best answer? 
+    // If the number of tools you found is bigger than that u want, increase the cost so ur logic picks less items
+    // if its smaller, decrease the cost so you pick mroe of those 
+*/

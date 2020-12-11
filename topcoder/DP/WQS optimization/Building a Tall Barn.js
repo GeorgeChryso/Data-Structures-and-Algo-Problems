@@ -36,10 +36,10 @@ let cowBuilders=(n,K,A)=>{
 
     //so dp[i][j] is monotone decreasing on j 
     // and monotone increasing on i 
-    dp.forEach(d=>console.log(d+''))
+    //dp.forEach(d=>console.log(d+''))
 
     //args are monotone increasing
-    args.forEach(d=>console.log(d+''))
+    //args.forEach(d=>console.log(d+''))
 
     return Math.round(dp[n][K])
 }
@@ -63,10 +63,10 @@ let cowBuildersAdv=(n,K,A)=>{
                 
     //so dp[i][j] is monotone decreasing on j 
     // and monotone increasing on i 
-     dp.forEach(d=>console.log(d+''))
+    //  dp.forEach(d=>console.log(d+''))
 
-    //args are monotone increasing
-    args.forEach(d=>console.log(d+''))
+    // //args are monotone increasing
+    // args.forEach(d=>console.log(d+''))
 
     return Math.round(dp[n][K])
 }
@@ -93,7 +93,7 @@ let cowBuildersDC=(n,K,A)=>{
         
     //so dp[i][j] is monotone decreasing on j 
     // and monotone increasing on i 
-    dp.forEach(d=>console.log(d+''))
+    //dp.forEach(d=>console.log(d+''))
     
     return Math.round(dp[n][K])
 }
@@ -103,40 +103,78 @@ let cowBuildersDC=(n,K,A)=>{
 // if for an A[i], i assigned c cows
 // then the gain for adding one more is A[i]/c - A[i]/(c+1). Maximize that and place the next cow wherever until no more cows are left. Then you have the answer
 
-//greedy
+//brute force WQS
 let cowBuildersGR=(n,K,A)=>{
     //n stories, K cows, A[]
     let r=Infinity
-
-    for (let m = -Math.max(...A); m <=Math.max(...A); m+=0.010) {
-        let totalCows=0,totalTime=0,cowSel=[]
+    let tot=A.reduce((a,c)=>a+c)
+    for (let m = -100; m <=100; m+=.010) {
+        if(m==0)
+            continue
+        let totalCows=0,totalTime=0
         for (let i = 0; i < A.length; i++) {
             let cows= Math.floor( (Math.sqrt(1+(4*A[i]/m))-1)/2)+1
             totalCows+=cows
             totalTime+=(A[i]/cows)
-            cowSel.push(cows)
         }
-        if(totalTime-totalCows*m<=0)
+        if(totalCows===K)
+        //so this differs from usual WQS cos the price supposed to be paid is not ever really paid, Right? 
+        // As in the totalTime doesnt take into account that any price was paid. It's just A[i]/cows
+            r=Math.min(r,totalTime) 
+    }
+    return  Math.round(r)
+}
+
+// Binary Search WQS
+let cowBuildersWQS=(n,K,A)=>{
+    //n stories, K cows, A[]
+    let r=Infinity,tot=A.reduce((a,c)=>a+c)
+
+    let calc=p=>{
+        let totalCows=0,totalTime=0
+        for (let i = 0; i < A.length; i++) {
+            let cows= Math.floor( (Math.sqrt(1+(4*A[i]/p))-1)/2)+1
+            totalCows+=cows
+            totalTime+=(A[i]/cows)
+        }
+        console.log(p,totalTime,totalCows)
+        return [totalCows,totalTime]
+    }
+    let lo=-1,hi=5
+    while(lo+0.000000000000000010<=hi){
+        console.log(lo,hi)
+        let mid=lo+((hi-lo)/2)
+        if(mid===0){
+            lo=lo+0.00001
             continue
-        if(totalCows==K){
-            r=Math.min(r,totalTime-K*m)
-            console.log(totalTime-K*m, m )
-            console.log(cowSel,A.map((d,i)=>d/cowSel[i]),m,totalTime)
         }
+        let [totalCows,totalTime]=calc(mid)
+        if(totalCows>K)
+            lo=mid+0.000000000000010
+        else if(totalCows===K)
+            lo=mid+0.000000000000010,
+            r=Math.min(totalTime,r)
+        else
+            hi=mid-0.000000000000010
+
     }
     
-    return  (r>>0 )+1
+    return  Math.round(r)
 }
 
 
-
-
-
 let tests=[
-    [3,3,[2,1,1]]
+    // [3,3,[2,1,1]],
+    // [4,10,[4,1,5,6]],
+    // [10,20,[4,5,10,11,23,11,2,1,5,6]],
+    [10,25,[4,5,10,11,23,11,2,1,5,6]],
+    // [7,11,[11,23,11,2,1,5,6]],
+    // [5,6,[1,2,1,5,6]],
+    // [3,3,[1,1,1]]
 ]
 
 console.log(tests.map(([a,b,c])=>cowBuilders(a,b,c)))
 console.log(tests.map(([a,b,c])=>cowBuildersAdv(a,b,c)))
 console.log(tests.map(([a,b,c])=>cowBuildersDC(a,b,c)))
 console.log(tests.map(([a,b,c])=>cowBuildersGR(a,b,c)))
+console.log(tests.map(([a,b,c])=>cowBuildersWQS(a,b,c)))

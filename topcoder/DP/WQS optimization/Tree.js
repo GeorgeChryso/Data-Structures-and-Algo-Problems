@@ -135,7 +135,7 @@ let Tree=(n,K,edges)=>{
     // increasing the white nodes in the mst gives me diminishing returns on the totalWeight,
     // that means that 1 extra white will increase my totalWeight by A
     // then if I add another 1 white the totalWeight will increase by B
-    // and A<=B always. 
+    // and A>=B always. 
     // So i binary search on the increase of weight
     //the bounds are -100, 100, because if let's say f(x-1) =100 but there is no MST with x whites, f(x)=0
     // hence f(x)-f(x-1)=0-100=-100
@@ -148,8 +148,10 @@ let Tree=(n,K,edges)=>{
         console.log(mid)
         let f=calc(mid) 
         let [totalWeight,totalWhites]=f
-        if(totalWhites>= K) 
+        if(totalWhites== K) 
             result = totalWeight- mid * K, 
+            lo = mid + 1;
+        else if(totalWhites>K)
             lo = mid + 1;
         else 
             hi = mid - 1;
@@ -160,7 +162,7 @@ let Tree=(n,K,edges)=>{
 
 
 let test=[
-    [3,2,[[0,2,0,0],[0,1,1,1],[0,1,2,0],[ 1,2,1,0], [0,2,2,1]]]
+    [4,3,[[1,3,1,1],[1,3,3,0],[0,2,0,0],[0,1,1,1],[0,1,2,0],[ 1,2,1,0], [0,2,2,1]]]
 ]
 
 test.forEach( ([A,B,C])=>console.log(Tree(A,B,C)))
