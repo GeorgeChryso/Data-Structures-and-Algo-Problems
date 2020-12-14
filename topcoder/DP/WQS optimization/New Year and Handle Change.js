@@ -67,7 +67,6 @@ let solve1=(n,K,l,s)=>{
 }
 
 // W Q S 
-
 let solve11=(n,K,l,s)=>{
     s=s.split('').map(d=> Number(d.charCodeAt(0)>96)) 
     let f=flag=>{

@@ -26,3 +26,23 @@
     // If the number of tools you found is bigger than that u want, increase the cost so ur logic picks less items
     // if its smaller, decrease the cost so you pick mroe of those 
 */
+
+
+
+/*
+    if F is convex/concave  <=> f(x)-f(x-1) >=< f(x+1)-f(x)
+
+    if you want f(k) =min/max time/cost/energy to do something with k items
+    but instead you can calculate 2  things:
+        1) g(l)=min/max time/cost/eneergy to do something with Infinite items available, but when each item costs l time/cost/energy 
+        2) kopt= the number of items for which g(l) minimizes/maximizes
+        
+        Then I can exploit the fact that :
+            1)g(l)=f(kopt)-l*kopt
+            2) and l1>l2 => k1>k2   (from convexity)
+        
+        and binary search on l, to find the when the kopt=k and return the naswer
+        min(F(x+1)-F(x)) <= l <= max( F(x+1)-F(x))
+
+        the answer will be f(kopt)= g(l)+l*kopt from (1)
+*/
