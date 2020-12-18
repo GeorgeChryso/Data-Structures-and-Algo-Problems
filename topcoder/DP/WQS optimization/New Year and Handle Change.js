@@ -88,6 +88,7 @@ let solve11=(n,K,l,s)=>{
         }
         return result;
     }
+    
     return Math.min(f(0),f(1))
 }
 

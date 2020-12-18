@@ -27,9 +27,13 @@
     // if its smaller, decrease the cost so you pick mroe of those 
 */
 
-
+/*
+    If the cost function  of a dp recurrence satisfies the quadrangle inequality then the recurrence is convex/concave 
+    //http://www.cs.ust.hk/mjg_lib/bibs/DPSu/DPSu.Files/sdarticle_204.pdf proof
+*/
 
 /*
+        https://soi.ch/wiki/alien-optimization/ 
     if F is convex/concave  <=> f(x)-f(x-1) >=< f(x+1)-f(x)
 
     if you want f(k) =min/max time/cost/energy to do something with k items
@@ -46,3 +50,10 @@
 
         the answer will be f(kopt)= g(l)+l*kopt from (1)
 */
+
+
+/*  Visit Anai's site when it's up 
+
+https://codeforces.com/blog/entry/68778#
+
+/*/

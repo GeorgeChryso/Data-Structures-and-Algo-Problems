@@ -135,27 +135,25 @@ let cowBuildersWQS=(n,K,A)=>{
         for (let i = 0; i < A.length; i++) {
             let cows= Math.floor( (Math.sqrt(1+(4*A[i]/p))-1)/2)+1
             totalCows+=cows
-            totalTime+=(A[i]/cows)
+            totalTime+=(A[i]/cows -p*cows)
         }
-        console.log(p,totalTime,totalCows)
         return [totalCows,totalTime]
     }
-    let lo=-1,hi=5
-    while(lo+0.000000000000000010<=hi){
-        console.log(lo,hi)
+    let lo=-100,hi=100
+    while(lo<=hi){
         let mid=lo+((hi-lo)/2)
         if(mid===0){
             lo=lo+0.00001
             continue
         }
         let [totalCows,totalTime]=calc(mid)
-        if(totalCows>K)
-            lo=mid+0.000000000000010
-        else if(totalCows===K)
-            lo=mid+0.000000000000010,
-            r=Math.min(totalTime,r)
+        if(totalCows>=K+0.1)
+            lo=mid+0.000001
+        else if(totalCows > K-0.1)
+            lo=mid+0.000001,
+            r=totalTime+totalCows*mid
         else
-            hi=mid-0.000000000000010
+            hi=mid-0.000001
 
     }
     
@@ -164,13 +162,13 @@ let cowBuildersWQS=(n,K,A)=>{
 
 
 let tests=[
-    // [3,3,[2,1,1]],
-    // [4,10,[4,1,5,6]],
-    // [10,20,[4,5,10,11,23,11,2,1,5,6]],
+    [3,3,[2,1,1]],
+    [4,10,[4,1,5,6]],
+    [10,20,[4,5,10,11,23,11,2,1,5,6]],
     [10,25,[4,5,10,11,23,11,2,1,5,6]],
-    // [7,11,[11,23,11,2,1,5,6]],
-    // [5,6,[1,2,1,5,6]],
-    // [3,3,[1,1,1]]
+    [7,11,[11,23,11,2,1,5,6]],
+    [5,6,[1,2,1,5,6]],
+    [3,3,[1,1,1]]
 ]
 
 console.log(tests.map(([a,b,c])=>cowBuilders(a,b,c)))
