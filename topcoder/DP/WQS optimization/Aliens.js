@@ -119,8 +119,15 @@ let solveCHT=(n,m,k,POI)=>{
     P.sort((a,b)=>a[0]-b[0])
     let dp=[...Array(k+1)].map(d=>[...Array(P.length+1)].map(d=>Infinity)),result=Infinity
     dp[0][0]=0
+    /*                      DP RECURRENCE => CHT LINE FORMAT 
+        dp[i][j]=Min (-2(xk-1)  *   yk   + dp[i-1][k-1]+(xk-1)**2-(j>=2?Math.max(P[j-2][1]-xc+1,0)**2:0)  + yj**2 )
+            y   =        M(k)   *  x[j]  +                          C[k]                                  + C'[j]
+
+            slope=> Decreasing          }   OK 
+             x[j]=> Increasing        }   OK
+    */
     for(let i=1;i<=k;i++){
-        if(i-1>=P.length)
+        if(i-1>=P.length)//will never use 9 boxes for 8 points
             break
         let q=[]
         for (let j = 1; j <=P.length; j++) {
@@ -140,5 +147,66 @@ let solveCHT=(n,m,k,POI)=>{
     }
 
     //dp.forEach(d=>console.log(d+''))
+    return result
+}
+
+
+/*
+    WQS idea: 
+        f(k)= Min cells used to cover all my special cells using K boxes
+        f(k+1)<=f(k) 
+        f(k)-f(k+1) <= f(k-1)-f(k)  //the gain i get from adding 1 box is nonincreasing
+    
+    Now it remains to : calculate fast 
+    g(p)= min cells used to cover all my special cells using as many boxes as i want, if I had to pay p extra cells for each box
+    arg(g(p))= the amount of boxes i used for that optimal solution of g(p)
+     
+*/
+
+// O(nlog(n))  O(log(n)logn)
+let solveWQS=(n,m,k,POI)=>{
+
+    POI=POI.map(([x,y])=>x>y?[y,x]:[x,y]) //mirror the points to be above the main diagonal
+    POI.sort(([x1,y1],[x2,y2])=>y1==y2?x1-x2: y2-y1) //sort them ascending
+    let P=[]
+    while(POI.length){
+        let [cx,cy]=POI.shift()
+        while(POI.length&&cx<=POI[0][0]&&cy>=POI[0][1])
+            POI.shift()
+        P.push([cx,cy])
+    }
+    P.sort((a,b)=>a[0]-b[0])
+    
+    
+    let gains=[]
+    for(let i=1;i<n;i++){
+        let [ox,oy]=P[i-1],
+            [nx,ny]=P[i]
+        let fullcost= (  ny-ox +1 )**2 //if no square partions this 2 
+        let gain=0,
+            used
+        if(oy>nx)
+            used= (ny-nx+1)**2+ (oy-ox+1)**2-(oy-nx+1)**2
+        else
+            used= (ny-nx+1)**2+ (oy-ox+1)**2
+        gain=fullcost-used 
+        gains.push([gain,fullcost,used1,used2,intersection,i])
+    }
+    let can=p=>{
+        let used=0,res=Infinity
+        //strategy: keep partitioning (picking new squares until the cost outweights the gain )
+
+        return [used,res]
+    }
+    let lo=0, hi= m*m+1 ,result=Infinity
+    while(lo<hi){
+        let mid=lo +( (hi-lo)>>1)
+        let [boxesUsed,minCost]=can(mid)
+        if(boxesUsed>=k)
+            hi=mid-1,
+            result= minCost +boxesUsed*mid
+        else
+            lo=mid+1
+    }
     return result
 }
