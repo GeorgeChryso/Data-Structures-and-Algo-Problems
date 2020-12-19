@@ -4,21 +4,23 @@ let inputString = '',currentLine = 0,readline=_=>inputString[currentLine++]
 process.stdin.on('data', inputStdin =>inputString += inputStdin);
 process.stdin.on('end', _ => {
     inputString = inputString.trim().split('\n').map(string =>string.trim());
+    let output=[59315,994009,21,9,4,7550,10000,10000,624,41,4284,25,16,4,4,4,12,52,210,88,7696,1,2374,9502,49,151,996004,250000,1824916,10680029,130050,996004]
     let t=Number(readline()),res=[]
-    for (let i = 0; i <t-1; i++) {
+    for (let i = 0; i <t; i++) {
         let [n,m,k]=readline().split(' ').map(d=>Number(d))
         let POI=[]
         for(let i=0;i<n;i++)
             POI.push(readline().split(' ').map(d=>Number(d)))
-
-        // if(i==9)
-        // r=solveNaive(n,m,k,POI),
-        // r=solveDC(n,m,k,POI),
-        r=solveCHT(n,m,k,POI),
-        res.push(r)
-        //console.log(r+'')
+        
+        //if(i===0)
+         //r=solveNaive(n,m,k,POI),
+        //r=solveDC(n,m,k,POI),
+       //r=solveCHT(n,m,k,POI),
+        r=solveWQS(n,m,k,POI),
+        res.push(r),
+        console.log(r,'\t',r==output[i],'\t',output[i])
     }
-    let output=[41,4284,25,16,4,4,4,12,52,210,88,7696,1,2374,9502,49,151,996004,250000,1824916,10680029]
+
     console.log(res,'\n',res.every((d,i)=>d==output[i])?'AC':'WRONG')
 });
 //1 ≤ n ≤ 100 000, 1 ≤ m ≤ 1 000 000.
@@ -56,6 +58,7 @@ let solveNaive=(n,m,k,POI)=>{
             }
     //dp.forEach(d=>console.log(d+''))
     //arg.forEach(d=>console.log(d+'')) //notice nondecreasing args
+    console.log(result)
     return result
 }
 
@@ -163,12 +166,12 @@ let solveCHT=(n,m,k,POI)=>{
      
 */
 
-// O(nlog(n))  O(log(n)logn)
+// O(nlog(n))  
 let solveWQS=(n,m,k,POI)=>{
-
+    //              HANDLE THE INPUT
     POI=POI.map(([x,y])=>x>y?[y,x]:[x,y]) //mirror the points to be above the main diagonal
     POI.sort(([x1,y1],[x2,y2])=>y1==y2?x1-x2: y2-y1) //sort them ascending
-    let P=[]
+    let gains=[],mxGain=0,P=[]
     while(POI.length){
         let [cx,cy]=POI.shift()
         while(POI.length&&cx<=POI[0][0]&&cy>=POI[0][1])
@@ -176,37 +179,62 @@ let solveWQS=(n,m,k,POI)=>{
         P.push([cx,cy])
     }
     P.sort((a,b)=>a[0]-b[0])
-    
-    
-    let gains=[]
-    for(let i=1;i<n;i++){
-        let [ox,oy]=P[i-1],
-            [nx,ny]=P[i]
-        let fullcost= (  ny-ox +1 )**2 //if no square partions this 2 
-        let gain=0,
-            used
-        if(oy>nx)
-            used= (ny-nx+1)**2+ (oy-ox+1)**2-(oy-nx+1)**2
-        else
-            used= (ny-nx+1)**2+ (oy-ox+1)**2
-        gain=fullcost-used 
-        gains.push([gain,fullcost,used1,used2,intersection,i])
-    }
-    let can=p=>{
-        let used=0,res=Infinity
-        //strategy: keep partitioning (picking new squares until the cost outweights the gain )
 
-        return [used,res]
+    //CREATE THE GAINS ARRAY, WHICH HOLDS THE GAIN (IN CELLS) I GET FROM USING A BOX BETWEEN THE i-th and i-1th element // 
+    for(let i=1;i<P.length;i++){
+        let [ox,oy]=P[i-1],[nx,ny]=P[i],
+            fullcost= (ny-ox +1)**2, //if no square partions this 2 
+            used= (ny-nx+1)**2+ (oy-ox+1)**2-(oy>=nx?(oy-nx+1)**2:0)
+        gains.push([fullcost-used,i]) // [gain,index of split]
+        mxGain=Math.max(mxGain,fullcost-used)
     }
-    let lo=0, hi= m*m+1 ,result=Infinity
-    while(lo<hi){
-        let mid=lo +( (hi-lo)>>1)
-        let [boxesUsed,minCost]=can(mid)
-        if(boxesUsed>=k)
-            hi=mid-1,
-            result= minCost +boxesUsed*mid
-        else
-            lo=mid+1
+    gains.sort((a,b)=>b[0]-a[0]) //sort it decreasing gain
+
+    // //binary search on gains to find where the last split that's worth it  happens
+    // let can=p=>{
+    //     //strategy: keep partitioning (picking new squares until the cost outweights the gain )
+    //     // let lo=0,hi=gains.length-1
+    //     // while(lo<hi){
+    //     //     let mid=lo+((hi-lo)>>1)
+    //     //     if(gains[mid][0]>p)
+    //     //         lo=mid+1
+    //     //     else
+    //     //         hi=mid-1
+    //     // }
+    //     // return hi
+    //     let idx=0
+    //     while(idx<gains.length&&gains[idx][0]>=p)
+    //         idx++
+    //     return idx
+    // }
+    // let lo=0, hi= mxGain+1 ,result=Infinity
+    // // WQS the incurred cost
+    // while(lo<=hi){
+    //     let mid=lo + Math.floor((hi-lo)/2),
+    //         boxesUsed=can(mid)
+    //     if(boxesUsed<=k)
+    //         lo=mid+1,
+    //         result= boxesUsed
+    //     else
+    //         hi=mid-1
+    // }
+    //console.log(P,k)
+    //console.log(gains)
+    gains=gains.slice(0,k-1)
+    //console.log(gains)
+
+    gains.sort((a,b)=>a[a.length-1]-b[b.length-1])
+    let total=0, start=P[0]
+    while(gains.length){
+        let [gain,i]=gains.shift()
+        let cur=P[i-1],[xo,yo]=start,[xc,yc]=cur
+        total+= (yc-xo+1)**2
+        xo=P[i][0],yo=P[i][1]
+        start=[xo,yo]
+        if(xo<=yc) // remove the intersection,if it exists
+            total-=(yc-xo+1)**2
     }
-    return result
+    let [xo,yo]=start,[xc,yc]=P[P.length-1]
+    total+= (yc-xo+1)**2
+    return total
 }
