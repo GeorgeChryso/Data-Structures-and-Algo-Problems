@@ -2,7 +2,7 @@
 
 
 // interval dp
-// what if the players play on dp[i,j]
+// dp[i][j] the best diff when the players play on [i,j]
 var stoneGameVII = function(A) {
     let prefix=[0],n=A.length
     for(let i=0;i<n;i++)
