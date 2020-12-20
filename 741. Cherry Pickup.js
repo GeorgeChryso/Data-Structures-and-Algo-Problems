@@ -25,7 +25,7 @@ var cherryPickup = function(A) {
     //dp[i][i1][i2]
     let dirs=[[0,-1],[-1,0]]
     for(let i=1;i<dp.length;i++)
-        for (let i1 = 0; i1 <= i; i1++) 
+        for (let i1 = 0; i1 <= i; i1++) n
             for (let i2 = 0; i2 <= i; i2++) 
                 for( let [dx1,dx2] of dirs)
                     for( let [dx3,dx4] of dirs){
