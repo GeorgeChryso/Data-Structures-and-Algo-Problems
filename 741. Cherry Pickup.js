@@ -18,6 +18,7 @@
 // grid[0][0] != -1
 // grid[n - 1][n - 1] != -1
 
+//intuition: we can create the two paths simultaneously. 
 var cherryPickup = function(A) {
     let [n,m]=[A.length,A[0].length],
         dp=[...Array(2*n)].map(d=>[...Array(n)].map(d=>[...Array(n)].map(d=>-Infinity)))
