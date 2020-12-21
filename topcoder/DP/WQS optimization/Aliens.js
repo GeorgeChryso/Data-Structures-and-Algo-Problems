@@ -154,8 +154,10 @@ let solveCHT=(n,m,k,POI)=>{
 }
 
 
-/*
+/* 
+// So i m stuck on proving why a greedy approach where I always pick the best split that gives me the best gain does not work --- WQS seems too hard for now 
     WQS idea: 
+    http://ioi.te.lv/locations/ioi16/contest/IOI2016_analysis.pdf
         f(k)= Min cells used to cover all my special cells using K boxes
         f(k+1)<=f(k) 
         f(k)-f(k+1) <= f(k-1)-f(k)  //the gain i get from adding 1 box is nonincreasing
