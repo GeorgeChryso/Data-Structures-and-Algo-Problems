@@ -57,3 +57,11 @@
 https://codeforces.com/blog/entry/68778#
 
 /*/
+
+
+/*
+    More problems: 
+https://robert1003.github.io/2020/02/26/dp-opt-wqs-binary-search.html#a-hrefhttpscodeforcescomcontest739problemecf739e---gosha-is-huntinga
+https://www.luogu.com.cn/problem/U72600
+*/
+
