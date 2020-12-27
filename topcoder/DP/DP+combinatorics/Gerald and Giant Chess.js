@@ -30,7 +30,7 @@ let solvee=(n,m,B)=>{
     return dp[n-1][m-1]
 }
 //1 row op
-let solve1=(n,m,B)=>{
+let solveOp=(n,m,B)=>{
     let mod=1e9+7
     B.sort(([x1,y1],[x2,y2])=>x1==x2?y1-y2:x1-x2)
     B.push([n-1,m-1])
@@ -49,6 +49,8 @@ let solve1=(n,m,B)=>{
     return dp[n]
 }
 
+
+// try manually calculating the combinations, too slow
 let memo=new Map()
 var combinations=(n,k,mod=BigInt(1e9+7))=>{
     let key=[n,k].toString()
@@ -62,7 +64,7 @@ var combinations=(n,k,mod=BigInt(1e9+7))=>{
     }
     return memo.get(key)
 }
-let solve=(n,m,B)=>{
+let solveComb=(n,m,B)=>{
     let mod=BigInt(1e9+7)
     B=B.map(([x,y])=>[x-1,y-1])
     B.sort(([x1,y1],[x2,y2])=>x1==x2?y1-y2:x1-x2)
@@ -70,9 +72,6 @@ let solve=(n,m,B)=>{
     n=B.length
     let dp=Arr(1,n+1,0n)
 
-    let fact=[]
-        invfact=[]
-    
     /*
         Now, let dp[i] be the number of ways to reach the i-th blocked cell (assuming it is not blocked) from(1,1)
         avoiding all the inbetween  blocked cells
@@ -94,3 +93,59 @@ let solve=(n,m,B)=>{
     }  
     return dp[n]
 }
+
+
+// try precalculating  the factorials and the inverse to calculate the combinations on the spot, for that
+// I will need modular inverse, for the (1/ fact[..] ) mod m division
+let extendedEuclidean=( a,  b) =>{
+    if (a == 0n) 
+        return [b,0n,1n];
+    let [g,x1,y1]= extendedEuclidean(b % a, a),
+        x = BigInt(y1- ((b / a)>>0n) * x1,)
+        y = BigInt(x1);
+    return [g,x,y];//gcd,solution x , solution to y
+}
+let modInverse=(a,b)=>{
+    a=BigInt(a),b=BigInt(b)
+    let [g,x,y]=extendedEuclidean(a,b)
+    if(g!==1n)return "Not possible" //gcd(a,mod) has to be 1 for the inverse to exist
+    return ((x%b+b)%b) //picks the positive x
+}
+
+let solve=(n,m,B)=>{
+    let mod=BigInt(1e9+7)
+    B=B.map(([x,y])=>[x-1,y-1])
+    B.sort(([x1,y1],[x2,y2])=>x1==x2?y1-y2:x1-x2)
+    B.push([n-1,m-1])
+    n=B.length
+    let dp=Arr(1,n+1,0n)
+    let factorials=[1n],inverse=[1n]
+    for(let i=1n;i<=2n*10n**5n;i++ )
+        factorials.push((factorials[factorials.length-1]*i )%mod),
+        inverse.push( (inverse[inverse.length-1]*modInverse(i,mod)) %mod)
+    /*
+        Now, let dp[i] be the number of ways to reach the i-th blocked cell (assuming it is not blocked) from(1,1)
+        avoiding all the inbetween  blocked cells
+    */
+    let combinations=(n,k,mod)=>
+         (factorials[n]*((inverse[n-k]*inverse[k])%mod))%mod 
+
+    dp[0]=1n
+    for (let i = 1; i <= n; i++){
+        let [curx,cury]=B[i-1]
+        dp[i]=combinations(curx+cury,curx,mod)
+        for (let j = 1; j <i; j++){
+            let [ox,oy]=B[j-1]
+            if(ox<=curx&&oy<=cury){
+                let x2=curx-ox,y2=cury-oy
+                //  - the paths from (j->i)*paths(0->j)
+                dp[i]=(dp[i]-(combinations(x2+y2,x2,mod)*dp[j])%mod)%mod 
+                if(dp[i]<=0)
+                    dp[i]=(dp[i]+mod)%mod
+            }
+        }    
+    }  
+    return dp[n]
+}
+
+
