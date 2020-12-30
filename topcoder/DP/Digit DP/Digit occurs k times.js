@@ -36,4 +36,4 @@ let solve=(b,d,k)=>{
 let dokt= (a,b,d,k)=>{
    return solve(b,d,k)-solve(a-1,d,k)
 }
-console.log(dokt(12,112,1,2)) 
+console.log(dokt(12,112,1,0)) 
