@@ -30,7 +30,7 @@ var minJumps = function(A) {
                     f[A[idx]]=[-1] //and invalidate the Value-neighbors previously processed
            })
        
-        q=temp level++
+        q=temp,level++
     }
     return result
 };
