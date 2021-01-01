@@ -59,9 +59,7 @@ var largestRectangleArea = function(H) {
 
     class Stack {
         constructor(){
-            //I will store Indices here.
             this.q=[]
-            
         }
         
         push=(indexOfCurr)=>{
@@ -150,11 +148,26 @@ var largestRectangleArea = function(H) {
 };
 
 
-
-
+//q holds tuples [pos,val]
+// Idea: if the rectangles are reduced to an ascending order, we can linearly find out with a left scan what's the biggest rectangle there is. 
+// On each iteration, we ensure the rectangles are in increasing order. If a rectangel is to be added that has a smaller value, it pops everything with a gbigger value. During this popping, everything in the q is already in increasing value, so i can still find the biggest rectangle theere is with a right scan, as the end point will always be the first one i m popping. 
+var largestRectangleArea =(A)=>{
+    let n =A.length,q=[],result=0
+    for(let i=0;i<n;i++){
+        let curr=[i,A[i]],lastidx=i-1
+        while(q.length&&A[i]<=q[q.length-1][1])
+            result=Math.max(result, (lastidx-q[q.length-1][0] +1 ) * q[q.length-1][1], (i-q[q.length-1][0]+1)*A[i] ),
+            curr[0]=q[q.length-1][0],
+            q.pop()
+        q.push(curr)
+        if(curr[0]!==i)
+            q.push([i,A[i]])
+    }
+    while(q.length)
+        result=Math.max(result,(q[q.length-1][0]-q[0][0]+1) *q[0][1] ),
+        q.shift()
+    return result
+}
 console.log(largestRectangleArea(
-    
-    
- //  [1,1]   
-    [2,1,5,6,2,3]
-))
+    [5,7,0,7,2,9,2,7,6,8,8]
+    ))

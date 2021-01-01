@@ -1,6 +1,13 @@
 
 
 //https://www.hackerearth.com/de/problem/algorithm/dsd-numbers/description/
+/*     
+    need to track 4 states: 
+    i
+    sum of digits <=100
+    remainder by dividing the number so far by the sum of their digits so far <=100
+    f
+*/
 let solve=(b)=>{
     if(b<0)
         return 0
