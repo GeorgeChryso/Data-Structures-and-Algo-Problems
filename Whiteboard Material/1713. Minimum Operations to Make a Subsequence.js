@@ -10,12 +10,9 @@
 
 class SegTree{
     constructor(l,r,A,operation){
-        this.leftmost=l,this.rightmost=r
-        this.rightChild,this.leftChild
-        this.sum
+        this.leftmost=l,this.rightmost=r,this.sum
         //change these for different operations
-        this.operation=operation
-        this.sentinel=0
+        this.operation=operation,this.sentinel=0
         //create the subtrees
         if(l==r)//leaf
             this.sum=A[l]
