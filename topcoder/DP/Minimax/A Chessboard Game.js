@@ -32,7 +32,7 @@ function chessboardGame(x, y) {
         return state
     }
     return canIwin(x,y)?'First':'Second'
-}
+}[
 
 //dp bottom up
 function chessboardGame(x, y) {
