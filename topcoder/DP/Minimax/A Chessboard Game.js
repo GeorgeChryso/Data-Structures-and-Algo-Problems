@@ -20,14 +20,12 @@ function chessboardGame(x, y) {
     let memo=new Map(),
         moves=[ [-2,1],[-2,-1],[1,-2],[-1,-2] ] 
     let canIwin=(x,y)=>{
-        if(memo.has([x,y].toString())){
+        if(memo.has([x,y].toString()))
             return memo.get([x,y].toString())
-        }
         let state=false
-        for (const [dx,dy] of moves) {
+        for (const [dx,dy] of moves) 
             if(x+dx>=1&&y+dy>=1&&x+dx<15&&y+dy<15&& canIwin(x+dx,y+dy)==false)
                 state=true
-        }
         memo.set([x,y].toString(),state)
         return state
     }
