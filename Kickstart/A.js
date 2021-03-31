@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 const input = fs.readFileSync(0, 'utf8').trim().split('\n');
 let currentline = 0;
@@ -7,18 +8,33 @@ function readline(){
 
 //boilerplate ends here
 // Test it with node ./name.js < input.txt
-let solve=(N,K,S)=>{
-        //N levels K current level S sword level
-    return Math.min(K-1+N+1,K-1+K-S+N-S+1)
-}
-let n=Number(readline()) //1st line is usually the number of testcases
 
-for (let i = 0; i <n; i++) { //for each testcase
+let T=Number(readline()) //1st line is usually the number of testcases
+let solve=(n,A)=>{
+
+
+    let  result=0
+
+    for (let i = 1; i <=n; i++) {
+        //the element n should go to index n-1
+        let idx = A.indexOf(i);
+        if(i===n)
+            break
+        result+=(idx-i+1+1)
+        for(let j=i-1;j<((i+idx)>>1);j++)
+            [A[j],A[idx-j+i-1]]=[A[idx-j+i-1],A[j]]
+    }
+    return result;
+}
+for (let t = 0; t <T; t++) { //for each testcase
     // input  logic
-    let [N,K,S]=readline().split(' ').map(d=>Number(d))
+    let n=Number(readline())
+    let A=readline().split(' ').map(d=>Number(d))
+    ////////////////////
+    // solve
     
-    let result=solve(N,K,S)
+    let result=solve(n,A)
     //output logic
-    console.log('Case #'+(i+1).toString()+': '+result.toString())
+    console.log('Case #'+(t+1).toString()+': '+result.toString())
 }
 

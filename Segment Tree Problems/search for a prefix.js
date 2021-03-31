@@ -23,7 +23,7 @@ class SegTree{
     }
     pointUpdate(index,newVal){
         if(this.leftmost==this.rightmost)
-            return this.sum=newVal
+            return this.sum+=newVal
         if(index<=this.mid)
             this.leftChild.pointUpdate(index,newVal)
         else
@@ -59,4 +59,4 @@ let addition=(a,b)=>a+b
 let A=[1,12,1,73,1,33,12],n=A.length
 let st=new SegTree(0,n-1,A,addition)
 console.log(st.rangeQuery(0,n-1))
-console.log(st.seachPrefixIndex(20))//returns 3
+console.log(st.seachPrefixIndex(34))//returns 3

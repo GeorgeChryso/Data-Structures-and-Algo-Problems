@@ -91,28 +91,6 @@ var LCS=(A,B)=>{
     return rec(n,m)
 }
 
-
-//forward dp style
-var longestCommonSubsequence = function(A, B) {
-    let n=A.length,m=B.length, dp=[...Array(n+1)].map(d=>[...Array(m+1)]
-    .map(q=>-Infinity))
-    //basecase
-    dp[0][0]=0 //empty prefixes    
-    for (let i =0; i <=n; i++) {
-        for (let j =0; j <=m; j++) {
-            let tres=dp[i][j]
-            if(i<n&&dp[i+1][j]<tres)
-                dp[i+1][j]=tres
-            if(j<m&&dp[i][j+1]<tres)
-                dp[i][j+1]=tres
-            if(i<n&&j<m&&A[i]==A[j]&&dp[i+1][j+1]<tres+1)
-                dp[i+1][j+1]=tres+1
-        }        
-    }
-    dp.forEach(d=>console.log(''+d))
-    pathreconstruction(A,B,n,m,dp)
-    return dp[n][m]
-};
 console.log(
     longestCommonSubsequence(
       //  "abc","def"

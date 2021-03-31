@@ -44,7 +44,6 @@ var LZZS=A=>{
             signs[i-1]=1
         else
             signs[i-1]=-1
-    
 
     let lastsig=0,result=1
     for (let i = 0; i < A.length-1; i++) {

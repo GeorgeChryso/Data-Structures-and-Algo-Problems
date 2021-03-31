@@ -39,8 +39,7 @@
 // after that, ,reverse on the idx the element should go
 // then, work your way to the lower elements in the same manner
 var pancakeSort = function(A) {
-    let  result = [],
-        n = A.length;
+    let  result = [],n=A.length
 
     for (let i = n; i >=1; i--) {
 
@@ -49,16 +48,12 @@ var pancakeSort = function(A) {
         if (idx == 0 &&i==1) break;
         if (idx ===i- 1) continue;
 
-        result.push(idx + 1,i);
-        console.log(i,idx,A)
 
         for (let j = 0; j <=idx >> 1; j++)
             [A[j], A[idx - j]] = [A[idx - j], A[j]];
-        console.log(A)
 
         for (let j = 0; j <i >> 1; j++)
             [A[j], A[i - j-1]] = [A[i- j-1], A[j]];
-        console.log(A)
     }
     return result;
 };

@@ -174,7 +174,7 @@ var lengthOfLIS = function(A) {
 };
 console.log(
     lengthOfLIS(
-        [1,3,6,7,9,4,10,5,23,2,3]
+        [2,5,5,7]
                        // [2,2,2,2,2]
     )
 )

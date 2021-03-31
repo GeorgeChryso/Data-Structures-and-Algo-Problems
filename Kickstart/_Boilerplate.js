@@ -9,17 +9,17 @@ function readline(){
 //boilerplate ends here
 // Test it with node ./name.js < input.txt
 
-let n=Number(readline()) //1st line is usually the number of testcases
+let T=Number(readline()) //1st line is usually the number of testcases
 
-for (let i = 0; i <n; i++) { //for each testcase
+for (let t = 0; t <T; t++) { //for each testcase
     // input  logic
-    let [N,K]=readline().split(' ').map(d=>Number(d))
-    let A=readline().split(' ').map(d=>Number(d)).reverse()
+    let N=Number(readline()),A=[],B=[]
+    let A=readline().split(' ').map(d=>Number(d))
     ////////////////////
     // solve
     
     let result=[A,N,K]
     //output logic
-    console.log('Case #'+(i+1).toString()+': '+result.toString())
+    console.log('Case #'+(t+1).toString()+': '+result.toString())
 }
 
